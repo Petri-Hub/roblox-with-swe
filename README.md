@@ -52,20 +52,50 @@ The tools have different jobs. Rojo moves files into Roblox's DataModel; it does
 
 ## Work on the project
 
-With Rokit installed, run these commands from the repository root:
+### Installation
+
+From the repository root, with Rokit and pre-commit installed:
 
 ```bash
+# Install the tool versions pinned in rokit.toml.
 rokit install
+
+# Install the dependencies pinned in wally.lock.
 wally install --locked
-make format-check
-make lint
-mkdir -p dist
-make build
+
+# Enable automatic Luau formatting when committing.
+pre-commit install
 ```
 
-`make build` writes `dist/development.rbxlx`. Open that file in Roblox Studio, start `make serve`, then connect the Rojo Studio plugin to see file changes as you make them. On Linux, Studio runs through Vinegar; the Rojo plugin is installed in Studio separately from the command-line tool.
+### Coding
 
-The existing `build-staging` and `build-production` Make targets only produce place files with different names. They do not publish anything yet.
+```bash
+# Edit the files in src/ and save your changes.
+
+# Format Luau source files.
+make format-apply
+
+# Check Luau source files with Selene.
+make lint
+
+# Sync changes to Studio through the Rojo plugin.
+make serve
+```
+
+### Building
+
+```bash
+# Build the development place in dist/.
+make build
+
+# Build the staging place file in dist/.
+make build-staging
+
+# Build the production place file in dist/.
+make build-production
+```
+
+Open a built `.rbxlx` file in Roblox Studio. The staging and production targets currently build files; publishing is planned.
 
 ## Technologies
 
@@ -154,6 +184,7 @@ This repository is licensed under the [MIT License](LICENSE).
 - [Rokit](https://github.com/rojo-rbx/rokit): versioned development tools
 - [Wally](https://github.com/UpliftGames/wally): packages, manifest, and lockfile
 - [StyLua](https://github.com/JohnnyMorganz/StyLua): Luau formatting
+- [pre-commit](https://pre-commit.com/): Git hook setup and configuration
 - [Selene](https://kampfkarren.github.io/selene/): Luau linting
 - [Jest Roblox](https://roblox.github.io/jest-roblox/): test runner and assertions
 - [Luau LSP](https://github.com/JohnnyMorganz/luau-lsp): editor analysis and Rojo sourcemaps
