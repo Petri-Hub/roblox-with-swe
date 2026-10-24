@@ -32,7 +32,7 @@
   <img src="assets/how-it-works.svg" alt="Today's workflow: Git source feeds Rojo, which builds or syncs the place to Studio through Vinegar. StyLua and Selene check the source; Rokit and Wally supply tools and packages. Planned workflow: friends and a Hermes profile contribute through pull requests; Jest and GitHub Actions test changes and publish staging and production Roblox places." />
 </p>
 
-The solid paths work today: edit files, format and lint Luau, use Rojo to build or sync the place, and playtest in Roblox Studio through Vinegar. The dashed paths are the next experiments: contributions from friends and a Hermes profile, reviewed pull requests, regression tests, CI, and releases. The [editable Excalidraw source](assets/how-it-works.excalidraw) lives beside the image.
+The solid paths work today: edit files, format and lint Luau, use Rojo to build or sync the place, and playtest in Roblox Studio through Vinegar. The dashed paths are the next experiments: contributions from friends and a Hermes profile, reviewed pull requests, regression tests, CI, and releases.
 
 ## Collaboration
 
@@ -40,7 +40,7 @@ The solid paths work today: edit files, format and lint Luau, use Rojo to build 
   <img src="assets/collaboration.svg" alt="Proposed four-lane collaboration flow. Friends discuss an idea in Discord; friends or a Hermes agent create a branch and pull request; GitHub Actions checks StyLua, Selene, a Rojo build, and Jest tests; then staging is playtested before a production Roblox release." />
 </p>
 
-Friends start with an idea or bug in Discord. A contributor or the planned Hermes profile in pepper turns the agreed change into code on a branch and opens a pull request. GitHub Actions would then check formatting with StyLua, lint with Selene, build with Rojo, and run Jest tests. Passing changes would reach a staging place for playtesting before a production release. This end-to-end flow is still a plan for the POC; local formatting, linting, and builds are the parts working today. The [editable Excalidraw source](assets/collaboration.excalidraw) lives beside the image.
+Friends start with an idea or bug in Discord. A contributor or the planned Hermes profile in pepper turns the agreed change into code on a branch and opens a pull request. GitHub Actions would then check formatting with StyLua, lint with Selene, build with Rojo, and run Jest tests. Passing changes would reach a staging place for playtesting before a production release.
 
 ## Software engineering in Roblox
 
