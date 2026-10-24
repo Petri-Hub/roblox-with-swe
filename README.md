@@ -60,20 +60,20 @@ The tools have different jobs. Rojo moves files into Roblox's DataModel; it does
 
 <table align="center">
   <tr>
-    <td align="center" width="112"><img src="https://cdn.simpleicons.org/robloxstudio" width="42" height="42" alt="Roblox Studio" /><br>Roblox Studio</td>
-    <td align="center" width="112"><img src="https://cdn.simpleicons.org/luau" width="42" height="42" alt="Luau" /><br>Luau</td>
-    <td align="center" width="112"><img src="https://raw.githubusercontent.com/vinegarhq/vinegar/master/data/icons/vinegar.svg" width="42" height="42" alt="Vinegar" /><br>Vinegar</td>
-    <td align="center" width="112"><img src="https://api.iconify.design/material-icon-theme/rojo.svg" width="42" height="42" alt="Rojo" /><br>Rojo</td>
-    <td align="center" width="112"><img src="https://api.iconify.design/catppuccin/rokit.svg" width="42" height="42" alt="Rokit" /><br>Rokit</td>
-    <td align="center" width="112"><img src="https://wally.run/favicon.ico" width="42" height="42" alt="Wally package manager" /><br>Wally</td>
+    <td align="center" width="112"><a href="https://create.roblox.com/docs/studio"><img src="https://cdn.simpleicons.org/robloxstudio" width="42" height="42" alt="Roblox Studio" /><br>Roblox Studio</a></td>
+    <td align="center" width="112"><a href="https://luau.org/"><img src="https://cdn.simpleicons.org/luau" width="42" height="42" alt="Luau" /><br>Luau</a></td>
+    <td align="center" width="112"><a href="https://vinegarhq.org/Vinegar/Installation.html"><img src="https://raw.githubusercontent.com/vinegarhq/vinegar/master/data/icons/vinegar.svg" width="42" height="42" alt="Vinegar" /><br>Vinegar</a></td>
+    <td align="center" width="112"><a href="https://rojo.space/docs/v7/"><img src="https://api.iconify.design/material-icon-theme/rojo.svg" width="42" height="42" alt="Rojo" /><br>Rojo</a></td>
+    <td align="center" width="112"><a href="https://github.com/rojo-rbx/rokit"><img src="https://api.iconify.design/catppuccin/rokit.svg" width="42" height="42" alt="Rokit" /><br>Rokit</a></td>
+    <td align="center" width="112"><a href="https://wally.run/"><img src="https://wally.run/favicon.ico" width="42" height="42" alt="Wally package manager" /><br>Wally</a></td>
   </tr>
   <tr>
-    <td align="center" width="112"><img src="https://api.iconify.design/catppuccin/stylua.svg" width="42" height="42" alt="StyLua" /><br>StyLua</td>
-    <td align="center" width="112"><img src="https://api.iconify.design/mdi/text-box-check-outline.svg?color=%239198A1" width="42" height="42" alt="Linting icon" /><br>Selene</td>
-    <td align="center" width="112"><img src="https://cdn.simpleicons.org/precommit" width="42" height="42" alt="pre-commit" /><br>pre-commit</td>
-    <td align="center" width="112"><img src="https://cdn.simpleicons.org/jest" width="42" height="42" alt="Jest" /><br>Jest Roblox</td>
-    <td align="center" width="112"><img src="https://cdn.simpleicons.org/git" width="42" height="42" alt="Git" /><br>Git</td>
-    <td align="center" width="112"><img src="https://cdn.simpleicons.org/github/9198A1" width="42" height="42" alt="GitHub" /><br>GitHub</td>
+    <td align="center" width="112"><a href="https://github.com/JohnnyMorganz/StyLua"><img src="https://api.iconify.design/catppuccin/stylua.svg" width="42" height="42" alt="StyLua" /><br>StyLua</a></td>
+    <td align="center" width="112"><a href="https://kampfkarren.github.io/selene/"><img src="https://api.iconify.design/mdi/text-box-check-outline.svg?color=%239198A1" width="42" height="42" alt="Linting icon" /><br>Selene</a></td>
+    <td align="center" width="112"><a href="https://pre-commit.com/"><img src="https://cdn.simpleicons.org/precommit" width="42" height="42" alt="pre-commit" /><br>pre-commit</a></td>
+    <td align="center" width="112"><a href="https://roblox.github.io/jest-roblox/"><img src="https://cdn.simpleicons.org/jest" width="42" height="42" alt="Jest" /><br>Jest Roblox</a></td>
+    <td align="center" width="112"><a href="https://git-scm.com/docs"><img src="https://cdn.simpleicons.org/git" width="42" height="42" alt="Git" /><br>Git</a></td>
+    <td align="center" width="112"><a href="https://docs.github.com/"><img src="https://cdn.simpleicons.org/github/9198A1" width="42" height="42" alt="GitHub" /><br>GitHub</a></td>
   </tr>
 </table>
 
