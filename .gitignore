@@ -1,12 +1,17 @@
-# Project place file
+# Project place file.
 *.rbxlx
 
-# Roblox Studio lock files
+# Roblox Studio lock files.
 /*.rbxlx.lock
 /*.rbxl.lock
 
-# Source map
+# Source map.
 sourcemap.json
 
-# Build files
+# Build files.
 /dist/*.rbxlx
+
+# Wally Packages.
+/Packages/
+/DevPackages/
+/ServerPackages/
