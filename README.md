@@ -27,28 +27,10 @@
 
 ## Technologies
 
-<table width="100%">
-  <tr>
-    <td align="center" width="33%"><img src="https://cdn.simpleicons.org/robloxstudio" width="48" height="48" alt="Roblox Studio" /><br>Roblox Studio</td>
-    <td align="center" width="33%"><img src="https://cdn.simpleicons.org/luau" width="48" height="48" alt="Luau" /><br>Luau</td>
-    <td align="center" width="33%"><img src="https://raw.githubusercontent.com/vinegarhq/vinegar/master/data/icons/vinegar.svg" width="48" height="48" alt="Vinegar" /><br>Vinegar</td>
-  </tr>
-  <tr>
-    <td align="center" width="33%"><img src="https://api.iconify.design/material-icon-theme/rojo.svg" width="48" height="48" alt="Rojo" /><br>Rojo</td>
-    <td align="center" width="33%"><img src="https://api.iconify.design/catppuccin/rokit.svg" width="48" height="48" alt="Rokit" /><br>Rokit</td>
-    <td align="center" width="33%"><img src="https://wally.run/favicon.ico" width="48" height="48" alt="Wally package manager" /><br>Wally</td>
-  </tr>
-  <tr>
-    <td align="center" width="33%"><img src="https://api.iconify.design/catppuccin/stylua.svg" width="48" height="48" alt="StyLua" /><br>StyLua</td>
-    <td align="center" width="33%"><img src="https://api.iconify.design/mdi/text-box-check-outline.svg?color=%239198A1" width="48" height="48" alt="Linting icon" /><br>Selene</td>
-    <td align="center" width="33%"><img src="https://cdn.simpleicons.org/precommit" width="48" height="48" alt="pre-commit" /><br>pre-commit</td>
-  </tr>
-  <tr>
-    <td align="center" width="33%"><img src="https://cdn.simpleicons.org/jest" width="48" height="48" alt="Jest" /><br>Jest Roblox</td>
-    <td align="center" width="33%"><img src="https://cdn.simpleicons.org/git" width="48" height="48" alt="Git" /><br>Git</td>
-    <td align="center" width="33%"><img src="https://cdn.simpleicons.org/github/9198A1" width="48" height="48" alt="GitHub" /><br>GitHub</td>
-  </tr>
-</table>
+<picture>
+  <source media="(max-width: 640px)" srcset="assets/technologies-mobile.svg" />
+  <img src="assets/technologies-desktop.svg" width="100%" alt="Roblox Studio, Luau, Vinegar, Rojo, Rokit, Wally, StyLua, Selene, pre-commit, Jest Roblox, Git, and GitHub" />
+</picture>
 
 ## How it works
 
