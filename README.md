@@ -43,7 +43,7 @@ The GitHub repository holds the Luau and world files. On Linux, a local checkout
 | Dependency management | Wally | `wally.toml` declares packages; `wally.lock` records the resolved versions. Jest Roblox is already installed as a development dependency. |
 | Formatting | StyLua and pre-commit | Luau gets a consistent style before it enters Git. |
 | Static analysis | Selene | Linting catches suspicious Luau code without launching the game. |
-| Regression testing | Jest Roblox | A separate test place runs the tree harvesting rules through Studio's command line mode on Linux. |
+| Regression testing | Jest Roblox | A separate test place runs the tree harvesting rules through Studio's command line mode on Linux. Open Cloud execution is planned for windowless runs. |
 | Continuous integration and delivery | GitHub Actions and Roblox Open Cloud | Planned checks will validate changes, run suitable engine tests, and publish separate staging and production places. |
 
 The tools have different jobs. Rojo moves files into Roblox's DataModel; it does not decide whether the code is correct. Selene checks code without running it; Jest checks behavior by running it. A successful build is therefore only one part of a trustworthy change.
@@ -143,6 +143,8 @@ To view the place in Roblox Studio, open a built `.rbxlx` file or run `make serv
 
 `make test` launches Studio through Vinegar, runs Jest, prints the result, and closes Studio. Close other Studio windows before running it. The test place includes the Wally development packages, so run `wally install` before building it. You can also open `dist/tests.rbxlx` in Studio, press Play, and check the Output window.
 
+The planned windowless path uses `rocale-cli` and Roblox Open Cloud Luau Execution. It will build `test.project.json` from the current working files, including uncommitted edits, upload a **Saved** version to a dedicated private Roblox test place, run Jest there, and return the results to the terminal. The test place has a Place ID and belongs to an experience with a Universe ID; `test.project.json` is its local Rojo definition. This path still needs the test place, an API key, and CLI setup. It will not publish the test build to players or replace the staging or production places.
+
 ## Roadmap
 
 What is working now:
@@ -161,8 +163,8 @@ What is working now:
 What comes next:
 
 - ❌ Add Luau LSP for editor feedback and type-aware code navigation.
+- ❌ Run Jest through Open Cloud with `rocale-cli` and a dedicated test place.
 - ❌ Run formatting, linting, builds, and engine tests in GitHub Actions.
-- ❌ Try Open Cloud Luau Execution for engine tests in CI.
 - ❌ Publish separate staging and production places through the Roblox API.
 - ❌ Try scripted Studio playtests, including whether Vinegar can run them unattended on Linux.
 - ❌ Establish Git Flow with friends and document contribution rules.
@@ -224,6 +226,7 @@ This repository is licensed under the [MIT License](LICENSE).
 - [Studio testing modes](https://create.roblox.com/docs/studio/testing-modes): playtests and scripted tests
 - [Studio command-line interface](https://create.roblox.com/docs/studio/command-line-interface): run a Luau test entrypoint from a terminal
 - [Open Cloud Luau Execution](https://create.roblox.com/docs/cloud/reference/features/luau-execution): engine code execution for automation
+- [rocale-cli](https://github.com/Roblox/rocale-cli): build, upload, and run local test projects in Open Cloud
 - [Place publishing API](https://create.roblox.com/docs/cloud/guides/usage-place-publishing): automated place releases
 - [Git](https://git-scm.com/doc): version control for the project
 - [Git Flow](https://nvie.com/posts/a-successful-git-branching-model/): feature, release, and hotfix branches
