@@ -27,14 +27,17 @@
       "$properties": {
         "FilteringEnabled": true
       },
+      "World": {
+        "$path": "src/world"
+      },
       "Baseplate": {
         "$className": "Part",
         "$properties": {
           "Anchored": true,
           "Color": [
-            0.38823,
-            0.37254,
-            0.38823
+            0.15,
+            0.75,
+            0.35
           ],
           "Locked": true,
           "Position": [
