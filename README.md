@@ -27,32 +27,36 @@
 
 ## Technologies
 
-<table align="center">
+<table width="100%">
   <tr>
-    <td align="center" width="112"><img src="https://cdn.simpleicons.org/robloxstudio" width="48" height="48" alt="Roblox Studio" /><br>Roblox Studio</td>
-    <td align="center" width="112"><img src="https://cdn.simpleicons.org/luau" width="48" height="48" alt="Luau" /><br>Luau</td>
-    <td align="center" width="112"><img src="https://raw.githubusercontent.com/vinegarhq/vinegar/master/data/icons/vinegar.svg" width="48" height="48" alt="Vinegar" /><br>Vinegar</td>
-    <td align="center" width="112"><img src="https://api.iconify.design/material-icon-theme/rojo.svg" width="48" height="48" alt="Rojo" /><br>Rojo</td>
-    <td align="center" width="112"><img src="https://api.iconify.design/catppuccin/rokit.svg" width="48" height="48" alt="Rokit" /><br>Rokit</td>
-    <td align="center" width="112"><img src="https://wally.run/favicon.ico" width="48" height="48" alt="Wally package manager" /><br>Wally</td>
+    <td align="center" width="33%"><img src="https://cdn.simpleicons.org/robloxstudio" width="48" height="48" alt="Roblox Studio" /><br>Roblox Studio</td>
+    <td align="center" width="33%"><img src="https://cdn.simpleicons.org/luau" width="48" height="48" alt="Luau" /><br>Luau</td>
+    <td align="center" width="33%"><img src="https://raw.githubusercontent.com/vinegarhq/vinegar/master/data/icons/vinegar.svg" width="48" height="48" alt="Vinegar" /><br>Vinegar</td>
   </tr>
   <tr>
-    <td align="center" width="112"><img src="https://api.iconify.design/catppuccin/stylua.svg" width="48" height="48" alt="StyLua" /><br>StyLua</td>
-    <td align="center" width="112"><img src="https://api.iconify.design/mdi/text-box-check-outline.svg?color=%239198A1" width="48" height="48" alt="Linting icon" /><br>Selene</td>
-    <td align="center" width="112"><img src="https://cdn.simpleicons.org/precommit" width="48" height="48" alt="pre-commit" /><br>pre-commit</td>
-    <td align="center" width="112"><img src="https://cdn.simpleicons.org/jest" width="48" height="48" alt="Jest" /><br>Jest Roblox</td>
-    <td align="center" width="112"><img src="https://cdn.simpleicons.org/git" width="48" height="48" alt="Git" /><br>Git</td>
-    <td align="center" width="112"><img src="https://cdn.simpleicons.org/github/9198A1" width="48" height="48" alt="GitHub" /><br>GitHub</td>
+    <td align="center" width="33%"><img src="https://api.iconify.design/material-icon-theme/rojo.svg" width="48" height="48" alt="Rojo" /><br>Rojo</td>
+    <td align="center" width="33%"><img src="https://api.iconify.design/catppuccin/rokit.svg" width="48" height="48" alt="Rokit" /><br>Rokit</td>
+    <td align="center" width="33%"><img src="https://wally.run/favicon.ico" width="48" height="48" alt="Wally package manager" /><br>Wally</td>
+  </tr>
+  <tr>
+    <td align="center" width="33%"><img src="https://api.iconify.design/catppuccin/stylua.svg" width="48" height="48" alt="StyLua" /><br>StyLua</td>
+    <td align="center" width="33%"><img src="https://api.iconify.design/mdi/text-box-check-outline.svg?color=%239198A1" width="48" height="48" alt="Linting icon" /><br>Selene</td>
+    <td align="center" width="33%"><img src="https://cdn.simpleicons.org/precommit" width="48" height="48" alt="pre-commit" /><br>pre-commit</td>
+  </tr>
+  <tr>
+    <td align="center" width="33%"><img src="https://cdn.simpleicons.org/jest" width="48" height="48" alt="Jest" /><br>Jest Roblox</td>
+    <td align="center" width="33%"><img src="https://cdn.simpleicons.org/git" width="48" height="48" alt="Git" /><br>Git</td>
+    <td align="center" width="33%"><img src="https://cdn.simpleicons.org/github/9198A1" width="48" height="48" alt="GitHub" /><br>GitHub</td>
   </tr>
 </table>
 
 ## How it works
 
 <p align="center">
-  <img src="assets/how-it-works.svg" alt="Current workflow: source files and pinned tools feed Rojo, which builds or syncs a place for Studio through Vinegar. StyLua and Selene check the source. Planned workflow: friends use Discord to reach a Hermes profile in pepper, contributions become GitHub pull requests, Jest Roblox adds regression tests, and GitHub Actions publishes staging and production places." />
+  <img src="assets/how-it-works.svg" alt="Today's workflow: Git source feeds Rojo, which builds or syncs the place to Studio through Vinegar. StyLua and Selene check the source; Rokit and Wally supply tools and packages. Planned workflow: friends and a Hermes profile contribute through pull requests; Jest and GitHub Actions test changes and publish staging and production Roblox places." />
 </p>
 
-The solid paths work today: edit files, use Rojo to build or sync the place, and playtest in Roblox Studio through Vinegar. StyLua and Selene already run locally. The dashed paths are the next experiments: regression tests, CI, releases, and contributions through Discord. The [editable Excalidraw source](assets/how-it-works.excalidraw) lives beside the image.
+The solid paths work today: edit files, format and lint Luau, use Rojo to build or sync the place, and playtest in Roblox Studio through Vinegar. The dashed paths are the next experiments: contributions from friends and a Hermes profile, reviewed pull requests, regression tests, CI, and releases. The [editable Excalidraw source](assets/how-it-works.excalidraw) lives beside the image.
 
 ## Software engineering in Roblox
 
