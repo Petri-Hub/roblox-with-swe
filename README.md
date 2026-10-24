@@ -101,14 +101,14 @@ What is working now:
 What comes next:
 
 - ❌ Add a small gameplay behavior worth testing.
-- ❌ Mount development packages in a dedicated Rojo test place, add a Jest runner, and write the first regression tests.
+- ❌ Set up a Rojo test place and run regression tests with Jest.
 - ❌ Add Luau LSP for editor feedback and type-aware code navigation.
 - ❌ Run formatting, linting, builds, and tests in GitHub Actions.
 - ❌ Try Open Cloud Luau Execution for engine tests in CI.
 - ❌ Publish separate staging and production places through the Roblox API.
 - ❌ Try scripted Studio playtests, including whether Vinegar can run them unattended on Linux.
 - ❌ Establish GitHub Flow with friends and document contribution rules.
-- ❌ Add a dedicated Hermes profile in pepper, reachable from Discord, that contributes through pull requests.
+- ❌ Add a Hermes profile in pepper that opens PRs from Discord.
 
 ## Repository layout
 
