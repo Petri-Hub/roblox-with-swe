@@ -16,21 +16,14 @@
 
 ## Contents
 
-- [Technologies](#technologies)
 - [How it works](#how-it-works)
 - [Software engineering in Roblox](#software-engineering-in-roblox)
+- [Technologies](#technologies)
 - [Work on the project](#work-on-the-project)
 - [Roadmap](#roadmap)
 - [Repository layout](#repository-layout)
 - [Related projects](#related-projects)
 - [References](#references)
-
-## Technologies
-
-<picture>
-  <source media="(max-width: 640px)" srcset="assets/technologies-mobile.svg" />
-  <img src="assets/technologies-desktop.svg" width="100%" alt="Roblox Studio, Luau, Vinegar, Rojo, Rokit, Wally, StyLua, Selene, pre-commit, Jest Roblox, Git, and GitHub" />
-</picture>
 
 ## How it works
 
@@ -56,6 +49,13 @@ The solid paths work today: edit files, format and lint Luau, use Rojo to build 
 | AI collaboration | A Hermes profile in pepper | Planned Discord access will let friends work with an agent that contributes through the same repository and review process. |
 
 The tools have different jobs. Rojo moves files into Roblox's DataModel; it does not decide whether the code is correct. Selene checks code without running it; Jest will check behavior by running it. A successful build is therefore only one part of a trustworthy change.
+
+## Technologies
+
+<picture>
+  <source media="(max-width: 640px)" srcset="assets/technologies-mobile.svg" />
+  <img src="assets/technologies-desktop.svg" width="100%" alt="Roblox Studio, Luau, Vinegar, Rojo, Rokit, Wally, StyLua, Selene, pre-commit, Jest Roblox, Git, and GitHub" />
+</picture>
 
 ## Work on the project
 
