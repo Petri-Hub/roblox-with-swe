@@ -1,4 +1,4 @@
-local root = script.Parent
+local root = script.Parent.Parent
 local JestGlobals = require(root.DevPackages.JestGlobals)
 local HarvestRules = require(root.Shared.HarvestRules)
 

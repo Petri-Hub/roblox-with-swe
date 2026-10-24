@@ -8,8 +8,8 @@
 # Source map.
 sourcemap.json
 
-# Build files.
-/dist/*.rbxlx
+# Build and test output.
+/dist/
 
 # Wally Packages.
 /Packages/
