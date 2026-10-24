@@ -83,6 +83,7 @@ The existing `build-staging` and `build-production` Make targets only produce pl
     <td align="center" width="112"><img src="https://kampfkarren.github.io/selene/favicon.png" width="48" height="48" alt="Selene" /><br>Selene</td>
     <td align="center" width="112"><img src="https://cdn.simpleicons.org/precommit" width="48" height="48" alt="pre-commit" /><br>pre-commit</td>
     <td align="center" width="112"><img src="https://cdn.simpleicons.org/jest" width="48" height="48" alt="Jest" /><br>Jest Roblox</td>
+    <td align="center" width="112"><img src="https://cdn.simpleicons.org/git" width="48" height="48" alt="Git" /><br>Git</td>
     <td align="center" width="112"><img src="https://cdn.simpleicons.org/github/9198A1" width="48" height="48" alt="GitHub" /><br>GitHub</td>
   </tr>
 </table>
@@ -160,6 +161,7 @@ This repository is licensed under the [MIT License](LICENSE).
 - [Studio testing modes](https://create.roblox.com/docs/studio/testing-modes): playtests and scripted tests
 - [Open Cloud Luau Execution](https://create.roblox.com/docs/cloud/reference/features/luau-execution): engine code execution for automation
 - [Place publishing API](https://create.roblox.com/docs/cloud/guides/usage-place-publishing): automated place releases
+- [Git](https://git-scm.com/doc): version control for the project
 - [GitHub Flow](https://docs.github.com/en/get-started/using-github/github-flow): branch and pull request collaboration
 - [GitHub Actions](https://docs.github.com/en/actions): CI and deployment workflows
 - [Wakapi](https://wakapi.dev): time tracking for this project and the badge above
