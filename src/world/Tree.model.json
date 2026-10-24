@@ -9,7 +9,19 @@
         "Color": [0.38, 0.2, 0.08],
         "CFrame": [14, 4, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1],
         "Size": [2, 8, 2]
-      }
+      },
+      "Children": [
+        {
+          "Name": "HarvestPrompt",
+          "ClassName": "ProximityPrompt",
+          "Properties": {
+            "ActionText": "Harvest",
+            "ObjectText": "Tree",
+            "HoldDuration": 0.5,
+            "MaxActivationDistance": 10
+          }
+        }
+      ]
     },
     {
       "Name": "LowerCanopy",

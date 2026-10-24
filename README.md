@@ -43,10 +43,12 @@ The GitHub repository holds the Luau and world files. On Linux, a local checkout
 | Dependency management | Wally | `wally.toml` declares packages; `wally.lock` records the resolved versions. Jest Roblox is already installed as a development dependency. |
 | Formatting | StyLua and pre-commit | Luau gets a consistent style before it enters Git. |
 | Static analysis | Selene | Linting catches suspicious Luau code without launching the game. |
-| Regression testing | Jest Roblox | Tests will exercise behavior in a Roblox environment so later changes cannot silently break it. The runner and first test are still to come. |
+| Regression testing | Jest Roblox | A separate test place runs the tree harvesting rules in Roblox Studio. Automated execution is still to come. |
 | Continuous integration and delivery | GitHub Actions and Roblox Open Cloud | Planned checks will validate changes, run suitable engine tests, and publish separate staging and production places. |
 
-The tools have different jobs. Rojo moves files into Roblox's DataModel; it does not decide whether the code is correct. Selene checks code without running it; Jest will check behavior by running it. A successful build is therefore only one part of a trustworthy change.
+The tools have different jobs. Rojo moves files into Roblox's DataModel; it does not decide whether the code is correct. Selene checks code without running it; Jest checks behavior by running it. A successful build is therefore only one part of a trustworthy change.
+
+The first feature lets a player harvest the tree in the world. The server checks the player's distance and the tree's regrowth timer, awards one wood, then hides the canopy for eight seconds. A client HUD shows the wood count. The harvest rules live in a shared module so they can be tested without waiting for a real timer.
 
 ## Collaboration
 
@@ -129,9 +131,14 @@ make build-staging
 
 # Build the production place file in dist/.
 make build-production
+
+# Build the separate Jest test place in dist/.
+make build-tests
 ```
 
 To view the place in Roblox Studio, open a built `.rbxlx` file or run `make serve` and connect the Rojo Studio plugin to its server URL.
+
+To run the regression tests, open `dist/tests.rbxlx` in Studio, press Play, and check the Output window for Jest's results. The test place includes the Wally development packages, so run `wally install` before building it.
 
 ## Roadmap
 
@@ -144,11 +151,12 @@ What is working now:
 - ✅ Format Luau with StyLua and run it from pre-commit.
 - ✅ Lint Luau with Selene.
 - ✅ Add Wally and lock Jest Roblox as a development dependency.
+- ✅ Add a small tree harvesting behavior worth testing.
+- ✅ Build a separate Rojo test place with Jest tests for the harvesting rules.
 
 What comes next:
 
-- ❌ Add a small gameplay behavior worth testing.
-- ❌ Set up a Rojo test place and run regression tests with Jest.
+- ❌ Verify the Jest tests in Studio and automate their execution.
 - ❌ Add Luau LSP for editor feedback and type-aware code navigation.
 - ❌ Run formatting, linting, builds, and tests in GitHub Actions.
 - ❌ Try Open Cloud Luau Execution for engine tests in CI.
@@ -173,7 +181,10 @@ What comes next:
 │   ├── shared/                  # shared modules
 │   └── world/                   # world objects for Rojo
 │
+├── tests/                       # Jest tests and Studio test runner
+│
 ├── default.project.json         # files mapped into the Roblox DataModel
+├── test.project.json            # separate place for running Jest tests
 ├── Makefile                     # local development commands
 │
 ├── rokit.toml                   # pinned development tools
