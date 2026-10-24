@@ -95,7 +95,7 @@ make build-staging
 make build-production
 ```
 
-Open a built `.rbxlx` file in Roblox Studio. The staging and production targets currently build files; publishing is planned.
+To view the place in Roblox Studio, open a built `.rbxlx` file or run `make serve` and connect the Rojo Studio plugin to its server URL.
 
 ## Technologies
 
