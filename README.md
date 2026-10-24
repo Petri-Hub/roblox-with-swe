@@ -16,14 +16,35 @@
 
 ## Contents
 
+- [Technologies](#technologies)
 - [How it works](#how-it-works)
 - [Software engineering in Roblox](#software-engineering-in-roblox)
 - [Work on the project](#work-on-the-project)
-- [Technologies](#technologies)
 - [Roadmap](#roadmap)
 - [Repository layout](#repository-layout)
 - [Related projects](#related-projects)
 - [References](#references)
+
+## Technologies
+
+<table align="center">
+  <tr>
+    <td align="center" width="112"><img src="https://cdn.simpleicons.org/robloxstudio" width="48" height="48" alt="Roblox Studio" /><br>Roblox Studio</td>
+    <td align="center" width="112"><img src="https://cdn.simpleicons.org/luau" width="48" height="48" alt="Luau" /><br>Luau</td>
+    <td align="center" width="112"><img src="https://raw.githubusercontent.com/vinegarhq/vinegar/master/data/icons/vinegar.svg" width="48" height="48" alt="Vinegar" /><br>Vinegar</td>
+    <td align="center" width="112"><img src="https://api.iconify.design/material-icon-theme/rojo.svg" width="48" height="48" alt="Rojo" /><br>Rojo</td>
+    <td align="center" width="112"><img src="https://api.iconify.design/catppuccin/rokit.svg" width="48" height="48" alt="Rokit" /><br>Rokit</td>
+    <td align="center" width="112"><img src="https://wally.run/favicon.ico" width="48" height="48" alt="Wally package manager" /><br>Wally</td>
+  </tr>
+  <tr>
+    <td align="center" width="112"><img src="https://api.iconify.design/catppuccin/stylua.svg" width="48" height="48" alt="StyLua" /><br>StyLua</td>
+    <td align="center" width="112"><img src="https://api.iconify.design/mdi/text-box-check-outline.svg?color=%239198A1" width="48" height="48" alt="Linting icon" /><br>Selene</td>
+    <td align="center" width="112"><img src="https://cdn.simpleicons.org/precommit" width="48" height="48" alt="pre-commit" /><br>pre-commit</td>
+    <td align="center" width="112"><img src="https://cdn.simpleicons.org/jest" width="48" height="48" alt="Jest" /><br>Jest Roblox</td>
+    <td align="center" width="112"><img src="https://cdn.simpleicons.org/git" width="48" height="48" alt="Git" /><br>Git</td>
+    <td align="center" width="112"><img src="https://cdn.simpleicons.org/github/9198A1" width="48" height="48" alt="GitHub" /><br>GitHub</td>
+  </tr>
+</table>
 
 ## How it works
 
@@ -105,27 +126,6 @@ make build-production
 ```
 
 To view the place in Roblox Studio, open a built `.rbxlx` file or run `make serve` and connect the Rojo Studio plugin to its server URL.
-
-## Technologies
-
-<table align="center">
-  <tr>
-    <td align="center" width="112"><img src="https://cdn.simpleicons.org/robloxstudio" width="48" height="48" alt="Roblox Studio" /><br>Roblox Studio</td>
-    <td align="center" width="112"><img src="https://cdn.simpleicons.org/luau" width="48" height="48" alt="Luau" /><br>Luau</td>
-    <td align="center" width="112"><img src="https://raw.githubusercontent.com/vinegarhq/vinegar/master/data/icons/vinegar.svg" width="48" height="48" alt="Vinegar" /><br>Vinegar</td>
-    <td align="center" width="112"><img src="https://api.iconify.design/material-icon-theme/rojo.svg" width="48" height="48" alt="Rojo" /><br>Rojo</td>
-    <td align="center" width="112"><img src="https://api.iconify.design/catppuccin/rokit.svg" width="48" height="48" alt="Rokit" /><br>Rokit</td>
-    <td align="center" width="112"><img src="https://wally.run/favicon.ico" width="48" height="48" alt="Wally package manager" /><br>Wally</td>
-  </tr>
-  <tr>
-    <td align="center" width="112"><img src="https://api.iconify.design/catppuccin/stylua.svg" width="48" height="48" alt="StyLua" /><br>StyLua</td>
-    <td align="center" width="112"><img src="https://api.iconify.design/mdi/text-box-check-outline.svg?color=%239198A1" width="48" height="48" alt="Linting icon" /><br>Selene</td>
-    <td align="center" width="112"><img src="https://cdn.simpleicons.org/precommit" width="48" height="48" alt="pre-commit" /><br>pre-commit</td>
-    <td align="center" width="112"><img src="https://cdn.simpleicons.org/jest" width="48" height="48" alt="Jest" /><br>Jest Roblox</td>
-    <td align="center" width="112"><img src="https://cdn.simpleicons.org/git" width="48" height="48" alt="Git" /><br>Git</td>
-    <td align="center" width="112"><img src="https://cdn.simpleicons.org/github/9198A1" width="48" height="48" alt="GitHub" /><br>GitHub</td>
-  </tr>
-</table>
 
 ## Roadmap
 
