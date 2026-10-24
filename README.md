@@ -69,8 +69,8 @@ From the repository root:
 # Install the tool versions pinned in rokit.toml.
 rokit install
 
-# Install the dependencies pinned in wally.lock.
-wally install --locked
+# Install the dependencies declared in wally.toml.
+wally install
 
 # Enable automatic Luau formatting when committing.
 pre-commit install
