@@ -12,7 +12,7 @@
 
 ## About
 
-> **TL;DR:** a proof of concept for bringing software engineering to Roblox on Linux: source-controlled places, linting, automated regression tests, GitHub Flow, playtest previews, and eventually staging and production releases. Friends will build together through branches and reviewed pull requests, using Discord to discuss ideas and ask an agent to help implement them. That agent will be a new Hermes profile in my personal agent pepper, running in my homelab and contributing through the same tests and review process. This game is the first place to try that shared workflow.
+> **TL;DR:** a proof of concept for bringing software engineering to Roblox on Linux: source-controlled places, linting, automated regression tests, Git Flow, playtest previews, and eventually staging and production releases. Friends will build together through branches and reviewed pull requests, using Discord to discuss ideas and ask an agent to help implement them. That agent will be a new Hermes profile in my personal agent pepper, running in my homelab and contributing through the same tests and review process. This game is the first place to try that shared workflow.
 
 ## Contents
 
@@ -43,10 +43,7 @@ The solid paths work today: edit files, format and lint Luau, use Rojo to build 
 | Formatting | StyLua and pre-commit | Luau gets a consistent style before it enters Git. |
 | Static analysis | Selene | Linting catches suspicious Luau code without launching the game. |
 | Regression testing | Jest Roblox | Tests will exercise behavior in a Roblox environment so later changes cannot silently break it. The runner and first test are still to come. |
-| Local integration | Rojo, Roblox Studio, and Vinegar | Rojo turns files into a place or syncs changes into Studio; Studio lets us see and play what we built on Linux. |
-| Collaboration | GitHub Flow | Branches and pull requests will make changes visible to the group before they are merged. |
 | Continuous integration and delivery | GitHub Actions and Roblox Open Cloud | Planned checks will validate changes, run suitable engine tests, and publish separate staging and production places. |
-| AI collaboration | A Hermes profile in pepper | Planned Discord access will let friends work with an agent that contributes through the same repository and review process. |
 
 The tools have different jobs. Rojo moves files into Roblox's DataModel; it does not decide whether the code is correct. Selene checks code without running it; Jest will check behavior by running it. A successful build is therefore only one part of a trustworthy change.
 
@@ -134,7 +131,7 @@ What comes next:
 - ❌ Try Open Cloud Luau Execution for engine tests in CI.
 - ❌ Publish separate staging and production places through the Roblox API.
 - ❌ Try scripted Studio playtests, including whether Vinegar can run them unattended on Linux.
-- ❌ Establish GitHub Flow with friends and document contribution rules.
+- ❌ Establish Git Flow with friends and document contribution rules.
 - ❌ Add a Hermes profile in pepper that opens PRs from Discord.
 
 ## Repository layout
@@ -188,6 +185,6 @@ This repository is licensed under the [MIT License](LICENSE).
 - [Open Cloud Luau Execution](https://create.roblox.com/docs/cloud/reference/features/luau-execution): engine code execution for automation
 - [Place publishing API](https://create.roblox.com/docs/cloud/guides/usage-place-publishing): automated place releases
 - [Git](https://git-scm.com/doc): version control for the project
-- [GitHub Flow](https://docs.github.com/en/get-started/using-github/github-flow): branch and pull request collaboration
+- [Git Flow](https://nvie.com/posts/a-successful-git-branching-model/): feature, release, and hotfix branches
 - [GitHub Actions](https://docs.github.com/en/actions): CI and deployment workflows
 - [Wakapi](https://wakapi.dev): time tracking for this project and the badge above
