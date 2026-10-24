@@ -9,4 +9,4 @@
 sourcemap.json
 
 # Build files
-/dist
+/dist/*.rbxlx
