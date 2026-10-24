@@ -19,8 +19,7 @@
 - [How it works](#how-it-works)
 - [Software engineering in Roblox](#software-engineering-in-roblox)
 - [Work on the project](#work-on-the-project)
-- [Testing](#testing)
-- [Collaboration](#collaboration)
+- [Technologies](#technologies)
 - [Roadmap](#roadmap)
 - [Repository layout](#repository-layout)
 - [Related projects](#related-projects)
@@ -68,23 +67,25 @@ make build
 
 The existing `build-staging` and `build-production` Make targets only produce place files with different names. They do not publish anything yet.
 
-## Testing
+## Technologies
 
-Jest Roblox is the chosen framework, but this repository does not have a test runner or test cases yet. The first useful test should follow the first small piece of gameplay, so it can check a behavior a player would notice rather than repeat an implementation detail.
-
-| Level | Example | Intended environment |
-|---|---|---|
-| Unit | A rule computes a reward or validates an action. | Jest Roblox; pure Luau could also run without Studio later. |
-| Integration | A server module changes real Roblox instances or attributes. | Jest Roblox in Studio or Open Cloud Luau Execution. |
-| End to end | A player interacts with the world and sees the result. | Studio playtest, with scripted Studio testing to investigate. |
-
-Open Cloud Luau Execution can run Luau against a place from CI without Studio on the CI machine. It does not run a live client or gameplay simulation, so it cannot replace a playtest. Running Studio unattended through Vinegar is another experiment, not a working part of this repository yet.
-
-## Collaboration
-
-The intended loop is simple: pick a small change, work on a branch, open a pull request, run the checks, review it with friends, and merge it. The same path should apply to code written by a person or proposed by the Hermes agent. Discord is the conversation surface; GitHub keeps the change and its review history.
-
-For now, this is a single-developer POC. There is no project-specific Hermes profile, Discord workflow, CI pipeline, or automatic Roblox deployment in this repository yet.
+<table align="center">
+  <tr>
+    <td align="center" width="112"><img src="https://cdn.simpleicons.org/robloxstudio" width="48" height="48" alt="Roblox Studio" /><br>Roblox Studio</td>
+    <td align="center" width="112"><img src="https://cdn.simpleicons.org/luau" width="48" height="48" alt="Luau" /><br>Luau</td>
+    <td align="center" width="112"><img src="https://raw.githubusercontent.com/vinegarhq/vinegar/master/data/icons/vinegar.svg" width="48" height="48" alt="Vinegar" /><br>Vinegar</td>
+    <td align="center" width="112"><img src="https://api.iconify.design/material-icon-theme/rojo.svg" width="48" height="48" alt="Rojo" /><br>Rojo</td>
+    <td align="center" width="112"><img src="https://api.iconify.design/catppuccin/rokit.svg" width="48" height="48" alt="Rokit" /><br>Rokit</td>
+    <td align="center" width="112"><img src="https://cdn.jsdelivr.net/gh/selfhst/icons/svg/wally.svg" width="48" height="48" alt="Wally" /><br>Wally</td>
+  </tr>
+  <tr>
+    <td align="center" width="112"><img src="https://api.iconify.design/catppuccin/stylua.svg" width="48" height="48" alt="StyLua" /><br>StyLua</td>
+    <td align="center" width="112"><img src="https://kampfkarren.github.io/selene/favicon.png" width="48" height="48" alt="Selene" /><br>Selene</td>
+    <td align="center" width="112"><img src="https://cdn.simpleicons.org/precommit" width="48" height="48" alt="pre-commit" /><br>pre-commit</td>
+    <td align="center" width="112"><img src="https://cdn.simpleicons.org/jest" width="48" height="48" alt="Jest" /><br>Jest Roblox</td>
+    <td align="center" width="112"><img src="https://cdn.simpleicons.org/github/9198A1" width="48" height="48" alt="GitHub" /><br>GitHub</td>
+  </tr>
+</table>
 
 ## Roadmap
 
