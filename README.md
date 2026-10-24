@@ -80,7 +80,7 @@ The existing `build-staging` and `build-production` Make targets only produce pl
   </tr>
   <tr>
     <td align="center" width="112"><img src="https://api.iconify.design/catppuccin/stylua.svg" width="48" height="48" alt="StyLua" /><br>StyLua</td>
-    <td align="center" width="112"><img src="https://kampfkarren.github.io/selene/favicon.png" width="48" height="48" alt="Selene" /><br>Selene</td>
+    <td align="center" width="112"><img src="https://api.iconify.design/mdi/text-box-check-outline.svg?color=%239198A1" width="48" height="48" alt="Linting icon" /><br>Selene</td>
     <td align="center" width="112"><img src="https://cdn.simpleicons.org/precommit" width="48" height="48" alt="pre-commit" /><br>pre-commit</td>
     <td align="center" width="112"><img src="https://cdn.simpleicons.org/jest" width="48" height="48" alt="Jest" /><br>Jest Roblox</td>
     <td align="center" width="112"><img src="https://cdn.simpleicons.org/git" width="48" height="48" alt="Git" /><br>Git</td>
