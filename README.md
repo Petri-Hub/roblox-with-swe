@@ -76,7 +76,7 @@ The existing `build-staging` and `build-production` Make targets only produce pl
     <td align="center" width="112"><img src="https://raw.githubusercontent.com/vinegarhq/vinegar/master/data/icons/vinegar.svg" width="48" height="48" alt="Vinegar" /><br>Vinegar</td>
     <td align="center" width="112"><img src="https://api.iconify.design/material-icon-theme/rojo.svg" width="48" height="48" alt="Rojo" /><br>Rojo</td>
     <td align="center" width="112"><img src="https://api.iconify.design/catppuccin/rokit.svg" width="48" height="48" alt="Rokit" /><br>Rokit</td>
-    <td align="center" width="112"><img src="https://cdn.jsdelivr.net/gh/selfhst/icons/svg/wally.svg" width="48" height="48" alt="Wally" /><br>Wally</td>
+    <td align="center" width="112"><img src="https://wally.run/favicon.ico" width="48" height="48" alt="Wally package manager" /><br>Wally</td>
   </tr>
   <tr>
     <td align="center" width="112"><img src="https://api.iconify.design/catppuccin/stylua.svg" width="48" height="48" alt="StyLua" /><br>StyLua</td>
