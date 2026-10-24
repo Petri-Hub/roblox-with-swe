@@ -17,6 +17,7 @@
 ## Contents
 
 - [How it works](#how-it-works)
+- [Collaboration](#collaboration)
 - [Software engineering in Roblox](#software-engineering-in-roblox)
 - [Technologies](#technologies)
 - [Work on the project](#work-on-the-project)
@@ -32,6 +33,14 @@
 </p>
 
 The solid paths work today: edit files, format and lint Luau, use Rojo to build or sync the place, and playtest in Roblox Studio through Vinegar. The dashed paths are the next experiments: contributions from friends and a Hermes profile, reviewed pull requests, regression tests, CI, and releases. The [editable Excalidraw source](assets/how-it-works.excalidraw) lives beside the image.
+
+## Collaboration
+
+<p align="center">
+  <img src="assets/collaboration.svg" alt="Proposed four-lane collaboration flow. Friends discuss an idea in Discord; friends or a Hermes agent create a branch and pull request; GitHub Actions checks StyLua, Selene, a Rojo build, and Jest tests; then staging is playtested before a production Roblox release." />
+</p>
+
+Friends start with an idea or bug in Discord. A contributor or the planned Hermes profile in pepper turns the agreed change into code on a branch and opens a pull request. GitHub Actions would then check formatting with StyLua, lint with Selene, build with Rojo, and run Jest tests. Passing changes would reach a staging place for playtesting before a production release. This end-to-end flow is still a plan for the POC; local formatting, linting, and builds are the parts working today. The [editable Excalidraw source](assets/collaboration.excalidraw) lives beside the image.
 
 ## Software engineering in Roblox
 
@@ -139,8 +148,12 @@ What comes next:
 ```sh
 .
 ├── assets/
+│   ├── collaboration.excalidraw  # editable collaboration diagram
+│   ├── collaboration.svg         # collaboration diagram shown above
 │   ├── how-it-works.excalidraw  # editable workflow diagram
-│   └── how-it-works.svg         # diagram shown above
+│   ├── how-it-works.svg         # workflow diagram shown above
+│   ├── technologies-desktop.svg  # desktop technology grid
+│   └── technologies-mobile.svg   # mobile technology grid
 │
 ├── src/
 │   ├── client/                  # client-side Luau
