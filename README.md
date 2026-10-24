@@ -52,9 +52,18 @@ The tools have different jobs. Rojo moves files into Roblox's DataModel; it does
 
 ## Work on the project
 
+### Requirements
+
+- [Git](https://git-scm.com/install/) to clone and contribute to the repository.
+- [GNU Make](https://www.gnu.org/software/make/#download) to run the project commands.
+- [Rokit](https://github.com/rojo-rbx/rokit#installation) to install the pinned Rojo, Wally, StyLua, and Selene versions.
+- [pre-commit](https://pre-commit.com/#installation) to enable the formatting hook.
+- [Roblox Studio](https://create.roblox.com/docs/tutorials/curriculums/studio/install-studio), or [Vinegar](https://vinegarhq.org/Vinegar/Installation.html) to run Studio on Linux.
+- [Rojo Studio plugin](https://create.roblox.com/store/asset/13916111004) for live syncing with Studio.
+
 ### Installation
 
-From the repository root, with Rokit and pre-commit installed:
+From the repository root:
 
 ```bash
 # Install the tool versions pinned in rokit.toml.
