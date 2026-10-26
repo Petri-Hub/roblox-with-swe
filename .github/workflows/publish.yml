@@ -1,0 +1,103 @@
+name: Publish
+
+on:
+  push:
+    branches: [staging, production]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Target environment
+        required: true
+        type: choice
+        options: [staging, production]
+      version_type:
+        description: Save a version without publishing, or publish it live
+        required: true
+        type: choice
+        default: Published
+        options: [Published, Saved]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publish-${{ inputs.environment || github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  quality:
+    name: Quality gate
+    uses: ./.github/workflows/quality.yml
+    secrets: inherit
+
+  publish:
+    name: Publish ${{ inputs.environment || github.ref_name }} place
+    needs: quality
+    runs-on: ubuntu-26.04
+    environment: ${{ inputs.environment || github.ref_name }}
+    timeout-minutes: 15
+    env:
+      TARGET: ${{ inputs.environment || github.ref_name }}
+      VERSION_TYPE: ${{ inputs.version_type || 'Published' }}
+      ROBLOX_OPEN_CLOUD_API_KEY: ${{ secrets.ROBLOX_OPEN_CLOUD_API_KEY }}
+      ROBLOX_UNIVERSE_ID: ${{ vars.ROBLOX_UNIVERSE_ID }}
+      ROBLOX_PLACE_ID: ${{ vars.ROBLOX_PLACE_ID }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Install pinned tools
+        uses: CompeyDev/setup-rokit@v0.2.1
+        with:
+          cache: true
+
+      - name: Build place
+        run: make build-$TARGET
+
+      - name: Check place size
+        run: |
+          set -euo pipefail
+          file="dist/$TARGET.rbxlx"
+          size=$(stat -c %s "$file")
+          limit=10485760
+          ls -lh "$file"
+          if (( size > limit )); then
+            echo "The place file is $size bytes, above the $limit byte publish limit." >&2
+            echo "Build a binary .rbxl instead, or keep the world smaller." >&2
+            exit 1
+          fi
+
+      - name: Upload place artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: place-${{ env.TARGET }}-${{ github.sha }}
+          path: dist/${{ env.TARGET }}.rbxlx
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Publish to Roblox
+        run: |
+          set -euo pipefail
+          response=$(curl --fail-with-body --silent --show-error \
+            --retry 3 --retry-delay 5 --max-time 120 \
+            --request POST \
+            --header "x-api-key: ${ROBLOX_OPEN_CLOUD_API_KEY}" \
+            --header "Content-Type: application/xml" \
+            --data-binary "@dist/${TARGET}.rbxlx" \
+            "https://apis.roblox.com/universes/v1/${ROBLOX_UNIVERSE_ID}/places/${ROBLOX_PLACE_ID}/versions?versionType=${VERSION_TYPE}")
+          echo "$response"
+          version=$(jq -r '.versionNumber' <<<"$response")
+          if [[ -z "$version" || "$version" == "null" ]]; then
+            echo "Roblox did not return a version number." >&2
+            exit 1
+          fi
+          {
+            echo "### Roblox place ${VERSION_TYPE,,}"
+            echo
+            echo "| Field | Value |"
+            echo "|---|---|"
+            echo "| Environment | \`${TARGET}\` |"
+            echo "| Universe | \`${ROBLOX_UNIVERSE_ID}\` |"
+            echo "| Place | \`${ROBLOX_PLACE_ID}\` |"
+            echo "| Version | \`${version}\` |"
+          } >> "$GITHUB_STEP_SUMMARY"
