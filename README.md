@@ -6,6 +6,7 @@
 
 <p align="center">
   <a href="https://github.com/Petri-Hub/roblox-with-swe/actions/workflows/quality.yml"><img alt="Quality" src="https://github.com/Petri-Hub/roblox-with-swe/actions/workflows/quality.yml/badge.svg?branch=development" /></a>
+  <a href="LICENSE"><img alt="License" src="https://img.shields.io/github/license/Petri-Hub/roblox-with-swe" /></a>
   <img alt="Time spent" src="https://img.shields.io/endpoint?url=https%3A%2F%2Flab-wakapi.petri.zip%2Fapi%2Fcompat%2Fshields%2Fv1%2FPetri%2Fproject%3Aroblox-with-swe%2Finterval%3Aall_time&label=time%20spent&logo=wakatime&logoColor=white&color=blue&cacheSeconds=3600" />
 </p>
 
