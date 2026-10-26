@@ -25,7 +25,7 @@ build-production:
 	rojo build --output ./dist/production.rbxlx
 
 test-on-system:
-	jest-roblox-cli --backend studio-cli
+	jest-roblox-cli
 
 test-on-ocale:
 	jest-roblox-cli --backend open-cloud
