@@ -23,6 +23,7 @@
 - [Collaboration](#collaboration)
 - [Technologies](#technologies)
 - [Work on the project](#work-on-the-project)
+- [What we learned](#what-we-learned)
 - [Roadmap](#roadmap)
 - [Repository layout](#repository-layout)
 - [Related projects](#related-projects)
@@ -31,10 +32,10 @@
 ## How it works
 
 <p align="center">
-  <img src="assets/how-it-works.svg" alt="Architecture: a GitHub repository connects to a Linux checkout. Rokit and Wally provide tools and packages; StyLua and Selene check source; Rojo builds or syncs it into Studio through Vinegar. Planned pull requests come from friends and a Hermes profile, while GitHub Actions publishes staging and production places through Roblox Open Cloud." />
+  <img src="assets/how-it-works.svg" alt="Architecture: a GitHub repository connects to a Linux checkout. Rokit and Wally provide tools and packages; StyLua and Selene check source; Rojo builds or syncs it into Studio through Vinegar. GitHub Actions checks changes with Open Cloud tests; staging and production publishing are planned." />
 </p>
 
-The GitHub repository holds the Luau and world files. On Linux, a local checkout uses Rokit and Wally for tools and dependencies, StyLua and Selene for source checks, and Rojo to build a place or sync it to Studio through Vinegar. The planned path connects friends and the Hermes profile in pepper through pull requests; GitHub Actions would run checks and publish staging and production places through Roblox Open Cloud.
+The GitHub repository holds the Luau and world files. On Linux, a local checkout uses Rokit and Wally for tools and dependencies, StyLua and Selene for source checks, and Rojo to build a place or sync it to Studio through Vinegar. GitHub Actions now checks pull requests and `development` pushes, including Jest tests in Roblox Open Cloud. Publishing to staging and production remains the next part of that path.
 
 ## Software engineering in Roblox
 
@@ -46,11 +47,14 @@ The GitHub repository holds the Luau and world files. On Linux, a local checkout
 | Formatting | StyLua and pre-commit | Luau gets a consistent style before it enters Git. |
 | Static analysis | Selene | Linting catches suspicious Luau code without launching the game. |
 | Regression testing | Jest Roblox and jest-roblox-cli | A separate test place runs the tree harvesting rules, locally through Studio on Linux or remotely through Roblox Open Cloud. |
-| Continuous integration and delivery | GitHub Actions and Roblox Open Cloud | Planned checks will validate changes, run suitable engine tests, and publish separate staging and production places. |
+| Continuous integration | GitHub Actions and Roblox Open Cloud | Pull requests and `development` pushes run formatting, linting, a build, and engine tests. |
+| Release automation | GitHub Actions and Roblox Open Cloud | Publishing separate staging and production places is planned. |
 
 The tools have different jobs. Rojo moves files into Roblox's DataModel; it does not decide whether the code is correct. Selene checks code without running it; Jest checks behavior by running it. A successful build is therefore only one part of a trustworthy change.
 
 The first feature lets a player harvest the tree in the world. The server checks the player's distance and the tree's regrowth timer, awards one wood, then hides the canopy for eight seconds. A client HUD shows the wood count. The harvest rules live in a shared module so they can be tested without waiting for a real timer.
+
+That small feature gives the POC something concrete to prove. We can now build and sync a place from files on Linux, and run the same regression tests through local Studio or Open Cloud. The next questions are whether friends and the planned agent can work through the same review process, and whether checked changes can move safely through staging to production.
 
 ## Collaboration
 
@@ -58,7 +62,7 @@ The first feature lets a player harvest the tree in the world. The server checks
   <img src="assets/collaboration.svg" alt="Proposed four-lane collaboration flow. Friends discuss an idea in Discord; friends or a Hermes agent create a branch and pull request; GitHub Actions checks StyLua, Selene, a Rojo build, and Jest tests; then staging is playtested before a production Roblox release." />
 </p>
 
-Friends start with an idea or bug in Discord. A contributor or the planned Hermes profile in pepper turns the agreed change into code on a branch and opens a pull request. GitHub Actions would then check formatting with StyLua, lint with Selene, build with Rojo, and run Jest tests. Passing changes would reach a staging place for playtesting before a production release.
+The intended flow starts with an idea or bug in Discord. A friend or the planned Hermes profile in pepper develops it on a branch and opens a pull request. GitHub Actions already checks formatting, linting, the Rojo build, and Jest tests on pull requests to `development` or `production`; the same checks run on `development` pushes. Contribution rules, staging playtests, and production releases are still to be established.
 
 ## Technologies
 
@@ -88,9 +92,9 @@ Friends start with an idea or bug in Discord. A contributor or the planned Herme
 - [Git](https://git-scm.com/install/) to clone and contribute to the repository.
 - [GNU Make](https://www.gnu.org/software/make/#download) to run the project commands.
 - [Rokit](https://github.com/rojo-rbx/rokit#installation) to install the pinned development tools.
-- [curl](https://curl.se/download.html) to install the Jest Studio plugin on Linux.
+- [curl](https://curl.se/download.html) to install the Jest Studio plugin for local Linux tests.
 - [pre-commit](https://pre-commit.com/#installation) to enable the formatting hook.
-- [Roblox Studio](https://create.roblox.com/docs/tutorials/curriculums/studio/install-studio), or [Vinegar](https://vinegarhq.org/Vinegar/Installation.html) to run Studio on Linux.
+- [Roblox Studio](https://create.roblox.com/docs/tutorials/curriculums/studio/install-studio), or [Vinegar](https://vinegarhq.org/Vinegar/Installation.html) on Linux, for local development and tests.
 - [Rojo Studio plugin](https://create.roblox.com/store/asset/13916111004) for live syncing with Studio.
 
 ### Installation
@@ -107,7 +111,7 @@ wally install
 # Enable automatic Luau formatting when committing.
 pre-commit install
 
-# On Linux, install the matching Jest plugin in Vinegar's Studio.
+# For local Linux tests, install the matching Jest plugin in Vinegar's Studio.
 bash scripts/install-jest-plugin.sh
 ```
 
@@ -141,6 +145,8 @@ make build-production
 
 To view the place in Roblox Studio, open a built `.rbxlx` file or run `make serve` and connect the Rojo Studio plugin to its server URL.
 
+The staging and production commands currently build local files from the same Rojo project. They do not publish those files to Roblox yet.
+
 ### Testing
 
 ```bash
@@ -152,6 +158,18 @@ make test-on-ocale
 ```
 
 `make test-on-system` builds the test place from the current working files, launches Studio through Vinegar, runs Jest, prints the result, and closes Studio. The test place includes Wally's development packages, so run `wally install` first. Studio opens a window during the run.
+
+For Open Cloud tests, choose a test place in an experience you control and keep it separate from a release place. Copy `.env.example` to `.env`, then enter that experience's Universe ID, the test Place ID, and an API key restricted to the experience. The key needs `universe-places:write` and `universe.place.luau-execution-session:write`. For the CLI's default live results, also grant `memory-store.sorted-map:read` and `memory-store.sorted-map:write`.
+
+The Makefile loads `.env` for local runs. In GitHub Actions, put the key in the `ROBLOX_OPEN_CLOUD_API_KEY` secret and the IDs in the `ROBLOX_UNIVERSE_ID` and `ROBLOX_PLACE_ID` repository variables. Keep the key out of Git. Open Cloud builds from the current checkout and uploads the test place when needed before running Jest.
+
+The tests currently cover the harvest rules: whether a nearby player may harvest and when the tree becomes available again. They do not yet exercise the prompt, client HUD, or a full player session, so those parts still need Studio playtesting and future gameplay tests.
+
+## What we learned
+
+Linux can support a quick Rojo editing loop, but plugin setup needed a few detours. Rojo's command-line plugin installer reported that the platform was unsupported; opening the plugin from Roblox's Creator Store installed it in Vinegar's Studio. Local terminal tests also need a matching Jest Studio plugin and a small path adapter for Vinegar. They run with a visible, signed-in Studio session.
+
+Open Cloud gives CI a way to run the engine tests without that Studio session, though it needs a test place and an API key. Our first remote run also found a difference that local Studio had hidden: Jest needed `LoadStringEnabled` set in the Rojo test place. The CI workflow runs its cloud test jobs one at a time because they share a test place and Roblox task creation has limits.
 
 ## Roadmap
 
@@ -168,11 +186,11 @@ What is working now:
 - ✅ Build a separate Rojo test place with Jest tests for the harvesting rules.
 - ✅ Run Jest from a Linux terminal with jest-roblox-cli and Vinegar.
 - ✅ Run Jest through Open Cloud with a dedicated test place.
+- ✅ Check formatting, linting, builds, and engine tests in GitHub Actions.
 
 What comes next:
 
 - ❌ Add Luau LSP for editor feedback and type-aware code navigation.
-- ❌ Run formatting, linting, builds, and engine tests in GitHub Actions.
 - ❌ Publish separate staging and production places through the Roblox API.
 - ❌ Try scripted Studio playtests for gameplay behavior.
 - ❌ Establish Git Flow with friends and document contribution rules.
@@ -182,6 +200,9 @@ What comes next:
 
 ```sh
 .
+├── .github/
+│   └── workflows/              # pull request and development quality checks
+│
 ├── assets/
 │   ├── collaboration.excalidraw  # editable collaboration diagram
 │   ├── collaboration.svg         # collaboration diagram shown above
@@ -201,6 +222,7 @@ What comes next:
 ├── test.project.json            # separate place for running Jest tests
 ├── jest.config.toml             # Jest CLI configuration
 ├── Makefile                     # local development commands
+├── .env.example                 # Open Cloud credential names and example IDs
 │
 ├── rokit.toml                   # pinned development tools
 ├── wally.toml                   # package declarations
