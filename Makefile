@@ -15,13 +15,16 @@ format-check:
 lint:
 	selene src tests
 
-build:
+dist:
+	mkdir -p dist
+
+build: dist
 	rojo build --output ./dist/development.rbxlx
 
-build-staging:
+build-staging: dist
 	rojo build --output ./dist/staging.rbxlx
 
-build-production:
+build-production: dist
 	rojo build --output ./dist/production.rbxlx
 
 test-on-system:
