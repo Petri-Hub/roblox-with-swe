@@ -1,3 +1,0 @@
-return {
-	testMatch = { "**/specs/*.spec" },
-}

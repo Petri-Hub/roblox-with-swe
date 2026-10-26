@@ -10,6 +10,7 @@ sourcemap.json
 
 # Build and test output.
 /dist/
+/.jest-roblox/
 
 # Wally Packages.
 /Packages/

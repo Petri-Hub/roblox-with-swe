@@ -1,4 +1,4 @@
-.PHONY: build build-staging build-production build-tests test format-apply format-check lint serve
+.PHONY: build build-staging build-production test format-apply format-check lint serve
 
 format-apply:
 	stylua src tests
@@ -18,11 +18,8 @@ build-staging:
 build-production:
 	rojo build --output ./dist/production.rbxlx
 
-build-tests:
-	rojo build test.project.json --output ./dist/tests.rbxlx
-
-test: build-tests
-	bash scripts/test-studio.sh
+test:
+	jest-roblox-cli
 
 serve:
 	rojo serve

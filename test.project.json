@@ -5,7 +5,9 @@
     "ServerScriptService": {
       "TestProject": {
         "$className": "Folder",
-        "$path": "tests",
+        "Specs": {
+          "$path": "tests/specs"
+        },
         "Shared": {
           "$path": "src/shared"
         },
