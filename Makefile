@@ -1,4 +1,10 @@
-.PHONY: build build-staging build-production test-on-system test-on-rocale format-apply format-check lint serve
+.PHONY: build build-staging build-production test-on-system test-on-ocale format-apply format-check lint serve
+
+-include .env
+
+export ROBLOX_OPEN_CLOUD_API_KEY
+export ROBLOX_UNIVERSE_ID
+export ROBLOX_PLACE_ID
 
 format-apply:
 	stylua src tests
@@ -19,10 +25,10 @@ build-production:
 	rojo build --output ./dist/production.rbxlx
 
 test-on-system:
-	jest-roblox-cli
+	jest-roblox-cli --backend studio-cli
 
-test-on-rocale:
-	@echo "Open Cloud tests are not configured yet." >&2; exit 1
+test-on-ocale:
+	jest-roblox-cli --backend open-cloud
 
 serve:
 	rojo serve

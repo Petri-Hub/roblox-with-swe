@@ -43,7 +43,7 @@ The GitHub repository holds the Luau and world files. On Linux, a local checkout
 | Dependency management | Wally | `wally.toml` declares packages; `wally.lock` records the resolved versions. Jest Roblox is already installed as a development dependency. |
 | Formatting | StyLua and pre-commit | Luau gets a consistent style before it enters Git. |
 | Static analysis | Selene | Linting catches suspicious Luau code without launching the game. |
-| Regression testing | Jest Roblox and jest-roblox-cli | A separate test place runs the tree harvesting rules through Studio on Linux. Open Cloud execution is planned for CI. |
+| Regression testing | Jest Roblox and jest-roblox-cli | A separate test place runs the tree harvesting rules, locally through Studio on Linux or remotely through Roblox Open Cloud. |
 | Continuous integration and delivery | GitHub Actions and Roblox Open Cloud | Planned checks will validate changes, run suitable engine tests, and publish separate staging and production places. |
 
 The tools have different jobs. Rojo moves files into Roblox's DataModel; it does not decide whether the code is correct. Selene checks code without running it; Jest checks behavior by running it. A successful build is therefore only one part of a trustworthy change.
@@ -144,9 +144,12 @@ To view the place in Roblox Studio, open a built `.rbxlx` file or run `make serv
 ```bash
 # Run the Jest regression tests through Vinegar.
 make test-on-system
+
+# Run the same tests in Roblox Open Cloud, without Studio.
+make test-on-ocale
 ```
 
-`make test-on-system` builds the test place from the current working files, launches Studio through Vinegar, runs Jest, prints the result, and closes Studio. The test place includes Wally's development packages, so run `wally install` first. Studio opens a window during the run. `make test-on-rocale` is reserved for future Open Cloud testing.
+`make test-on-system` builds the test place from the current working files, launches Studio through Vinegar, runs Jest, prints the result, and closes Studio. The test place includes Wally's development packages, so run `wally install` first. Studio opens a window during the run.
 
 ## Roadmap
 
@@ -230,6 +233,8 @@ This repository is licensed under the [MIT License](LICENSE).
 - [Vinegar](https://vinegarhq.org/): Roblox Studio on Linux
 - [Studio testing modes](https://create.roblox.com/docs/studio/testing-modes): playtests and scripted tests
 - [Studio command-line interface](https://create.roblox.com/docs/studio/command-line-interface): run a Luau test entrypoint from a terminal
+- [Open Cloud API keys](https://create.roblox.com/docs/cloud/auth/api-keys): key creation, permissions, and expiration
+- [Open Cloud scopes](https://create.roblox.com/docs/cloud/reference/scopes): the permission each endpoint requires
 - [Open Cloud Luau Execution](https://create.roblox.com/docs/cloud/reference/features/luau-execution): engine code execution for automation
 - [Place publishing API](https://create.roblox.com/docs/cloud/guides/usage-place-publishing): automated place releases
 - [Git](https://git-scm.com/doc): version control for the project
