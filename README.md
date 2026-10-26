@@ -43,7 +43,7 @@ The GitHub repository holds the Luau and world files. On Linux, a local checkout
 | Dependency management | Wally | `wally.toml` declares packages; `wally.lock` records the resolved versions. Jest Roblox is already installed as a development dependency. |
 | Formatting | StyLua and pre-commit | Luau gets a consistent style before it enters Git. |
 | Static analysis | Selene | Linting catches suspicious Luau code without launching the game. |
-| Regression testing | Jest Roblox and jest-roblox-cli | A separate test place runs the tree harvesting rules through Studio on Linux. The CLI's Open Cloud backend is planned for CI. |
+| Regression testing | Jest Roblox and jest-roblox-cli | A separate test place runs the tree harvesting rules through Studio on Linux. Open Cloud execution is planned for CI. |
 | Continuous integration and delivery | GitHub Actions and Roblox Open Cloud | Planned checks will validate changes, run suitable engine tests, and publish separate staging and production places. |
 
 The tools have different jobs. Rojo moves files into Roblox's DataModel; it does not decide whether the code is correct. Selene checks code without running it; Jest checks behavior by running it. A successful build is therefore only one part of a trustworthy change.
@@ -86,8 +86,9 @@ Friends start with an idea or bug in Discord. A contributor or the planned Herme
 - [Git](https://git-scm.com/install/) to clone and contribute to the repository.
 - [GNU Make](https://www.gnu.org/software/make/#download) to run the project commands.
 - [Rokit](https://github.com/rojo-rbx/rokit#installation) to install the pinned development tools.
+- [curl](https://curl.se/download.html) to install the Jest Studio plugin on Linux.
 - [pre-commit](https://pre-commit.com/#installation) to enable the formatting hook.
-- [Roblox Studio](https://create.roblox.com/docs/tutorials/curriculums/studio/install-studio), or [Vinegar](https://vinegarhq.org/Vinegar/Installation.html) to run Studio on Linux. The terminal test command uses Vinegar's Flatpak package.
+- [Roblox Studio](https://create.roblox.com/docs/tutorials/curriculums/studio/install-studio), or [Vinegar](https://vinegarhq.org/Vinegar/Installation.html) to run Studio on Linux.
 - [Rojo Studio plugin](https://create.roblox.com/store/asset/13916111004) for live syncing with Studio.
 
 ### Installation
@@ -103,9 +104,10 @@ wally install
 
 # Enable automatic Luau formatting when committing.
 pre-commit install
-```
 
-On Linux, install the [Jest Studio plugin](https://github.com/christopher-buss/jest-roblox-cli/releases) from the same release pinned in `rokit.toml`. Copy `JestRobloxRunner.rbxm` into Vinegar's Studio plugins folder at `~/.var/app/org.vinegarhq.Vinegar/data/vinegar/prefixes/studio/drive_c/users/<your-user>/AppData/Local/Roblox/Plugins/`. This is a one-time setup for local test runs.
+# On Linux, install the matching Jest plugin in Vinegar's Studio.
+bash scripts/install-jest-plugin.sh
+```
 
 ### Coding
 
@@ -133,14 +135,18 @@ make build-staging
 
 # Build the production place file in dist/.
 make build-production
-
-# Run the Jest regression tests through Vinegar.
-make test
 ```
 
 To view the place in Roblox Studio, open a built `.rbxlx` file or run `make serve` and connect the Rojo Studio plugin to its server URL.
 
-`make test` builds the test place from the current working files, launches Studio through Vinegar, runs Jest, prints the result, and closes Studio. The test place includes Wally's development packages, so run `wally install` first. Studio opens a window during the run.
+### Testing
+
+```bash
+# Run the Jest regression tests through Vinegar.
+make test-on-system
+```
+
+`make test-on-system` builds the test place from the current working files, launches Studio through Vinegar, runs Jest, prints the result, and closes Studio. The test place includes Wally's development packages, so run `wally install` first. Studio opens a window during the run. `make test-on-rocale` is reserved for future Open Cloud testing.
 
 ## Roadmap
 
@@ -160,7 +166,7 @@ What is working now:
 What comes next:
 
 - ❌ Add Luau LSP for editor feedback and type-aware code navigation.
-- ❌ Run Jest through the CLI's Open Cloud backend and a dedicated test place.
+- ❌ Run Jest through Open Cloud with a dedicated test place.
 - ❌ Run formatting, linting, builds, and engine tests in GitHub Actions.
 - ❌ Publish separate staging and production places through the Roblox API.
 - ❌ Try scripted Studio playtests for gameplay behavior.
@@ -184,7 +190,7 @@ What comes next:
 │   └── world/                   # world objects for Rojo
 │
 ├── tests/                       # Jest regression specs
-├── scripts/                     # Vinegar launcher for jest-roblox-cli
+├── scripts/                     # Vinegar launch and plugin setup scripts
 │
 ├── default.project.json         # files mapped into the Roblox DataModel
 ├── test.project.json            # separate place for running Jest tests

@@ -1,4 +1,4 @@
-.PHONY: build build-staging build-production test format-apply format-check lint serve
+.PHONY: build build-staging build-production test-on-system test-on-rocale format-apply format-check lint serve
 
 format-apply:
 	stylua src tests
@@ -18,8 +18,11 @@ build-staging:
 build-production:
 	rojo build --output ./dist/production.rbxlx
 
-test:
+test-on-system:
 	jest-roblox-cli
+
+test-on-rocale:
+	@echo "Open Cloud tests are not configured yet." >&2; exit 1
 
 serve:
 	rojo serve
