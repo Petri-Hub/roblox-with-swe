@@ -2,9 +2,9 @@
 
 -include .env
 
-export ROBLOX_OPEN_CLOUD_API_KEY
-export ROBLOX_UNIVERSE_ID
-export ROBLOX_PLACE_ID
+export JEST_ROBLOX_OPEN_CLOUD_API_KEY
+export JEST_ROBLOX_UNIVERSE_ID
+export JEST_ROBLOX_PLACE_ID
 
 format-apply:
 	stylua src tests

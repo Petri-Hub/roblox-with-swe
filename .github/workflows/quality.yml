@@ -57,6 +57,6 @@ jobs:
       - name: Run Jest
         run: make test-on-ocale
         env:
-          ROBLOX_OPEN_CLOUD_API_KEY: ${{ secrets.ROBLOX_OPEN_CLOUD_API_KEY }}
-          ROBLOX_UNIVERSE_ID: ${{ vars.ROBLOX_UNIVERSE_ID }}
-          ROBLOX_PLACE_ID: ${{ vars.ROBLOX_PLACE_ID }}
+          JEST_ROBLOX_OPEN_CLOUD_API_KEY: ${{ secrets.JEST_ROBLOX_OPEN_CLOUD_API_KEY }}
+          JEST_ROBLOX_UNIVERSE_ID: ${{ vars.JEST_ROBLOX_UNIVERSE_ID }}
+          JEST_ROBLOX_PLACE_ID: ${{ vars.JEST_ROBLOX_PLACE_ID }}
