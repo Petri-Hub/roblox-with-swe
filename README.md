@@ -165,11 +165,11 @@ What is working now:
 - ✅ Add a small tree harvesting behavior worth testing.
 - ✅ Build a separate Rojo test place with Jest tests for the harvesting rules.
 - ✅ Run Jest from a Linux terminal with jest-roblox-cli and Vinegar.
+- ✅ Run Jest through Open Cloud with a dedicated test place.
 
 What comes next:
 
 - ❌ Add Luau LSP for editor feedback and type-aware code navigation.
-- ❌ Run Jest through Open Cloud with a dedicated test place.
 - ❌ Run formatting, linting, builds, and engine tests in GitHub Actions.
 - ❌ Publish separate staging and production places through the Roblox API.
 - ❌ Try scripted Studio playtests for gameplay behavior.
