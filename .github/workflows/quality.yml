@@ -2,9 +2,9 @@ name: Quality
 
 on:
   pull_request:
-    branches: [development, production]
+    branches: [staging, production]
   push:
-    branches: [development]
+    branches: [staging]
 
 permissions:
   contents: read
@@ -32,7 +32,7 @@ jobs:
       - name: Lint
         run: make lint
 
-      - name: Build development place
+      - name: Build place
         run: make build
 
   tests:
