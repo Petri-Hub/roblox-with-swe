@@ -5,7 +5,7 @@
 <h3 align="center">A Roblox game built like a software project.<br>Code, tests, collaboration, and releases—explored on Linux</h3>
 
 <p align="center">
-  <a href="https://github.com/Petri-Hub/roblox-with-swe/actions/workflows/quality.yml"><img alt="Quality" src="https://github.com/Petri-Hub/roblox-with-swe/actions/workflows/quality.yml/badge.svg?branch=staging" /></a>
+  <a href="https://github.com/Petri-Hub/roblox-with-swe/actions/workflows/publish.yml"><img alt="Publish" src="https://github.com/Petri-Hub/roblox-with-swe/actions/workflows/publish.yml/badge.svg?branch=staging" /></a>
   <a href="LICENSE"><img alt="License" src="https://img.shields.io/github/license/Petri-Hub/roblox-with-swe" /></a>
   <img alt="Time spent" src="https://img.shields.io/endpoint?url=https%3A%2F%2Flab-wakapi.petri.zip%2Fapi%2Fcompat%2Fshields%2Fv1%2FPetri%2Fproject%3Aroblox-with-swe%2Finterval%3Aall_time&label=time%20spent&logo=wakatime&logoColor=white&color=blue&cacheSeconds=3600" />
 </p>
@@ -34,7 +34,7 @@
   <img src="assets/how-it-works.svg" alt="Architecture: a GitHub repository connects to a Linux checkout. Rokit and Wally provide tools and packages; StyLua and Selene check source; Rojo builds or syncs it into Studio through Vinegar. Planned pull requests come from friends and a Hermes profile, while GitHub Actions publishes staging and production places through Roblox Open Cloud." />
 </p>
 
-The GitHub repository holds the Luau and world files. On Linux, a local checkout uses Rokit and Wally for tools and dependencies, StyLua and Selene for source checks, and Rojo to build a place or sync it to Studio through Vinegar. The planned path connects friends and the Hermes profile in pepper through pull requests; GitHub Actions would run checks and publish staging and production places through Roblox Open Cloud.
+The GitHub repository holds the Luau and world files. On Linux, a local checkout uses Rokit and Wally for tools and dependencies, StyLua and Selene for source checks, and Rojo to build a place or sync it to Studio through Vinegar. The planned path connects friends and the Hermes profile in pepper through pull requests; GitHub Actions runs checks and publishes staging and production places through Roblox Open Cloud.
 
 ## Software engineering in Roblox
 
@@ -46,7 +46,7 @@ The GitHub repository holds the Luau and world files. On Linux, a local checkout
 | Formatting | StyLua and pre-commit | Luau gets a consistent style before it enters Git. |
 | Static analysis | Selene | Linting catches suspicious Luau code without launching the game. |
 | Regression testing | Jest Roblox and jest-roblox-cli | A separate test place runs the tree harvesting rules, locally through Studio on Linux or remotely through Roblox Open Cloud. |
-| Continuous integration and delivery | GitHub Actions and Roblox Open Cloud | Planned checks will validate changes, run suitable engine tests, and publish separate staging and production places. |
+| Continuous integration and delivery | GitHub Actions and Roblox Open Cloud | Pull requests run formatting, linting, builds, and engine tests; merges publish separate staging and production places. |
 
 The tools have different jobs. Rojo moves files into Roblox's DataModel; it does not decide whether the code is correct. Selene checks code without running it; Jest checks behavior by running it. A successful build is therefore only one part of a trustworthy change.
 
@@ -58,7 +58,7 @@ The first feature lets a player harvest the tree in the world. The server checks
   <img src="assets/collaboration.svg" alt="Proposed four-lane collaboration flow. Friends discuss an idea in Discord; friends or a Hermes agent create a branch and pull request; GitHub Actions checks StyLua, Selene, a Rojo build, and Jest tests; then staging is playtested before a production Roblox release." />
 </p>
 
-Friends start with an idea or bug in Discord. A contributor or the planned Hermes profile in pepper turns the agreed change into code on a branch and opens a pull request. GitHub Actions would then check formatting with StyLua, lint with Selene, build with Rojo, and run Jest tests. Passing changes would reach a staging place for playtesting before a production release.
+Friends start with an idea or bug in Discord. A contributor or the planned Hermes profile in pepper turns the agreed change into code on a branch and opens a pull request. GitHub Actions checks formatting with StyLua, lint with Selene, build with Rojo, and run Jest tests. Passing changes reach a staging place for playtesting before a production release.
 
 ## Technologies
 
@@ -168,12 +168,12 @@ What is working now:
 - ✅ Build a separate Rojo test place with Jest tests for the harvesting rules.
 - ✅ Run Jest from a Linux terminal with jest-roblox-cli and Vinegar.
 - ✅ Run Jest through Open Cloud with a dedicated test place.
+- ✅ Run formatting, linting, builds, and engine tests in GitHub Actions.
+- ✅ Publish separate staging and production places through the Roblox API.
 
 What comes next:
 
 - ❌ Add Luau LSP for editor feedback and type-aware code navigation.
-- ❌ Run formatting, linting, builds, and engine tests in GitHub Actions.
-- ❌ Publish separate staging and production places through the Roblox API.
 - ❌ Try scripted Studio playtests for gameplay behavior.
 - ❌ Establish Git Flow with friends and document contribution rules.
 - ❌ Add a Hermes profile in pepper that opens PRs from Discord.
@@ -182,6 +182,11 @@ What comes next:
 
 ```sh
 .
+├── .github/
+│   └── workflows/
+│       ├── quality.yml          # format, lint, build, and Jest checks
+│       └── publish.yml          # build and publish staging and production places
+│
 ├── assets/
 │   ├── collaboration.excalidraw  # editable collaboration diagram
 │   ├── collaboration.svg         # collaboration diagram shown above
