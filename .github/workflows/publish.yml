@@ -71,6 +71,4 @@ jobs:
             --header "x-api-key: ${ROBLOX_OPEN_CLOUD_API_KEY}" \
             --header "Content-Type: application/xml" \
             --data-binary "@dist/${TARGET}.rbxlx" \
-            --output /tmp/publish.json \
             "https://apis.roblox.com/universes/v1/${ROBLOX_UNIVERSE_ID}/places/${ROBLOX_PLACE_ID}/versions?versionType=${VERSION_TYPE}"
-          echo "Published \`${TARGET}\` place version $(jq -r '.versionNumber' /tmp/publish.json)." >> "$GITHUB_STEP_SUMMARY"
