@@ -16,8 +16,14 @@
 
 > **TL;DR:** a proof of concept for bringing software engineering to Roblox on Linux: source-controlled places, linting, automated regression tests, Git Flow, playtest previews, and eventually staging and production releases. Friends will build together through branches and reviewed pull requests, using Discord to discuss ideas and ask an agent to help implement them. That agent will be a new Hermes profile in my personal agent pepper, running in my homelab and contributing through the same tests and review process. This game is the first place to try that shared workflow.
 
+## Play the game
+
+- [Staging playtest](https://www.roblox.com/games/112768229129661) receives changes merged into `staging`.
+- [Production game](https://www.roblox.com/games/138015860615681) receives changes merged into `production`.
+
 ## Contents
 
+- [Play the game](#play-the-game)
 - [How it works](#how-it-works)
 - [Software engineering in Roblox](#software-engineering-in-roblox)
 - [Collaboration](#collaboration)
@@ -173,9 +179,6 @@ What is working now:
 
 What comes next:
 
-- ❌ Add Luau LSP for editor feedback and type-aware code navigation.
-- ❌ Try scripted Studio playtests for gameplay behavior.
-- ❌ Establish Git Flow with friends and document contribution rules.
 - ❌ Add a Hermes profile in pepper that opens PRs from Discord.
 
 ## Repository layout
