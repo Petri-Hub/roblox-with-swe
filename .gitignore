@@ -8,8 +8,12 @@
 # Source map.
 sourcemap.json
 
-# Build files.
-/dist/*.rbxlx
+# Build and test output.
+/dist/
+/.jest-roblox/
+
+# Local Open Cloud credentials.
+/.env
 
 # Wally Packages.
 /Packages/

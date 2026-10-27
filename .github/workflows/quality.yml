@@ -1,0 +1,61 @@
+name: Quality
+
+on:
+  pull_request:
+    branches: [staging, production]
+  workflow_call:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: quality-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    name: Format, lint, build
+    runs-on: ubuntu-26.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Install tools
+        uses: CompeyDev/setup-rokit@v0.2.1
+        with:
+          cache: true
+
+      - name: Check formatting
+        run: make format-check
+
+      - name: Lint
+        run: make lint
+
+      - name: Build place
+        run: make build
+
+  tests:
+    name: Jest on Open Cloud
+    runs-on: ubuntu-26.04
+    needs: checks
+    concurrency:
+      group: luau-execution
+      cancel-in-progress: false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Install pinned tools
+        uses: CompeyDev/setup-rokit@v0.2.1
+        with:
+          cache: true
+
+      - name: Install Wally packages
+        run: wally install
+
+      - name: Run Jest
+        run: make test-on-ocale
+        env:
+          JEST_ROBLOX_OPEN_CLOUD_API_KEY: ${{ secrets.JEST_ROBLOX_OPEN_CLOUD_API_KEY }}
+          JEST_ROBLOX_UNIVERSE_ID: ${{ vars.JEST_ROBLOX_UNIVERSE_ID }}
+          JEST_ROBLOX_PLACE_ID: ${{ vars.JEST_ROBLOX_PLACE_ID }}

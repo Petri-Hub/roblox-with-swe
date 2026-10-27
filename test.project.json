@@ -1,0 +1,23 @@
+{
+  "name": "roblox-with-swe-tests",
+  "tree": {
+    "$className": "DataModel",
+    "ServerScriptService": {
+      "$properties": {
+        "LoadStringEnabled": true
+      },
+      "TestProject": {
+        "$className": "Folder",
+        "Specs": {
+          "$path": "tests/specs"
+        },
+        "Shared": {
+          "$path": "src/shared"
+        },
+        "DevPackages": {
+          "$path": "DevPackages"
+        }
+      }
+    }
+  }
+}

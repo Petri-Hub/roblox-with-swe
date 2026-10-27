@@ -1,0 +1,10 @@
+backend = "studio-cli"
+studioPath = "scripts/jest-studio-vinegar.sh"
+placeFile = "dist/tests.rbxl"
+rojoProject = "test.project.json"
+jestPath = "ServerScriptService/TestProject/DevPackages/Jest"
+
+[[test.projects]]
+[test.projects.test]
+displayName = "game"
+include = ["tests/specs/*.spec.luau"]
