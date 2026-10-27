@@ -153,21 +153,6 @@ make test-on-ocale
 
 `make test-on-system` builds the test place from the current working files, launches Studio through Vinegar, runs Jest, prints the result, and closes Studio. The test place includes Wally's development packages, so run `wally install` first. Studio opens a window during the run.
 
-### Publishing
-
-Merging into `staging` or `production` builds the matching place and publishes it through the [Place Publishing API](https://create.roblox.com/docs/cloud/guides/usage-place-publishing). The workflow is `.github/workflows/publish.yml`; it runs the quality gate first, so a failing check stops the publish.
-
-| Environment | Branch | Credentials |
-|---|---|---|
-| `staging` | `staging` | `ROBLOX_OPEN_CLOUD_API_KEY` secret, `ROBLOX_UNIVERSE_ID` and `ROBLOX_PLACE_ID` variables |
-| `production` | `production` | The same names, in the `production` environment |
-
-Both environments only accept deploys from their own branch, and `production` also requires a reviewer, so a production publish waits for approval. The API key needs the `universe-places:write` scope on the matching universe.
-
-To publish by hand, run the **Publish** workflow with `workflow_dispatch` and choose `Saved` instead of `Published`. That stores a place version without making it live, which is a safe way to check credentials.
-
-The published file becomes the whole place. Anything that exists only in Studio, such as terrain, uploaded assets, or Team Create edits, is replaced, so the world has to live in the repository or come back through `rojo syncback`. The API also rejects a publish while the place is open in an active Team Create session, and accepts at most 10 MiB per request. The build is a `.rbxlx`, so switch to a binary `.rbxl` if the file grows past that.
-
 ## Roadmap
 
 What is working now:
@@ -198,7 +183,10 @@ What comes next:
 ```sh
 .
 ├── .github/
-│   └── workflows/              # quality gate and place publishing
+│   └── workflows/
+│       ├── quality.yml          # format, lint, build, and Jest checks
+│       └── publish.yml          # build and publish staging and production places
+│
 ├── assets/
 │   ├── collaboration.excalidraw  # editable collaboration diagram
 │   ├── collaboration.svg         # collaboration diagram shown above
