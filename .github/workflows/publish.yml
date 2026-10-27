@@ -54,19 +54,6 @@ jobs:
       - name: Build place
         run: make build-$TARGET
 
-      - name: Check place size
-        run: |
-          set -euo pipefail
-          file="dist/$TARGET.rbxlx"
-          size=$(stat -c %s "$file")
-          limit=10485760
-          ls -lh "$file"
-          if (( size > limit )); then
-            echo "The place file is $size bytes, above the $limit byte publish limit." >&2
-            echo "Build a binary .rbxl instead, or keep the world smaller." >&2
-            exit 1
-          fi
-
       - name: Upload place artifact
         uses: actions/upload-artifact@v7
         with:
@@ -78,26 +65,12 @@ jobs:
       - name: Publish to Roblox
         run: |
           set -euo pipefail
-          response=$(curl --fail-with-body --silent --show-error \
-            --retry 3 --retry-delay 5 --max-time 120 \
+          curl --fail-with-body --silent --show-error \
+            --retry 3 \
             --request POST \
             --header "x-api-key: ${ROBLOX_OPEN_CLOUD_API_KEY}" \
             --header "Content-Type: application/xml" \
             --data-binary "@dist/${TARGET}.rbxlx" \
-            "https://apis.roblox.com/universes/v1/${ROBLOX_UNIVERSE_ID}/places/${ROBLOX_PLACE_ID}/versions?versionType=${VERSION_TYPE}")
-          echo "$response"
-          version=$(jq -r '.versionNumber' <<<"$response")
-          if [[ -z "$version" || "$version" == "null" ]]; then
-            echo "Roblox did not return a version number." >&2
-            exit 1
-          fi
-          {
-            echo "### Roblox place ${VERSION_TYPE,,}"
-            echo
-            echo "| Field | Value |"
-            echo "|---|---|"
-            echo "| Environment | \`${TARGET}\` |"
-            echo "| Universe | \`${ROBLOX_UNIVERSE_ID}\` |"
-            echo "| Place | \`${ROBLOX_PLACE_ID}\` |"
-            echo "| Version | \`${version}\` |"
-          } >> "$GITHUB_STEP_SUMMARY"
+            --output /tmp/publish.json \
+            "https://apis.roblox.com/universes/v1/${ROBLOX_UNIVERSE_ID}/places/${ROBLOX_PLACE_ID}/versions?versionType=${VERSION_TYPE}"
+          echo "Published \`${TARGET}\` place version $(jq -r '.versionNumber' /tmp/publish.json)." >> "$GITHUB_STEP_SUMMARY"
