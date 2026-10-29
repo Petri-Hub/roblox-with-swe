@@ -229,9 +229,9 @@ This repository is licensed under the [MIT License](LICENSE).
 
 ## Related projects
 
-- [roblox-assets-mcp](https://github.com/Petri-Hub/roblox-assets-mcp): an asset-only MCP server for Creator Store search, previews, and temporary download URLs.
-- [pepper](https://github.com/Petri-Hub/pepper): my personal agent; the planned Hermes profile for this project will be documented there.
-- [lab](https://github.com/Petri-Hub/lab): my homelab, where pepper and the new profile will run.
+| [roblox-assets-mcp](https://github.com/Petri-Hub/roblox-assets-mcp) | [pepper](https://github.com/Petri-Hub/pepper) | [lab](https://github.com/Petri-Hub/lab) |
+|---|---|---|
+| Asset-only MCP server for Creator Store search, previews, and temporary download URLs. | My personal agent; the planned Hermes profile for this project will be documented there. | My homelab, where pepper and the new profile will run. |
 
 ## References
 
