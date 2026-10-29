@@ -18,6 +18,8 @@
 
 ## Play the game
 
+This AI-assisted horror game is taking shape in a procedurally generated forest. The current build is an early playtest of the map and first-person movement.
+
 - [Staging playtest](https://www.roblox.com/games/112768229129661) receives changes merged into `staging`.
 - [Production game](https://www.roblox.com/games/138015860615681) receives changes merged into `production`.
 
@@ -180,6 +182,7 @@ What is working now:
 What comes next:
 
 - ❌ Add a Hermes profile in pepper that opens PRs from Discord.
+- ❌ Build a cloud-only MCP server for Creator Store asset search and downloads, including delivery into Pepper's Modal sandbox ([plan](TODO.md)).
 
 ## Repository layout
 

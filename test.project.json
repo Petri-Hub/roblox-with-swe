@@ -2,6 +2,16 @@
   "name": "roblox-with-swe-tests",
   "tree": {
     "$className": "DataModel",
+    "ReplicatedStorage": {
+      "Shared": {
+        "$path": "src/shared"
+      }
+    },
+    "ServerStorage": {
+      "RobloxRedwoods": {
+        "$path": "src/assets/RobloxRedwoods_6432306802.rbxmx"
+      }
+    },
     "ServerScriptService": {
       "$properties": {
         "LoadStringEnabled": true
@@ -11,8 +21,8 @@
         "Specs": {
           "$path": "tests/specs"
         },
-        "Shared": {
-          "$path": "src/shared"
+        "ForestGenerator": {
+          "$path": "src/server/ForestGenerator.luau"
         },
         "DevPackages": {
           "$path": "DevPackages"
