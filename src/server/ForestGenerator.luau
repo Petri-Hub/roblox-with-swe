@@ -10,6 +10,9 @@ local ForestGenerator = {}
 local REDWOOD_VARIANTS = { "RedwoodTree-Var01", "Redwoodtree-LowLOD-Var01" }
 local GROUND_COLOR = Color3.fromRGB(43, 64, 42)
 local DIRT_COLOR = Color3.fromRGB(54, 48, 38)
+local MUD_COLOR = Color3.fromRGB(48, 40, 32)
+local LEAFY_GRASS_COLOR = Color3.fromRGB(38, 56, 36)
+local ROCK_COLOR = Color3.fromRGB(65, 70, 68)
 local TRUNK_COLOR = Color3.fromRGB(56, 42, 32)
 local CANOPY_COLORS = {
 	Color3.fromRGB(29, 54, 41),
@@ -44,9 +47,15 @@ local function buildTerrain()
 				local z = -halfSize + (zCell - 0.5) * voxelSize
 				local height = ForestLayout.heightAt(x, z)
 				local occupancy = math.clamp((height - cellBottom) / voxelSize, 0, 1)
-				local material = if occupancy == 0
-					then Enum.Material.Air
-					else if cellBottom < height - voxelSize then Enum.Material.Ground else Enum.Material.Grass
+				local material
+				if occupancy == 0 then
+					material = Enum.Material.Air
+				elseif cellBottom < height - voxelSize then
+					material = Enum.Material.Ground
+				else
+					local slope = ForestLayout.slopeAt(x, z)
+					material = ForestLayout.surfaceMaterialAt(x, z, slope)
+				end
 
 				materials[xCell][yCell][zCell] = material
 				occupancies[xCell][yCell][zCell] = occupancy
@@ -56,6 +65,9 @@ local function buildTerrain()
 
 	terrain:SetMaterialColor(Enum.Material.Grass, GROUND_COLOR)
 	terrain:SetMaterialColor(Enum.Material.Ground, DIRT_COLOR)
+	terrain:SetMaterialColor(Enum.Material.Mud, MUD_COLOR)
+	terrain:SetMaterialColor(Enum.Material.LeafyGrass, LEAFY_GRASS_COLOR)
+	terrain:SetMaterialColor(Enum.Material.Rock, ROCK_COLOR)
 	terrain:WriteVoxels(region, voxelSize, materials, occupancies)
 end
 
@@ -81,7 +93,7 @@ end
 
 local function makeTree(parent: Instance, position: Vector2, random: Random, index: number)
 	local groundHeight = ForestLayout.heightAt(position.X, position.Y)
-	local treeHeight = random:NextNumber(45, 66)
+	local treeHeight = random:NextNumber(ForestLayout.TREE_MIN_HEIGHT, ForestLayout.TREE_MAX_HEIGHT)
 	local trunkWidth = random:NextNumber(2.5, 3.7)
 	local foliageColor = CANOPY_COLORS[random:NextInteger(1, #CANOPY_COLORS)]
 	local tree = Instance.new("Model")
@@ -192,7 +204,7 @@ local function makeRedwood(parent: Instance, source: Model, position: Vector2, r
 	end
 
 	local _, originalSize = tree:GetBoundingBox()
-	local targetHeight = random:NextNumber(45, 66)
+	local targetHeight = random:NextNumber(ForestLayout.TREE_MIN_HEIGHT, ForestLayout.TREE_MAX_HEIGHT)
 	tree:ScaleTo(tree:GetScale() * targetHeight / originalSize.Y)
 
 	local bounds, size = tree:GetBoundingBox()
@@ -226,6 +238,70 @@ local function configureLighting()
 	Lighting.FogEnd = 82
 end
 
+local function loadForestAsset(name: string): Instance?
+	local folder = ServerStorage:FindFirstChild("ForestAssets")
+	return folder and folder:FindFirstChild(name)
+end
+
+local function cleanScripts(instance: Instance)
+	for _, child in instance:GetDescendants() do
+		if child:IsA("Script") or child:IsA("LocalScript") or child:IsA("ModuleScript") then
+			child:Destroy()
+		end
+	end
+end
+
+local function placeProp(
+	parent: Instance,
+	template: Instance,
+	position: Vector2,
+	rotation: number,
+	scale: number?,
+	canCollide: boolean?,
+	embedOffset: number?
+): Instance?
+	local prop = template:Clone()
+	cleanScripts(prop)
+
+	local embed = embedOffset or 0.2
+	local groundHeight = ForestLayout.heightAt(position.X, position.Y)
+
+	if prop:IsA("Model") then
+		if scale and scale ~= 1 then
+			prop:ScaleTo(prop:GetScale() * scale)
+		end
+		for _, child in prop:GetDescendants() do
+			if child:IsA("BasePart") then
+				child.Anchored = true
+				if canCollide ~= nil then
+					child.CanCollide = canCollide
+				end
+			end
+		end
+		local bounds, size = prop:GetBoundingBox()
+		local lowestY = bounds.Position.Y - size.Y / 2
+		local pivotOffsetY = prop:GetPivot().Position.Y - lowestY
+		prop:PivotTo(
+			CFrame.new(position.X, groundHeight + pivotOffsetY - embed, position.Y) * CFrame.Angles(0, rotation, 0)
+		)
+	elseif prop:IsA("BasePart") then
+		prop.Anchored = true
+		if canCollide ~= nil then
+			prop.CanCollide = canCollide
+		end
+		if scale and scale ~= 1 then
+			prop.Size *= scale
+		end
+		local pivotOffsetY = prop.Size.Y / 2
+		prop:PivotTo(
+			CFrame.new(position.X, groundHeight + pivotOffsetY - embed, position.Y) * CFrame.Angles(0, rotation, 0)
+		)
+	end
+
+	prop.Parent = parent
+	return prop
+end
+
 function ForestGenerator.generate(): Model
 	ensureSpawn()
 	buildTerrain()
@@ -254,6 +330,26 @@ function ForestGenerator.generate(): Model
 	trees.Name = "Trees"
 	trees.Parent = forest
 
+	local landmarks = Instance.new("Folder")
+	landmarks.Name = "Landmarks"
+	landmarks.Parent = forest
+
+	local boulders = Instance.new("Folder")
+	boulders.Name = "Boulders"
+	boulders.Parent = forest
+
+	local debris = Instance.new("Folder")
+	debris.Name = "Debris"
+	debris.Parent = forest
+
+	local foliage = Instance.new("Folder")
+	foliage.Name = "Foliage"
+	foliage.Parent = forest
+
+	local scatter = Instance.new("Folder")
+	scatter.Name = "Scatter"
+	scatter.Parent = forest
+
 	local redwoods, treeSource = loadRedwoodTemplates()
 	forest:SetAttribute("TreeSource", treeSource)
 	if #redwoods == 0 then
@@ -269,7 +365,63 @@ function ForestGenerator.generate(): Model
 			makeTree(trees, position, random, index)
 		end
 	end
+
+	for _, landmark in ForestLayout.LANDMARKS do
+		local template = loadForestAsset(landmark.assetName)
+		if template then
+			local prop = placeProp(landmarks, template, landmark.position, landmark.rotation, 1, true, 0.4)
+			if prop then
+				prop.Name = landmark.id
+			end
+		end
+	end
+
+	for index, propInfo in ForestLayout.boulderLocations() do
+		local template = loadForestAsset(propInfo.assetName)
+		if template then
+			local prop = placeProp(boulders, template, propInfo.position, propInfo.rotation, propInfo.scale, true, 0.4)
+			if prop then
+				prop.Name = string.format("Boulder%03d", index)
+			end
+		end
+	end
+
+	for index, propInfo in ForestLayout.debrisLocations() do
+		local template = loadForestAsset(propInfo.assetName)
+		if template then
+			local prop = placeProp(debris, template, propInfo.position, propInfo.rotation, propInfo.scale, true, 0.25)
+			if prop then
+				prop.Name = string.format("Debris%03d", index)
+			end
+		end
+	end
+
+	for index, propInfo in ForestLayout.foliageLocations() do
+		local template = loadForestAsset(propInfo.assetName)
+		if template then
+			local prop = placeProp(foliage, template, propInfo.position, propInfo.rotation, propInfo.scale, false, 0.1)
+			if prop then
+				prop.Name = string.format("Foliage%03d", index)
+			end
+		end
+	end
+
+	for index, propInfo in ForestLayout.landmarkScatterLocations() do
+		local template = loadForestAsset(propInfo.assetName)
+		if template then
+			local prop = placeProp(scatter, template, propInfo.position, propInfo.rotation, propInfo.scale, true, 0.15)
+			if prop then
+				prop.Name = string.format("Scatter%03d", index)
+			end
+		end
+	end
+
 	forest:SetAttribute("ExpectedTreeCount", #trees:GetChildren())
+	forest:SetAttribute("LandmarkCount", #landmarks:GetChildren())
+	forest:SetAttribute("BoulderCount", #boulders:GetChildren())
+	forest:SetAttribute("DebrisCount", #debris:GetChildren())
+	forest:SetAttribute("FoliageCount", #foliage:GetChildren())
+	forest:SetAttribute("ScatterCount", #scatter:GetChildren())
 	forest:SetAttribute("Ready", true)
 	return forest
 end

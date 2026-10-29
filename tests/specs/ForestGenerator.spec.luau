@@ -43,6 +43,40 @@ describe("forest generation", function()
 			end
 		end
 		expect(redwoodCount).toBeGreaterThan(0)
+
+		local landmarks = forest:FindFirstChild("Landmarks")
+		expect(landmarks).never.toBeNil()
+		expect(#landmarks:GetChildren()).toBeGreaterThan(0)
+		for _, landmark in landmarks:GetChildren() do
+			for _, child in landmark:GetDescendants() do
+				expect(child:IsA("Script") or child:IsA("LocalScript") or child:IsA("ModuleScript")).toBe(false)
+				if child:IsA("BasePart") then
+					expect(child.Anchored).toBe(true)
+				end
+			end
+		end
+
+		local foliage = forest:FindFirstChild("Foliage")
+		expect(foliage).never.toBeNil()
+		expect(#foliage:GetChildren()).toBeGreaterThan(0)
+		for _, prop in foliage:GetChildren() do
+			if prop:IsA("BasePart") then
+				expect(prop.Anchored).toBe(true)
+				expect(prop.CanCollide).toBe(false)
+			else
+				for _, child in prop:GetDescendants() do
+					if child:IsA("BasePart") then
+						expect(child.Anchored).toBe(true)
+						expect(child.CanCollide).toBe(false)
+					end
+				end
+			end
+		end
+
+		local boulders = forest:FindFirstChild("Boulders")
+		expect(boulders).never.toBeNil()
+		expect(#boulders:GetChildren()).toBeGreaterThan(0)
+
 		local spawn = workspace:FindFirstChild("ForestSpawn")
 		expect(spawn).never.toBeNil()
 		expect(spawn:IsA("SpawnLocation")).toBe(true)

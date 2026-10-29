@@ -51,42 +51,78 @@ local root =
 root.Transparency = 1
 flashlight.PrimaryPart = root
 
-local darkMetal = Color3.fromRGB(35, 42, 45)
-local brightMetal = Color3.fromRGB(76, 84, 86)
-local lightColor = Color3.fromRGB(225, 236, 255)
+local darkMetal = Color3.fromRGB(25, 27, 28)
+local headMetal = Color3.fromRGB(35, 38, 40)
+local brightMetal = Color3.fromRGB(56, 62, 65)
+local lightColor = Color3.fromRGB(238, 242, 250)
+local lensColor = Color3.fromRGB(242, 238, 222)
+local forwardRot = CFrame.Angles(0, -math.pi / 2, 0)
+
 local barrel = makePart(
 	flashlight,
 	"Barrel",
-	Vector3.new(0.28, 0.7, 0.28),
-	CFrame.new(0.45, -0.53, -1.56) * CFrame.Angles(math.pi / 2, 0, 0),
-	Enum.Material.Metal,
+	Vector3.new(0.85, 0.22, 0.22),
+	CFrame.new(0.42, -0.50, -1.45) * forwardRot,
+	Enum.Material.CorrodedMetal,
 	darkMetal
 )
 barrel.Shape = Enum.PartType.Cylinder
+
+local endCap = makePart(
+	flashlight,
+	"EndCap",
+	Vector3.new(0.10, 0.25, 0.25),
+	CFrame.new(0.42, -0.50, -1.0) * forwardRot,
+	Enum.Material.Metal,
+	headMetal
+)
+endCap.Shape = Enum.PartType.Cylinder
+
+local head = makePart(
+	flashlight,
+	"Head",
+	Vector3.new(0.28, 0.36, 0.36),
+	CFrame.new(0.42, -0.50, -1.95) * forwardRot,
+	Enum.Material.Metal,
+	headMetal
+)
+head.Shape = Enum.PartType.Cylinder
+
 local rim = makePart(
 	flashlight,
 	"Rim",
-	Vector3.new(0.34, 0.09, 0.34),
-	CFrame.new(0.45, -0.53, -1.93) * CFrame.Angles(math.pi / 2, 0, 0),
+	Vector3.new(0.08, 0.40, 0.40),
+	CFrame.new(0.42, -0.50, -2.10) * forwardRot,
 	Enum.Material.Metal,
 	brightMetal
 )
 rim.Shape = Enum.PartType.Cylinder
+
 local lens = makePart(
 	flashlight,
 	"Lens",
-	Vector3.new(0.25, 0.25, 0.04),
-	CFrame.new(0.45, -0.53, -1.99),
+	Vector3.new(0.02, 0.36, 0.36),
+	CFrame.new(0.42, -0.50, -2.12) * forwardRot,
 	Enum.Material.Neon,
-	lightColor
+	lensColor
 )
-lens.Shape = Enum.PartType.Ball
+lens.Shape = Enum.PartType.Cylinder
+lens.Transparency = 0.35
+
+local _switch = makePart(
+	flashlight,
+	"Switch",
+	Vector3.new(0.06, 0.04, 0.12),
+	CFrame.new(0.42, -0.37, -1.50),
+	Enum.Material.SmoothPlastic,
+	Color3.fromRGB(18, 20, 22)
+)
 
 local emitter = makePart(
 	flashlight,
 	"Emitter",
 	Vector3.one * 0.05,
-	CFrame.new(0.45, -0.53, -2.02),
+	CFrame.new(0.42, -0.50, -2.15),
 	Enum.Material.SmoothPlastic,
 	lightColor
 )
@@ -95,15 +131,15 @@ local beam = Instance.new("SpotLight")
 beam.Name = "FlashlightBeam"
 beam.Face = Enum.NormalId.Front
 beam.Color = lightColor
-beam.Brightness = 4
-beam.Range = 60
-beam.Angle = 48
+beam.Brightness = 4.5
+beam.Range = 65
+beam.Angle = 50
 beam.Shadows = true
 beam.Parent = emitter
 
 local glow = Instance.new("PointLight")
 glow.Name = "FlashlightGlow"
-glow.Color = lightColor
+glow.Color = lensColor
 glow.Brightness = 0.45
 glow.Range = 7
 glow.Parent = lens
@@ -141,18 +177,20 @@ local function showCharacterArm(character: Model, generation: number)
 		cloneArmPart(
 			upper :: BasePart,
 			"FlashlightUpperArm",
-			Vector3.new(0.77, -1.35, -0.18),
-			Vector3.new(0.69, -0.93, -0.77)
+			Vector3.new(0.72, -1.30, -0.22),
+			Vector3.new(0.64, -0.88, -0.80)
 		)
 		cloneArmPart(
 			lower :: BasePart,
 			"FlashlightForearm",
-			Vector3.new(0.69, -0.93, -0.77),
-			Vector3.new(0.46, -0.55, -1.28)
+			Vector3.new(0.64, -0.88, -0.80),
+			Vector3.new(0.42, -0.50, -1.35)
 		)
 		local handCopy = FirstPersonBodyPart.clone(hand :: BasePart)
 		handCopy.Name = "FlashlightHand"
-		handCopy.CFrame = flashlight:GetPivot() * CFrame.new(0.46, -0.55, -1.28)
+		handCopy.CFrame = flashlight:GetPivot()
+			* CFrame.new(0.42, -0.50, -1.35)
+			* CFrame.Angles(0, math.rad(-15), math.rad(10))
 		handCopy.Parent = flashlight
 		table.insert(armParts, handCopy)
 	else
@@ -161,8 +199,8 @@ local function showCharacterArm(character: Model, generation: number)
 			cloneArmPart(
 				arm :: BasePart,
 				"FlashlightArm",
-				Vector3.new(0.77, -1.35, -0.18),
-				Vector3.new(0.46, -0.55, -1.28)
+				Vector3.new(0.72, -1.30, -0.22),
+				Vector3.new(0.42, -0.50, -1.35)
 			)
 		end
 	end
