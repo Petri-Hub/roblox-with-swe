@@ -28,6 +28,7 @@ local function addTemplate(assetId: number)
 	local sound = Instance.new("Sound")
 	sound.Name = "ForestSound" .. assetId
 	sound.SoundId = "rbxassetid://" .. assetId
+	SurfaceSounds.dull(sound)
 	sound.Parent = SoundService
 	templates[assetId] = sound
 	table.insert(preloadSounds, sound)
@@ -108,21 +109,25 @@ local function onCharacterAdded(character: Model)
 
 		if newState == Enum.HumanoidStateType.Jumping then
 			local category = SurfaceSounds.categoryFor(lastGroundMaterial)
-			playSample(SurfaceSounds.footsteps[category], 0.22, 0.78)
+			playSample(SurfaceSounds.footsteps[category], SurfaceSounds.mix.jumpVolume, SurfaceSounds.mix.jumpPitch)
 		elseif newState == Enum.HumanoidStateType.Landed then
 			local material = humanoid.FloorMaterial
 			if material == Enum.Material.Air then
 				material = lastGroundMaterial
 			end
 			local category = SurfaceSounds.categoryFor(material)
-			playSample(SurfaceSounds.landings[category], 0.32, 0.85)
+			playSample(
+				SurfaceSounds.landings[category],
+				SurfaceSounds.mix.landingVolume,
+				SurfaceSounds.mix.landingPitch
+			)
 			distanceSinceStep = 0
 		end
 	end)
 
 	humanoid.Died:Connect(function()
 		if currentHumanoid == humanoid then
-			playSound(SurfaceSounds.death, 0.4, 0.82)
+			playSound(SurfaceSounds.death, SurfaceSounds.mix.deathVolume, SurfaceSounds.mix.deathPitch)
 		end
 	end)
 end
@@ -167,8 +172,8 @@ RunService.Heartbeat:Connect(function()
 	local stepDistance = if humanoid.WalkSpeed >= 13 then RUN_STEP_DISTANCE else WALK_STEP_DISTANCE
 	if distanceSinceStep >= stepDistance then
 		local category = SurfaceSounds.categoryFor(material)
-		local speed = if humanoid.WalkSpeed >= 13 then 0.9 else 0.82
-		playSample(SurfaceSounds.footsteps[category], 0.3, speed)
+		local volume, pitch = SurfaceSounds.footstepMix(humanoid.WalkSpeed >= 13, math.random())
+		playSample(SurfaceSounds.footsteps[category], volume, pitch)
 		distanceSinceStep %= stepDistance
 	end
 end)

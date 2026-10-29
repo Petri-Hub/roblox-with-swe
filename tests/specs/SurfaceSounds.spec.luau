@@ -26,4 +26,27 @@ describe("surface sounds", function()
 			expect(#SurfaceSounds.landings[category]).toBeGreaterThan(0)
 		end
 	end)
+
+	it("keeps footsteps low, quiet, and slightly varied", function()
+		local walkVolume, walkPitch = SurfaceSounds.footstepMix(false, 0.5)
+		local runVolume, runPitch = SurfaceSounds.footstepMix(true, 0.5)
+
+		expect(walkPitch).toBeLessThan(0.8)
+		expect(runPitch).toBeLessThan(0.85)
+		expect(walkVolume).toBeLessThan(0.3)
+		expect(runVolume).toBeLessThan(0.3)
+
+		local _, quietPitch = SurfaceSounds.footstepMix(false, 0)
+		local _, loudPitch = SurfaceSounds.footstepMix(false, 1)
+		expect(quietPitch).never.toBe(loudPitch)
+	end)
+
+	it("dulls the high end of a footstep so it stops sounding noisy", function()
+		local sound = Instance.new("Sound")
+		local equalizer = SurfaceSounds.dull(sound)
+
+		expect(equalizer.Parent).toBe(sound)
+		expect(equalizer.HighGain).toBeLessThan(-6)
+		sound:Destroy()
+	end)
 end)

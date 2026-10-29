@@ -217,11 +217,13 @@ local function configureLighting()
 	Lighting.Brightness = 1
 	Lighting.ExposureCompensation = -0.45
 	Lighting.GlobalShadows = true
-	Lighting.Ambient = Color3.fromRGB(18, 27, 31)
-	Lighting.OutdoorAmbient = Color3.fromRGB(27, 39, 43)
-	Lighting.FogColor = Color3.fromRGB(27, 39, 43)
-	Lighting.FogStart = 18
-	Lighting.FogEnd = 90
+	Lighting.Ambient = Color3.fromRGB(10, 14, 16)
+	Lighting.OutdoorAmbient = Color3.fromRGB(14, 20, 22)
+	-- Near-black fog keeps the distance dark instead of the blue-gray haze
+	-- that made the edge of the map visible against the night sky.
+	Lighting.FogColor = Color3.fromRGB(2, 3, 4)
+	Lighting.FogStart = 14
+	Lighting.FogEnd = 82
 end
 
 function ForestGenerator.generate(): Model

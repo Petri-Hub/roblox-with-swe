@@ -1,9 +1,11 @@
 local ContentProvider = game:GetService("ContentProvider")
+local Debris = game:GetService("Debris")
 local Lighting = game:GetService("Lighting")
 local Players = game:GetService("Players")
 local ReplicatedFirst = game:GetService("ReplicatedFirst")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
+local SoundService = game:GetService("SoundService")
 local TweenService = game:GetService("TweenService")
 local Workspace = game:GetService("Workspace")
 
@@ -55,6 +57,51 @@ status.MaxVisibleGraphemes = -1
 screen.Parent = playerGui
 player:SetAttribute("ForestIntroShown", true)
 ReplicatedFirst:RemoveDefaultLoadingScreen()
+
+-- The curtain is already on screen, so waiting for the shared module only
+-- delays the first keystroke, never the black screen itself.
+local TypingSounds = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("TypingSounds"))
+
+local typingTemplates = {}
+local keystrokeIndex = 0
+
+local function prepareTypingSounds()
+	local sounds = {}
+	for _, assetId in TypingSounds.samples do
+		local sound = Instance.new("Sound")
+		sound.Name = "IntroTyping" .. assetId
+		sound.SoundId = "rbxassetid://" .. assetId
+		sound.Volume = 0
+		sound.Parent = SoundService
+		typingTemplates[assetId] = sound
+		table.insert(sounds, sound)
+	end
+
+	task.spawn(function()
+		local success, message = pcall(ContentProvider.PreloadAsync, ContentProvider, sounds)
+		if not success then
+			warn("Could not preload the typing sounds: " .. tostring(message))
+		end
+	end)
+end
+
+local function playKeystroke()
+	keystrokeIndex += 1
+	local assetId, pitch, volume = TypingSounds.keystroke(keystrokeIndex, math.random(), math.random())
+	local template = typingTemplates[assetId]
+	if not template then
+		return
+	end
+
+	local sound = template:Clone()
+	sound.Volume = volume
+	sound.PlaybackSpeed = pitch
+	sound.Parent = SoundService
+	Debris:AddItem(sound, 1)
+	sound:Play()
+end
+
+prepareTypingSounds()
 
 local function terrainHasReachedSpawn(spawn: SpawnLocation): boolean
 	local raycastParams = RaycastParams.new()
@@ -189,6 +236,7 @@ end)
 local function typeLine(label: TextLabel, delayBetweenLetters: number)
 	for index = 1, #label.Text do
 		label.MaxVisibleGraphemes = index
+		playKeystroke()
 		task.wait(delayBetweenLetters)
 	end
 end

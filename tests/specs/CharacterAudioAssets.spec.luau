@@ -1,6 +1,7 @@
 local root = script.Parent.Parent
 local JestGlobals = require(root.DevPackages.JestGlobals)
 local SurfaceSounds = require(game:GetService("ReplicatedStorage").Shared.SurfaceSounds)
+local TypingSounds = require(game:GetService("ReplicatedStorage").Shared.TypingSounds)
 local ContentProvider = game:GetService("ContentProvider")
 local SoundService = game:GetService("SoundService")
 
@@ -26,6 +27,9 @@ describe("character audio assets", function()
 			end
 		end
 		addSound(SurfaceSounds.death)
+		for _, assetId in TypingSounds.samples do
+			addSound(assetId)
+		end
 
 		ContentProvider:PreloadAsync(sounds)
 		for _, sound in sounds do

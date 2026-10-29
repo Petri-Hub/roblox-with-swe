@@ -16,6 +16,45 @@ SurfaceSounds.landings = {
 
 SurfaceSounds.death = 9113480915
 
+-- The engine's default footsteps are bright and clicky, which reads as noise in
+-- a quiet forest. These settings drop the pitch and shave the high end so the
+-- steps sit under the ambience instead of on top of it.
+SurfaceSounds.mix = {
+	walkPitch = 0.72,
+	runPitch = 0.8,
+	jumpPitch = 0.66,
+	landingPitch = 0.74,
+	deathPitch = 0.8,
+	walkVolume = 0.22,
+	runVolume = 0.18,
+	jumpVolume = 0.16,
+	landingVolume = 0.24,
+	deathVolume = 0.34,
+	pitchJitter = 0.035,
+	highGain = -12,
+	midGain = -3,
+	lowGain = 3,
+}
+
+function SurfaceSounds.footstepMix(running: boolean, roll: number): (number, number)
+	local mix = SurfaceSounds.mix
+	local pitch = if running then mix.runPitch else mix.walkPitch
+	local volume = if running then mix.runVolume else mix.walkVolume
+	local jitter = (math.clamp(roll, 0, 1) * 2 - 1) * mix.pitchJitter
+	return volume, pitch + jitter
+end
+
+function SurfaceSounds.dull(sound: Sound): EqualizerSoundEffect
+	local mix = SurfaceSounds.mix
+	local equalizer = Instance.new("EqualizerSoundEffect")
+	equalizer.Name = "ForestDullness"
+	equalizer.HighGain = mix.highGain
+	equalizer.MidGain = mix.midGain
+	equalizer.LowGain = mix.lowGain
+	equalizer.Parent = sound
+	return equalizer
+end
+
 function SurfaceSounds.categoryFor(material: Enum.Material): string
 	if material == Enum.Material.Grass or material == Enum.Material.LeafyGrass then
 		return "grass"

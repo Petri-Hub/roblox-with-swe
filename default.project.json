@@ -71,25 +71,25 @@
     "Lighting": {
       "$properties": {
         "Ambient": [
-          0.0706,
-          0.1059,
-          0.1216
+          0.0392,
+          0.0549,
+          0.0627
         ],
         "Brightness": 1,
         "ClockTime": 0.5,
         "ExposureCompensation": -0.45,
         "FogColor": [
-          0.1059,
-          0.1529,
-          0.1686
+          0.0078,
+          0.0118,
+          0.0157
         ],
-        "FogStart": 18,
-        "FogEnd": 90,
+        "FogStart": 14,
+        "FogEnd": 82,
         "GlobalShadows": true,
         "OutdoorAmbient": [
-          0.1059,
-          0.1529,
-          0.1686
+          0.0549,
+          0.0784,
+          0.0863
         ],
         "Outlines": false,
         "LightingStyle": "Realistic"
