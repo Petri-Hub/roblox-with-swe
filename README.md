@@ -178,11 +178,12 @@ What is working now:
 - ✅ Run Jest through Open Cloud with a dedicated test place.
 - ✅ Run formatting, linting, builds, and engine tests in GitHub Actions.
 - ✅ Publish separate staging and production places through the Roblox API.
+- ✅ Build [roblox-assets-mcp](https://github.com/Petri-Hub/roblox-assets-mcp) for Creator Store search, asset details, previews, and temporary download URLs.
 
 What comes next:
 
 - ❌ Add a Hermes profile in pepper that opens PRs from Discord.
-- ❌ Build a cloud-only MCP server for Creator Store asset search and downloads, including delivery into Pepper's Modal sandbox ([plan](TODO.md)).
+- ❌ Verify that Pepper can download selected assets into its Modal sandbox and bundle them in a place ([handoff plan](TODO.md)).
 
 ## Repository layout
 
@@ -228,6 +229,7 @@ This repository is licensed under the [MIT License](LICENSE).
 
 ## Related projects
 
+- [roblox-assets-mcp](https://github.com/Petri-Hub/roblox-assets-mcp): an asset-only MCP server for Creator Store search, previews, and temporary download URLs.
 - [pepper](https://github.com/Petri-Hub/pepper): my personal agent; the planned Hermes profile for this project will be documented there.
 - [lab](https://github.com/Petri-Hub/lab): my homelab, where pepper and the new profile will run.
 
