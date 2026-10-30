@@ -16,8 +16,16 @@
 
 > **TL;DR:** a proof of concept for bringing software engineering to Roblox on Linux: source-controlled places, linting, automated regression tests, Git Flow, playtest previews, and eventually staging and production releases. Friends will build together through branches and reviewed pull requests, using Discord to discuss ideas and ask an agent to help implement them. That agent will be a new Hermes profile in my personal agent pepper, running in my homelab and contributing through the same tests and review process. This game is the first place to try that shared workflow.
 
+## Play the game
+
+This AI-assisted horror game is taking shape in a procedurally generated forest. The current build is an early playtest of the map and first-person movement.
+
+- [Staging playtest](https://www.roblox.com/games/112768229129661) receives changes merged into `staging`.
+- [Production game](https://www.roblox.com/games/138015860615681) receives changes merged into `production`.
+
 ## Contents
 
+- [Play the game](#play-the-game)
 - [How it works](#how-it-works)
 - [Software engineering in Roblox](#software-engineering-in-roblox)
 - [Collaboration](#collaboration)
@@ -170,13 +178,12 @@ What is working now:
 - ✅ Run Jest through Open Cloud with a dedicated test place.
 - ✅ Run formatting, linting, builds, and engine tests in GitHub Actions.
 - ✅ Publish separate staging and production places through the Roblox API.
+- ✅ Build [roblox-assets-mcp](https://github.com/Petri-Hub/roblox-assets-mcp) for Creator Store search, asset details, previews, and temporary download URLs.
 
 What comes next:
 
-- ❌ Add Luau LSP for editor feedback and type-aware code navigation.
-- ❌ Try scripted Studio playtests for gameplay behavior.
-- ❌ Establish Git Flow with friends and document contribution rules.
 - ❌ Add a Hermes profile in pepper that opens PRs from Discord.
+- ❌ Verify that Pepper can download selected assets into its Modal sandbox and bundle them in a place ([handoff plan](TODO.md)).
 
 ## Repository layout
 
@@ -222,8 +229,9 @@ This repository is licensed under the [MIT License](LICENSE).
 
 ## Related projects
 
-- [pepper](https://github.com/Petri-Hub/pepper): my personal agent; the planned Hermes profile for this project will be documented there.
-- [lab](https://github.com/Petri-Hub/lab): my homelab, where pepper and the new profile will run.
+| [roblox-assets-mcp](https://github.com/Petri-Hub/roblox-assets-mcp) | [pepper](https://github.com/Petri-Hub/pepper) | [lab](https://github.com/Petri-Hub/lab) |
+|---|---|---|
+| Asset-only MCP server for Creator Store search, previews, and temporary download URLs. | My personal agent; the planned Hermes profile for this project will be documented there. | My homelab, where pepper and the new profile will run. |
 
 ## References
 

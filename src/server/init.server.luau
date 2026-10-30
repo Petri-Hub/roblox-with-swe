@@ -1,50 +1,41 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local Workspace = game:GetService("Workspace")
 
-local HarvestRules = require(ReplicatedStorage.Shared.HarvestRules)
+local ForestGenerator = require(script.ForestGenerator)
+local ForestAvatar = require(ReplicatedStorage.Shared.ForestAvatar)
 
-local tree = Workspace.World.Tree
-local trunk = tree.Trunk
-local prompt = trunk.HarvestPrompt
-local canopies = { tree.LowerCanopy, tree.UpperCanopy }
-
-local readyAt = 0
-
-local function setTreeAvailable(isAvailable: boolean)
-	prompt.Enabled = isAvailable
-	for _, canopy in canopies do
-		canopy.Transparency = if isAvailable then 0 else 1
-		canopy.CanCollide = isAvailable
+local function onCharacterAdded(character: Model)
+	local humanoid = character:WaitForChild("Humanoid") :: Humanoid
+	local description = ForestAvatar.newDescription()
+	local success, message = pcall(humanoid.ApplyDescriptionAsync, humanoid, description)
+	description:Destroy()
+	if not success then
+		warn("Could not apply the forest character appearance: " .. tostring(message))
 	end
+	character:SetAttribute("ForestAppearanceReady", true)
 end
 
-local function onHarvest(player: Player)
-	local character = player.Character
-	local root = if character then character:FindFirstChild("HumanoidRootPart") else nil
-	local humanoid = if character then character:FindFirstChildOfClass("Humanoid") else nil
-	if not root or not humanoid or humanoid.Health <= 0 then
+local watchedPlayers = {}
+local function onPlayerAdded(player: Player)
+	if watchedPlayers[player] then
 		return
 	end
-
-	local now = time()
-	local distance = (root.Position - trunk.Position).Magnitude
-	local nextReadyAt = HarvestRules.nextReadyAt(readyAt, now, distance)
-	if not nextReadyAt then
-		return
-	end
-
-	readyAt = nextReadyAt
-	player:SetAttribute("Wood", (player:GetAttribute("Wood") or 0) + 1)
-	setTreeAvailable(false)
-
-	task.delay(HarvestRules.REGROW_SECONDS, function()
-		setTreeAvailable(true)
+	watchedPlayers[player] = true
+	player.CharacterAdded:Connect(function(character)
+		task.spawn(onCharacterAdded, character)
 	end)
+	if player.Character then
+		task.spawn(onCharacterAdded, player.Character)
+	end
 end
 
-Players.PlayerAdded:Connect(function(player)
-	player:SetAttribute("Wood", 0)
-end)
+Players.PlayerAdded:Connect(onPlayerAdded)
+for _, player in Players:GetPlayers() do
+	onPlayerAdded(player)
+end
 
-prompt.Triggered:Connect(onHarvest)
+local success, message = pcall(ForestGenerator.generate)
+if not success then
+	ReplicatedStorage:SetAttribute("ForestLoadFailed", true)
+	warn("Forest generation failed: " .. tostring(message))
+end

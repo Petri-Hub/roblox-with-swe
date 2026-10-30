@@ -2,68 +2,159 @@
   "name": "roblox-with-swe",
   "tree": {
     "$className": "DataModel",
-
     "ReplicatedStorage": {
       "Shared": {
         "$path": "src/shared"
       }
     },
-
+    "ServerStorage": {
+      "RobloxRedwoods": {
+        "$path": "src/assets/RobloxRedwoods_6432306802.rbxmx"
+      },
+      "ForestAssets": {
+        "$className": "Folder",
+        "BushTall": {
+          "$path": "src/assets/forest/BushTall.rbxm"
+        },
+        "BushRound": {
+          "$path": "src/assets/forest/BushRound.rbxm"
+        },
+        "Fern": {
+          "$path": "src/assets/forest/Fern.rbxm"
+        },
+        "FernSmall": {
+          "$path": "src/assets/forest/FernSmall.rbxm"
+        },
+        "RockCluster": {
+          "$path": "src/assets/forest/RockCluster.rbxm"
+        },
+        "Boulder": {
+          "$path": "src/assets/forest/Boulder.rbxm"
+        },
+        "MossBoulder": {
+          "$path": "src/assets/forest/MossBoulder.rbxm"
+        },
+        "PlainBoulder": {
+          "$path": "src/assets/forest/PlainBoulder.rbxm"
+        },
+        "RootStump": {
+          "$path": "src/assets/forest/RootStump.rbxm"
+        },
+        "RelStump": {
+          "$path": "src/assets/forest/RelStump.rbxm"
+        },
+        "FallenLog": {
+          "$path": "src/assets/forest/FallenLog.rbxm"
+        },
+        "HollowLog": {
+          "$path": "src/assets/forest/HollowLog.rbxm"
+        },
+        "AbandonedCabin": {
+          "$path": "src/assets/forest/AbandonedCabin.rbxm"
+        },
+        "CollapsedShed": {
+          "$path": "src/assets/forest/CollapsedShed.rbxm"
+        },
+        "RustedCar": {
+          "$path": "src/assets/forest/RustedCar.rbxm"
+        },
+        "RustyBarrel": {
+          "$path": "src/assets/forest/RustyBarrel.rbxm"
+        },
+        "BrokenCrate": {
+          "$path": "src/assets/forest/BrokenCrate.rbxm"
+        },
+        "SupplyPile": {
+          "$path": "src/assets/forest/SupplyPile.rbxm"
+        },
+        "Crate": {
+          "$path": "src/assets/forest/Crate.rbxmx"
+        }
+      }
+    },
+    "ReplicatedFirst": {
+      "ForestIntro": {
+        "$path": "src/client/ForestIntro.client.luau"
+      }
+    },
     "ServerScriptService": {
       "Server": {
         "$path": "src/server"
       }
     },
-
     "StarterPlayer": {
+      "$properties": {
+        "CameraMode": "LockFirstPerson",
+        "CharacterJumpHeight": 4.5,
+        "CharacterUseJumpPower": false,
+        "CharacterWalkSpeed": 10,
+        "EnableMouseLockOption": false,
+        "LoadCharacterAppearance": false
+      },
       "StarterPlayerScripts": {
-        "Client": {
-          "$path": "src/client"
+        "ForestIntroFallback": {
+          "$path": "src/client/ForestIntro.client.luau"
+        },
+        "FirstPersonMovement": {
+          "$path": "src/client/FirstPersonMovement.client.luau"
+        },
+        "CharacterSounds": {
+          "$path": "src/client/CharacterSounds.client.luau"
+        },
+        "ForestPresentation": {
+          "$path": "src/client/ForestPresentation.client.luau"
         }
       }
     },
-
     "Workspace": {
       "$properties": {
         "FilteringEnabled": true
       },
-      "World": {
-        "$path": "src/world"
-      },
-      "Baseplate": {
-        "$className": "Part",
+      "ForestSpawn": {
+        "$className": "SpawnLocation",
         "$properties": {
           "Anchored": true,
-          "Color": [
-            0.15,
-            0.75,
-            0.35
-          ],
-          "Locked": true,
+          "CanCollide": true,
+          "Neutral": true,
           "Position": [
             0,
-            -10,
+            -0.45,
             0
           ],
           "Size": [
-            512,
-            20,
-            512
-          ]
+            10,
+            1,
+            10
+          ],
+          "Transparency": 1
         }
       }
     },
     "Lighting": {
       "$properties": {
         "Ambient": [
-          0,
-          0,
-          0
+          0.0392,
+          0.0549,
+          0.0627
         ],
-        "Brightness": 2,
+        "Brightness": 1,
+        "ClockTime": 0.5,
+        "ExposureCompensation": -0.45,
+        "FogColor": [
+          0.0078,
+          0.0118,
+          0.0157
+        ],
+        "FogStart": 14,
+        "FogEnd": 82,
         "GlobalShadows": true,
+        "OutdoorAmbient": [
+          0.0549,
+          0.0784,
+          0.0863
+        ],
         "Outlines": false,
-        "Technology": "Voxel"
+        "LightingStyle": "Realistic"
       }
     },
     "SoundService": {
