@@ -44,3 +44,67 @@ If the CDN URL cannot be fetched from the sandbox, investigate copying the bytes
 - Pepper can search and inspect a free model through the MCP server without any Studio connection or Roblox key in the sandbox.
 - Pepper can download a selected model into a Modal checkout, handle any compression in the response, verify its actual `.rbxm` or `.rbxmx` contents, build it with Rojo, and commit it.
 - A real Hermes-to-Modal test confirms the downloaded file exists in the sandbox, not only on the homelab host; OCALE verifies any asset used by the game.
+
+
+---
+
+# Backlog: Lemon — desenvolvimento colaborativo via Discord
+
+> Levantamento de requisitos em 2026-11-01. São propostas e pontos a validar, não funcionalidades confirmadas. Preservar a seção anterior sobre o bridge de assets do Pepper.
+
+## Fase 1 — Auditoria do ambiente existente (prioridade imediata)
+- [ ] Inventariar containers/imagens Docker, processos, portas, SSH, credenciais/permissões, volumes, serviços de Rojo e túneis zrok no homelab.
+- [ ] Revisar integrações Lemon ↔ Discord ↔ GitHub ↔ Rojo ↔ zrok ↔ Roblox, ciclo de vida, logs, limpeza e isolamento.
+- [ ] Identificar o que já funciona, o que está manual, riscos de segurança e pontos frágeis antes de ampliar o sistema.
+
+**Por quê:** o setup foi construído em várias etapas; precisamos de uma base confiável e documentada antes de adicionar automações.
+
+## Fase 2 — Contrato operacional do Lemon
+- [ ] Definir SOUL.md/instruções de identidade, escopo, autonomia, limites e comunicação; separar princípios de procedimentos verificáveis.
+- [ ] Exigir worktree e branch próprias por thread/tarefa do Discord; provisionar, reutilizar e limpar worktrees com segurança.
+- [ ] Definir skill de setup: pré-requisitos, inicialização, Rojo serve, zrok, compartilhamento da URL, diagnóstico e encerramento.
+- [ ] Definir skill de implementação: descoberta de requisitos, plano curto, alterações incrementais, revisão, testes, entrega e recuperação de falhas.
+- [ ] Especificar quando continuar com commits na mesma branch, quando abrir PR e quando fazer merge; evitar PRs/execuções de cloud desnecessários.
+- [ ] Definir regras para criar GitHub Issues (backlog, débitos técnicos, melhorias futuras), evitando registrar toda ideia passageira.
+- [ ] Criar glossário e linguagem acessível a não programadores (ex.: PR como “pacote de mudanças”), com detalhe técnico sob demanda.
+
+**Por quê:** hoje o agente não conhece nem o fluxo de worktrees; comportamento consistente não deve depender de improvisação ou apenas da memória do modelo.
+
+## Proteção e governança de branches
+- [ ] Configurar rulesets/branch protection para `development` e `staging`: alterações somente via PR, checks obrigatórios, bloqueio de force push e exclusão; revisar bypass de administradores e bots.
+- [ ] Verificar se `development` existe e qual é o fluxo real de promoção entre branches antes de aplicar regras.
+- [ ] Ajustar permissões do Lemon e validar que ele não consegue contornar a política.
+
+**Por quê:** impedir alterações diretas ou não validadas em branches compartilhadas. **Ainda não configurado.**
+
+## Testes e entrega Roblox
+- [ ] Validar em dois Studios a interação de Rojo + Team Create + Team Test: quais mudanças de código entram no estado compartilhado, drafts/commits, início, entrada tardia e encerramento.
+- [ ] Documentar teste multiplayer manual: uma sessão Team Test ativa por experiência; aceitar inicialmente essa limitação, sem criar pool de experiências.
+- [ ] Levantar testes viáveis sem Roblox Studio headless, checks em CI/cloud, limites/custos e critérios de aceite.
+- [ ] Definir política de PR, monitoramento dos checks, correção de falhas, merge e release/publicação, distinguindo teste no Studio de versão publicada.
+
+**Por quê:** Rojo sincroniza código, mas não é um servidor multiplayer; evitar prometer validação automática que a infraestrutura não executa.
+
+## Assets e ferramentas determinísticas
+- [ ] Criar fluxo de busca de Creator Store por termo/categoria, com paginação “próxima/anterior”, seleção de um ou mais assets e estado por thread.
+- [ ] Gerar imagens de prévia com overlay legível de nome/ID (e, se útil, índice), pois a apresentação de imagens no Discord não atende ao fluxo de escolha.
+- [ ] Integrar seleção, inspeção de metadados/licenças/segurança de scripts, download/importação e rastreabilidade dos assets.
+- [ ] Reconciliar este fluxo com o bridge MCP de assets já descrito acima; separar skill de orientação das ferramentas de paginação/composição de imagens.
+
+**Por quê:** pessoas não técnicas precisam escolher visualmente assets sem decorar IDs; ferramentas previsíveis economizam tokens.
+
+## Conhecimento, MCP e Game Design
+- [ ] Criar skills reutilizáveis de construção de blocos/mecânicas comuns, com exemplos e convenções do projeto.
+- [ ] Avaliar documentação estruturada/cache/Context7 para reduzir parsing repetitivo de HTML e gasto de tokens; verificar cobertura real de APIs Roblox.
+- [ ] Avaliar integração MCP e possível uso de Tripwire (confirmar produto/escopo pretendido) para governança das ferramentas.
+- [ ] Criar skill consultiva de Game Design: core loop, game feel, progressão, balanceamento, feedback, rejogabilidade e diversão; explicar termos sem excesso de jargão.
+- [ ] Manter decisões criativas com os participantes: Lemon sugere alternativas e trade-offs, não impõe direção de design.
+
+**Por quê:** Lemon deve ser um colega de equipe que ajuda a conceber, construir e explicar experiências jogáveis, sem transformar toda conversa em aula.
+
+## Próximo passo de planejamento
+- [ ] Mapear uma jornada ponta a ponta: pedido no Discord → worktree → implementação → teste → revisão/PR → entrega.
+- [ ] Classificar cada requisito em instrução geral, skill, ferramenta determinística, infraestrutura ou política de GitHub.
+- [ ] Priorizar um MVP operacional após a auditoria e testar com duas pessoas em uma thread antes de expandir.
+
+**Critério geral:** simplicidade primeiro; automatizar apenas o que foi validado manualmente e medir confiabilidade, custo e experiência de uso.
