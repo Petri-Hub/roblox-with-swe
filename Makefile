@@ -1,4 +1,4 @@
-.PHONY: build build-staging build-production test-on-system test-on-ocale format-apply format-check lint serve
+.PHONY: build build-staging build-production test-on-system test-on-cloud test-on-ocale format-apply format-check lint serve
 
 -include .env
 
@@ -30,8 +30,11 @@ build-production: dist
 test-on-system:
 	jest-roblox-cli
 
-test-on-ocale:
+test-on-cloud:
 	jest-roblox-cli --backend open-cloud
+
+# Deprecated alias kept for older docs and .github/workflows/quality.yml.
+test-on-ocale: test-on-cloud
 
 serve:
 	rojo serve

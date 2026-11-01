@@ -156,7 +156,7 @@ To view the place in Roblox Studio, open a built `.rbxlx` file or run `make serv
 make test-on-system
 
 # Run the same tests in Roblox Open Cloud, without Studio.
-make test-on-ocale
+make test-on-cloud
 ```
 
 `make test-on-system` builds the test place from the current working files, launches Studio through Vinegar, runs Jest, prints the result, and closes Studio. The test place includes Wally's development packages, so run `wally install` first. Studio opens a window during the run.
