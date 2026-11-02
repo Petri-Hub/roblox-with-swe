@@ -14,11 +14,14 @@
       "GhostTemplateAlt2": {
         "$path": "src/assets/GhostAlt2.rbxm"
       },
-      "RobloxRedwoods": {
-        "$path": "src/assets/RobloxRedwoods_6432306802.rbxmx"
-      },
       "ForestAssets": {
         "$className": "Folder",
+        "TreeLayeredPine": {
+          "$path": "src/assets/trees/TreeLayeredPine.rbxm"
+        },
+        "TreePineSingle": {
+          "$path": "src/assets/trees/TreePineSingle.rbxm"
+        },
         "BushTall": {
           "$path": "src/assets/forest/BushTall.rbxm"
         },

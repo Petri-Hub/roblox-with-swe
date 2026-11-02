@@ -26,23 +26,26 @@ describe("forest generation", function()
 		expect(#trees).toBe(#ForestLayout.treeLocations())
 		expect(forest:GetAttribute("Ready")).toBe(true)
 		expect(forest:GetAttribute("ExpectedTreeCount")).toBe(#trees)
-		local redwoodCount = 0
+		local templatedCount = 0
 		for _, tree in trees do
-			if tree.Name:find("Redwood") then
-				redwoodCount += 1
+			if tree.Name:find("Tree") then
+				templatedCount += 1
 				local _, size = tree:GetBoundingBox()
-				expect(size.Y).toBeGreaterThan(44)
-				expect(size.Y).toBeLessThan(67)
+				expect(size.Y).toBeGreaterThan(ForestLayout.TREE_MIN_HEIGHT * 0.85)
+				expect(size.Y).toBeLessThan(ForestLayout.TREE_MAX_HEIGHT * 1.15)
 				expect(tree:FindFirstChild("Soil", true)).toBeNil()
 				for _, child in tree:GetDescendants() do
 					expect(child:IsA("Script") or child:IsA("LocalScript") or child:IsA("ModuleScript")).toBe(false)
 					if child:IsA("BasePart") then
-						expect(child.CanCollide).toBe(child.Name == "Trunk")
+						local lowerName = string.lower(child.Name)
+						local solid = string.find(lowerName, "trunk", 1, true) ~= nil
+							or string.find(lowerName, "bark", 1, true) ~= nil
+						expect(child.CanCollide).toBe(solid)
 					end
 				end
 			end
 		end
-		expect(redwoodCount).toBeGreaterThan(0)
+		expect(templatedCount).toBeGreaterThan(0)
 
 		local landmarks = forest:FindFirstChild("Landmarks")
 		expect(landmarks).never.toBeNil()

@@ -23,6 +23,8 @@ local EXPECTED_FOREST_ASSETS = {
 	"RustedCar",
 	"RustyBarrel",
 	"SupplyPile",
+	"TreeLayeredPine",
+	"TreePineSingle",
 }
 
 describe("forest visual assets", function()

@@ -126,9 +126,11 @@ local beam = Instance.new("SpotLight")
 beam.Name = "FlashlightBeam"
 beam.Face = Enum.NormalId.Front
 beam.Color = lightColor
-beam.Brightness = 4.5
-beam.Range = 65
-beam.Angle = 50
+beam.Brightness = 5.5
+beam.Range = 78
+-- A wide flood cone: the lantern should wash a whole clearing, not draw a
+-- pencil beam through the fog.
+beam.Angle = 110
 beam.Shadows = true
 beam.Parent = emitter
 
