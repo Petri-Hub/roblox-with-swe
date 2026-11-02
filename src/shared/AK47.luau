@@ -10,17 +10,21 @@ AK47.MAX_RESERVE = 240
 AK47.ROUNDS_PER_MINUTE = 600
 AK47.SHOT_INTERVAL = 60 / AK47.ROUNDS_PER_MINUTE
 AK47.RELOAD_TIME = 2.4
-AK47.DAMAGE = 34
+AK47.DAMAGE = 45
 AK47.RANGE = 320
 AK47.HIP_SPREAD = math.rad(2.3)
 AK47.AIM_SPREAD = math.rad(0.35)
 AK47.MOVING_SPREAD = math.rad(1.1)
 
--- Built-in engine sounds only. A licensed AK-47 sample can replace these later
--- without touching the weapon logic.
+-- Free Creator Store samples, rotated so sustained fire does not sound like the
+-- same one-second loop. Engine-built sounds cover the handling clicks.
 AK47.SOUNDS = {
-	fire = { id = "rbxasset://sounds/snap.wav", volume = 0.55, pitch = 0.62 },
-	body = { id = "rbxasset://sounds/bass.wav", volume = 0.4, pitch = 1.9 },
+	fire = {
+		ids = { 101051077802734, 93412796557696, 102442472539680 },
+		volume = 0.55,
+		pitch = 1,
+	},
+	body = { id = "rbxasset://sounds/bass.wav", volume = 0.32, pitch = 2.1 },
 	reloadOut = { id = "rbxasset://sounds/switch.wav", volume = 0.3, pitch = 0.9 },
 	reloadIn = { id = "rbxasset://sounds/switch3.wav", volume = 0.34, pitch = 1.15 },
 	empty = { id = "rbxasset://sounds/clickfast.wav", volume = 0.28, pitch = 1.4 },

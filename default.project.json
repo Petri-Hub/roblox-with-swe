@@ -106,6 +106,12 @@
         },
         "WeaponController": {
           "$path": "src/client/WeaponController.client.luau"
+        },
+        "FlashlightController": {
+          "$path": "src/client/FlashlightController.client.luau"
+        },
+        "InventoryController": {
+          "$path": "src/client/InventoryController.client.luau"
         }
       }
     },

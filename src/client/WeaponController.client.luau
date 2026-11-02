@@ -10,6 +10,7 @@ local Workspace = game:GetService("Workspace")
 
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local AK47 = require(Shared.AK47)
+local Inventory = require(Shared.Inventory)
 local WeaponPose = require(Shared.WeaponPose)
 
 local player = Players.LocalPlayer
@@ -236,6 +237,11 @@ local function now(): number
 	return Workspace:GetServerTimeNow()
 end
 
+local function isEquipped(): boolean
+	local id = player:GetAttribute(Inventory.EQUIPPED_ATTRIBUTE)
+	return id == nil or id == "AK47"
+end
+
 ---------------------------------------------------------------------------
 -- Audio
 ---------------------------------------------------------------------------
@@ -243,13 +249,37 @@ end
 local function playSound(spec): Sound
 	local sound = Instance.new("Sound")
 	sound.Name = "AK47Sound"
-	sound.SoundId = spec.id
+	sound.SoundId = if spec.id then spec.id else "rbxassetid://" .. spec.ids[1]
 	sound.Volume = spec.volume
 	sound.PlaybackSpeed = spec.pitch * (1 + (math.random() - 0.5) * 0.06)
 	sound.Parent = SoundService
 	sound:Play()
 	Debris:AddItem(sound, 3)
 	return sound
+end
+
+-- One gunshot voice, restarted per round: rotating samples keeps sustained fire
+-- from looping, and reusing the instance stops ten overlapping tails at 600 RPM.
+local shotSound: Sound? = nil
+local shotSample = 0
+
+local function playShotSound()
+	local spec = AK47.SOUNDS.fire
+	shotSample = shotSample % #spec.ids + 1
+
+	if not shotSound or not shotSound.Parent then
+		local sound = Instance.new("Sound")
+		sound.Name = "AK47Shot"
+		sound.Volume = spec.volume
+		sound.Parent = SoundService
+		shotSound = sound
+	end
+
+	local active = shotSound :: Sound
+	active.SoundId = "rbxassetid://" .. tostring(spec.ids[shotSample])
+	active.PlaybackSpeed = spec.pitch * (1 + (math.random() - 0.5) * 0.05)
+	active.TimePosition = 0
+	active:Play()
 end
 
 ---------------------------------------------------------------------------
@@ -319,7 +349,7 @@ local function poseWeapon(deltaTime: number)
 		return
 	end
 
-	rig.model.Parent = if alive and currentCharacter then Workspace else nil
+	rig.model.Parent = if alive and currentCharacter and isEquipped() then Workspace else nil
 	if not alive or not rig.model.Parent then
 		return
 	end
@@ -662,6 +692,10 @@ local function buildHud()
 		gui = gui,
 		marks = marks,
 		dot = dot,
+		crosshair = crosshair,
+		ammoFrame = ammoFrame,
+		reloadTrack = reloadTrack,
+		touchControls = touchControls,
 		ammoLabel = ammoLabel,
 		reserveLabel = reserveLabel,
 		hintLabel = hintLabel,
@@ -811,7 +845,7 @@ end
 
 local function shoot(currentTime: number)
 	local humanoid = currentHumanoid
-	if not alive or not humanoid then
+	if not alive or not humanoid or not isEquipped() then
 		return
 	end
 
@@ -838,7 +872,7 @@ local function shoot(currentTime: number)
 	swayPitch += 0.01
 
 	muzzleFlash()
-	playSound(AK47.SOUNDS.fire)
+	playShotSound()
 	playSound(AK47.SOUNDS.body)
 
 	local muzzlePosition = if rig then rig.parts.Muzzle.Position else origin
@@ -848,7 +882,7 @@ local function shoot(currentTime: number)
 end
 
 local function updateFiring(currentTime: number)
-	if not firing or not alive then
+	if not firing or not alive or not isEquipped() then
 		return
 	end
 
@@ -861,7 +895,7 @@ end
 
 local function setFiring(value: boolean)
 	firing = value
-	if value and alive then
+	if value and alive and isEquipped() then
 		shoot(now())
 	end
 end
@@ -1010,6 +1044,12 @@ hitRemote.OnClientEvent:Connect(function(payload)
 end)
 
 player:GetAttributeChangedSignal("Kills"):Connect(refreshKills)
+player:GetAttributeChangedSignal(Inventory.EQUIPPED_ATTRIBUTE):Connect(function()
+	if not isEquipped() then
+		firing = false
+		aiming = false
+	end
+end)
 
 player.CharacterAdded:Connect(onCharacterAdded)
 if player.Character then
@@ -1023,6 +1063,15 @@ player.CharacterRemoving:Connect(function()
 	player:SetAttribute(AIM_ATTRIBUTE, 1)
 end)
 
+local function refreshWeaponHudVisibility()
+	local equipped = isEquipped() and alive
+	hud.crosshair.Visible = equipped
+	hud.ammoFrame.Visible = equipped
+	hud.reloadTrack.Visible = equipped
+	hud.hitMarker.Visible = equipped
+	hud.touchControls.Visible = equipped and UserInputService.TouchEnabled
+end
+
 local function paintHud(deltaTime: number, currentTime: number)
 	poseWeapon(deltaTime)
 
@@ -1035,6 +1084,7 @@ local function paintHud(deltaTime: number, currentTime: number)
 		forestCrosshair.Enabled = false
 	end
 
+	refreshWeaponHudVisibility()
 	refreshAmmoLabels()
 	refreshReloadBar()
 
