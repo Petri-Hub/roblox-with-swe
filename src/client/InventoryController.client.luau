@@ -12,6 +12,14 @@ local SLOT_WIDTH = 132
 local SLOT_HEIGHT = 42
 local SLOT_GAP = 8
 
+local SLOT_KEYS = {
+	[Enum.KeyCode.One] = 1,
+	[Enum.KeyCode.Two] = 2,
+	[Enum.KeyCode.Three] = 3,
+	[Enum.KeyCode.Four] = 4,
+	[Enum.KeyCode.Five] = 5,
+}
+
 local slotButtons = {}
 local hintLabel: TextLabel
 
@@ -123,12 +131,8 @@ local function onInputBegan(input: InputObject, processed: boolean)
 		return
 	end
 
-	local slot: number? = nil
-	if input.KeyCode == Enum.KeyCode.One then
-		slot = 1
-	elseif input.KeyCode == Enum.KeyCode.Two then
-		slot = 2
-	elseif input.KeyCode == Enum.KeyCode.ButtonY then
+	local slot: number? = SLOT_KEYS[input.KeyCode]
+	if input.KeyCode == Enum.KeyCode.ButtonY then
 		player:SetAttribute(Inventory.EQUIPPED_ATTRIBUTE, Inventory.nextEquipped(equippedId()))
 		return
 	end
