@@ -1,6 +1,7 @@
 local root = script.Parent.Parent
 local JestGlobals = require(root.DevPackages.JestGlobals)
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Inventory = require(ReplicatedStorage.Shared.Inventory)
 local ShopCatalog = require(ReplicatedStorage.Shared.ShopCatalog)
 
 local describe = JestGlobals.describe
@@ -41,6 +42,18 @@ describe("shop catalog", function()
 		local items = ShopCatalog.items()
 		items[1].price = 0
 		expect(ShopCatalog.price(items[1].id)).toBeGreaterThan(0)
+	end)
+
+	it("gives the player something to earn kills with", function()
+		-- The shop only takes kills, so the starting kit cannot be weaponless.
+		local armed = false
+		for _, id in Inventory.STARTER_ITEMS do
+			if Inventory.isWeapon(id) then
+				armed = true
+			end
+		end
+
+		expect(armed).toBe(true)
 	end)
 
 	it("explains why a purchase is refused", function()

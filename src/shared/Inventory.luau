@@ -53,9 +53,9 @@ Inventory.FLASHLIGHT_ATTRIBUTE = "FlashlightOn"
 Inventory.DEFAULT_ITEM = "AK47"
 Inventory.OWNED_PREFIX = "Owns_"
 
--- Everyone starts with the lamp in hand and nothing else: weapons come from the
--- shop, paid for with ghost kills.
-Inventory.STARTER_ITEMS = { "Flashlight" }
+-- Everyone starts with the lamp and the pistol: kills are the shop currency, so
+-- you need something to earn the first ones with.
+Inventory.STARTER_ITEMS = { "Flashlight", "M9" }
 
 -- Ownership lives on the player as one boolean attribute per item, which
 -- replicates to every client without a custom remote.

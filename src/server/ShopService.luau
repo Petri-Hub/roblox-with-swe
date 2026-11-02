@@ -61,7 +61,8 @@ local function buildSign(stall: Model, cframe: CFrame)
 
 	local surface = Instance.new("SurfaceGui")
 	surface.Name = "SignFace"
-	surface.Face = Enum.NormalId.Front
+	-- Roblox "Back" is the +Z face, which is the one the customers face.
+	surface.Face = Enum.NormalId.Back
 	surface.CanvasSize = Vector2.new(350, 90)
 	surface.LightInfluence = 0
 	surface.Parent = board
@@ -142,6 +143,35 @@ local function buildStall(position: Vector3, angle: number): Model
 	roof.CanCollide = true
 
 	buildSign(stall, base * CFrame.new(0, 4.2, 4.5))
+
+	-- Trim so the roof does not read as a floating slab.
+	part(stall, "Fascia", Vector3.new(12.6, 0.5, 0.3), WOOD_LIGHT, base * CFrame.new(0, 5.05, 5.5))
+	for _, side in { -1, 1 } do
+		part(
+			stall,
+			"Chain",
+			Vector3.new(0.12, 0.9, 0.12),
+			IRON,
+			base * CFrame.new(side * 2.6, 4.95, 4.5),
+			Enum.Material.Metal
+		)
+	end
+
+	-- Shelf behind the counter, with one crate per thing on sale so the stall
+	-- advertises itself from the doorway.
+	part(stall, "Shelf", Vector3.new(9.4, 0.2, 1.4), WOOD_LIGHT, base * CFrame.new(0, 2.6, -3.4))
+	local goods = { Color3.fromRGB(206, 164, 92), Color3.fromRGB(120, 132, 128), Color3.fromRGB(150, 108, 214) }
+	for index, color in goods do
+		local crate = part(
+			stall,
+			`Goods{index}`,
+			Vector3.new(0.9, 0.9, 0.9),
+			color,
+			base * CFrame.new((index - 2) * 2.2, 3.15, -3.4),
+			Enum.Material.SmoothPlastic
+		)
+		crate.CanCollide = false
+	end
 
 	-- Two hanging lamps so the stall reads warm against the black forest.
 	for _, side in { -1, 1 } do
