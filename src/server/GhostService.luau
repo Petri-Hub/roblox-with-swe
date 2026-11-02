@@ -23,7 +23,7 @@ local UV_TINT = Color3.fromRGB(176, 132, 255)
 
 -- Every ghost picks one of the shipped models and a small variation on top, so
 -- the forest never shows the same silhouette twice in a row.
-local GHOST_TEMPLATE_NAMES = { "GhostTemplate", "GhostTemplateAlt1", "GhostTemplateAlt2" }
+local GHOST_TEMPLATE_NAMES = { "GhostTemplate", "GhostTemplateAlt2" }
 local GHOST_TINTS = {
 	Color3.fromRGB(255, 255, 255),
 	Color3.fromRGB(198, 226, 214),

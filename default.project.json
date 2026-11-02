@@ -11,9 +11,6 @@
       "GhostTemplate": {
         "$path": "src/assets/Ghost.rbxm"
       },
-      "GhostTemplateAlt1": {
-        "$path": "src/assets/GhostAlt1.rbxm"
-      },
       "GhostTemplateAlt2": {
         "$path": "src/assets/GhostAlt2.rbxm"
       },
