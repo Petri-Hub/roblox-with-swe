@@ -33,7 +33,7 @@ return {
 	cameraKickAim = 0.004,
 
 	sounds = {
-		fire = { ids = { 130930282434364 }, volume = 0.5, pitch = 1.05 },
+		fire = { ids = { 111272255398192 }, volume = 0.55, pitch = 1 },
 		body = { id = "rbxasset://sounds/bass.wav", volume = 0.2, pitch = 2.6 },
 		reloadOut = { id = "rbxasset://sounds/switch.wav", volume = 0.26, pitch = 1.1 },
 		reloadIn = { id = "rbxasset://sounds/switch3.wav", volume = 0.3, pitch = 1.35 },
