@@ -18,7 +18,9 @@
 
 ## Play the game
 
-This AI-assisted horror game is taking shape in a procedurally generated forest. The current build is an early playtest of the map and first-person movement.
+This AI-assisted horror game is taking shape in a procedurally generated forest. The current build is an early playtest of the map, first-person movement, and the first weapon.
+
+Every life starts with an AK-47: a 30-round magazine, 600 rounds per minute, iron sights while holding right mouse, and `R` to reload. Ghosts drift out of the fog and follow you, and every one you put down adds a point to the `KILLS` counter in the corner.
 
 - [Staging playtest](https://www.roblox.com/games/112768229129661) receives changes merged into `staging`.
 - [Production game](https://www.roblox.com/games/138015860615681) receives changes merged into `production`.

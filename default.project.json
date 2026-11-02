@@ -103,6 +103,9 @@
         },
         "ForestPresentation": {
           "$path": "src/client/ForestPresentation.client.luau"
+        },
+        "WeaponController": {
+          "$path": "src/client/WeaponController.client.luau"
         }
       }
     },

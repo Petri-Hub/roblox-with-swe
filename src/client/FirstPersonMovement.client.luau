@@ -22,6 +22,7 @@ local FIELD_OF_VIEW_SMOOTH_TIME = 0.24
 local TILT_SMOOTH_TIME = 0.16
 local MAX_STRAFE_TILT = math.rad(2.5)
 local BASE_CAMERA_OFFSET = Vector3.new(0, 0.1, -0.6)
+local AIM_FOV_ATTRIBUTE = "AimFovScale"
 local SPRINT_ACTION = "ForestSprint"
 local RENDER_STEP = "ForestFirstPersonMovement"
 local TILT_RENDER_STEP = "ForestCameraTilt"
@@ -117,6 +118,15 @@ local function createStaminaBar(parent: ScreenGui): Frame
 	return fill
 end
 
+local function aimFovScale(): number
+	local scale = player:GetAttribute(AIM_FOV_ATTRIBUTE)
+	if typeof(scale) == "number" then
+		return math.clamp(scale, 0.5, 1)
+	end
+
+	return 1
+end
+
 local function onSprintInput(_actionName: string, inputState: Enum.UserInputState): Enum.ContextActionResult
 	if inputState == Enum.UserInputState.Begin then
 		sprintHeld = true
@@ -195,7 +205,7 @@ local function updateMovement(deltaTime: number)
 	staminaFill.Size = UDim2.fromScale(stamina.value, 1)
 	staminaFill.BackgroundColor3 = Color3.fromRGB(190, 135, 108):Lerp(Color3.fromRGB(185, 211, 197), stamina.value)
 	local targetSpeed = if isRunning then RUN_SPEED else WALK_SPEED
-	local targetFieldOfView = if isRunning then RUN_FIELD_OF_VIEW else WALK_FIELD_OF_VIEW
+	local targetFieldOfView = (if isRunning then RUN_FIELD_OF_VIEW else WALK_FIELD_OF_VIEW) * aimFovScale()
 
 	local nextSpeed
 	nextSpeed, speedVelocity = TweenService:SmoothDamp(

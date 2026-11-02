@@ -1,0 +1,1049 @@
+local Debris = game:GetService("Debris")
+local GuiService = game:GetService("GuiService")
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
+local SoundService = game:GetService("SoundService")
+local TweenService = game:GetService("TweenService")
+local UserInputService = game:GetService("UserInputService")
+local Workspace = game:GetService("Workspace")
+
+local Shared = ReplicatedStorage:WaitForChild("Shared")
+local AK47 = require(Shared.AK47)
+local WeaponPose = require(Shared.WeaponPose)
+
+local player = Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+local remotes = ReplicatedStorage:WaitForChild("CombatRemotes")
+local fireRemote = remotes:WaitForChild("Fire") :: RemoteEvent
+local reloadRemote = remotes:WaitForChild("Reload") :: RemoteEvent
+local stateRemote = remotes:WaitForChild("WeaponState") :: RemoteEvent
+local hitRemote = remotes:WaitForChild("Hit") :: RemoteEvent
+
+local RENDER_STEP = "AK47Viewmodel"
+local AIM_ATTRIBUTE = "AimFovScale"
+local AIM_FOV_SCALE = 0.7
+local AIM_BLEND_SPEED = 11
+local RECOIL_DECAY = 8
+local BOLT_TRAVEL = 0.24
+local CROSSHAIR_BASE = 5
+local CROSSHAIR_SPREAD_SCALE = 120
+-- Parts that sit behind the eye when aiming; they fade out with the aim blend
+-- so the sight picture is not blocked by the stock.
+local ADS_HIDDEN_PARTS = {
+	Stock = true,
+	StockPlate = true,
+}
+
+local METAL = Color3.fromRGB(38, 40, 37)
+local METAL_LIGHT = Color3.fromRGB(62, 65, 60)
+local WOOD = Color3.fromRGB(88, 54, 30)
+local WOOD_DARK = Color3.fromRGB(62, 38, 22)
+local TRACER_COLOR = Color3.fromRGB(255, 231, 170)
+
+local PART_SPECS = {
+	{
+		name = "Receiver",
+		size = Vector3.new(0.34, 0.3, 1.25),
+		offset = CFrame.new(0, 0, -0.5),
+		color = METAL,
+		material = Enum.Material.Metal,
+	},
+	{
+		name = "DustCover",
+		size = Vector3.new(0.3, 0.09, 0.9),
+		offset = CFrame.new(0, 0.17, -0.55),
+		color = METAL_LIGHT,
+		material = Enum.Material.Metal,
+	},
+	{
+		name = "DustRib",
+		size = Vector3.new(0.06, 0.03, 0.82),
+		offset = CFrame.new(0, 0.225, -0.55),
+		color = METAL,
+		material = Enum.Material.Metal,
+	},
+	{
+		name = "EjectionPort",
+		size = Vector3.new(0.02, 0.1, 0.3),
+		offset = CFrame.new(0.175, 0.06, -0.45),
+		color = METAL_LIGHT,
+		material = Enum.Material.Metal,
+	},
+	{
+		name = "Handguard",
+		size = Vector3.new(0.3, 0.26, 0.52),
+		offset = CFrame.new(0, 0.03, -1.34),
+		color = WOOD,
+		material = Enum.Material.Wood,
+	},
+	{
+		name = "UpperHandguard",
+		size = Vector3.new(0.24, 0.11, 0.46),
+		offset = CFrame.new(0, 0.21, -1.32),
+		color = WOOD_DARK,
+		material = Enum.Material.Wood,
+	},
+	{
+		name = "GasBlock",
+		size = Vector3.new(0.12, 0.2, 0.14),
+		offset = CFrame.new(0, 0.16, -1.7),
+		color = METAL,
+		material = Enum.Material.Metal,
+	},
+	{
+		name = "GasTube",
+		size = Vector3.new(0.06, 0.06, 0.3),
+		offset = CFrame.new(0, 0.2, -1.6),
+		color = METAL_LIGHT,
+		material = Enum.Material.Metal,
+	},
+	{
+		name = "GasBlock",
+		size = Vector3.new(0.13, 0.24, 0.16),
+		offset = CFrame.new(0, 0.14, -1.72),
+		color = METAL,
+		material = Enum.Material.Metal,
+	},
+	{
+		name = "HandguardCap",
+		size = Vector3.new(0.32, 0.28, 0.06),
+		offset = CFrame.new(0, 0.03, -1.62),
+		color = METAL,
+		material = Enum.Material.Metal,
+	},
+	{
+		name = "Barrel",
+		size = Vector3.new(0.09, 0.09, 0.95),
+		offset = CFrame.new(0, 0.04, -1.95),
+		color = METAL,
+		material = Enum.Material.Metal,
+	},
+	{
+		name = "CleaningRod",
+		size = Vector3.new(0.035, 0.035, 0.7),
+		offset = CFrame.new(0, -0.045, -1.95),
+		color = METAL_LIGHT,
+		material = Enum.Material.Metal,
+	},
+	{
+		name = "FrontSightBase",
+		size = Vector3.new(0.13, 0.09, 0.13),
+		offset = CFrame.new(0, 0.105, -2.12),
+		color = METAL,
+		material = Enum.Material.Metal,
+	},
+	{
+		name = "FrontSight",
+		size = Vector3.new(0.05, 0.2, 0.05),
+		offset = CFrame.new(0, 0.24, -2.12),
+		color = METAL_LIGHT,
+		material = Enum.Material.Metal,
+	},
+	{
+		name = "RearSightBase",
+		size = Vector3.new(0.14, 0.03, 0.08),
+		offset = CFrame.new(0, 0.205, -0.88),
+		color = METAL_LIGHT,
+		material = Enum.Material.Metal,
+	},
+	{
+		name = "RearSightLeft",
+		size = Vector3.new(0.035, 0.09, 0.05),
+		offset = CFrame.new(-0.045, 0.25, -0.88),
+		color = METAL_LIGHT,
+		material = Enum.Material.Metal,
+	},
+	{
+		name = "RearSightRight",
+		size = Vector3.new(0.035, 0.09, 0.05),
+		offset = CFrame.new(0.045, 0.25, -0.88),
+		color = METAL_LIGHT,
+		material = Enum.Material.Metal,
+	},
+	{
+		name = "Muzzle",
+		size = Vector3.new(0.1, 0.1, 0.16),
+		offset = CFrame.new(0, 0.04, -2.44),
+		color = METAL_LIGHT,
+		material = Enum.Material.Metal,
+	},
+	{
+		name = "Magazine",
+		size = Vector3.new(0.23, 0.6, 0.17),
+		offset = CFrame.new(0, -0.44, -0.62) * CFrame.Angles(math.rad(-12), 0, 0),
+		color = METAL,
+		material = Enum.Material.Metal,
+	},
+	{
+		name = "Grip",
+		size = Vector3.new(0.16, 0.4, 0.21),
+		offset = CFrame.new(0, -0.34, -0.11) * CFrame.Angles(math.rad(-20), 0, 0),
+		color = WOOD_DARK,
+		material = Enum.Material.Wood,
+	},
+	{
+		name = "Stock",
+		size = Vector3.new(0.2, 0.24, 0.64),
+		offset = CFrame.new(0, 0.01, 0.34),
+		color = WOOD,
+		material = Enum.Material.Wood,
+	},
+	{
+		name = "StockPlate",
+		size = Vector3.new(0.22, 0.3, 0.06),
+		offset = CFrame.new(0, -0.01, 0.68),
+		color = METAL,
+		material = Enum.Material.Metal,
+	},
+	{
+		name = "Bolt",
+		size = Vector3.new(0.07, 0.07, 0.22),
+		offset = CFrame.new(0.19, 0.13, -0.34),
+		color = METAL_LIGHT,
+		material = Enum.Material.Metal,
+	},
+	{
+		name = "Flash",
+		size = Vector3.new(0.36, 0.36, 0.46),
+		offset = CFrame.new(0, 0.04, -2.72),
+		color = Color3.fromRGB(255, 238, 190),
+		material = Enum.Material.Neon,
+	},
+}
+
+local state = AK47.new()
+local rig = nil
+local hud = nil
+local currentHumanoid: Humanoid? = nil
+local currentCharacter: Model? = nil
+local alive = false
+local firing = false
+local aiming = false
+local aimAlpha = 0
+local lastFovScale = 1
+local recoil = 0
+local cameraKick = 0
+local cameraKickYaw = 0
+local bobPhase = 0
+local swayYaw = 0
+local swayPitch = 0
+local flashToken = 0
+local hitMarkerUntil = 0
+local forestCrosshair: ScreenGui? = nil
+
+local function now(): number
+	return Workspace:GetServerTimeNow()
+end
+
+---------------------------------------------------------------------------
+-- Audio
+---------------------------------------------------------------------------
+
+local function playSound(spec): Sound
+	local sound = Instance.new("Sound")
+	sound.Name = "AK47Sound"
+	sound.SoundId = spec.id
+	sound.Volume = spec.volume
+	sound.PlaybackSpeed = spec.pitch * (1 + (math.random() - 0.5) * 0.06)
+	sound.Parent = SoundService
+	sound:Play()
+	Debris:AddItem(sound, 3)
+	return sound
+end
+
+---------------------------------------------------------------------------
+-- Viewmodel
+---------------------------------------------------------------------------
+
+local function buildRig()
+	local model = Instance.new("Model")
+	model.Name = "AK47Viewmodel"
+
+	local parts = {}
+	local offsets = {}
+	for _, spec in PART_SPECS do
+		local part = Instance.new("Part")
+		part.Name = spec.name
+		part.Size = spec.size
+		part.Color = spec.color
+		part.Material = spec.material
+		part.Anchored = true
+		part.CanCollide = false
+		part.CanTouch = false
+		part.CanQuery = false
+		part.CastShadow = false
+		part.Massless = true
+		part.TopSurface = Enum.SurfaceType.Smooth
+		part.BottomSurface = Enum.SurfaceType.Smooth
+		part.CFrame = CFrame.new(0, 0, 0)
+		if spec.name == "Flash" then
+			part.Transparency = 1
+			local light = Instance.new("PointLight")
+			light.Name = "MuzzleLight"
+			light.Color = Color3.fromRGB(255, 224, 160)
+			light.Brightness = 0
+			light.Range = 14
+			light.Shadows = false
+			light.Parent = part
+		end
+		part.Parent = model
+		parts[spec.name] = part
+		offsets[spec.name] = spec.offset
+	end
+
+	model.Parent = Workspace
+
+	return {
+		model = model,
+		parts = parts,
+		offsets = offsets,
+		flash = parts.Flash,
+		flashLight = parts.Flash:FindFirstChild("MuzzleLight"),
+	}
+end
+
+local function clearRig()
+	if rig then
+		rig.model:Destroy()
+		rig = nil
+	end
+end
+
+local function reloadProgress(): number
+	return AK47.reloadProgress(state, now())
+end
+
+local function poseWeapon(deltaTime: number)
+	if not rig then
+		return
+	end
+
+	rig.model.Parent = if alive and currentCharacter then Workspace else nil
+	if not alive or not rig.model.Parent then
+		return
+	end
+
+	local camera = Workspace.CurrentCamera
+	local humanoid = currentHumanoid
+	if not camera or not humanoid then
+		return
+	end
+
+	local targetAim = if aiming then 1 else 0
+	aimAlpha += (targetAim - aimAlpha) * math.min(1, deltaTime * AIM_BLEND_SPEED)
+	if math.abs(aimAlpha - targetAim) < 0.002 then
+		aimAlpha = targetAim
+	end
+
+	local fovScale = 1 + (AIM_FOV_SCALE - 1) * aimAlpha
+	if math.abs(fovScale - lastFovScale) > 0.01 then
+		lastFovScale = fovScale
+		player:SetAttribute(AIM_ATTRIBUTE, fovScale)
+	end
+
+	recoil = math.max(0, recoil - deltaTime * RECOIL_DECAY)
+	cameraKick *= math.clamp(1 - deltaTime * 7, 0, 1)
+	cameraKickYaw *= math.clamp(1 - deltaTime * 9, 0, 1)
+	camera.CFrame *= CFrame.Angles(cameraKick, cameraKickYaw, 0)
+
+	local walkAmount = math.clamp(humanoid.MoveDirection.Magnitude, 0, 1)
+	if humanoid.FloorMaterial == Enum.Material.Air then
+		walkAmount *= 0.35
+	end
+	if walkAmount > 0.05 then
+		bobPhase += deltaTime * (7 + walkAmount * 5)
+	end
+
+	local progress = reloadProgress()
+	local base = camera.CFrame
+		* WeaponPose.compose(
+			WeaponPose.base(aimAlpha),
+			WeaponPose.reloadBody(progress),
+			WeaponPose.bob(walkAmount * (1 - aimAlpha * 0.7), bobPhase),
+			WeaponPose.recoil(recoil),
+			WeaponPose.sway(swayYaw * (1 - aimAlpha * 0.6), swayPitch * (1 - aimAlpha * 0.6))
+		)
+
+	local magazineOffset = WeaponPose.reloadMagazine(progress)
+	local boltOffset = WeaponPose.reloadBolt(progress)
+
+	for name, part in rig.parts do
+		local offset = rig.offsets[name]
+		if name == "Magazine" then
+			part.CFrame = base * offset * magazineOffset
+		elseif name == "Bolt" then
+			part.CFrame = base * offset * CFrame.new(0, 0, boltOffset * BOLT_TRAVEL)
+		else
+			part.CFrame = base * offset
+		end
+
+		if ADS_HIDDEN_PARTS[name] then
+			part.Transparency = math.clamp(aimAlpha * 1.6 - 0.45, 0, 1)
+		end
+	end
+
+	swayYaw *= math.clamp(1 - deltaTime * 8, 0, 1)
+	swayPitch *= math.clamp(1 - deltaTime * 8, 0, 1)
+end
+
+---------------------------------------------------------------------------
+-- Effects
+---------------------------------------------------------------------------
+
+local function muzzleFlash()
+	if not rig then
+		return
+	end
+
+	flashToken += 1
+	local token = flashToken
+	rig.flash.Transparency = 0.1
+	rig.flash.Size = Vector3.new(0.36, 0.36, 0.46) * (0.8 + math.random() * 0.5)
+	if rig.flashLight then
+		rig.flashLight.Brightness = 4
+	end
+
+	task.delay(0.05, function()
+		if token ~= flashToken or not rig or not rig.flash.Parent then
+			return
+		end
+		rig.flash.Transparency = 1
+		if rig.flashLight then
+			rig.flashLight.Brightness = 0
+		end
+	end)
+end
+
+local function spawnTracer(from: Vector3, to: Vector3)
+	local delta = to - from
+	local distance = delta.Magnitude
+	if distance < 1 then
+		return
+	end
+
+	local part = Instance.new("Part")
+	part.Name = "AK47Tracer"
+	part.Anchored = true
+	part.CanCollide = false
+	part.CanTouch = false
+	part.CanQuery = false
+	part.CastShadow = false
+	part.Material = Enum.Material.Neon
+	part.Color = TRACER_COLOR
+	part.Size = Vector3.new(0.05, 0.05, distance)
+	part.CFrame = CFrame.lookAt(from + delta.Unit * distance / 2, to)
+	part.Transparency = 0.2
+	part.Parent = Workspace
+
+	TweenService:Create(part, TweenInfo.new(0.07), { Transparency = 1 }):Play()
+	Debris:AddItem(part, 0.14)
+end
+
+local function spawnImpact(position: Vector3)
+	local holder = Instance.new("Part")
+	holder.Name = "AK47Impact"
+	holder.Anchored = true
+	holder.CanCollide = false
+	holder.CanTouch = false
+	holder.CanQuery = false
+	holder.CastShadow = false
+	holder.Transparency = 1
+	holder.Size = Vector3.new(0.2, 0.2, 0.2)
+	holder.CFrame = CFrame.new(position)
+	holder.Parent = Workspace
+
+	local attachment = Instance.new("Attachment")
+	attachment.Parent = holder
+
+	local sparks = Instance.new("ParticleEmitter")
+	sparks.Name = "Sparks"
+	sparks.Color = ColorSequence.new(TRACER_COLOR)
+	sparks.LightEmission = 0.7
+	sparks.Size = NumberSequence.new(0.14)
+	sparks.Lifetime = NumberRange.new(0.12, 0.3)
+	sparks.Speed = NumberRange.new(5, 10)
+	sparks.SpreadAngle = Vector2.new(55, 55)
+	sparks.Drag = 3
+	sparks.Enabled = false
+	sparks.Parent = attachment
+	sparks:Emit(6)
+
+	Debris:AddItem(holder, 1)
+end
+
+---------------------------------------------------------------------------
+-- HUD
+---------------------------------------------------------------------------
+
+local function newLabel(parent: Instance, name: string, text: string, size: number, font: Enum.Font): TextLabel
+	local label = Instance.new("TextLabel")
+	label.Name = name
+	label.BackgroundTransparency = 1
+	label.Size = UDim2.fromScale(1, 1)
+	label.Font = font
+	label.TextSize = size
+	label.Text = text
+	label.TextColor3 = Color3.fromRGB(214, 226, 216)
+	label.TextXAlignment = Enum.TextXAlignment.Right
+	label.TextYAlignment = Enum.TextYAlignment.Center
+	label.Parent = parent
+	return label
+end
+
+local function buildHud()
+	local existing = playerGui:FindFirstChild("WeaponHud")
+	if existing then
+		existing:Destroy()
+	end
+
+	local gui = Instance.new("ScreenGui")
+	gui.Name = "WeaponHud"
+	gui.ResetOnSpawn = false
+	gui.IgnoreGuiInset = true
+	gui.DisplayOrder = 12
+	gui.Parent = playerGui
+
+	local crosshair = Instance.new("Frame")
+	crosshair.Name = "Crosshair"
+	crosshair.BackgroundTransparency = 1
+	crosshair.AnchorPoint = Vector2.new(0.5, 0.5)
+	crosshair.Position = UDim2.fromScale(0.5, 0.5)
+	crosshair.Size = UDim2.fromOffset(120, 120)
+	crosshair.Parent = gui
+
+	local marks = {}
+	local function addMark(name: string, horizontal: boolean)
+		local mark = Instance.new("Frame")
+		mark.Name = name
+		mark.AnchorPoint = Vector2.new(0.5, 0.5)
+		mark.BackgroundColor3 = Color3.fromRGB(226, 236, 226)
+		mark.BackgroundTransparency = 0.12
+		mark.BorderSizePixel = 0
+		mark.Size = if horizontal then UDim2.fromOffset(9, 2) else UDim2.fromOffset(2, 9)
+		mark.Parent = crosshair
+		marks[name] = mark
+	end
+
+	addMark("Left", true)
+	addMark("Right", true)
+	addMark("Top", false)
+	addMark("Bottom", false)
+
+	local dot = Instance.new("Frame")
+	dot.Name = "Dot"
+	dot.AnchorPoint = Vector2.new(0.5, 0.5)
+	dot.Position = UDim2.fromScale(0.5, 0.5)
+	dot.Size = UDim2.fromOffset(2, 2)
+	dot.BackgroundColor3 = Color3.fromRGB(226, 236, 226)
+	dot.BackgroundTransparency = 0.3
+	dot.BorderSizePixel = 0
+	dot.Parent = crosshair
+
+	local arenaLabel = Instance.new("TextLabel")
+	arenaLabel.Name = "Kills"
+	arenaLabel.BackgroundTransparency = 1
+	arenaLabel.AnchorPoint = Vector2.new(1, 0)
+	arenaLabel.Position = UDim2.new(1, -34, 0, 28)
+	arenaLabel.Size = UDim2.fromOffset(190, 26)
+	arenaLabel.Font = Enum.Font.Code
+	arenaLabel.TextSize = 18
+	arenaLabel.Text = "KILLS  0"
+	arenaLabel.TextColor3 = Color3.fromRGB(190, 214, 199)
+	arenaLabel.TextXAlignment = Enum.TextXAlignment.Right
+	arenaLabel.Parent = gui
+
+	local ammoFrame = Instance.new("Frame")
+	ammoFrame.Name = "Ammo"
+	ammoFrame.BackgroundTransparency = 1
+	ammoFrame.AnchorPoint = Vector2.new(1, 1)
+	ammoFrame.Position = UDim2.new(1, -34, 1, -30)
+	ammoFrame.Size = UDim2.fromOffset(210, 60)
+	ammoFrame.Parent = gui
+
+	local reloadTrack = Instance.new("Frame")
+	reloadTrack.Name = "ReloadTrack"
+	reloadTrack.AnchorPoint = Vector2.new(1, 1)
+	reloadTrack.Position = UDim2.new(1, 0, 0, -6)
+	reloadTrack.Size = UDim2.fromOffset(150, 3)
+	reloadTrack.BackgroundColor3 = Color3.fromRGB(28, 36, 33)
+	reloadTrack.BackgroundTransparency = 0.25
+	reloadTrack.BorderSizePixel = 0
+	reloadTrack.Parent = ammoFrame
+
+	local reloadFill = Instance.new("Frame")
+	reloadFill.Name = "ReloadFill"
+	reloadFill.Size = UDim2.fromScale(0, 1)
+	reloadFill.BackgroundColor3 = Color3.fromRGB(190, 214, 199)
+	reloadFill.BorderSizePixel = 0
+	reloadFill.Parent = reloadTrack
+
+	local ammoLabel = newLabel(ammoFrame, "AmmoCount", "30", 34, Enum.Font.Code)
+	ammoLabel.AnchorPoint = Vector2.new(1, 1)
+	ammoLabel.Position = UDim2.fromScale(1, 1)
+	ammoLabel.Size = UDim2.fromOffset(120, 44)
+
+	local reserveLabel = newLabel(ammoFrame, "ReserveCount", "/ 90", 16, Enum.Font.Code)
+	reserveLabel.AnchorPoint = Vector2.new(1, 1)
+	reserveLabel.Position = UDim2.new(1, -132, 1, -8)
+	reserveLabel.Size = UDim2.fromOffset(90, 24)
+	reserveLabel.TextColor3 = Color3.fromRGB(150, 168, 156)
+
+	local hintLabel = newLabel(ammoFrame, "Hint", "", 13, Enum.Font.Code)
+	hintLabel.AnchorPoint = Vector2.new(1, 1)
+	hintLabel.Position = UDim2.new(1, 0, 0, -16)
+	hintLabel.Size = UDim2.fromOffset(220, 20)
+	hintLabel.TextColor3 = Color3.fromRGB(150, 168, 156)
+
+	local hitMarker = Instance.new("Frame")
+	hitMarker.Name = "HitMarker"
+	hitMarker.BackgroundTransparency = 1
+	hitMarker.AnchorPoint = Vector2.new(0.5, 0.5)
+	hitMarker.Position = UDim2.fromScale(0.5, 0.5)
+	hitMarker.Size = UDim2.fromOffset(34, 34)
+	hitMarker.Parent = gui
+
+	for _, rotation in { 45, -45 } do
+		local stroke = Instance.new("Frame")
+		stroke.Name = "Stroke"
+		stroke.AnchorPoint = Vector2.new(0.5, 0.5)
+		stroke.Position = UDim2.fromScale(0.5, 0.5)
+		stroke.Size = UDim2.fromOffset(22, 2)
+		stroke.Rotation = rotation
+		stroke.BackgroundColor3 = Color3.fromRGB(255, 226, 178)
+		stroke.BackgroundTransparency = 1
+		stroke.BorderSizePixel = 0
+		stroke.Parent = hitMarker
+	end
+
+	local damage = Instance.new("Frame")
+	damage.Name = "DamageFlash"
+	damage.BackgroundColor3 = Color3.fromRGB(148, 24, 24)
+	damage.BackgroundTransparency = 1
+	damage.BorderSizePixel = 0
+	damage.Size = UDim2.fromScale(1, 1)
+	damage.Parent = gui
+
+	local touchControls = Instance.new("Frame")
+	touchControls.Name = "TouchControls"
+	touchControls.BackgroundTransparency = 1
+	touchControls.Size = UDim2.fromScale(1, 1)
+	touchControls.Visible = UserInputService.TouchEnabled
+	touchControls.Parent = gui
+
+	local function touchButton(name: string, text: string, position: UDim2, size: UDim2): TextButton
+		local button = Instance.new("TextButton")
+		button.Name = name
+		button.Text = text
+		button.Font = Enum.Font.Code
+		button.TextSize = 16
+		button.TextColor3 = Color3.fromRGB(220, 232, 220)
+		button.BackgroundColor3 = Color3.fromRGB(20, 26, 24)
+		button.BackgroundTransparency = 0.55
+		button.AnchorPoint = Vector2.new(1, 1)
+		button.Position = position
+		button.Size = size
+		button.AutoButtonColor = false
+		button.BorderSizePixel = 0
+		button.Parent = touchControls
+
+		local corner = Instance.new("UICorner")
+		corner.CornerRadius = UDim.new(0.2, 0)
+		corner.Parent = button
+
+		return button
+	end
+
+	local fireButton = touchButton("FireButton", "FIRE", UDim2.new(1, -24, 1, -130), UDim2.fromOffset(86, 86))
+	local aimButton = touchButton("AimButton", "AIM", UDim2.new(1, -122, 1, -142), UDim2.fromOffset(60, 60))
+	local reloadButton = touchButton("ReloadButton", "RELOAD", UDim2.new(1, -24, 1, -228), UDim2.fromOffset(76, 44))
+
+	return {
+		gui = gui,
+		marks = marks,
+		dot = dot,
+		ammoLabel = ammoLabel,
+		reserveLabel = reserveLabel,
+		hintLabel = hintLabel,
+		reloadFill = reloadFill,
+		killsLabel = arenaLabel,
+		hitMarker = hitMarker,
+		damage = damage,
+		fireButton = fireButton,
+		aimButton = aimButton,
+		reloadButton = reloadButton,
+	}
+end
+
+local function updateCrosshair(spread: number, currentTime: number)
+	local offset = CROSSHAIR_BASE + spread * CROSSHAIR_SPREAD_SCALE
+	local marks = hud.marks
+	marks.Left.Position = UDim2.new(0.5, -offset, 0.5, 0)
+	marks.Right.Position = UDim2.new(0.5, offset, 0.5, 0)
+	marks.Top.Position = UDim2.new(0.5, 0, 0.5, -offset)
+	marks.Bottom.Position = UDim2.new(0.5, 0, 0.5, offset)
+	hud.dot.BackgroundTransparency = 0.3 + aimAlpha * 0.45
+
+	local markerVisible = currentTime < hitMarkerUntil
+	for _, stroke in hud.hitMarker:GetChildren() do
+		if stroke:IsA("Frame") then
+			stroke.BackgroundTransparency = if markerVisible then 0 else 1
+		end
+	end
+end
+
+local function flashDamage()
+	hud.damage.BackgroundTransparency = 0.62
+	TweenService:Create(hud.damage, TweenInfo.new(0.45, Enum.EasingStyle.Quad), { BackgroundTransparency = 1 }):Play()
+end
+
+local function showKillPopup()
+	local label = Instance.new("TextLabel")
+	label.Name = "KillPopup"
+	label.BackgroundTransparency = 1
+	label.AnchorPoint = Vector2.new(0.5, 0.5)
+	label.Position = UDim2.new(0.5, 0, 0.5, 74)
+	label.Size = UDim2.fromOffset(240, 32)
+	label.Font = Enum.Font.Code
+	label.TextSize = 22
+	label.Text = "+1 KILL"
+	label.TextColor3 = Color3.fromRGB(255, 226, 178)
+	label.Parent = hud.gui
+
+	TweenService:Create(label, TweenInfo.new(0.7, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+		Position = UDim2.new(0.5, 0, 0.5, 24),
+		TextTransparency = 1,
+	}):Play()
+	Debris:AddItem(label, 0.8)
+end
+
+local function refreshAmmoLabels()
+	local ammoText = tostring(state.ammo)
+	if hud.ammoLabel.Text ~= ammoText then
+		hud.ammoLabel.Text = ammoText
+		hud.ammoLabel.TextColor3 = if state.ammo == 0
+			then Color3.fromRGB(226, 128, 108)
+			else Color3.fromRGB(226, 236, 226)
+	end
+
+	local reserveText = " / " .. tostring(state.reserve)
+	if hud.reserveLabel.Text ~= reserveText then
+		hud.reserveLabel.Text = reserveText
+	end
+
+	local hint = ""
+	if state.reloading then
+		hint = "RELOADING"
+	elseif state.ammo == 0 and state.reserve == 0 then
+		hint = "OUT OF AMMO"
+	elseif state.ammo <= 5 then
+		hint = "PRESS R"
+	end
+	if hud.hintLabel.Text ~= hint then
+		hud.hintLabel.Text = hint
+	end
+end
+
+local function refreshReloadBar()
+	local progress = if state.reloading then AK47.reloadProgress(state, now()) else 0
+	hud.reloadFill.Size = UDim2.fromScale(progress, 1)
+	hud.reloadFill.BackgroundColor3 = if state.reloading
+		then Color3.fromRGB(214, 196, 140)
+		else Color3.fromRGB(190, 214, 199)
+end
+
+local function refreshKills()
+	local kills = player:GetAttribute("Kills")
+	hud.killsLabel.Text = string.format("KILLS  %d", if typeof(kills) == "number" then kills else 0)
+end
+
+---------------------------------------------------------------------------
+-- Firing
+---------------------------------------------------------------------------
+
+local function buildShotDirection(spread: number): (Vector3, Vector3)
+	local camera = Workspace.CurrentCamera
+	if not camera then
+		return Vector3.zero, Vector3.new(0, 0, -1)
+	end
+
+	local origin = camera.CFrame.Position
+	local jitter = CFrame.Angles((math.random() - 0.5) * spread, (math.random() - 0.5) * spread, 0)
+	return origin, (camera.CFrame * jitter).LookVector
+end
+
+local function localHitPoint(origin: Vector3, direction: Vector3): Vector3
+	local filters = {}
+	if currentCharacter then
+		table.insert(filters, currentCharacter)
+	end
+	if rig then
+		table.insert(filters, rig.model)
+	end
+
+	local params = RaycastParams.new()
+	params.FilterType = Enum.RaycastFilterType.Exclude
+	params.FilterDescendantsInstances = filters
+	params.IgnoreWater = true
+
+	local result = Workspace:Raycast(origin, direction * AK47.RANGE, params)
+	if result then
+		return result.Position
+	end
+
+	return origin + direction * AK47.RANGE
+end
+
+local function requestReload()
+	local humanoid = currentHumanoid
+	if not alive or not humanoid then
+		return
+	end
+
+	local currentTime = now()
+	if not AK47.startReload(state, currentTime) then
+		return
+	end
+
+	reloadRemote:FireServer()
+	playSound(AK47.SOUNDS.reloadOut)
+end
+
+local function shoot(currentTime: number)
+	local humanoid = currentHumanoid
+	if not alive or not humanoid then
+		return
+	end
+
+	if not AK47.canFire(state, currentTime) then
+		if state.ammo == 0 and not state.reloading and state.reserve > 0 then
+			requestReload()
+		end
+		return
+	end
+
+	local moving = humanoid.MoveDirection.Magnitude > 0.1
+	local spread = AK47.spreadFor(aiming, moving)
+	local origin, direction = buildShotDirection(spread)
+	if not AK47.fire(state, currentTime) then
+		return
+	end
+
+	fireRemote:FireServer(origin, direction)
+
+	recoil = math.min(1, recoil + (if aiming then 0.16 else 0.3))
+	cameraKick += if aiming then 0.006 else 0.013
+	cameraKickYaw += (math.random() - 0.5) * 0.008
+	swayYaw += (math.random() - 0.5) * 0.02
+	swayPitch += 0.01
+
+	muzzleFlash()
+	playSound(AK47.SOUNDS.fire)
+	playSound(AK47.SOUNDS.body)
+
+	local muzzlePosition = if rig then rig.parts.Muzzle.Position else origin
+	local target = localHitPoint(origin, direction)
+	spawnTracer(muzzlePosition, target)
+	spawnImpact(target)
+end
+
+local function updateFiring(currentTime: number)
+	if not firing or not alive then
+		return
+	end
+
+	shoot(currentTime)
+end
+
+---------------------------------------------------------------------------
+-- Input
+---------------------------------------------------------------------------
+
+local function setFiring(value: boolean)
+	firing = value
+	if value and alive then
+		shoot(now())
+	end
+end
+
+local function setAiming(value: boolean)
+	aiming = value
+end
+
+local function onInputBegan(input: InputObject, processed: boolean)
+	if processed or GuiService.MenuIsOpen then
+		return
+	end
+
+	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.KeyCode == Enum.KeyCode.ButtonR2 then
+		setFiring(true)
+	elseif input.UserInputType == Enum.UserInputType.MouseButton2 or input.KeyCode == Enum.KeyCode.ButtonL2 then
+		setAiming(true)
+	elseif input.KeyCode == Enum.KeyCode.R or input.KeyCode == Enum.KeyCode.ButtonX then
+		requestReload()
+	end
+end
+
+local function onInputEnded(input: InputObject)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.KeyCode == Enum.KeyCode.ButtonR2 then
+		setFiring(false)
+	elseif input.UserInputType == Enum.UserInputType.MouseButton2 or input.KeyCode == Enum.KeyCode.ButtonL2 then
+		setAiming(false)
+	end
+end
+
+UserInputService.InputBegan:Connect(onInputBegan)
+UserInputService.InputEnded:Connect(onInputEnded)
+UserInputService.InputChanged:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseMovement then
+		swayYaw -= input.Delta.X * 0.0007
+		swayPitch -= input.Delta.Y * 0.0005
+	end
+end)
+
+---------------------------------------------------------------------------
+-- Lifecycle
+---------------------------------------------------------------------------
+
+local function bindTouchButtons()
+	local function holdButton(button: TextButton, onDown: () -> ())
+		button.InputBegan:Connect(function(input)
+			if
+				input.UserInputType == Enum.UserInputType.Touch
+				or input.UserInputType == Enum.UserInputType.MouseButton1
+			then
+				button.BackgroundTransparency = 0.25
+				onDown()
+			end
+		end)
+		button.InputEnded:Connect(function()
+			button.BackgroundTransparency = 0.55
+		end)
+	end
+
+	holdButton(hud.fireButton, function()
+		firing = true
+	end)
+	holdButton(hud.reloadButton, function()
+		requestReload()
+	end)
+
+	hud.fireButton.InputEnded:Connect(function()
+		firing = false
+	end)
+
+	hud.aimButton.InputBegan:Connect(function(input)
+		if
+			input.UserInputType == Enum.UserInputType.Touch
+			or input.UserInputType == Enum.UserInputType.MouseButton1
+		then
+			aiming = not aiming
+		end
+	end)
+end
+
+local function onCharacterAdded(character: Model)
+	local humanoid = character:WaitForChild("Humanoid") :: Humanoid
+	if player.Character ~= character then
+		return
+	end
+
+	clearRig()
+	rig = buildRig()
+	currentCharacter = character
+	currentHumanoid = humanoid
+	alive = humanoid.Health > 0
+	state = AK47.new()
+	firing = false
+	aiming = false
+	aimAlpha = 0
+	lastFovScale = 1
+	recoil = 0
+	cameraKick = 0
+	cameraKickYaw = 0
+	bobPhase = 0
+	swayYaw = 0
+	swayPitch = 0
+	refreshAmmoLabels()
+	refreshKills()
+
+	humanoid.HealthChanged:Connect(function(health)
+		if currentHumanoid ~= humanoid then
+			return
+		end
+
+		if health < humanoid.MaxHealth and health > 0 then
+			flashDamage()
+		end
+
+		alive = health > 0
+		if not alive then
+			firing = false
+			aiming = false
+			player:SetAttribute(AIM_ATTRIBUTE, 1)
+			lastFovScale = 1
+		end
+	end)
+end
+
+hud = buildHud()
+bindTouchButtons()
+refreshKills()
+
+forestCrosshair = playerGui:WaitForChild("ForestCrosshair", 15)
+stateRemote.OnClientEvent:Connect(function(snapshot)
+	AK47.applySnapshot(state, snapshot, now())
+end)
+
+hitRemote.OnClientEvent:Connect(function(payload)
+	if typeof(payload) ~= "table" then
+		return
+	end
+
+	local currentTime = now()
+	if payload.ghost then
+		hitMarkerUntil = currentTime + 0.16
+	end
+	if payload.killed then
+		showKillPopup()
+	end
+end)
+
+player:GetAttributeChangedSignal("Kills"):Connect(refreshKills)
+
+player.CharacterAdded:Connect(onCharacterAdded)
+if player.Character then
+	task.spawn(onCharacterAdded, player.Character)
+end
+player.CharacterRemoving:Connect(function()
+	alive = false
+	clearRig()
+	currentCharacter = nil
+	currentHumanoid = nil
+	player:SetAttribute(AIM_ATTRIBUTE, 1)
+end)
+
+local function paintHud(deltaTime: number, currentTime: number)
+	poseWeapon(deltaTime)
+
+	if AK47.update(state, currentTime) then
+		playSound(AK47.SOUNDS.reloadIn)
+	end
+	updateFiring(currentTime)
+
+	if forestCrosshair then
+		forestCrosshair.Enabled = false
+	end
+
+	refreshAmmoLabels()
+	refreshReloadBar()
+
+	local humanoid = currentHumanoid
+	local moving = humanoid ~= nil and humanoid.MoveDirection.Magnitude > 0.1
+	local spread = AK47.spreadFor(aiming, moving) + recoil * math.rad(1.5)
+	updateCrosshair(spread, currentTime)
+end
+
+RunService:BindToRenderStep(RENDER_STEP, Enum.RenderPriority.Camera.Value + 2, paintHud)
+
+forestCrosshair = playerGui:WaitForChild("ForestCrosshair", 15)
