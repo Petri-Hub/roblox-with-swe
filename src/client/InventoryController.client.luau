@@ -23,17 +23,40 @@ local SLOT_KEYS = {
 local slotButtons = {}
 local hintLabel: TextLabel
 
+local LOCKED_COLOR = Color3.fromRGB(96, 104, 98)
+
+local function owned(id: string): boolean
+	return Inventory.owns(player, id)
+end
+
 local function equippedId(): string
 	local id = player:GetAttribute(Inventory.EQUIPPED_ATTRIBUTE)
-	return if Inventory.isValid(id) then id else Inventory.DEFAULT_ITEM
+	if Inventory.isValid(id) and owned(id) then
+		return id
+	end
+
+	for _, item in Inventory.items() do
+		if owned(item.id) then
+			return item.id
+		end
+	end
+
+	return Inventory.STARTER_ITEMS[1]
 end
 
 local function refreshHud()
 	local current = equippedId()
 	for id, button in slotButtons do
-		local active = id == current
+		local entry = Inventory.itemById(id)
+		local unlocked = owned(id)
+		local active = unlocked and id == current
+		button.Text = if unlocked
+			then string.format("%d  %s", entry.slot, string.upper(entry.label))
+			else string.format("%d  [LOJA]", entry.slot)
 		button.BackgroundTransparency = if active then 0.15 else 0.6
-		button.TextColor3 = if active then Color3.fromRGB(236, 242, 232) else Color3.fromRGB(148, 164, 152)
+		button.TextColor3 = if not unlocked
+			then LOCKED_COLOR
+			else if active then Color3.fromRGB(236, 242, 232) else Color3.fromRGB(148, 164, 152)
 
 		local bar = button:FindFirstChild("ActiveBar")
 		if bar and bar:IsA("Frame") then
@@ -46,7 +69,7 @@ local function refreshHud()
 end
 
 local function equip(id: string)
-	if not Inventory.isValid(id) then
+	if not Inventory.isValid(id) or not owned(id) then
 		return
 	end
 
@@ -133,7 +156,15 @@ local function onInputBegan(input: InputObject, processed: boolean)
 
 	local slot: number? = SLOT_KEYS[input.KeyCode]
 	if input.KeyCode == Enum.KeyCode.ButtonY then
-		player:SetAttribute(Inventory.EQUIPPED_ATTRIBUTE, Inventory.nextEquipped(equippedId()))
+		-- Cycle past anything still locked behind the shop.
+		local next = Inventory.nextEquipped(equippedId())
+		for _ = 1, #Inventory.items() do
+			if owned(next) then
+				player:SetAttribute(Inventory.EQUIPPED_ATTRIBUTE, next)
+				return
+			end
+			next = Inventory.nextEquipped(next)
+		end
 		return
 	end
 
@@ -154,13 +185,17 @@ end
 buildHud()
 
 if player:GetAttribute(Inventory.EQUIPPED_ATTRIBUTE) == nil then
-	player:SetAttribute(Inventory.EQUIPPED_ATTRIBUTE, Inventory.DEFAULT_ITEM)
+	player:SetAttribute(Inventory.EQUIPPED_ATTRIBUTE, Inventory.STARTER_ITEMS[1])
 end
 if player:GetAttribute(Inventory.FLASHLIGHT_ATTRIBUTE) == nil then
 	player:SetAttribute(Inventory.FLASHLIGHT_ATTRIBUTE, true)
 end
 
 player:GetAttributeChangedSignal(Inventory.EQUIPPED_ATTRIBUTE):Connect(refreshHud)
+-- A purchase flips an ownership attribute; the hotbar redraws itself.
+for _, item in Inventory.items() do
+	player:GetAttributeChangedSignal(Inventory.ownershipKey(item.id)):Connect(refreshHud)
+end
 refreshHud()
 
 UserInputService.InputBegan:Connect(onInputBegan)

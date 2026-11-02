@@ -51,6 +51,40 @@ local ITEMS: { Item } = buildItems()
 Inventory.EQUIPPED_ATTRIBUTE = "EquippedItem"
 Inventory.FLASHLIGHT_ATTRIBUTE = "FlashlightOn"
 Inventory.DEFAULT_ITEM = "AK47"
+Inventory.OWNED_PREFIX = "Owns_"
+
+-- Everyone starts with the lamp in hand and nothing else: weapons come from the
+-- shop, paid for with ghost kills.
+Inventory.STARTER_ITEMS = { "Flashlight" }
+
+-- Ownership lives on the player as one boolean attribute per item, which
+-- replicates to every client without a custom remote.
+function Inventory.ownershipKey(id: string): string
+	return Inventory.OWNED_PREFIX .. id
+end
+
+function Inventory.owns(player: Instance, id: any): boolean
+	if typeof(id) ~= "string" then
+		return false
+	end
+
+	return player:GetAttribute(Inventory.ownershipKey(id)) == true
+end
+
+function Inventory.grant(player: Instance, id: string): boolean
+	if not Inventory.isValid(id) then
+		return false
+	end
+
+	player:SetAttribute(Inventory.ownershipKey(id), true)
+	return true
+end
+
+function Inventory.grantStarterKit(player: Instance)
+	for _, id in Inventory.STARTER_ITEMS do
+		Inventory.grant(player, id)
+	end
+end
 
 local function copy(item: Item): Item
 	return { id = item.id, label = item.label, slot = item.slot, hint = item.hint, kind = item.kind }

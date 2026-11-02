@@ -44,8 +44,19 @@ local function defaultWeapon(): string
 	error("CombatService: no weapon is registered", 2)
 end
 
-local function newSession(): Session
-	local equipped = defaultWeapon()
+-- The first weapon the player actually owns, in hotbar order.
+local function ownedWeapon(player: Player): string?
+	for _, item in Inventory.items() do
+		if Inventory.isWeapon(item.id) and Inventory.owns(player, item.id) then
+			return item.id
+		end
+	end
+
+	return nil
+end
+
+local function newSession(player: Player): Session
+	local equipped = ownedWeapon(player) or defaultWeapon()
 	return {
 		equipped = equipped,
 		states = { [equipped] = WeaponSpec.newState(WeaponRegistry.get(equipped) :: WeaponSpec.Spec) },
@@ -85,6 +96,16 @@ local function activeWeapon(player: Player): (WeaponSpec.Spec?, WeaponSpec.State
 	local session = sessions[player]
 	if not session then
 		return nil, nil
+	end
+
+	-- Ownership is checked on every use: a client that never bought the rifle
+	-- still cannot shoot with it.
+	if not Inventory.owns(player, session.equipped) then
+		local replacement = ownedWeapon(player)
+		if not replacement then
+			return nil, nil
+		end
+		session.equipped = replacement
 	end
 
 	local spec = WeaponRegistry.get(session.equipped)
@@ -130,7 +151,7 @@ local function livingCharacter(player: Player): (Model?, Humanoid?, BasePart?)
 end
 
 local function onSelect(player: Player, weaponId: any)
-	if not Inventory.isWeapon(weaponId) then
+	if not Inventory.isWeapon(weaponId) or not Inventory.owns(player, weaponId) then
 		return
 	end
 
@@ -225,9 +246,9 @@ function CombatService.start()
 
 	sessions = {}
 	Players.PlayerAdded:Connect(function(player)
-		sessions[player] = newSession()
+		sessions[player] = newSession(player)
 		player.CharacterAdded:Connect(function()
-			sessions[player] = newSession()
+			sessions[player] = newSession(player)
 			syncWeapon(player)
 		end)
 	end)
@@ -235,7 +256,7 @@ function CombatService.start()
 		sessions[player] = nil
 	end)
 	for _, player in Players:GetPlayers() do
-		sessions[player] = newSession()
+		sessions[player] = newSession(player)
 	end
 
 	fireRemote.OnServerEvent:Connect(onFire)

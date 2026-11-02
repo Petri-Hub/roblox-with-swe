@@ -3,6 +3,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 
 local Shared = ReplicatedStorage:WaitForChild("Shared")
+local Inventory = require(Shared.Inventory)
 local UVLantern = require(Shared.UVLantern)
 
 local UVService = {}
@@ -58,7 +59,7 @@ end
 -- Shared by the ghost controller: 0 when the lamp is off or the ghost is out of
 -- the cone, up to 1 in the middle of the beam.
 function UVService.exposureFor(player: Player?, point: Vector3): number
-	if not player then
+	if not player or not Inventory.owns(player, "UVLantern") then
 		return 0
 	end
 
@@ -85,7 +86,9 @@ function UVService.start()
 	toggleRemote = buildRemotes()
 
 	toggleRemote.OnServerEvent:Connect(function(player: Player, wants: any)
-		entryFor(player).wants = wants == true
+		-- Owning the lamp is the price of admission; a client without it cannot
+		-- light one up by asking.
+		entryFor(player).wants = wants == true and Inventory.owns(player, "UVLantern")
 	end)
 
 	Players.PlayerAdded:Connect(function(player)
