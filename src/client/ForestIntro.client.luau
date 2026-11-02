@@ -148,7 +148,7 @@ end
 local function waitForStartingGear()
 	local deadline = os.clock() + 5
 	while os.clock() < deadline do
-		if Workspace:FindFirstChild("AK47Viewmodel") then
+		if Workspace:FindFirstChild("WeaponViewmodel") then
 			return
 		end
 		task.wait(0.1)

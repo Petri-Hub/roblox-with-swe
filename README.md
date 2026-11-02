@@ -20,7 +20,17 @@
 
 This AI-assisted horror game is taking shape in a procedurally generated forest. The current build is an early playtest of the map, first-person movement, and the first weapon.
 
-Every life starts with an AK-47: a 30-round magazine, 600 rounds per minute, iron sights while holding right mouse, and `R` to reload. The flashlight now lives in the hotbar instead of the hand: press `1` for the rifle, `2` for the flashlight and `F` to turn its beam on or off. Slot `3` is the ghost detector, which reads the distance to the nearest ghost in studs every three seconds. Slot `4` is the UV floodlight: hold left mouse to wash ghosts in violet light, which burns them slowly and pushes them back, until the 8 second battery runs dry; it refills on its own in 10 seconds. Ghosts drift out of the fog groaning, and every one you put down adds a point to the `KILLS` counter in the corner. They come in three shipped looks (`src/assets/Ghost*.rbxm`, Creator Store assets `16371325697`, `15005694264`, `14659873441`) with a random tint and height, all scaled to about seven studs.
+Every life starts with an AK-47: a 30-round magazine, 600 rounds per minute, iron sights while holding right mouse, and `R` to reload. Slot `5` is an `M9` pistol — semi automatic, 15 rounds — that exists to prove the weapon template: both guns run on the same engine and differ only in their definition file. The flashlight lives in the hotbar instead of the hand: press `1` for the rifle, `2` for the flashlight and `F` to turn its beam on or off. Slot `3` is the ghost detector, which reads the distance to the nearest ghost in studs every three seconds. Slot `4` is the UV floodlight: hold left mouse to wash ghosts in violet light, which burns them slowly and pushes them back, until the 8 second battery runs dry; it refills on its own in 10 seconds. Ghosts drift out of the fog groaning, and every one you put down adds a point to the `KILLS` counter in the corner. They come in three shipped looks (`src/assets/Ghost*.rbxm`, Creator Store assets `16371325697`, `15005694264`, `14659873441`) with a random tint and height, all scaled to about seven studs.
+
+### Adding a weapon
+
+Weapons are data. `WeaponSpec` owns the magazine, cadence, reload, spread, recoil and state sync for every gun, and `WeaponRegistry` hands out the validated definitions. To add one:
+
+1. Copy `src/shared/weapons/M9.luau` to `src/shared/weapons/<Gun>.luau` and change the numbers: `id`, `name`, `fireMode` (`auto` or `semi`), `damage`, `roundsPerMinute`, `magazine`, `startingReserve`, `maxReserve`, `reloadTime`, `range`, the three spreads, the recoil pairs, `sounds`, and the `viewmodel` part list (including `muzzlePart`, `boltPart` and `magazinePart`).
+2. Register it once in `src/shared/WeaponRegistry.luau`.
+3. Add it to the hotbar in `src/shared/Inventory.luau` — the label and the hint come from the definition.
+
+`WeaponSpec.derive` validates the table and fails the build on a missing name, a zero cadence, a part named twice, a muzzle that is not in the part list or a gun without a fire sound, so a typo cannot ship a weapon that does not shoot. Three tests in `tests/specs/WeaponSpec.spec.luau` run a synthetic third gun through the same engine to keep the abstraction honest.
 
 - [Staging playtest](https://www.roblox.com/games/112768229129661) receives changes merged into `staging`.
 - [Production game](https://www.roblox.com/games/138015860615681) receives changes merged into `production`.

@@ -32,8 +32,10 @@ local function smooth(value: number): number
 	return clamped * clamped * (3 - 2 * clamped)
 end
 
-function WeaponPose.base(aimAlpha: number): CFrame
-	return WeaponPose.HIP_OFFSET:Lerp(WeaponPose.AIM_OFFSET, clamp01(aimAlpha))
+function WeaponPose.base(aimAlpha: number, hold: CFrame?, aim: CFrame?): CFrame
+	local hip = hold or WeaponPose.HIP_OFFSET
+	local aimed = aim or WeaponPose.AIM_OFFSET
+	return hip:Lerp(aimed, clamp01(aimAlpha))
 end
 
 function WeaponPose.bob(walkAmount: number, phase: number): CFrame

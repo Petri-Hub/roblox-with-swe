@@ -4,7 +4,9 @@ local RunService = game:GetService("RunService")
 local Workspace = game:GetService("Workspace")
 
 local Shared = ReplicatedStorage:WaitForChild("Shared")
-local AK47 = require(Shared.AK47)
+local Inventory = require(Shared.Inventory)
+local WeaponRegistry = require(Shared.WeaponRegistry)
+local WeaponSpec = require(Shared.WeaponSpec)
 
 local GhostService = require(script.Parent.GhostService)
 
@@ -13,13 +15,42 @@ local CombatService = {}
 local REMOTE_FOLDER = "CombatRemotes"
 local MAX_ORIGIN_DRIFT = 8
 
+type Session = {
+	equipped: string,
+	states: { [string]: WeaponSpec.State },
+}
+
 local remotes: Folder
 local fireRemote: RemoteEvent
 local reloadRemote: RemoteEvent
+local selectRemote: RemoteEvent
 local stateRemote: RemoteEvent
 local hitRemote: RemoteEvent
 
-local sessions: { [Player]: { weapon: AK47.State } } = {}
+local sessions: { [Player]: Session } = {}
+
+local function defaultWeapon(): string
+	local spec = WeaponRegistry.get(Inventory.DEFAULT_ITEM)
+	if spec then
+		return spec.id
+	end
+
+	-- Registry order is the source of truth when the default is missing.
+	local first = WeaponRegistry.all()[1]
+	if first then
+		return first.id
+	end
+
+	error("CombatService: no weapon is registered", 2)
+end
+
+local function newSession(): Session
+	local equipped = defaultWeapon()
+	return {
+		equipped = equipped,
+		states = { [equipped] = WeaponSpec.newState(WeaponRegistry.get(equipped) :: WeaponSpec.Spec) },
+	}
+end
 
 local function buildRemotes()
 	local folder = ReplicatedStorage:FindFirstChild(REMOTE_FOLDER)
@@ -44,17 +75,39 @@ local function buildRemotes()
 
 	fireRemote = remote("Fire")
 	reloadRemote = remote("Reload")
+	selectRemote = remote("Select")
 	stateRemote = remote("WeaponState")
 	hitRemote = remote("Hit")
 end
 
-local function syncWeapon(player: Player)
+-- Everything the session needs for the weapon the player is holding right now.
+local function activeWeapon(player: Player): (WeaponSpec.Spec?, WeaponSpec.State?)
 	local session = sessions[player]
 	if not session then
+		return nil, nil
+	end
+
+	local spec = WeaponRegistry.get(session.equipped)
+	if not spec then
+		return nil, nil
+	end
+
+	local state = session.states[spec.id]
+	if not state then
+		state = WeaponSpec.newState(spec)
+		session.states[spec.id] = state
+	end
+
+	return spec, state
+end
+
+local function syncWeapon(player: Player)
+	local spec, state = activeWeapon(player)
+	if not spec or not state then
 		return
 	end
 
-	stateRemote:FireClient(player, AK47.snapshot(session.weapon))
+	stateRemote:FireClient(player, { weapon = spec.id, snapshot = WeaponSpec.snapshot(state) })
 end
 
 local function isVector(value: any): boolean
@@ -76,21 +129,48 @@ local function livingCharacter(player: Player): (Model?, Humanoid?, BasePart?)
 	return character, humanoid, head
 end
 
+local function onSelect(player: Player, weaponId: any)
+	if not Inventory.isWeapon(weaponId) then
+		return
+	end
+
+	local session = sessions[player]
+	if not session then
+		return
+	end
+
+	if session.equipped == weaponId then
+		syncWeapon(player)
+		return
+	end
+
+	local spec = WeaponRegistry.get(weaponId)
+	if not spec then
+		return
+	end
+
+	session.equipped = spec.id
+	if not session.states[spec.id] then
+		session.states[spec.id] = WeaponSpec.newState(spec)
+	end
+	syncWeapon(player)
+end
+
 local function onFire(player: Player, clientOrigin: any, direction: any)
 	if not isVector(clientOrigin) or not isVector(direction) or direction.Magnitude < 0.01 then
 		return
 	end
 
-	local session = sessions[player]
+	local spec, state = activeWeapon(player)
 	local character, _, head = livingCharacter(player)
-	if not session or not character or not head then
+	if not spec or not state or not character or not head then
 		return
 	end
 
 	local currentTime = Workspace:GetServerTimeNow()
-	AK47.update(session.weapon, currentTime)
+	WeaponSpec.update(spec, state, currentTime)
 
-	if not AK47.canFire(session.weapon, currentTime) then
+	if not WeaponSpec.canFire(spec, state, currentTime) then
 		syncWeapon(player)
 		return
 	end
@@ -102,7 +182,7 @@ local function onFire(player: Player, clientOrigin: any, direction: any)
 		return
 	end
 
-	AK47.fire(session.weapon, currentTime)
+	WeaponSpec.fire(spec, state, currentTime)
 
 	local unit = direction.Unit
 	local raycastParams = RaycastParams.new()
@@ -110,15 +190,15 @@ local function onFire(player: Player, clientOrigin: any, direction: any)
 	raycastParams.FilterDescendantsInstances = { character }
 	raycastParams.IgnoreWater = true
 
-	local result = Workspace:Raycast(origin, unit * AK47.RANGE, raycastParams)
-	local hitPosition = if result then result.Position else origin + unit * AK47.RANGE
+	local result = Workspace:Raycast(origin, unit * spec.range, raycastParams)
+	local hitPosition = if result then result.Position else origin + unit * spec.range
 	local payload = { position = hitPosition, killed = false, ghost = false }
 
 	if result then
 		local ghostModel = GhostService.resolve(result.Instance)
 		if ghostModel then
 			payload.ghost = true
-			payload.killed = GhostService.damage(ghostModel, AK47.DAMAGE, player)
+			payload.killed = GhostService.damage(ghostModel, spec.damage, player)
 		end
 	end
 
@@ -127,15 +207,15 @@ local function onFire(player: Player, clientOrigin: any, direction: any)
 end
 
 local function onReload(player: Player)
-	local session = sessions[player]
+	local spec, state = activeWeapon(player)
 	local _, humanoid, _ = livingCharacter(player)
-	if not session or not humanoid then
+	if not spec or not state or not humanoid then
 		return
 	end
 
 	local currentTime = Workspace:GetServerTimeNow()
-	AK47.update(session.weapon, currentTime)
-	if AK47.startReload(session.weapon, currentTime) then
+	WeaponSpec.update(spec, state, currentTime)
+	if WeaponSpec.startReload(spec, state, currentTime) then
 		syncWeapon(player)
 	end
 end
@@ -145,9 +225,9 @@ function CombatService.start()
 
 	sessions = {}
 	Players.PlayerAdded:Connect(function(player)
-		sessions[player] = { weapon = AK47.new() }
+		sessions[player] = newSession()
 		player.CharacterAdded:Connect(function()
-			sessions[player] = { weapon = AK47.new() }
+			sessions[player] = newSession()
 			syncWeapon(player)
 		end)
 	end)
@@ -155,11 +235,12 @@ function CombatService.start()
 		sessions[player] = nil
 	end)
 	for _, player in Players:GetPlayers() do
-		sessions[player] = { weapon = AK47.new() }
+		sessions[player] = newSession()
 	end
 
 	fireRemote.OnServerEvent:Connect(onFire)
 	reloadRemote.OnServerEvent:Connect(onReload)
+	selectRemote.OnServerEvent:Connect(onSelect)
 
 	-- Reloads finish on their own; this tick tells the client so its HUD and
 	-- animation agree with the authoritative magazine.
@@ -172,8 +253,9 @@ function CombatService.start()
 		accumulator = 0
 
 		local currentTime = Workspace:GetServerTimeNow()
-		for player, session in sessions do
-			if AK47.update(session.weapon, currentTime) then
+		for player in sessions do
+			local spec, state = activeWeapon(player)
+			if spec and state and WeaponSpec.update(spec, state, currentTime) then
 				syncWeapon(player)
 			end
 		end

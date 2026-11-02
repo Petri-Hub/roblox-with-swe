@@ -9,15 +9,17 @@ local UserInputService = game:GetService("UserInputService")
 local Workspace = game:GetService("Workspace")
 
 local Shared = ReplicatedStorage:WaitForChild("Shared")
-local AK47 = require(Shared.AK47)
 local Inventory = require(Shared.Inventory)
 local WeaponPose = require(Shared.WeaponPose)
+local WeaponRegistry = require(Shared.WeaponRegistry)
+local WeaponSpec = require(Shared.WeaponSpec)
 
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 local remotes = ReplicatedStorage:WaitForChild("CombatRemotes")
 local fireRemote = remotes:WaitForChild("Fire") :: RemoteEvent
 local reloadRemote = remotes:WaitForChild("Reload") :: RemoteEvent
+local selectRemote = remotes:WaitForChild("Select") :: RemoteEvent
 local stateRemote = remotes:WaitForChild("WeaponState") :: RemoteEvent
 local hitRemote = remotes:WaitForChild("Hit") :: RemoteEvent
 
@@ -29,191 +31,10 @@ local RECOIL_DECAY = 8
 local BOLT_TRAVEL = 0.24
 local CROSSHAIR_BASE = 5
 local CROSSHAIR_SPREAD_SCALE = 120
--- Parts that sit behind the eye when aiming; they fade out with the aim blend
--- so the sight picture is not blocked by the stock.
-local ADS_HIDDEN_PARTS = {
-	Stock = true,
-	StockPlate = true,
-}
-
-local METAL = Color3.fromRGB(38, 40, 37)
-local METAL_LIGHT = Color3.fromRGB(62, 65, 60)
-local WOOD = Color3.fromRGB(88, 54, 30)
-local WOOD_DARK = Color3.fromRGB(62, 38, 22)
 local TRACER_COLOR = Color3.fromRGB(255, 231, 170)
 
-local PART_SPECS = {
-	{
-		name = "Receiver",
-		size = Vector3.new(0.34, 0.3, 1.25),
-		offset = CFrame.new(0, 0, -0.5),
-		color = METAL,
-		material = Enum.Material.Metal,
-	},
-	{
-		name = "DustCover",
-		size = Vector3.new(0.3, 0.09, 0.9),
-		offset = CFrame.new(0, 0.17, -0.55),
-		color = METAL_LIGHT,
-		material = Enum.Material.Metal,
-	},
-	{
-		name = "DustRib",
-		size = Vector3.new(0.06, 0.03, 0.82),
-		offset = CFrame.new(0, 0.225, -0.55),
-		color = METAL,
-		material = Enum.Material.Metal,
-	},
-	{
-		name = "EjectionPort",
-		size = Vector3.new(0.02, 0.1, 0.3),
-		offset = CFrame.new(0.175, 0.06, -0.45),
-		color = METAL_LIGHT,
-		material = Enum.Material.Metal,
-	},
-	{
-		name = "Handguard",
-		size = Vector3.new(0.3, 0.26, 0.52),
-		offset = CFrame.new(0, 0.03, -1.34),
-		color = WOOD,
-		material = Enum.Material.Wood,
-	},
-	{
-		name = "UpperHandguard",
-		size = Vector3.new(0.24, 0.11, 0.46),
-		offset = CFrame.new(0, 0.21, -1.32),
-		color = WOOD_DARK,
-		material = Enum.Material.Wood,
-	},
-	{
-		name = "GasBlock",
-		size = Vector3.new(0.12, 0.2, 0.14),
-		offset = CFrame.new(0, 0.16, -1.7),
-		color = METAL,
-		material = Enum.Material.Metal,
-	},
-	{
-		name = "GasTube",
-		size = Vector3.new(0.06, 0.06, 0.3),
-		offset = CFrame.new(0, 0.2, -1.6),
-		color = METAL_LIGHT,
-		material = Enum.Material.Metal,
-	},
-	{
-		name = "GasBlock",
-		size = Vector3.new(0.13, 0.24, 0.16),
-		offset = CFrame.new(0, 0.14, -1.72),
-		color = METAL,
-		material = Enum.Material.Metal,
-	},
-	{
-		name = "HandguardCap",
-		size = Vector3.new(0.32, 0.28, 0.06),
-		offset = CFrame.new(0, 0.03, -1.62),
-		color = METAL,
-		material = Enum.Material.Metal,
-	},
-	{
-		name = "Barrel",
-		size = Vector3.new(0.09, 0.09, 0.95),
-		offset = CFrame.new(0, 0.04, -1.95),
-		color = METAL,
-		material = Enum.Material.Metal,
-	},
-	{
-		name = "CleaningRod",
-		size = Vector3.new(0.035, 0.035, 0.7),
-		offset = CFrame.new(0, -0.045, -1.95),
-		color = METAL_LIGHT,
-		material = Enum.Material.Metal,
-	},
-	{
-		name = "FrontSightBase",
-		size = Vector3.new(0.13, 0.09, 0.13),
-		offset = CFrame.new(0, 0.105, -2.12),
-		color = METAL,
-		material = Enum.Material.Metal,
-	},
-	{
-		name = "FrontSight",
-		size = Vector3.new(0.05, 0.2, 0.05),
-		offset = CFrame.new(0, 0.24, -2.12),
-		color = METAL_LIGHT,
-		material = Enum.Material.Metal,
-	},
-	{
-		name = "RearSightBase",
-		size = Vector3.new(0.14, 0.03, 0.08),
-		offset = CFrame.new(0, 0.205, -0.88),
-		color = METAL_LIGHT,
-		material = Enum.Material.Metal,
-	},
-	{
-		name = "RearSightLeft",
-		size = Vector3.new(0.035, 0.09, 0.05),
-		offset = CFrame.new(-0.045, 0.25, -0.88),
-		color = METAL_LIGHT,
-		material = Enum.Material.Metal,
-	},
-	{
-		name = "RearSightRight",
-		size = Vector3.new(0.035, 0.09, 0.05),
-		offset = CFrame.new(0.045, 0.25, -0.88),
-		color = METAL_LIGHT,
-		material = Enum.Material.Metal,
-	},
-	{
-		name = "Muzzle",
-		size = Vector3.new(0.1, 0.1, 0.16),
-		offset = CFrame.new(0, 0.04, -2.44),
-		color = METAL_LIGHT,
-		material = Enum.Material.Metal,
-	},
-	{
-		name = "Magazine",
-		size = Vector3.new(0.23, 0.6, 0.17),
-		offset = CFrame.new(0, -0.44, -0.62) * CFrame.Angles(math.rad(-12), 0, 0),
-		color = METAL,
-		material = Enum.Material.Metal,
-	},
-	{
-		name = "Grip",
-		size = Vector3.new(0.16, 0.4, 0.21),
-		offset = CFrame.new(0, -0.34, -0.11) * CFrame.Angles(math.rad(-20), 0, 0),
-		color = WOOD_DARK,
-		material = Enum.Material.Wood,
-	},
-	{
-		name = "Stock",
-		size = Vector3.new(0.2, 0.24, 0.64),
-		offset = CFrame.new(0, 0.01, 0.34),
-		color = WOOD,
-		material = Enum.Material.Wood,
-	},
-	{
-		name = "StockPlate",
-		size = Vector3.new(0.22, 0.3, 0.06),
-		offset = CFrame.new(0, -0.01, 0.68),
-		color = METAL,
-		material = Enum.Material.Metal,
-	},
-	{
-		name = "Bolt",
-		size = Vector3.new(0.07, 0.07, 0.22),
-		offset = CFrame.new(0.19, 0.13, -0.34),
-		color = METAL_LIGHT,
-		material = Enum.Material.Metal,
-	},
-	{
-		name = "Flash",
-		size = Vector3.new(0.36, 0.36, 0.46),
-		offset = CFrame.new(0, 0.04, -2.72),
-		color = Color3.fromRGB(255, 238, 190),
-		material = Enum.Material.Neon,
-	},
-}
-
-local state = AK47.new()
+local spec = WeaponRegistry.get(Inventory.DEFAULT_ITEM) :: WeaponSpec.Spec
+local state = WeaponSpec.newState(spec)
 local rig = nil
 local hud = nil
 local currentHumanoid: Humanoid? = nil
@@ -237,21 +58,34 @@ local function now(): number
 	return Workspace:GetServerTimeNow()
 end
 
-local function isEquipped(): boolean
+-- The weapon the hotbar says is in hand, or nil when the player is holding a
+-- tool (flashlight, detector, UV lamp).
+local function equippedWeaponId(): string?
 	local id = player:GetAttribute(Inventory.EQUIPPED_ATTRIBUTE)
-	return id == nil or id == "AK47"
+	if id == nil then
+		return spec.id
+	end
+	if not Inventory.isWeapon(id) then
+		return nil
+	end
+
+	return id :: string
+end
+
+local function isEquipped(): boolean
+	return equippedWeaponId() == spec.id
 end
 
 ---------------------------------------------------------------------------
 -- Audio
 ---------------------------------------------------------------------------
 
-local function playSound(spec): Sound
+local function playSound(soundSpec): Sound
 	local sound = Instance.new("Sound")
-	sound.Name = "AK47Sound"
-	sound.SoundId = if spec.id then spec.id else "rbxassetid://" .. spec.ids[1]
-	sound.Volume = spec.volume
-	sound.PlaybackSpeed = spec.pitch * (1 + (math.random() - 0.5) * 0.06)
+	sound.Name = "WeaponSound"
+	sound.SoundId = if soundSpec.id then soundSpec.id else "rbxassetid://" .. soundSpec.ids[1]
+	sound.Volume = soundSpec.volume
+	sound.PlaybackSpeed = soundSpec.pitch * (1 + (math.random() - 0.5) * 0.06)
 	sound.Parent = SoundService
 	sound:Play()
 	Debris:AddItem(sound, 3)
@@ -264,20 +98,20 @@ local shotSound: Sound? = nil
 local shotSample = 0
 
 local function playShotSound()
-	local spec = AK47.SOUNDS.fire
-	shotSample = shotSample % #spec.ids + 1
+	local fire = spec.sounds.fire
+	shotSample = shotSample % #fire.ids + 1
 
 	if not shotSound or not shotSound.Parent then
 		local sound = Instance.new("Sound")
-		sound.Name = "AK47Shot"
-		sound.Volume = spec.volume
+		sound.Name = "WeaponShot"
+		sound.Volume = fire.volume
 		sound.Parent = SoundService
 		shotSound = sound
 	end
 
 	local active = shotSound :: Sound
-	active.SoundId = "rbxassetid://" .. tostring(spec.ids[shotSample])
-	active.PlaybackSpeed = spec.pitch * (1 + (math.random() - 0.5) * 0.05)
+	active.SoundId = "rbxassetid://" .. tostring(fire.ids[shotSample])
+	active.PlaybackSpeed = fire.pitch * (1 + (math.random() - 0.5) * 0.05)
 	active.TimePosition = 0
 	active:Play()
 end
@@ -286,18 +120,21 @@ end
 -- Viewmodel
 ---------------------------------------------------------------------------
 
-local function buildRig()
+-- Builds the first-person model from the weapon definition. Nothing about the
+-- AK-47 is hardcoded here: a new gun just ships different parts.
+local function buildRig(weaponSpec: WeaponSpec.Spec)
+	local view = weaponSpec.viewmodel
 	local model = Instance.new("Model")
-	model.Name = "AK47Viewmodel"
+	model.Name = "WeaponViewmodel"
 
 	local parts = {}
 	local offsets = {}
-	for _, spec in PART_SPECS do
+	for _, partSpec in view.parts do
 		local part = Instance.new("Part")
-		part.Name = spec.name
-		part.Size = spec.size
-		part.Color = spec.color
-		part.Material = spec.material
+		part.Name = partSpec.name
+		part.Size = partSpec.size
+		part.Color = partSpec.color
+		part.Material = partSpec.material
 		part.Anchored = true
 		part.CanCollide = false
 		part.CanTouch = false
@@ -307,7 +144,7 @@ local function buildRig()
 		part.TopSurface = Enum.SurfaceType.Smooth
 		part.BottomSurface = Enum.SurfaceType.Smooth
 		part.CFrame = CFrame.new(0, 0, 0)
-		if spec.name == "Flash" then
+		if partSpec.name == "Flash" then
 			part.Transparency = 1
 			local light = Instance.new("PointLight")
 			light.Name = "MuzzleLight"
@@ -318,18 +155,25 @@ local function buildRig()
 			light.Parent = part
 		end
 		part.Parent = model
-		parts[spec.name] = part
-		offsets[spec.name] = spec.offset
+		parts[partSpec.name] = part
+		offsets[partSpec.name] = partSpec.offset
 	end
 
 	model.Parent = Workspace
 
+	local flash = parts.Flash
 	return {
 		model = model,
 		parts = parts,
 		offsets = offsets,
-		flash = parts.Flash,
-		flashLight = parts.Flash:FindFirstChild("MuzzleLight"),
+		hold = view.hold,
+		aim = view.aim,
+		hidden = view.adsHidden or {},
+		muzzle = parts[view.muzzlePart],
+		bolt = if view.boltPart then parts[view.boltPart] else nil,
+		magazine = if view.magazinePart then parts[view.magazinePart] else nil,
+		flash = flash,
+		flashLight = if flash then flash:FindFirstChild("MuzzleLight") else nil,
 	}
 end
 
@@ -341,7 +185,7 @@ local function clearRig()
 end
 
 local function reloadProgress(): number
-	return AK47.reloadProgress(state, now())
+	return WeaponSpec.reloadProgress(spec, state, now())
 end
 
 local function poseWeapon(deltaTime: number)
@@ -388,7 +232,7 @@ local function poseWeapon(deltaTime: number)
 	local progress = reloadProgress()
 	local base = camera.CFrame
 		* WeaponPose.compose(
-			WeaponPose.base(aimAlpha),
+			WeaponPose.base(aimAlpha, rig.hold, rig.aim),
 			WeaponPose.reloadBody(progress),
 			WeaponPose.bob(walkAmount * (1 - aimAlpha * 0.7), bobPhase),
 			WeaponPose.recoil(recoil),
@@ -400,15 +244,15 @@ local function poseWeapon(deltaTime: number)
 
 	for name, part in rig.parts do
 		local offset = rig.offsets[name]
-		if name == "Magazine" then
+		if rig.magazine and part == rig.magazine then
 			part.CFrame = base * offset * magazineOffset
-		elseif name == "Bolt" then
+		elseif rig.bolt and part == rig.bolt then
 			part.CFrame = base * offset * CFrame.new(0, 0, boltOffset * BOLT_TRAVEL)
 		else
 			part.CFrame = base * offset
 		end
 
-		if ADS_HIDDEN_PARTS[name] then
+		if rig.hidden[name] then
 			part.Transparency = math.clamp(aimAlpha * 1.6 - 0.45, 0, 1)
 		end
 	end
@@ -422,14 +266,13 @@ end
 ---------------------------------------------------------------------------
 
 local function muzzleFlash()
-	if not rig then
+	if not rig or not rig.flash then
 		return
 	end
 
 	flashToken += 1
 	local token = flashToken
 	rig.flash.Transparency = 0.1
-	rig.flash.Size = Vector3.new(0.36, 0.36, 0.46) * (0.8 + math.random() * 0.5)
 	if rig.flashLight then
 		rig.flashLight.Brightness = 4
 	end
@@ -765,12 +608,12 @@ local function refreshAmmoLabels()
 		hud.reserveLabel.Text = reserveText
 	end
 
-	local hint = ""
+	local hint = spec.name
 	if state.reloading then
 		hint = "RELOADING"
 	elseif state.ammo == 0 and state.reserve == 0 then
 		hint = "OUT OF AMMO"
-	elseif state.ammo <= 5 then
+	elseif state.ammo <= math.max(1, math.floor(spec.magazine / 5)) then
 		hint = "PRESS R"
 	end
 	if hud.hintLabel.Text ~= hint then
@@ -779,7 +622,7 @@ local function refreshAmmoLabels()
 end
 
 local function refreshReloadBar()
-	local progress = if state.reloading then AK47.reloadProgress(state, now()) else 0
+	local progress = if state.reloading then WeaponSpec.reloadProgress(spec, state, now()) else 0
 	hud.reloadFill.Size = UDim2.fromScale(progress, 1)
 	hud.reloadFill.BackgroundColor3 = if state.reloading
 		then Color3.fromRGB(214, 196, 140)
@@ -820,12 +663,12 @@ local function localHitPoint(origin: Vector3, direction: Vector3): Vector3
 	params.FilterDescendantsInstances = filters
 	params.IgnoreWater = true
 
-	local result = Workspace:Raycast(origin, direction * AK47.RANGE, params)
+	local result = Workspace:Raycast(origin, direction * spec.range, params)
 	if result then
 		return result.Position
 	end
 
-	return origin + direction * AK47.RANGE
+	return origin + direction * spec.range
 end
 
 local function requestReload()
@@ -835,12 +678,14 @@ local function requestReload()
 	end
 
 	local currentTime = now()
-	if not AK47.startReload(state, currentTime) then
+	if not WeaponSpec.startReload(spec, state, currentTime) then
 		return
 	end
 
 	reloadRemote:FireServer()
-	playSound(AK47.SOUNDS.reloadOut)
+	if spec.sounds.reloadOut then
+		playSound(spec.sounds.reloadOut)
+	end
 end
 
 local function shoot(currentTime: number)
@@ -849,7 +694,7 @@ local function shoot(currentTime: number)
 		return
 	end
 
-	if not AK47.canFire(state, currentTime) then
+	if not WeaponSpec.canFire(spec, state, currentTime) then
 		if state.ammo == 0 and not state.reloading and state.reserve > 0 then
 			requestReload()
 		end
@@ -857,36 +702,50 @@ local function shoot(currentTime: number)
 	end
 
 	local moving = humanoid.MoveDirection.Magnitude > 0.1
-	local spread = AK47.spreadFor(aiming, moving)
+	local spread = WeaponSpec.spreadFor(spec, aiming, moving)
 	local origin, direction = buildShotDirection(spread)
-	if not AK47.fire(state, currentTime) then
+	if not WeaponSpec.fire(spec, state, currentTime) then
 		return
 	end
 
 	fireRemote:FireServer(origin, direction)
 
-	recoil = math.min(1, recoil + (if aiming then 0.16 else 0.3))
-	cameraKick += if aiming then 0.006 else 0.013
+	recoil = math.min(1, recoil + WeaponSpec.recoilFor(spec, aiming))
+	cameraKick += WeaponSpec.cameraKickFor(spec, aiming)
 	cameraKickYaw += (math.random() - 0.5) * 0.008
 	swayYaw += (math.random() - 0.5) * 0.02
 	swayPitch += 0.01
 
 	muzzleFlash()
 	playShotSound()
-	playSound(AK47.SOUNDS.body)
+	if spec.sounds.body then
+		playSound(spec.sounds.body)
+	end
 
-	local muzzlePosition = if rig then rig.parts.Muzzle.Position else origin
+	local muzzlePosition = if rig and rig.muzzle then rig.muzzle.Position else origin
 	local target = localHitPoint(origin, direction)
 	spawnTracer(muzzlePosition, target)
 	spawnImpact(target)
 end
 
+local triggerSpent = false
+
+-- Automatic weapons fire for as long as the trigger is held; semi automatic ones
+-- spend one round per press.
 local function updateFiring(currentTime: number)
 	if not firing or not alive or not isEquipped() then
 		return
 	end
 
+	if spec.fireMode == "semi" and triggerSpent then
+		return
+	end
+
+	local before = state.ammo
 	shoot(currentTime)
+	if spec.fireMode == "semi" and state.ammo < before then
+		triggerSpent = true
+	end
 end
 
 ---------------------------------------------------------------------------
@@ -895,7 +754,12 @@ end
 
 local function setFiring(value: boolean)
 	firing = value
-	if value and alive and isEquipped() then
+	if not value then
+		triggerSpent = false
+		return
+	end
+
+	if alive and isEquipped() then
 		shoot(now())
 	end
 end
@@ -983,13 +847,14 @@ local function onCharacterAdded(character: Model)
 	end
 
 	clearRig()
-	rig = buildRig()
+	rig = buildRig(spec)
 	currentCharacter = character
 	currentHumanoid = humanoid
 	alive = humanoid.Health > 0
-	state = AK47.new()
+	state = WeaponSpec.newState(spec)
 	firing = false
 	aiming = false
+	triggerSpent = false
 	aimAlpha = 0
 	lastFovScale = 1
 	recoil = 0
@@ -998,6 +863,9 @@ local function onCharacterAdded(character: Model)
 	bobPhase = 0
 	swayYaw = 0
 	swayPitch = 0
+	-- The server rebuilds its session on respawn and falls back to the starting
+	-- gun, so tell it which weapon is actually in hand again.
+	selectRemote:FireServer(spec.id)
 	refreshAmmoLabels()
 	refreshKills()
 
@@ -1025,8 +893,17 @@ bindTouchButtons()
 refreshKills()
 
 forestCrosshair = playerGui:WaitForChild("ForestCrosshair", 15)
-stateRemote.OnClientEvent:Connect(function(snapshot)
-	AK47.applySnapshot(state, snapshot, now())
+stateRemote.OnClientEvent:Connect(function(payload)
+	if typeof(payload) ~= "table" or typeof(payload.snapshot) ~= "table" then
+		return
+	end
+	-- Snapshots belong to the gun the server thinks is in hand; ignore stragglers
+	-- from the weapon that was equipped a moment ago.
+	if payload.weapon ~= spec.id then
+		return
+	end
+
+	WeaponSpec.applySnapshot(spec, state, payload.snapshot, now())
 end)
 
 hitRemote.OnClientEvent:Connect(function(payload)
@@ -1048,8 +925,42 @@ player:GetAttributeChangedSignal(Inventory.EQUIPPED_ATTRIBUTE):Connect(function(
 	if not isEquipped() then
 		firing = false
 		aiming = false
+		triggerSpent = false
 	end
 end)
+
+-- Swaps the viewmodel, the ammo and the tuning when the hotbar picks another
+-- gun. This is the only place that knows a weapon changed.
+local function syncEquippedWeapon()
+	local id = equippedWeaponId()
+	if id == nil or id == spec.id then
+		return
+	end
+
+	local nextSpec = WeaponRegistry.get(id)
+	if not nextSpec then
+		return
+	end
+
+	spec = nextSpec
+	state = WeaponSpec.newState(spec)
+	firing = false
+	aiming = false
+	triggerSpent = false
+	aimAlpha = 0
+	recoil = 0
+	lastFovScale = 1
+	player:SetAttribute(AIM_ATTRIBUTE, 1)
+
+	clearRig()
+	if alive then
+		rig = buildRig(spec)
+	end
+
+	selectRemote:FireServer(spec.id)
+	refreshAmmoLabels()
+	refreshReloadBar()
+end
 
 player.CharacterAdded:Connect(onCharacterAdded)
 if player.Character then
@@ -1073,10 +984,13 @@ local function refreshWeaponHudVisibility()
 end
 
 local function paintHud(deltaTime: number, currentTime: number)
+	syncEquippedWeapon()
 	poseWeapon(deltaTime)
 
-	if AK47.update(state, currentTime) then
-		playSound(AK47.SOUNDS.reloadIn)
+	if WeaponSpec.update(spec, state, currentTime) then
+		if spec.sounds.reloadIn then
+			playSound(spec.sounds.reloadIn)
+		end
 	end
 	updateFiring(currentTime)
 
@@ -1090,7 +1004,7 @@ local function paintHud(deltaTime: number, currentTime: number)
 
 	local humanoid = currentHumanoid
 	local moving = humanoid ~= nil and humanoid.MoveDirection.Magnitude > 0.1
-	local spread = AK47.spreadFor(aiming, moving) + recoil * math.rad(1.5)
+	local spread = WeaponSpec.spreadFor(spec, aiming, moving) + recoil * math.rad(1.5)
 	updateCrosshair(spread, currentTime)
 end
 
