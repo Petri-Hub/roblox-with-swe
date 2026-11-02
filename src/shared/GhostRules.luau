@@ -118,4 +118,18 @@ function GhostRules.isAggro(settings: Settings, distance: number): boolean
 	return distance <= settings.aggroRange
 end
 
+-- Scale factor that fits a template into a ghost-sized box. Templates arrive in
+-- every orientation imaginable (a bedsheet mesh can be metres wide and a couple
+-- of centimetres tall), so normalising by the tallest axis alone blows flat
+-- models up to building size. Fitting on the longest axis keeps every ghost
+-- inside the same budget.
+function GhostRules.fitScale(extents: Vector3, targetHeight: number): number
+	local longest = math.max(extents.X, extents.Y, extents.Z)
+	if longest < 0.01 or targetHeight <= 0 then
+		return 0
+	end
+
+	return targetHeight / longest
+end
+
 return GhostRules

@@ -217,14 +217,23 @@ local function buildTemplateGhost(template: Model): GhostVisual?
 	end
 
 	local extents = model:GetExtentsSize()
-	if extents.Y < 0.01 then
+	local height = settings.ghostHeight * random:NextNumber(0.85, 1.18)
+	local scale = GhostRules.fitScale(extents, height)
+	if scale <= 0 then
 		model:Destroy()
 		return nil
 	end
+	model:ScaleTo(scale)
 
-	local height = settings.ghostHeight * random:NextNumber(0.85, 1.18)
+	-- ScaleTo is only as trustworthy as GetExtentsSize. Measure again and correct
+	-- once more so a template can never end up bigger than its budget.
+	local fitted = model:GetExtentsSize()
+	local correction = GhostRules.fitScale(fitted, height)
+	if correction > 0 and math.abs(correction - 1) > 0.05 then
+		model:ScaleTo(model:GetScale() * correction)
+	end
+
 	local tint = GHOST_TINTS[random:NextInteger(1, #GHOST_TINTS)]
-	model:ScaleTo(height / extents.Y)
 
 	local parts: { BasePart } = {}
 	local primary: BasePart? = nil
