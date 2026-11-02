@@ -5,6 +5,7 @@ local ForestGenerator = require(script.ForestGenerator)
 local ForestAvatar = require(ReplicatedStorage.Shared.ForestAvatar)
 local GhostService = require(script.GhostService)
 local CombatService = require(script.CombatService)
+local UVService = require(script.UVService)
 
 local function onCharacterAdded(character: Model)
 	local humanoid = character:WaitForChild("Humanoid") :: Humanoid
@@ -44,3 +45,4 @@ end
 
 GhostService.start()
 CombatService.start()
+UVService.start()

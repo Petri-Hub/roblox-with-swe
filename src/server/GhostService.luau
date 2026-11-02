@@ -9,6 +9,9 @@ local Workspace = game:GetService("Workspace")
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local ForestLayout = require(Shared.ForestLayout)
 local GhostRules = require(Shared.GhostRules)
+local UVLantern = require(Shared.UVLantern)
+
+local UVService = require(script.Parent.UVService)
 
 local GhostService = {}
 
@@ -16,6 +19,18 @@ local GHOST_TAG = "Ghost"
 local KILLS_ATTRIBUTE = "Kills"
 local BODY_COLOR = Color3.fromRGB(178, 208, 198)
 local EYE_COLOR = Color3.fromRGB(214, 255, 236)
+local UV_TINT = Color3.fromRGB(176, 132, 255)
+
+-- Every ghost picks one of the shipped models and a small variation on top, so
+-- the forest never shows the same silhouette twice in a row.
+local GHOST_TEMPLATE_NAMES = { "GhostTemplate", "GhostTemplateAlt1", "GhostTemplateAlt2" }
+local GHOST_TINTS = {
+	Color3.fromRGB(255, 255, 255),
+	Color3.fromRGB(198, 226, 214),
+	Color3.fromRGB(206, 212, 240),
+	Color3.fromRGB(228, 212, 228),
+	Color3.fromRGB(214, 232, 208),
+}
 
 local settings = GhostRules.settings()
 local random = Random.new()
@@ -86,6 +101,7 @@ export type GhostVisual = {
 	model: Model,
 	parts: { BasePart },
 	baseTransparency: { [BasePart]: number },
+	baseColor: { [BasePart]: Color3 },
 	footOffset: number,
 	healthFill: Frame,
 	wisp: ParticleEmitter?,
@@ -162,14 +178,17 @@ local function finishGhost(model: Model, parts: { BasePart }, healthFill: Frame,
 	model.WorldPivot = CFrame.new(boxCFrame.Position.X, boxCFrame.Position.Y - boxSize.Y / 2, boxCFrame.Position.Z)
 
 	local baseTransparency: { [BasePart]: number } = {}
+	local baseColor: { [BasePart]: Color3 } = {}
 	for _, part in parts do
 		baseTransparency[part] = part.Transparency
+		baseColor[part] = part.Color
 	end
 
 	return {
 		model = model,
 		parts = parts,
 		baseTransparency = baseTransparency,
+		baseColor = baseColor,
 		footOffset = footOffset,
 		healthFill = healthFill,
 		wisp = wisp,
@@ -202,13 +221,17 @@ local function buildTemplateGhost(template: Model): GhostVisual?
 		model:Destroy()
 		return nil
 	end
-	model:ScaleTo(settings.ghostHeight / extents.Y)
+
+	local height = settings.ghostHeight * random:NextNumber(0.85, 1.18)
+	local tint = GHOST_TINTS[random:NextInteger(1, #GHOST_TINTS)]
+	model:ScaleTo(height / extents.Y)
 
 	local parts: { BasePart } = {}
 	local primary: BasePart? = nil
 	for _, descendant in model:GetDescendants() do
 		if descendant:IsA("BasePart") then
 			descendant.Transparency = math.max(descendant.Transparency, 0.16)
+			descendant.Color = descendant.Color:Lerp(tint, 0.4)
 			table.insert(parts, descendant)
 			if primary == nil or descendant.Size.Magnitude > primary.Size.Magnitude then
 				primary = descendant
@@ -280,13 +303,21 @@ local function buildProceduralGhost(): GhostVisual
 end
 
 local function buildGhost(): GhostVisual?
-	local template = ServerStorage:FindFirstChild("GhostTemplate")
-	if template and template:IsA("Model") then
+	local templates = {}
+	for _, name in GHOST_TEMPLATE_NAMES do
+		local candidate = ServerStorage:FindFirstChild(name)
+		if candidate and candidate:IsA("Model") then
+			table.insert(templates, candidate)
+		end
+	end
+
+	if #templates > 0 then
+		local template = templates[random:NextInteger(1, #templates)]
 		local built = buildTemplateGhost(template)
 		if built then
 			return built
 		end
-		warn("GhostService: GhostTemplate could not be used, falling back to the part model")
+		warn(`GhostService: {template.Name} could not be used, trying another look`)
 	end
 
 	return buildProceduralGhost()
@@ -399,6 +430,7 @@ local function spawnGhost(target: Player, position: Vector3): Model?
 		model = model,
 		parts = visual.parts,
 		baseTransparency = visual.baseTransparency,
+		baseColor = visual.baseColor,
 		footOffset = visual.footOffset,
 		healthFill = visual.healthFill,
 		wisp = visual.wisp,
@@ -409,6 +441,7 @@ local function spawnGhost(target: Player, position: Vector3): Model?
 		target = target,
 		attackAt = 0,
 		flashUntil = 0,
+		uvDamage = 0,
 		dying = false,
 	}
 
@@ -434,7 +467,33 @@ local function updateGhost(record, deltaTime: number, currentTime: number)
 	local flat = Vector3.new(targetPosition.X - position.X, 0, targetPosition.Z - position.Z)
 	local distance = flat.Magnitude
 
-	if distance > settings.attackRange then
+	-- UV floodlight: burns slowly and shoves the ghost back out of the beam.
+	-- Any player's lamp counts, not just the ghost's current target.
+	local exposure = 0
+	local uvPlayer: Player? = nil
+	for _, candidate in Players:GetPlayers() do
+		local candidateExposure = UVService.exposureFor(candidate, position)
+		if candidateExposure > exposure then
+			exposure = candidateExposure
+			uvPlayer = candidate
+		end
+	end
+
+	if exposure > 0 then
+		record.uvDamage += UVLantern.DAMAGE_PER_SECOND * exposure * deltaTime
+		local away = -flat
+		if away.Magnitude > 0.01 then
+			position += away.Unit * UVLantern.PUSH_SPEED * deltaTime
+		end
+
+		if record.uvDamage >= 1 then
+			local whole = math.floor(record.uvDamage)
+			record.uvDamage -= whole
+			if GhostService.damage(model, whole, uvPlayer) then
+				return
+			end
+		end
+	elseif distance > settings.attackRange then
 		local step = math.min(distance, settings.speed * deltaTime)
 		position += flat.Unit * step
 	end
@@ -450,8 +509,13 @@ local function updateGhost(record, deltaTime: number, currentTime: number)
 	model:PivotTo(CFrame.lookAt(nextPosition, lookAt))
 
 	local flashing = currentTime < record.flashUntil
+	local litByUV = exposure > 0
 	for part, base in record.baseTransparency do
 		part.Transparency = if flashing then math.max(0.02, base - 0.24) else base
+		local baseColor = record.baseColor[part]
+		if baseColor then
+			part.Color = if litByUV then baseColor:Lerp(UV_TINT, 0.6) else baseColor
+		end
 	end
 
 	if currentTime >= record.groanAt then
@@ -467,7 +531,7 @@ local function updateGhost(record, deltaTime: number, currentTime: number)
 	local fill = record.healthFill
 	fill.Size = UDim2.fromScale(math.clamp(record.ghost.health / record.ghost.maxHealth, 0, 1), 1)
 
-	if GhostRules.inAttackRange(settings, distance) and currentTime >= record.attackAt then
+	if GhostRules.inAttackRange(settings, distance) and exposure <= 0 and currentTime >= record.attackAt then
 		record.attackAt = currentTime + settings.attackCooldown
 		record.flashUntil = currentTime + 0.18
 		local character = nearestPlayer and nearestPlayer.Character
