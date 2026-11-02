@@ -2,6 +2,7 @@ local Debris = game:GetService("Debris")
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
+local ServerStorage = game:GetService("ServerStorage")
 local TweenService = game:GetService("TweenService")
 local Workspace = game:GetService("Workspace")
 
@@ -44,15 +45,15 @@ local function newPart(name: string, size: Vector3, color: Color3, material: Enu
 	return part
 end
 
-local function addHealthBar(head: BasePart): Frame
+local function addHealthBar(host: BasePart, studsOffset: number): Frame
 	local gui = Instance.new("BillboardGui")
 	gui.Name = "GhostHealth"
 	gui.Size = UDim2.fromOffset(58, 5)
-	gui.StudsOffsetWorldSpace = Vector3.new(0, 1.35, 0)
+	gui.StudsOffsetWorldSpace = Vector3.new(0, studsOffset, 0)
 	gui.MaxDistance = 120
 	gui.LightInfluence = 0
 	gui.AlwaysOnTop = false
-	gui.Parent = head
+	gui.Parent = host
 
 	local track = Instance.new("Frame")
 	track.Name = "Track"
@@ -81,9 +82,141 @@ local function addHealthBar(head: BasePart): Frame
 	return fill
 end
 
--- Ghosts are assembled from parts instead of an external mesh so the repo keeps
--- no binary art for them and the look can be tuned in code.
-local function buildGhost(): (Model, { [string]: BasePart }, Frame)
+export type GhostVisual = {
+	model: Model,
+	parts: { BasePart },
+	baseTransparency: { [BasePart]: number },
+	footOffset: number,
+	healthFill: Frame,
+	wisp: ParticleEmitter?,
+}
+
+local function dressPart(part: BasePart)
+	part.Anchored = true
+	part.CanCollide = false
+	part.CanTouch = false
+	part.CanQuery = true
+	part.CastShadow = false
+end
+
+local function addGlow(host: BasePart)
+	local glow = Instance.new("PointLight")
+	glow.Name = "Glow"
+	glow.Color = EYE_COLOR
+	glow.Brightness = 1.1
+	glow.Range = 16
+	glow.Shadows = false
+	glow.Parent = host
+end
+
+local function addWisp(host: BasePart, yOffset: number): ParticleEmitter
+	local attachment = Instance.new("Attachment")
+	attachment.Name = "Wisp"
+	attachment.Position = Vector3.new(0, yOffset, 0)
+	attachment.Parent = host
+
+	local wisp = Instance.new("ParticleEmitter")
+	wisp.Name = "Wisp"
+	wisp.Color = ColorSequence.new(BODY_COLOR)
+	wisp.LightEmission = 0.35
+	wisp.Size = NumberSequence.new({
+		NumberSequenceKeypoint.new(0, 0.55),
+		NumberSequenceKeypoint.new(1, 0.05),
+	})
+	wisp.Transparency = NumberSequence.new({
+		NumberSequenceKeypoint.new(0, 0.55),
+		NumberSequenceKeypoint.new(1, 1),
+	})
+	wisp.Lifetime = NumberRange.new(0.6, 1.4)
+	wisp.Rate = 9
+	wisp.Speed = NumberRange.new(0.4, 1.1)
+	wisp.SpreadAngle = Vector2.new(25, 25)
+	wisp.Acceleration = Vector3.new(0, 1.1, 0)
+	wisp.Drag = 1.5
+	wisp.Parent = attachment
+	return wisp
+end
+
+-- Pivots every ghost at its feet so the same hover math works for the store
+-- model and for the procedural fallback.
+local function finishGhost(model: Model, parts: { BasePart }, healthFill: Frame, wisp: ParticleEmitter?): GhostVisual
+	local boxCFrame, boxSize = model:GetBoundingBox()
+	local pivot = model:GetPivot()
+	local footOffset = pivot.Position.Y - (boxCFrame.Position.Y - boxSize.Y / 2)
+	model.WorldPivot = CFrame.new(boxCFrame.Position.X, boxCFrame.Position.Y - boxSize.Y / 2, boxCFrame.Position.Z)
+
+	local baseTransparency: { [BasePart]: number } = {}
+	for _, part in parts do
+		baseTransparency[part] = part.Transparency
+	end
+
+	return {
+		model = model,
+		parts = parts,
+		baseTransparency = baseTransparency,
+		footOffset = footOffset,
+		healthFill = healthFill,
+		wisp = wisp,
+	}
+end
+
+-- Store model path: clone ServerStorage.GhostTemplate, strip anything that
+-- moves or runs on its own, then scale it to settings.ghostHeight.
+local function buildTemplateGhost(template: Model): GhostVisual?
+	local model = template:Clone()
+	model.Name = "Ghost"
+	model:SetAttribute(GHOST_TAG, true)
+
+	for _, descendant in model:GetDescendants() do
+		if
+			descendant:IsA("Script")
+			or descendant:IsA("Humanoid")
+			or descendant:IsA("AnimationController")
+			or descendant:IsA("ParticleEmitter")
+			or descendant:IsA("Trail")
+		then
+			descendant:Destroy()
+		elseif descendant:IsA("BasePart") then
+			dressPart(descendant)
+		end
+	end
+
+	local extents = model:GetExtentsSize()
+	if extents.Y < 0.01 then
+		model:Destroy()
+		return nil
+	end
+	model:ScaleTo(settings.ghostHeight / extents.Y)
+
+	local parts: { BasePart } = {}
+	local primary: BasePart? = nil
+	for _, descendant in model:GetDescendants() do
+		if descendant:IsA("BasePart") then
+			descendant.Transparency = math.max(descendant.Transparency, 0.16)
+			table.insert(parts, descendant)
+			if primary == nil or descendant.Size.Magnitude > primary.Size.Magnitude then
+				primary = descendant
+			end
+		end
+	end
+
+	if primary == nil or #parts == 0 then
+		model:Destroy()
+		return nil
+	end
+
+	model.PrimaryPart = primary
+	local boxCFrame, boxSize = model:GetBoundingBox()
+	addGlow(primary)
+	local wisp = addWisp(primary, (boxCFrame.Position.Y - boxSize.Y / 2) - primary.Position.Y + 0.6)
+	local healthFill = addHealthBar(primary, (boxCFrame.Position.Y + boxSize.Y / 2) - primary.Position.Y + 1)
+
+	return finishGhost(model, parts, healthFill, wisp)
+end
+
+-- Fallback used when the template is missing (tests, or an empty ServerStorage):
+-- ghosts are assembled from translucent parts.
+local function buildProceduralGhost(): GhostVisual
 	local model = Instance.new("Model")
 	model.Name = "Ghost"
 	model:SetAttribute(GHOST_TAG, true)
@@ -121,55 +254,26 @@ local function buildGhost(): (Model, { [string]: BasePart }, Frame)
 	rightArm.CFrame = CFrame.new(0.95, 0.05, 0.05) * CFrame.Angles(0, 0, math.rad(-14))
 	rightArm.Parent = model
 
-	local glow = Instance.new("PointLight")
-	glow.Name = "Glow"
-	glow.Color = EYE_COLOR
-	glow.Brightness = 1.1
-	glow.Range = 16
-	glow.Shadows = false
-	glow.Parent = core
-
-	local attachment = Instance.new("Attachment")
-	attachment.Name = "Wisp"
-	attachment.Position = Vector3.new(0, -0.6, 0)
-	attachment.Parent = veil
-
-	local wisp = Instance.new("ParticleEmitter")
-	wisp.Name = "Wisp"
-	wisp.Color = ColorSequence.new(BODY_COLOR)
-	wisp.LightEmission = 0.35
-	wisp.Size = NumberSequence.new({
-		NumberSequenceKeypoint.new(0, 0.55),
-		NumberSequenceKeypoint.new(1, 0.05),
-	})
-	wisp.Transparency = NumberSequence.new({
-		NumberSequenceKeypoint.new(0, 0.55),
-		NumberSequenceKeypoint.new(1, 1),
-	})
-	wisp.Lifetime = NumberRange.new(0.6, 1.4)
-	wisp.Rate = 9
-	wisp.Speed = NumberRange.new(0.4, 1.1)
-	wisp.SpreadAngle = Vector2.new(25, 25)
-	wisp.Acceleration = Vector3.new(0, 1.1, 0)
-	wisp.Drag = 1.5
-	wisp.Parent = attachment
-
-	local healthFill = addHealthBar(head)
+	addGlow(core)
+	local wisp = addWisp(veil, -0.9)
+	local healthFill = addHealthBar(head, 1.35)
 
 	model.PrimaryPart = core
-	model:PivotTo(CFrame.new(0, settings.hoverHeight, 0))
 
-	local parts = {
-		Core = core,
-		Veil = veil,
-		Head = head,
-		LeftArm = leftArm,
-		RightArm = rightArm,
-		LeftEye = leftEye,
-		RightEye = rightEye,
-	}
+	return finishGhost(model, { core, veil, head, leftEye, rightEye, leftArm, rightArm }, healthFill, wisp)
+end
 
-	return model, parts, healthFill
+local function buildGhost(): GhostVisual?
+	local template = ServerStorage:FindFirstChild("GhostTemplate")
+	if template and template:IsA("Model") then
+		local built = buildTemplateGhost(template)
+		if built then
+			return built
+		end
+		warn("GhostService: GhostTemplate could not be used, falling back to the part model")
+	end
+
+	return buildProceduralGhost()
 end
 
 local function ensureLeaderstats(player: Player): IntValue
@@ -202,35 +306,20 @@ local function awardKill(player: Player?)
 	player:SetAttribute(KILLS_ATTRIBUTE, kills.Value)
 end
 
--- Ghost hit flash and death fade both work by writing transparency, so parts
--- keep their base value around to restore it.
-local BASE_TRANSPARENCY = {
-	Core = 0.42,
-	Veil = 0.62,
-	Head = 0.34,
-	LeftArm = 0.55,
-	RightArm = 0.55,
-}
-
 local function killGhost(record, attacker: Player?)
 	record.dying = true
 	ghosts[record.model] = nil
 	awardKill(attacker)
 
-	local wisp = record.model:FindFirstChild("Veil") and record.model.Veil:FindFirstChild("Wisp")
-	if wisp then
-		local emitter = wisp:FindFirstChildOfClass("ParticleEmitter")
-		if emitter then
-			emitter.Rate = 0
-			emitter:Emit(18)
-		end
+	local emitter = record.wisp
+	if emitter then
+		emitter.Rate = 0
+		emitter:Emit(18)
 	end
 
 	local tweenInfo = TweenInfo.new(0.55, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
-	for name, part in record.parts do
-		if name ~= "LeftEye" and name ~= "RightEye" then
-			TweenService:Create(part, tweenInfo, { Transparency = 1 }):Play()
-		end
+	for _, part in record.parts do
+		TweenService:Create(part, tweenInfo, { Transparency = 1 }):Play()
 	end
 
 	Debris:AddItem(record.model, 1.6)
@@ -280,13 +369,21 @@ local function spawnGhost(target: Player, position: Vector3): Model?
 		return nil
 	end
 
-	local model, parts, healthFill = buildGhost()
+	local visual = buildGhost()
+	if not visual then
+		return nil
+	end
+
+	local model = visual.model
 	model:PivotTo(CFrame.lookAt(position, Vector3.new(root.Position.X, position.Y, root.Position.Z)))
 
 	local record = {
 		model = model,
-		parts = parts,
-		healthFill = healthFill,
+		parts = visual.parts,
+		baseTransparency = visual.baseTransparency,
+		footOffset = visual.footOffset,
+		healthFill = visual.healthFill,
+		wisp = visual.wisp,
 		ghost = GhostRules.newGhost(settings),
 		phase = random:NextNumber(0, math.pi * 2),
 		target = target,
@@ -306,7 +403,6 @@ local function updateGhost(record, deltaTime: number, currentTime: number)
 	end
 
 	local model = record.model
-	local parts = record.parts
 	local pivot = model:GetPivot()
 	local position = pivot.Position
 
@@ -325,7 +421,7 @@ local function updateGhost(record, deltaTime: number, currentTime: number)
 
 	local ground = ForestLayout.heightAt(position.X, position.Z)
 	local bob = math.sin(currentTime * 1.7 + record.phase) * 0.18
-	local hover = ground + settings.hoverHeight + bob
+	local hover = ground + settings.floatGap + record.footOffset + bob
 	local nextPosition = Vector3.new(position.X, hover, position.Z)
 	local lookAt = if distance > 0.05
 		then Vector3.new(targetPosition.X, hover, targetPosition.Z)
@@ -333,12 +429,9 @@ local function updateGhost(record, deltaTime: number, currentTime: number)
 
 	model:PivotTo(CFrame.lookAt(nextPosition, lookAt))
 
-	if currentTime < record.flashUntil then
-		parts.Core.Transparency = 0.08
-		parts.Head.Transparency = 0.05
-	else
-		parts.Core.Transparency = BASE_TRANSPARENCY.Core
-		parts.Head.Transparency = BASE_TRANSPARENCY.Head
+	local flashing = currentTime < record.flashUntil
+	for part, base in record.baseTransparency do
+		part.Transparency = if flashing then math.max(0.02, base - 0.24) else base
 	end
 
 	local fill = record.healthFill

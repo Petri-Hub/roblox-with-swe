@@ -8,6 +8,9 @@
       }
     },
     "ServerStorage": {
+      "GhostTemplate": {
+        "$path": "src/assets/Ghost.rbxm"
+      },
       "RobloxRedwoods": {
         "$path": "src/assets/RobloxRedwoods_6432306802.rbxmx"
       },
