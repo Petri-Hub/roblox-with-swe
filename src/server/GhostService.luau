@@ -137,6 +137,22 @@ local function addWisp(host: BasePart, yOffset: number): ParticleEmitter
 	return wisp
 end
 
+-- Licensed Pro Sound Effects voices. Ghosts breathe a groan now and then and
+-- shriek when they land a hit.
+local GROAN_IDS = { 9113802327, 9113802218, 9114170094 }
+local SCREAM_ID = 9114568392
+
+local function addVoice(host: BasePart): Sound
+	local voice = Instance.new("Sound")
+	voice.Name = "Voice"
+	voice.Volume = 0.6
+	voice.RollOffMode = Enum.RollOffMode.InverseTapered
+	voice.RollOffMinDistance = 8
+	voice.RollOffMaxDistance = 95
+	voice.Parent = host
+	return voice
+end
+
 -- Pivots every ghost at its feet so the same hover math works for the store
 -- model and for the procedural fallback.
 local function finishGhost(model: Model, parts: { BasePart }, healthFill: Frame, wisp: ParticleEmitter?): GhostVisual
@@ -377,6 +393,8 @@ local function spawnGhost(target: Player, position: Vector3): Model?
 	local model = visual.model
 	model:PivotTo(CFrame.lookAt(position, Vector3.new(root.Position.X, position.Y, root.Position.Z)))
 
+	local voiceHost = model.PrimaryPart or model:FindFirstChildWhichIsA("BasePart")
+
 	local record = {
 		model = model,
 		parts = visual.parts,
@@ -384,6 +402,8 @@ local function spawnGhost(target: Player, position: Vector3): Model?
 		footOffset = visual.footOffset,
 		healthFill = visual.healthFill,
 		wisp = visual.wisp,
+		voice = if voiceHost then addVoice(voiceHost) else nil,
+		groanAt = now() + random:NextNumber(1.5, 4),
 		ghost = GhostRules.newGhost(settings),
 		phase = random:NextNumber(0, math.pi * 2),
 		target = target,
@@ -434,6 +454,16 @@ local function updateGhost(record, deltaTime: number, currentTime: number)
 		part.Transparency = if flashing then math.max(0.02, base - 0.24) else base
 	end
 
+	if currentTime >= record.groanAt then
+		local voice = record.voice
+		if voice then
+			voice.SoundId = `rbxassetid://{GROAN_IDS[random:NextInteger(1, #GROAN_IDS)]}`
+			voice.PlaybackSpeed = random:NextNumber(0.82, 1.02)
+			voice:Play()
+		end
+		record.groanAt = currentTime + random:NextNumber(7, 15)
+	end
+
 	local fill = record.healthFill
 	fill.Size = UDim2.fromScale(math.clamp(record.ghost.health / record.ghost.maxHealth, 0, 1), 1)
 
@@ -444,6 +474,12 @@ local function updateGhost(record, deltaTime: number, currentTime: number)
 		local humanoid = character and character:FindFirstChildOfClass("Humanoid")
 		if humanoid and humanoid.Health > 0 then
 			humanoid:TakeDamage(settings.attackDamage)
+			local voice = record.voice
+			if voice then
+				voice.SoundId = `rbxassetid://{SCREAM_ID}`
+				voice.PlaybackSpeed = random:NextNumber(0.9, 1.05)
+				voice:Play()
+			end
 		end
 	end
 end

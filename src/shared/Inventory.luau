@@ -12,6 +12,7 @@ export type Item = {
 local ITEMS: { Item } = {
 	{ id = "AK47", label = "AK-47", slot = 1, hint = "RMB mira · R recarrega" },
 	{ id = "Flashlight", label = "Lanterna", slot = 2, hint = "F liga/desliga" },
+	{ id = "Detector", label = "Detector", slot = 3, hint = "lê a cada 3s" },
 }
 
 Inventory.EQUIPPED_ATTRIBUTE = "EquippedItem"

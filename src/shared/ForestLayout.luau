@@ -56,7 +56,6 @@ ForestLayout.LANDMARKS = {
 	},
 } :: { Landmark }
 
-ForestLayout.BOULDER_VARIANTS = { "Boulder", "MossBoulder", "PlainBoulder", "RockCluster" }
 ForestLayout.DEBRIS_VARIANTS = { "FallenLog", "HollowLog", "RootStump", "RelStump" }
 ForestLayout.FOLIAGE_VARIANTS = { "BushTall", "BushRound", "Fern", "FernSmall" }
 ForestLayout.SCATTER_VARIANTS = { "RustyBarrel", "BrokenCrate", "Crate" }
@@ -151,38 +150,6 @@ function ForestLayout.treeLocations(): { Vector2 }
 	end
 
 	return locations
-end
-
-function ForestLayout.boulderLocations(): { PropPlacement }
-	local random = Random.new(ForestLayout.SEED + 101)
-	local placements = {}
-	local halfSize = ForestLayout.PLAYABLE_RADIUS
-	local spacing = 28
-	local halfSpacing = spacing / 2
-
-	for x = -halfSize + halfSpacing, halfSize - halfSpacing, spacing do
-		for z = -halfSize + halfSpacing, halfSize - halfSpacing, spacing do
-			local position = Vector2.new(x + random:NextNumber(-8, 8), z + random:NextNumber(-8, 8))
-			local distance = position.Magnitude
-			local rimFade = math.clamp(1 - (distance - ForestLayout.RIM_START + 14) / 14, 0, 1)
-
-			if
-				distance > ForestLayout.SPAWN_CLEARING_RADIUS + 4
-				and distance < ForestLayout.PLAYABLE_RADIUS - 6
-				and not ForestLayout.isInsideLandmarkClearing(position)
-				and random:NextNumber() < 0.55 * rimFade
-			then
-				local variant = ForestLayout.BOULDER_VARIANTS[random:NextInteger(1, #ForestLayout.BOULDER_VARIANTS)]
-				table.insert(placements, {
-					assetName = variant,
-					position = position,
-					rotation = random:NextNumber(0, 2 * math.pi),
-					scale = random:NextNumber(0.85, 1.35),
-				})
-			end
-		end
-	end
-	return placements
 end
 
 function ForestLayout.debrisLocations(): { PropPlacement }

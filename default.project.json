@@ -28,18 +28,6 @@
         "FernSmall": {
           "$path": "src/assets/forest/FernSmall.rbxm"
         },
-        "RockCluster": {
-          "$path": "src/assets/forest/RockCluster.rbxm"
-        },
-        "Boulder": {
-          "$path": "src/assets/forest/Boulder.rbxm"
-        },
-        "MossBoulder": {
-          "$path": "src/assets/forest/MossBoulder.rbxm"
-        },
-        "PlainBoulder": {
-          "$path": "src/assets/forest/PlainBoulder.rbxm"
-        },
         "RootStump": {
           "$path": "src/assets/forest/RootStump.rbxm"
         },
@@ -115,6 +103,12 @@
         },
         "InventoryController": {
           "$path": "src/client/InventoryController.client.luau"
+        },
+        "DetectorController": {
+          "$path": "src/client/DetectorController.client.luau"
+        },
+        "MusicController": {
+          "$path": "src/client/MusicController.client.luau"
         }
       }
     },

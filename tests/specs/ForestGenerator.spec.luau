@@ -74,8 +74,8 @@ describe("forest generation", function()
 		end
 
 		local boulders = forest:FindFirstChild("Boulders")
-		expect(boulders).never.toBeNil()
-		expect(#boulders:GetChildren()).toBeGreaterThan(0)
+		expect(boulders).toBeNil()
+		expect(forest:GetAttribute("BoulderCount")).toBe(0)
 
 		local spawn = workspace:FindFirstChild("ForestSpawn")
 		expect(spawn).never.toBeNil()

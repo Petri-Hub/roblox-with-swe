@@ -20,7 +20,7 @@
 
 This AI-assisted horror game is taking shape in a procedurally generated forest. The current build is an early playtest of the map, first-person movement, and the first weapon.
 
-Every life starts with an AK-47: a 30-round magazine, 600 rounds per minute, iron sights while holding right mouse, and `R` to reload. The flashlight now lives in the hotbar instead of the hand: press `1` for the rifle, `2` for the flashlight and `F` to turn its beam on or off. Ghosts drift out of the fog and follow you, and every one you put down adds a point to the `KILLS` counter in the corner. Their looks come from `src/assets/Ghost.rbxm` (Creator Store asset `16371325697`), scaled to seven studs tall at runtime.
+Every life starts with an AK-47: a 30-round magazine, 600 rounds per minute, iron sights while holding right mouse, and `R` to reload. The flashlight now lives in the hotbar instead of the hand: press `1` for the rifle, `2` for the flashlight and `F` to turn its beam on or off. Slot `3` is the ghost detector, which reads the distance to the nearest ghost in studs every three seconds. Ghosts drift out of the fog groaning, and every one you put down adds a point to the `KILLS` counter in the corner. Their looks come from `src/assets/Ghost.rbxm` (Creator Store asset `16371325697`), scaled to seven studs tall at runtime.
 
 - [Staging playtest](https://www.roblox.com/games/112768229129661) receives changes merged into `staging`.
 - [Production game](https://www.roblox.com/games/138015860615681) receives changes merged into `production`.

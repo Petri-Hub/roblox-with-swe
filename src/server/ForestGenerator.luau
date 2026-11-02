@@ -334,10 +334,6 @@ function ForestGenerator.generate(): Model
 	landmarks.Name = "Landmarks"
 	landmarks.Parent = forest
 
-	local boulders = Instance.new("Folder")
-	boulders.Name = "Boulders"
-	boulders.Parent = forest
-
 	local debris = Instance.new("Folder")
 	debris.Name = "Debris"
 	debris.Parent = forest
@@ -376,16 +372,6 @@ function ForestGenerator.generate(): Model
 		end
 	end
 
-	for index, propInfo in ForestLayout.boulderLocations() do
-		local template = loadForestAsset(propInfo.assetName)
-		if template then
-			local prop = placeProp(boulders, template, propInfo.position, propInfo.rotation, propInfo.scale, true, 0.4)
-			if prop then
-				prop.Name = string.format("Boulder%03d", index)
-			end
-		end
-	end
-
 	for index, propInfo in ForestLayout.debrisLocations() do
 		local template = loadForestAsset(propInfo.assetName)
 		if template then
@@ -418,7 +404,7 @@ function ForestGenerator.generate(): Model
 
 	forest:SetAttribute("ExpectedTreeCount", #trees:GetChildren())
 	forest:SetAttribute("LandmarkCount", #landmarks:GetChildren())
-	forest:SetAttribute("BoulderCount", #boulders:GetChildren())
+	forest:SetAttribute("BoulderCount", 0)
 	forest:SetAttribute("DebrisCount", #debris:GetChildren())
 	forest:SetAttribute("FoliageCount", #foliage:GetChildren())
 	forest:SetAttribute("ScatterCount", #scatter:GetChildren())
