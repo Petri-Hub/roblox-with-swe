@@ -317,11 +317,27 @@ function ShopService.position(): Vector3
 	return shopPosition
 end
 
+-- The stall is flat and the forest is not. Level a pad under it first, or a
+-- slope swallows the floor and the counter ends up below ground.
+local PAD_SIZE = Vector3.new(20, 8, 18)
+
+local function levelPad(x: number, z: number): number
+	local highest = ForestLayout.heightAt(x, z)
+	for _, offset in { Vector2.new(-8, -7), Vector2.new(8, -7), Vector2.new(-8, 7), Vector2.new(8, 7) } do
+		highest = math.max(highest, ForestLayout.heightAt(x + offset.X, z + offset.Y))
+	end
+
+	local level = highest + 0.05
+	Workspace.Terrain:FillBlock(CFrame.new(x, level + PAD_SIZE.Y / 2, z), PAD_SIZE, Enum.Material.Air)
+	Workspace.Terrain:FillBlock(CFrame.new(x, level - PAD_SIZE.Y / 2, z), PAD_SIZE, Enum.Material.Ground)
+	return level
+end
+
 function ShopService.start()
 	buildRemotes()
 
 	local point = ShopLayout.pointFor(SHOP_SEED)
-	local ground = ForestLayout.heightAt(point.x, point.z)
+	local ground = levelPad(point.x, point.z)
 	shopPosition = Vector3.new(point.x, ground, point.z)
 
 	local existing = Workspace:FindFirstChild(SHOP_NAME)

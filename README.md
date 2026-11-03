@@ -24,7 +24,9 @@ Every life starts with the flashlight and the `M9` pistol — kills are the shop
 
 ### The shop
 
-`ShopService` plants one stall in the forest, built from parts at a point taken from the forest seed (`ShopLayout.pointFor`), 96 to 132 studs out and never on the spawn sightline. It clears the trees standing where the counter goes, hangs two warm lamps and a sign, and drops a `Sound` (`1839910323`, a 30 second music box) on a linear rolloff so the track is at full volume only at the counter and gone past 78 studs: you hear the shop before you see it, but not from across the map.
+`ShopService` plants one stall in the forest, built from parts at a point taken from the forest seed (`ShopLayout.pointFor`), 96 to 132 studs out and never on the spawn sightline. Before it builds, it levels a flat pad in the terrain so a slope cannot swallow the floor, clears the trees standing where the counter goes, hangs two warm lamps and a sign, and drops a `Sound` (`1839910323`, a 30 second music box) on a linear rolloff so the track is at full volume only at the counter and gone past 78 studs: you hear the shop before you see it, but not from across the map.
+
+The game is first person, and first person locks the cursor to the centre, so `ShopClient` steps the camera back and frees the mouse while you stand at the counter; walk away and the first-person camera comes back.
 
 Prices live in `src/shared/ShopCatalog.luau` and the money is the `KILLS` counter. The client only asks to buy; `ShopService` checks the distance to the counter, the price, whether you already own the item, then spends the kills, flips the ownership attribute and puts the purchase in your hands. Combat and the UV lamp check ownership on every use, so an unpaid client cannot shoot the rifle it did not buy.
 
@@ -32,7 +34,9 @@ Prices live in `src/shared/ShopCatalog.luau` and the money is the `KILLS` counte
 
 The fireball is everyone's spell for now, not a shop item. Press `Z` and the character points the right arm and hand at the cursor; a spinning rune circle, built from neon parts and fire particles, opens in front of the palm and a fireball leaves it. The ball flies at 110 studs per second up to 240 studs with a particle trail and its own light.
 
-On impact it explodes: a flash, an expanding shockwave, fire, sparks, smoke, embers, a boom and a light tremor on the screens of players within 55 studs. A direct hit deals 120 damage — enough to kill a full-health ghost — and the blast splashes up to 100 damage within 12 studs. The surface under the blast gets a scorched crater and eight to eleven radial cracks that follow the terrain and disappear after 30 seconds. Each cast is followed by `SOL CRUEL` above the character and in the chat, and the spell takes 6 seconds to recharge; the badge above the UV battery shows the countdown.
+Hold `Z` to charge it: the circle in front of the palm grows with the hold, and so does the ball, up to a ceiling of 1.6 seconds and 2.2 times its size. Let go to throw. A tap still throws the small ball.
+
+On impact it explodes: a flash, an expanding shockwave, fire, sparks, smoke, embers, a boom and a light tremor on the screens of players within 55 studs. A direct hit deals 120 damage — enough to kill a full-health ghost — and the blast splashes up to 100 damage within 16 studs. A fully charged ball is bigger and meaner: 240 direct damage, 190 splash at the centre, and a 26-stud radius, with the crater, the cracks and the blast particles scaled to match. The surface under the blast gets a scorched crater and eight to eleven radial cracks that follow the terrain and disappear after 30 seconds. Each cast is followed by `SOL CRUEL` above the character and in the chat, and the spell takes 6 seconds to recharge; the badge above the UV battery shows the countdown.
 
 The tuning lives in `src/shared/FireMagic.luau`, the damage, projectile and scorch marks in `src/server/FireMagicService.luau`, the input, first-person arm and cooldown badge in `src/client/FireMagicController.client.luau`, and the circle, ball, blast and screen shake in `src/client/FireMagicEffects.client.luau`.
 
