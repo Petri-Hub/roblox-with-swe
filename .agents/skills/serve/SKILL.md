@@ -7,7 +7,7 @@ description: Start, reuse or stop a Rojo Share preview for the roblox-with-swe p
 
 ## Workspace
 
-Serve the thread's own worktree. Confirm its path and project with the workspace tooling before starting a preview. Do not serve the primary checkout or another thread's worktree.
+Serve the thread's own worktree. Use the workspace layout and Git to confirm its path and project before starting a preview. Do not serve the primary checkout or another thread's worktree.
 
 ```text
 # /home/lemon/workspace — example project and thread

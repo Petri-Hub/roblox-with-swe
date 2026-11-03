@@ -7,7 +7,7 @@ description: Deliver a finished project change through a pull request, required 
 
 ## Prepare
 
-Confirm the project, the thread's worktree, its branch and the project's base branch with the workspace tooling and project instructions. Review the diff, keep unrelated work out, and use the `test` and `document` skills where relevant. Address failed checks already run and report anything that could not be verified. The pull request's required CI checks run after the PR is opened.
+Use the workspace layout, Git and project instructions to confirm the project, the thread's worktree, its branch and the project's base branch. Review the diff, keep unrelated work out, and use the `test` and `document` skills where relevant. Address failed checks already run and report anything that could not be verified. The pull request's required CI checks run after the PR is opened.
 
 Commit with a Conventional Commit and use the GitHub App authentication skill. Push the feature branch and open a pull request to the project's base branch when the change is close to ready. Do not push to a protected branch or force-push. Describe what changed, the checks performed and any remaining playtest limitations.
 

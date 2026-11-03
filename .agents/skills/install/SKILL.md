@@ -7,7 +7,7 @@ description: Set up or repair the toolchain and dependencies for the roblox-with
 
 ## Workspace
 
-Set up the thread's own worktree. Confirm its path and project with the workspace tooling before installing anything. Do not install into the primary checkout or another thread's worktree.
+Set up the thread's own worktree. Use the workspace layout and Git to confirm its path and project before installing anything. Do not install into the primary checkout or another thread's worktree.
 
 ```text
 # /home/lemon/workspace — example project and thread

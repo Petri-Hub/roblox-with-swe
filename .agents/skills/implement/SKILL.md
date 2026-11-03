@@ -7,7 +7,7 @@ description: Implement an agreed feature or fix in a Roblox project. Use when Le
 
 ## Context
 
-Confirm the project and the thread's worktree with the workspace tooling. Read the project's instructions, relevant documentation and code before editing. Resume the thread's existing work when present; otherwise start its worktree and branch from the project's current base branch.
+Use the workspace layout and Git to confirm the project and the thread's worktree. Read the project's instructions, relevant documentation and code before editing. Resume the thread's existing work when present; otherwise start its worktree and branch from the project's current base branch.
 
 Clarify the intended player experience and the boundaries of the change. Ask the group when a creative decision or an ambiguous requirement would materially change the result. For a clear request, make routine technical decisions and proceed.
 
