@@ -18,7 +18,25 @@
 
 ## Play the game
 
-This AI-assisted horror game is taking shape in a procedurally generated forest. The current build is an early playtest of the map and first-person movement.
+This AI-assisted horror game is taking shape in a procedurally generated forest, planted with Creator Store pine models (`src/assets/trees/TreeLayeredPine.rbxm`, `TreePineSingle.rbxm`) at random heights and rotations on top of the generated terrain. The current build is an early playtest of the map, first-person movement, and the first weapon.
+
+Every life starts with the flashlight and the `M9` pistol — kills are the shop currency, so you need a gun to earn the first ones — and the rest is bought with ghost kills at a shop the forest generates for you. The AK-47 (30 rounds, 600 rounds per minute, iron sights while holding right mouse, `R` to reload) costs 4 kills, the `M9` pistol — semi automatic, 15 rounds — costs 2 kills, and the UV floodlight costs 6. Until you pay, the hotbar shows the slot as `[LOJA]` and refuses to equip it. Both guns run on the same engine and differ only in their definition file. The flashlight lives in the hotbar instead of the hand: press `2` for the flashlight and `F` to turn its beam on or off. Slot `3` is the ghost detector, which reads the distance to the nearest ghost in studs every three seconds. Slot `4` is the UV floodlight: hold left mouse to wash ghosts in violet light, which burns them slowly and pushes them back, until the 8 second battery runs dry; it refills on its own in 10 seconds. The handheld flashlight runs a wide 110-degree flood cone, so it lights a clearing instead of a pencil beam. Ghosts drift out of the fog at 4.4 studs per second groaning, and every one you put down adds a point to the `KILLS` counter in the corner. They come in two shipped looks (`src/assets/Ghost.rbxm` and `src/assets/GhostAlt2.rbxm`, Creator Store assets `16371325697` and `14659873441`) with a random tint and height, all scaled to about seven studs.
+
+### The shop
+
+`ShopService` plants one stall in the forest, built from parts at a point taken from the forest seed (`ShopLayout.pointFor`), 96 to 132 studs out and never on the spawn sightline. It clears the trees standing where the counter goes, hangs two warm lamps and a sign, and drops a `Sound` (`1839910323`, a 30 second music box) on a linear rolloff so the track is at full volume only at the counter and gone past 78 studs: you hear the shop before you see it, but not from across the map.
+
+Prices live in `src/shared/ShopCatalog.luau` and the money is the `KILLS` counter. The client only asks to buy; `ShopService` checks the distance to the counter, the price, whether you already own the item, then spends the kills, flips the ownership attribute and puts the purchase in your hands. Combat and the UV lamp check ownership on every use, so an unpaid client cannot shoot the rifle it did not buy.
+
+### Adding a weapon
+
+Weapons are data. `WeaponSpec` owns the magazine, cadence, reload, spread, recoil and state sync for every gun, and `WeaponRegistry` hands out the validated definitions. To add one:
+
+1. Copy `src/shared/weapons/M9.luau` to `src/shared/weapons/<Gun>.luau` and change the numbers: `id`, `name`, `fireMode` (`auto` or `semi`), `damage`, `roundsPerMinute`, `magazine`, `startingReserve`, `maxReserve`, `reloadTime`, `range`, the three spreads, the recoil pairs, `sounds`, and the `viewmodel` part list (including `muzzlePart`, `boltPart` and `magazinePart`).
+2. Register it once in `src/shared/WeaponRegistry.luau`.
+3. Add it to the hotbar in `src/shared/Inventory.luau` — the label and the hint come from the definition.
+
+`WeaponSpec.derive` validates the table and fails the build on a missing name, a zero cadence, a part named twice, a muzzle that is not in the part list or a gun without a fire sound, so a typo cannot ship a weapon that does not shoot. Three tests in `tests/specs/WeaponSpec.spec.luau` run a synthetic third gun through the same engine to keep the abstraction honest.
 
 - [Staging playtest](https://www.roblox.com/games/112768229129661) receives changes merged into `staging`.
 - [Production game](https://www.roblox.com/games/138015860615681) receives changes merged into `production`.

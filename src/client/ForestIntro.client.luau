@@ -145,17 +145,15 @@ local function waitForForest(): (Model?, Model?)
 	end
 end
 
-local function waitForFlashlight()
+local function waitForStartingGear()
 	local deadline = os.clock() + 5
 	while os.clock() < deadline do
-		local flashlight = Workspace:FindFirstChild("FirstPersonFlashlight")
-		local beam = flashlight and flashlight:FindFirstChild("FlashlightBeam", true)
-		if beam and beam:IsA("SpotLight") and beam.Enabled then
+		if Workspace:FindFirstChild("WeaponViewmodel") then
 			return
 		end
 		task.wait(0.1)
 	end
-	warn("The flashlight did not appear before the opening screen ended")
+	warn("The starting weapon did not appear before the opening screen ended")
 end
 
 local function preloadStartingArea(forest: Model, character: Model)
@@ -225,7 +223,7 @@ task.spawn(function()
 	if not preloadFinished then
 		warn("Starting-area assets are taking longer than 20 seconds to load")
 	end
-	waitForFlashlight()
+	waitForStartingGear()
 
 	for _ = 1, 2 do
 		RunService.RenderStepped:Wait()

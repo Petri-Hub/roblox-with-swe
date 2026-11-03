@@ -7,7 +7,7 @@ local ForestLayout = require(ReplicatedStorage.Shared.ForestLayout)
 
 local ForestGenerator = {}
 
-local REDWOOD_VARIANTS = { "RedwoodTree-Var01", "Redwoodtree-LowLOD-Var01" }
+local TREE_ASSETS = { "TreeLayeredPine", "TreePineSingle" }
 local GROUND_COLOR = Color3.fromRGB(43, 64, 42)
 local DIRT_COLOR = Color3.fromRGB(54, 48, 38)
 local MUD_COLOR = Color3.fromRGB(48, 40, 32)
@@ -127,47 +127,81 @@ local function makeTree(parent: Instance, position: Vector2, random: Random, ind
 	end
 end
 
-local function findRedwoodTemplates(container: Instance): { Model }
-	local templates = {}
-	for _, name in REDWOOD_VARIANTS do
-		local tree = container:FindFirstChild(name, true)
-		if tree and tree:IsA("Model") then
-			table.insert(templates, tree)
-		end
-	end
-	return templates
+-- A tree pack is a model holding one model per variant; a single tree asset is
+-- just one model. Both arrive the same way, so flatten one level and treat every
+-- model inside as a variant.
+local function wrapPart(part: BasePart): Model
+	local model = Instance.new("Model")
+	model.Name = part.Name
+	local clone = part:Clone()
+	clone.Anchored = true
+	clone.Parent = model
+	model.PrimaryPart = clone
+	return model
 end
 
-local function hasUsableMeshes(templates: { Model }): boolean
-	if #templates ~= #REDWOOD_VARIANTS then
-		return false
+local function expandVariants(asset: Instance): { Model }
+	local variants = {}
+	if asset:IsA("BasePart") then
+		-- A single-part tree still has to behave like a model so the spawner can
+		-- measure, scale and pivot it.
+		table.insert(variants, wrapPart(asset))
+		return variants
 	end
-	for _, tree in templates do
-		local meshCount = 0
-		for _, child in tree:GetDescendants() do
-			if child:IsA("MeshPart") then
-				meshCount += 1
-				if child.MeshId == "" then
-					return false
+
+	if not asset:IsA("Model") then
+		return variants
+	end
+
+	for _, child in asset:GetChildren() do
+		if child:IsA("Model") then
+			table.insert(variants, child)
+		end
+	end
+
+	if #variants == 0 then
+		table.insert(variants, asset)
+	end
+
+	return variants
+end
+
+local function hasUsableMeshes(model: Model): boolean
+	local meshes = 0
+	for _, descendant in model:GetDescendants() do
+		if descendant:IsA("MeshPart") then
+			if descendant.MeshId == "" then
+				return false
+			end
+			meshes += 1
+		end
+	end
+
+	return meshes > 0
+end
+
+local function loadTreeVariants(): ({ Model }, string)
+	local folder = ServerStorage:FindFirstChild("ForestAssets")
+	local variants = {}
+
+	if folder then
+		for _, name in TREE_ASSETS do
+			local asset = folder:FindFirstChild(name)
+			if asset then
+				for _, variant in expandVariants(asset) do
+					if hasUsableMeshes(variant) then
+						table.insert(variants, variant)
+					end
 				end
 			end
 		end
-		if meshCount == 0 then
-			return false
-		end
 	end
-	return true
-end
 
-local function loadRedwoodTemplates(): ({ Model }, string)
-	local bundled = ServerStorage:FindFirstChild("RobloxRedwoods")
-	if bundled then
-		local templates = findRedwoodTemplates(bundled)
-		if hasUsableMeshes(templates) then
-			return templates, "Bundled"
-		end
-		warn("Bundled redwoods have missing meshes; using procedural trees")
+	if #variants > 0 then
+		return variants, "Bundled"
 	end
+
+	warn("No usable bundled tree models; using procedural trees")
 	return {}, "Procedural"
 end
 
@@ -186,9 +220,9 @@ local function ensureSpawn(): SpawnLocation
 	return spawn
 end
 
-local function makeRedwood(parent: Instance, source: Model, position: Vector2, random: Random, index: number)
+local function makeTemplateTree(parent: Instance, source: Model, position: Vector2, random: Random, index: number)
 	local tree = source:Clone()
-	tree.Name = string.format("Redwood%03d", index)
+	tree.Name = string.format("Tree%03d", index)
 
 	for _, child in tree:GetDescendants() do
 		if child:IsA("Script") or child:IsA("LocalScript") or child:IsA("ModuleScript") then
@@ -198,7 +232,11 @@ local function makeRedwood(parent: Instance, source: Model, position: Vector2, r
 				child:Destroy()
 			else
 				child.Anchored = true
-				child.CanCollide = child.Name == "Trunk"
+				-- Only the trunk is solid; browsing the canopy should not bounce
+				-- the player off invisible leaves.
+				local lowerName = string.lower(child.Name)
+				child.CanCollide = string.find(lowerName, "trunk", 1, true) ~= nil
+					or string.find(lowerName, "bark", 1, true) ~= nil
 			end
 		end
 	end
@@ -334,10 +372,6 @@ function ForestGenerator.generate(): Model
 	landmarks.Name = "Landmarks"
 	landmarks.Parent = forest
 
-	local boulders = Instance.new("Folder")
-	boulders.Name = "Boulders"
-	boulders.Parent = forest
-
 	local debris = Instance.new("Folder")
 	debris.Name = "Debris"
 	debris.Parent = forest
@@ -350,17 +384,14 @@ function ForestGenerator.generate(): Model
 	scatter.Name = "Scatter"
 	scatter.Parent = forest
 
-	local redwoods, treeSource = loadRedwoodTemplates()
+	local treeVariants, treeSource = loadTreeVariants()
 	forest:SetAttribute("TreeSource", treeSource)
-	if #redwoods == 0 then
-		warn("Roblox Forest Pack has no redwood variants; using procedural trees")
-	end
 
 	local random = Random.new(ForestLayout.SEED + 3)
 	for index, position in ForestLayout.treeLocations() do
-		if #redwoods > 0 then
-			local source = redwoods[random:NextInteger(1, #redwoods)]
-			makeRedwood(trees, source, position, random, index)
+		if #treeVariants > 0 then
+			local source = treeVariants[random:NextInteger(1, #treeVariants)]
+			makeTemplateTree(trees, source, position, random, index)
 		else
 			makeTree(trees, position, random, index)
 		end
@@ -372,16 +403,6 @@ function ForestGenerator.generate(): Model
 			local prop = placeProp(landmarks, template, landmark.position, landmark.rotation, 1, true, 0.4)
 			if prop then
 				prop.Name = landmark.id
-			end
-		end
-	end
-
-	for index, propInfo in ForestLayout.boulderLocations() do
-		local template = loadForestAsset(propInfo.assetName)
-		if template then
-			local prop = placeProp(boulders, template, propInfo.position, propInfo.rotation, propInfo.scale, true, 0.4)
-			if prop then
-				prop.Name = string.format("Boulder%03d", index)
 			end
 		end
 	end
@@ -418,7 +439,7 @@ function ForestGenerator.generate(): Model
 
 	forest:SetAttribute("ExpectedTreeCount", #trees:GetChildren())
 	forest:SetAttribute("LandmarkCount", #landmarks:GetChildren())
-	forest:SetAttribute("BoulderCount", #boulders:GetChildren())
+	forest:SetAttribute("BoulderCount", 0)
 	forest:SetAttribute("DebrisCount", #debris:GetChildren())
 	forest:SetAttribute("FoliageCount", #foliage:GetChildren())
 	forest:SetAttribute("ScatterCount", #scatter:GetChildren())

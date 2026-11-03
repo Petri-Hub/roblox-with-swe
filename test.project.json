@@ -8,11 +8,14 @@
       }
     },
     "ServerStorage": {
-      "RobloxRedwoods": {
-        "$path": "src/assets/RobloxRedwoods_6432306802.rbxmx"
-      },
       "ForestAssets": {
         "$className": "Folder",
+        "TreeLayeredPine": {
+          "$path": "src/assets/trees/TreeLayeredPine.rbxm"
+        },
+        "TreePineSingle": {
+          "$path": "src/assets/trees/TreePineSingle.rbxm"
+        },
         "BushTall": {
           "$path": "src/assets/forest/BushTall.rbxm"
         },
@@ -24,18 +27,6 @@
         },
         "FernSmall": {
           "$path": "src/assets/forest/FernSmall.rbxm"
-        },
-        "RockCluster": {
-          "$path": "src/assets/forest/RockCluster.rbxm"
-        },
-        "Boulder": {
-          "$path": "src/assets/forest/Boulder.rbxm"
-        },
-        "MossBoulder": {
-          "$path": "src/assets/forest/MossBoulder.rbxm"
-        },
-        "PlainBoulder": {
-          "$path": "src/assets/forest/PlainBoulder.rbxm"
         },
         "RootStump": {
           "$path": "src/assets/forest/RootStump.rbxm"

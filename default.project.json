@@ -8,11 +8,20 @@
       }
     },
     "ServerStorage": {
-      "RobloxRedwoods": {
-        "$path": "src/assets/RobloxRedwoods_6432306802.rbxmx"
+      "GhostTemplate": {
+        "$path": "src/assets/Ghost.rbxm"
+      },
+      "GhostTemplateAlt2": {
+        "$path": "src/assets/GhostAlt2.rbxm"
       },
       "ForestAssets": {
         "$className": "Folder",
+        "TreeLayeredPine": {
+          "$path": "src/assets/trees/TreeLayeredPine.rbxm"
+        },
+        "TreePineSingle": {
+          "$path": "src/assets/trees/TreePineSingle.rbxm"
+        },
         "BushTall": {
           "$path": "src/assets/forest/BushTall.rbxm"
         },
@@ -24,18 +33,6 @@
         },
         "FernSmall": {
           "$path": "src/assets/forest/FernSmall.rbxm"
-        },
-        "RockCluster": {
-          "$path": "src/assets/forest/RockCluster.rbxm"
-        },
-        "Boulder": {
-          "$path": "src/assets/forest/Boulder.rbxm"
-        },
-        "MossBoulder": {
-          "$path": "src/assets/forest/MossBoulder.rbxm"
-        },
-        "PlainBoulder": {
-          "$path": "src/assets/forest/PlainBoulder.rbxm"
         },
         "RootStump": {
           "$path": "src/assets/forest/RootStump.rbxm"
@@ -103,6 +100,27 @@
         },
         "ForestPresentation": {
           "$path": "src/client/ForestPresentation.client.luau"
+        },
+        "WeaponController": {
+          "$path": "src/client/WeaponController.client.luau"
+        },
+        "FlashlightController": {
+          "$path": "src/client/FlashlightController.client.luau"
+        },
+        "InventoryController": {
+          "$path": "src/client/InventoryController.client.luau"
+        },
+        "DetectorController": {
+          "$path": "src/client/DetectorController.client.luau"
+        },
+        "MusicController": {
+          "$path": "src/client/MusicController.client.luau"
+        },
+        "UVLanternController": {
+          "$path": "src/client/UVLanternController.client.luau"
+        },
+        "ShopClient": {
+          "$path": "src/client/ShopClient.client.luau"
         }
       }
     },

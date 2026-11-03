@@ -9,7 +9,6 @@ local it = JestGlobals.it
 
 local EXPECTED_FOREST_ASSETS = {
 	"AbandonedCabin",
-	"Boulder",
 	"BrokenCrate",
 	"BushRound",
 	"BushTall",
@@ -19,14 +18,13 @@ local EXPECTED_FOREST_ASSETS = {
 	"Fern",
 	"FernSmall",
 	"HollowLog",
-	"MossBoulder",
-	"PlainBoulder",
 	"RelStump",
-	"RockCluster",
 	"RootStump",
 	"RustedCar",
 	"RustyBarrel",
 	"SupplyPile",
+	"TreeLayeredPine",
+	"TreePineSingle",
 }
 
 describe("forest visual assets", function()

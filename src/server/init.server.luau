@@ -3,6 +3,10 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local ForestGenerator = require(script.ForestGenerator)
 local ForestAvatar = require(ReplicatedStorage.Shared.ForestAvatar)
+local GhostService = require(script.GhostService)
+local CombatService = require(script.CombatService)
+local UVService = require(script.UVService)
+local ShopService = require(script.ShopService)
 
 local function onCharacterAdded(character: Model)
 	local humanoid = character:WaitForChild("Humanoid") :: Humanoid
@@ -39,3 +43,8 @@ if not success then
 	ReplicatedStorage:SetAttribute("ForestLoadFailed", true)
 	warn("Forest generation failed: " .. tostring(message))
 end
+
+GhostService.start()
+CombatService.start()
+UVService.start()
+ShopService.start()

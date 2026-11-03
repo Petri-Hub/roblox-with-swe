@@ -43,21 +43,13 @@ describe("forest layout", function()
 	end)
 
 	it("generates repeatable props that respect boundaries and spawn clearings", function()
-		local boulders = ForestLayout.boulderLocations()
 		local debris = ForestLayout.debrisLocations()
 		local foliage = ForestLayout.foliageLocations()
 		local scatter = ForestLayout.landmarkScatterLocations()
 
-		expect(#boulders).toBeGreaterThan(10)
 		expect(#debris).toBeGreaterThan(10)
 		expect(#foliage).toBeGreaterThan(30)
 		expect(#scatter).toBeGreaterThan(5)
-
-		for _, prop in boulders do
-			expect(prop.position.Magnitude).toBeGreaterThan(ForestLayout.SPAWN_CLEARING_RADIUS)
-			expect(prop.position.Magnitude).toBeLessThan(ForestLayout.PLAYABLE_RADIUS)
-			expect(table.find(ForestLayout.BOULDER_VARIANTS, prop.assetName)).never.toBeNil()
-		end
 
 		for _, prop in foliage do
 			expect(prop.position.Magnitude).toBeGreaterThan(ForestLayout.SPAWN_CLEARING_RADIUS)
