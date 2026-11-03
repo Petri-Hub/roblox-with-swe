@@ -11,13 +11,27 @@ FireMagic.SPEED = 110
 FireMagic.RANGE = 240
 FireMagic.DIRECT_DAMAGE = 120
 FireMagic.SPLASH_DAMAGE = 100
-FireMagic.SPLASH_RADIUS = 12
+FireMagic.SPLASH_RADIUS = 16
 FireMagic.CRACK_SECONDS = 30
 FireMagic.CRACK_FADE_SECONDS = 3
 FireMagic.SHAKE_RADIUS = 55
 FireMagic.SHAKE_DEGREES = 1.1
 FireMagic.MAX_ORIGIN_DRIFT = 8
 FireMagic.CHAT_LINE = "SOL CRUEL"
+
+-- Hold Z to grow the ball. The charge fills in CHARGE_SECONDS and then stops:
+-- the spell has a ceiling, not an infinite scale.
+FireMagic.CHARGE_SECONDS = 1.6
+FireMagic.MIN_BALL_SCALE = 1
+FireMagic.MAX_BALL_SCALE = 2.2
+FireMagic.MAX_DIRECT_DAMAGE = 240
+FireMagic.MAX_SPLASH_DAMAGE = 190
+FireMagic.MAX_SPLASH_RADIUS = 26
+FireMagic.MAX_CIRCLE_SCALE = 1.65
+
+-- Where the hand sits in front of the camera, in camera space. The cast circle
+-- and the ball both start here, so the controller and the effects agree.
+FireMagic.HAND_ORIGIN = Vector3.new(0.34, -0.55, -1.65)
 
 -- Creator Store audio. The cast voice runs under the windup; the launch voice
 -- is the whoosh that leaves the hand; the explosion voice carries the boom.
@@ -35,6 +49,40 @@ local function smoothstep(value: number): number
 	return clamped * clamped * (3 - 2 * clamped)
 end
 
+local function clamp01(value: number?): number
+	if typeof(value) ~= "number" or value ~= value then
+		return 0
+	end
+
+	return math.clamp(value, 0, 1)
+end
+
+-- Held seconds to charge, 0..1. Past CHARGE_SECONDS the ball keeps its size:
+-- the spell grows to a ceiling and stops there.
+function FireMagic.charge(heldSeconds: number?): number
+	if typeof(heldSeconds) ~= "number" or heldSeconds ~= heldSeconds or heldSeconds <= 0 then
+		return 0
+	end
+
+	return clamp01(heldSeconds / FireMagic.CHARGE_SECONDS)
+end
+
+function FireMagic.ballScale(charge: number?): number
+	return FireMagic.MIN_BALL_SCALE + (FireMagic.MAX_BALL_SCALE - FireMagic.MIN_BALL_SCALE) * clamp01(charge)
+end
+
+function FireMagic.circleScale(charge: number?): number
+	return 1 + (FireMagic.MAX_CIRCLE_SCALE - 1) * clamp01(charge)
+end
+
+function FireMagic.explosionRadius(charge: number?): number
+	return FireMagic.SPLASH_RADIUS + (FireMagic.MAX_SPLASH_RADIUS - FireMagic.SPLASH_RADIUS) * clamp01(charge)
+end
+
+function FireMagic.directDamage(charge: number?): number
+	return FireMagic.DIRECT_DAMAGE + (FireMagic.MAX_DIRECT_DAMAGE - FireMagic.DIRECT_DAMAGE) * clamp01(charge)
+end
+
 -- Seconds left before the spell is ready again. A nil or stale timestamp means
 -- the spell is ready.
 function FireMagic.cooldownRemaining(readyAt: number?, now: number): number
@@ -50,17 +98,21 @@ function FireMagic.canCast(readyAt: number?, now: number): boolean
 end
 
 -- Splash damage falls from full at the centre to zero at the edge of the
--- radius, so standing behind a tree actually helps.
-function FireMagic.splashDamage(distance: number): number
+-- radius, so standing behind a tree actually helps. A charged ball has a wider
+-- radius and a higher ceiling.
+function FireMagic.splashDamage(distance: number, charge: number?): number
+	local radius = FireMagic.explosionRadius(charge)
 	if typeof(distance) ~= "number" or distance ~= distance or distance < 0 then
 		return 0
 	end
 
-	if distance >= FireMagic.SPLASH_RADIUS then
+	if distance >= radius then
 		return 0
 	end
 
-	return FireMagic.SPLASH_DAMAGE * (1 - smoothstep(distance / FireMagic.SPLASH_RADIUS))
+	local maximum = FireMagic.SPLASH_DAMAGE + (FireMagic.MAX_SPLASH_DAMAGE - FireMagic.SPLASH_DAMAGE) * clamp01(charge)
+
+	return maximum * (1 - smoothstep(distance / radius))
 end
 
 -- 1 next to the blast, 0 outside the shake radius. The camera applies this
@@ -112,6 +164,21 @@ function FireMagic.crackPlan(random: Random): { CrackLine }
 	end
 
 	return lines
+end
+
+-- A ray from the camera through a screen point, starting at the hand. The
+-- controller fires along it and the effects draw the charging circle along it,
+-- so the two never disagree about where the spell is pointing.
+function FireMagic.aimRay(camera: Camera, screenPoint: Vector2): (Vector3, Vector3)
+	local hand = (camera.CFrame * CFrame.new(FireMagic.HAND_ORIGIN)).Position
+	local ray = camera:ViewportPointToRay(screenPoint.X, screenPoint.Y)
+	local target = ray.Origin + ray.Direction * 600
+	local direction = target - hand
+	if direction.Magnitude < 1 then
+		direction = camera.CFrame.LookVector
+	end
+
+	return hand, direction.Unit
 end
 
 return FireMagic

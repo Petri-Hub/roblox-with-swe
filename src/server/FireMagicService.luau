@@ -27,6 +27,7 @@ type Projectile = {
 	direction: Vector3,
 	distanceLeft: number,
 	launchAt: number,
+	charge: number,
 }
 
 local remotes: Folder
@@ -177,7 +178,10 @@ end
 -- A scorched crater and radial cracks that fade out after half a minute. The
 -- marks live on the server so every player sees the same scar in the same
 -- place, and Debris cleans them up even if the fade tween is interrupted.
-local function createScorch(position: Vector3, normal: Vector3, ignored: Model?)
+local function createScorch(position: Vector3, normal: Vector3, ignored: Model?, charge: number)
+	local scale = 1 + charge * 0.6
+	local craterRadius = CRATER_RADIUS * scale
+	local scorchRadius = SCORCH_RADIUS * scale
 	local folder = ensureScorchFolder()
 	local model = Instance.new("Model")
 	model.Name = "FireMagicScorch"
@@ -194,7 +198,7 @@ local function createScorch(position: Vector3, normal: Vector3, ignored: Model?)
 
 	local crater = newPart(
 		"Crater",
-		Vector3.new(0.14, CRATER_RADIUS * 2, CRATER_RADIUS * 2),
+		Vector3.new(0.14, craterRadius * 2, craterRadius * 2),
 		Color3.fromRGB(12, 10, 9),
 		Enum.Material.SmoothPlastic,
 		model
@@ -205,7 +209,7 @@ local function createScorch(position: Vector3, normal: Vector3, ignored: Model?)
 
 	local scorch = newPart(
 		"Scorch",
-		Vector3.new(0.08, SCORCH_RADIUS * 2, SCORCH_RADIUS * 2),
+		Vector3.new(0.08, scorchRadius * 2, scorchRadius * 2),
 		Color3.fromRGB(24, 15, 11),
 		Enum.Material.SmoothPlastic,
 		model
@@ -214,8 +218,14 @@ local function createScorch(position: Vector3, normal: Vector3, ignored: Model?)
 	scorch.Shape = Enum.PartType.Cylinder
 	scorch.CFrame = surface * CFrame.Angles(0, math.pi / 2, 0)
 
-	local glow =
-		newPart("EmberGlow", Vector3.new(0.1, 2.6, 2.6), Color3.fromRGB(255, 108, 38), Enum.Material.Neon, model)
+	local glowSize = 2.6 * scale
+	local glow = newPart(
+		"EmberGlow",
+		Vector3.new(0.1, glowSize, glowSize),
+		Color3.fromRGB(255, 108, 38),
+		Enum.Material.Neon,
+		model
+	)
 	glow.Transparency = 0.45
 	glow.Shape = Enum.PartType.Cylinder
 	glow.CFrame = surface * CFrame.Angles(0, math.pi / 2, 0)
@@ -230,9 +240,9 @@ local function createScorch(position: Vector3, normal: Vector3, ignored: Model?)
 		for index = 1, #line.points - 1 do
 			local from = line.points[index]
 			local to = line.points[index + 1]
-			local width = line.width * (1 - (index - 1) / math.max(1, #line.points - 1) * 0.55)
-			local a = surfacePoint(surface * Vector3.new(from.X, from.Y, 0), normal, rayParams)
-			local b = surfacePoint(surface * Vector3.new(to.X, to.Y, 0), normal, rayParams)
+			local width = line.width * scale * (1 - (index - 1) / math.max(1, #line.points - 1) * 0.55)
+			local a = surfacePoint(surface * Vector3.new(from.X * scale, from.Y * scale, 0), normal, rayParams)
+			local b = surfacePoint(surface * Vector3.new(to.X * scale, to.Y * scale, 0), normal, rayParams)
 			local segment = makeCrackSegment(a, b, width, normal, model)
 			if segment then
 				table.insert(fadeParts, segment)
@@ -254,7 +264,7 @@ local function createScorch(position: Vector3, normal: Vector3, ignored: Model?)
 	Debris:AddItem(model, FireMagic.CRACK_SECONDS)
 end
 
-local function damageGhosts(position: Vector3, directInstance: Instance?, attacker: Player)
+local function damageGhosts(position: Vector3, directInstance: Instance?, attacker: Player, charge: number)
 	local damaged: { [Model]: boolean } = {}
 
 	local function apply(model: Model, amount: number)
@@ -268,17 +278,17 @@ local function damageGhosts(position: Vector3, directInstance: Instance?, attack
 
 	local direct = GhostService.resolve(directInstance)
 	if direct then
-		apply(direct, FireMagic.DIRECT_DAMAGE)
+		apply(direct, FireMagic.directDamage(charge))
 	end
 
 	local overlap = OverlapParams.new()
 	overlap.FilterType = Enum.RaycastFilterType.Exclude
 	overlap.FilterDescendantsInstances = if attacker.Character then { attacker.Character } else {}
-	for _, part in Workspace:GetPartBoundsInRadius(position, FireMagic.SPLASH_RADIUS, overlap) do
+	for _, part in Workspace:GetPartBoundsInRadius(position, FireMagic.explosionRadius(charge), overlap) do
 		local ghost = GhostService.resolve(part)
 		if ghost and not damaged[ghost] then
 			local origin = if ghost.PrimaryPart then ghost.PrimaryPart.Position else ghost:GetPivot().Position
-			apply(ghost, FireMagic.splashDamage((origin - position).Magnitude))
+			apply(ghost, FireMagic.splashDamage((origin - position).Magnitude, charge))
 		end
 	end
 end
@@ -286,12 +296,13 @@ end
 local function explode(projectile: Projectile, position: Vector3, normal: Vector3, hitInstance: Instance?)
 	projectiles[projectile.id] = nil
 
-	damageGhosts(position, hitInstance, projectile.player)
+	damageGhosts(position, hitInstance, projectile.player, projectile.charge)
 	explosionRemote:FireAllClients({
 		castId = projectile.id,
 		position = position,
 		normal = normal,
 		caster = projectile.player,
+		charge = projectile.charge,
 	})
 
 	-- Scars belong on the world, not on a ghost or on a player. A blast that
@@ -300,12 +311,12 @@ local function explode(projectile: Projectile, position: Vector3, normal: Vector
 		local model = hitInstance:FindFirstAncestorOfClass("Model")
 		local isCharacter = model ~= nil and Players:GetPlayerFromCharacter(model) ~= nil
 		if not isCharacter then
-			createScorch(position, normal, projectile.character)
+			createScorch(position, normal, projectile.character, projectile.charge)
 		end
 	end
 end
 
-local function cast(player: Player, origin: any, direction: any)
+local function cast(player: Player, origin: any, direction: any, charge: any)
 	if not isVector(origin) or not isVector(direction) or direction.Magnitude < 0.01 then
 		return
 	end
@@ -328,6 +339,10 @@ local function cast(player: Player, origin: any, direction: any)
 		return
 	end
 
+	-- The client reports how long Z was held. It is only a size, so clamping it
+	-- is enough: a liar can make the ball as big as a full charge, never bigger.
+	local chargeFraction = if typeof(charge) == "number" and charge == charge then math.clamp(charge, 0, 1) else 0
+
 	nextCastId += 1
 	local castId = nextCastId
 	local unit = direction.Unit
@@ -342,6 +357,7 @@ local function cast(player: Player, origin: any, direction: any)
 		direction = unit,
 		distanceLeft = FireMagic.RANGE,
 		launchAt = launchAt,
+		charge = chargeFraction,
 	}
 
 	castStartedRemote:FireAllClients({
@@ -350,6 +366,7 @@ local function cast(player: Player, origin: any, direction: any)
 		origin = origin,
 		direction = unit,
 		launchAt = launchAt,
+		charge = chargeFraction,
 	})
 	speak(character)
 end

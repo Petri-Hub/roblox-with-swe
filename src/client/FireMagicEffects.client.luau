@@ -5,6 +5,7 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 local TweenService = game:GetService("TweenService")
+local UserInputService = game:GetService("UserInputService")
 local Workspace = game:GetService("Workspace")
 
 local Shared = ReplicatedStorage:WaitForChild("Shared")
@@ -36,10 +37,14 @@ type CastVisual = {
 	launchAt: number,
 	launched: boolean,
 	ball: Model?,
+	ballScale: number,
 	fading: boolean,
 }
 
 local casts: { [number]: CastVisual } = {}
+local chargePreview: Model? = nil
+local chargePreviewScale = 1
+local chargeStartedAt: number? = nil
 
 ---------------------------------------------------------------------------
 -- Small builders
@@ -97,6 +102,22 @@ local function playAt(position: Vector3, soundId: number, volume: number, maxDis
 	sound.Parent = holder
 	sound:Play()
 	Debris:AddItem(holder, 6)
+end
+
+-- Scales every part of a model around its pivot. Used for the charging circle
+-- (which grows and shrinks with the hold) and for the ball.
+local function scaleModel(model: Model, factor: number)
+	if math.abs(factor - 1) < 0.001 then
+		return
+	end
+
+	local pivot = model:GetPivot()
+	for _, descendant in model:GetDescendants() do
+		if descendant:IsA("BasePart") then
+			descendant.Size *= factor
+			descendant.Position = pivot:PointToWorldSpace(pivot:PointToObjectSpace(descendant.Position) * factor)
+		end
+	end
 end
 
 ---------------------------------------------------------------------------
@@ -229,6 +250,21 @@ local function buildMagicCircle(): (Model, { BasePart })
 	return model, parts
 end
 
+-- The circle the player sees while Z is held. It is the same circle as the
+-- real cast, scaled by the charge, so the hand-off on release is invisible.
+local function ensureChargePreview(): Model
+	if chargePreview and chargePreview.Parent then
+		return chargePreview
+	end
+
+	local model = buildMagicCircle()
+	model.Name = "FireMagicChargeCircle"
+	model.Parent = Workspace
+	chargePreview = model
+	chargePreviewScale = 1
+	return model
+end
+
 ---------------------------------------------------------------------------
 -- Fireball
 ---------------------------------------------------------------------------
@@ -296,32 +332,33 @@ end
 -- Explosion
 ---------------------------------------------------------------------------
 
-local function spawnExplosion(position: Vector3, normal: Vector3)
+local function spawnExplosion(position: Vector3, normal: Vector3, scale: number)
 	local holder = newPart(Workspace, "FireMagicBlast", Vector3.one * 0.2, PALE_FIRE, Enum.Material.SmoothPlastic)
 	holder.Transparency = 1
 	holder.CFrame = CFrame.new(position)
 
-	local flash = newBall(holder, "Flash", 2.6, PALE_FIRE, 0.02)
+	local flash = newBall(holder, "Flash", 2.6 * scale, PALE_FIRE, 0.02)
 	flash.CFrame = holder.CFrame
 	TweenService:Create(flash, TweenInfo.new(0.22, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-		Size = Vector3.one * 10,
+		Size = Vector3.one * 10 * scale,
 		Transparency = 1,
 	}):Play()
 
-	local bloom = newBall(holder, "Bloom", 4, EMBER, 0.2)
+	local bloom = newBall(holder, "Bloom", 4 * scale, EMBER, 0.2)
 	bloom.CFrame = holder.CFrame
 	TweenService:Create(bloom, TweenInfo.new(0.45, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-		Size = Vector3.one * 17,
+		Size = Vector3.one * 17 * scale,
 		Transparency = 1,
 	}):Play()
 
-	local shockwave = newPart(holder, "Shockwave", Vector3.new(0.14, 2.4, 2.4), GOLD, Enum.Material.Neon)
+	local shockwave =
+		newPart(holder, "Shockwave", Vector3.new(0.14, 2.4 * scale, 2.4 * scale), GOLD, Enum.Material.Neon)
 	shockwave.Transparency = 0.35
 	shockwave.Shape = Enum.PartType.Cylinder
 	shockwave.CFrame = CFrame.lookAt(position + normal * 0.2, position + normal * 0.2 + normal)
 		* CFrame.Angles(0, math.pi / 2, 0)
 	TweenService:Create(shockwave, TweenInfo.new(0.5, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {
-		Size = Vector3.new(0.1, 26, 26),
+		Size = Vector3.new(0.1, 26 * scale, 26 * scale),
 		Transparency = 1,
 	}):Play()
 
@@ -329,7 +366,7 @@ local function spawnExplosion(position: Vector3, normal: Vector3)
 	light.Name = "BlastLight"
 	light.Color = Color3.fromRGB(255, 150, 70)
 	light.Brightness = 16
-	light.Range = 46
+	light.Range = 46 * scale
 	light.Shadows = true
 	light.Parent = holder
 
@@ -341,9 +378,9 @@ local function spawnExplosion(position: Vector3, normal: Vector3)
 	fire.Speed = NumberRange.new(16, 34)
 	fire.SpreadAngle = Vector2.new(180, 180)
 	fire.Size = NumberSequence.new({
-		NumberSequenceKeypoint.new(0, 4.2),
-		NumberSequenceKeypoint.new(0.6, 2.6),
-		NumberSequenceKeypoint.new(1, 0.2),
+		NumberSequenceKeypoint.new(0, 4.2 * scale),
+		NumberSequenceKeypoint.new(0.6, 2.6 * scale),
+		NumberSequenceKeypoint.new(1, 0.2 * scale),
 	})
 	fire.Transparency = NumberSequence.new({
 		NumberSequenceKeypoint.new(0, 0.15),
@@ -360,7 +397,7 @@ local function spawnExplosion(position: Vector3, normal: Vector3)
 	sparks.Speed = NumberRange.new(22, 46)
 	sparks.SpreadAngle = Vector2.new(180, 180)
 	sparks.Size = NumberSequence.new({
-		NumberSequenceKeypoint.new(0, 0.42),
+		NumberSequenceKeypoint.new(0, 0.42 * scale),
 		NumberSequenceKeypoint.new(1, 0),
 	})
 	sparks.Transparency = NumberSequence.new(0.15)
@@ -375,8 +412,8 @@ local function spawnExplosion(position: Vector3, normal: Vector3)
 	smoke.Speed = NumberRange.new(3, 9)
 	smoke.SpreadAngle = Vector2.new(180, 180)
 	smoke.Size = NumberSequence.new({
-		NumberSequenceKeypoint.new(0, 4),
-		NumberSequenceKeypoint.new(1, 10),
+		NumberSequenceKeypoint.new(0, 4 * scale),
+		NumberSequenceKeypoint.new(1, 10 * scale),
 	})
 	smoke.Transparency = NumberSequence.new({
 		NumberSequenceKeypoint.new(0, 0.35),
@@ -393,7 +430,7 @@ local function spawnExplosion(position: Vector3, normal: Vector3)
 	embers.Speed = NumberRange.new(4, 11)
 	embers.SpreadAngle = Vector2.new(180, 180)
 	embers.Size = NumberSequence.new({
-		NumberSequenceKeypoint.new(0, 0.24),
+		NumberSequenceKeypoint.new(0, 0.24 * scale),
 		NumberSequenceKeypoint.new(1, 0),
 	})
 	embers.Transparency = NumberSequence.new(0.1)
@@ -405,8 +442,8 @@ local function spawnExplosion(position: Vector3, normal: Vector3)
 
 	-- A little client-side rubble sells the impact without asking the server
 	-- to simulate physics for every player.
-	for _ = 1, 9 do
-		local size = math.random() * 0.45 + 0.22
+	for _ = 1, math.floor(9 * scale) do
+		local size = (math.random() * 0.45 + 0.22) * scale
 		local chunk = newPart(holder, "Debris", Vector3.one * size, Color3.fromRGB(28, 24, 22), Enum.Material.Slate)
 		chunk.Anchored = false
 		chunk.CanCollide = false
@@ -503,6 +540,7 @@ local function startCast(payload)
 		return
 	end
 
+	local charge = if typeof(payload.charge) == "number" then math.clamp(payload.charge, 0, 1) else 0
 	local old = casts[castId]
 	if old then
 		old.circle:Destroy()
@@ -512,6 +550,7 @@ local function startCast(payload)
 	end
 
 	local circle, parts = buildMagicCircle()
+	scaleModel(circle, FireMagic.circleScale(charge))
 	circle:PivotTo(CFrame.lookAt(origin + direction * 0.35, origin + direction * 0.35 + direction))
 	circle.Parent = Workspace
 
@@ -524,6 +563,7 @@ local function startCast(payload)
 		launchAt = launchAt,
 		launched = false,
 		ball = nil,
+		ballScale = FireMagic.ballScale(charge),
 		fading = false,
 	}
 
@@ -546,6 +586,7 @@ end
 local function launchBall(cast: CastVisual)
 	cast.launched = true
 	local ball = buildBall()
+	scaleModel(ball, cast.ballScale)
 	ball:PivotTo(CFrame.new(cast.origin))
 	ball.Parent = Workspace
 	cast.ball = ball
@@ -563,21 +604,49 @@ explosionRemote.OnClientEvent:Connect(function(payload)
 		stopCast(payload.castId)
 	end
 
+	local charge = if typeof(payload.charge) == "number" then math.clamp(payload.charge, 0, 1) else 0
 	local normal = if typeof(payload.normal) == "Vector3" and payload.normal.Magnitude > 0.01
 		then payload.normal.Unit
 		else Vector3.yAxis
-	spawnExplosion(payload.position, normal)
+	local blastScale = FireMagic.explosionRadius(charge) / FireMagic.SPLASH_RADIUS
+	spawnExplosion(payload.position, normal, blastScale)
 
 	local character = player.Character
 	local root = character and character:FindFirstChild("HumanoidRootPart") :: BasePart?
 	local from = if root then root.Position else Workspace.CurrentCamera and Workspace.CurrentCamera.CFrame.Position
 	if from then
-		addShake(FireMagic.shakeStrength((from - payload.position).Magnitude))
+		local strength = FireMagic.shakeStrength((from - payload.position).Magnitude) * (1 + charge * 0.4)
+		addShake(strength)
 	end
 end)
 
 RunService:BindToRenderStep(RENDER_STEP, Enum.RenderPriority.Camera.Value + 2, function()
 	local now = Workspace:GetServerTimeNow()
+
+	local charging = player:GetAttribute("FireMagicCharging") == true
+	if charging then
+		if not chargeStartedAt then
+			chargeStartedAt = os.clock()
+		end
+
+		local camera = Workspace.CurrentCamera
+		if camera then
+			local origin, direction = FireMagic.aimRay(camera, UserInputService:GetMouseLocation())
+			local target = FireMagic.circleScale(FireMagic.charge(os.clock() - chargeStartedAt))
+			local model = ensureChargePreview()
+			scaleModel(model, target / chargePreviewScale)
+			chargePreviewScale = target
+			local centre = origin + direction * 0.35
+			model:PivotTo(CFrame.lookAt(centre, centre + direction) * CFrame.Angles(0, 0, os.clock() * 1.9))
+		end
+	else
+		chargeStartedAt = nil
+		if chargePreview then
+			chargePreview:Destroy()
+			chargePreview = nil
+			chargePreviewScale = 1
+		end
+	end
 
 	for _, cast in casts do
 		local spin = os.clock() * 1.9
@@ -609,5 +678,12 @@ player.CharacterAdded:Connect(function()
 	-- A respawn must not leave a ball or a circle frozen in the old place.
 	for castId in casts do
 		stopCast(castId)
+	end
+
+	chargeStartedAt = nil
+	if chargePreview then
+		chargePreview:Destroy()
+		chargePreview = nil
+		chargePreviewScale = 1
 	end
 end)

@@ -197,6 +197,7 @@ local function poseWeapon(deltaTime: number)
 			and currentCharacter
 			and isEquipped()
 			and player:GetAttribute("FireMagicCasting") ~= true
+			and player:GetAttribute("ShopOpen") ~= true
 		then Workspace
 		else nil
 	if not alive or not rig.model.Parent then
