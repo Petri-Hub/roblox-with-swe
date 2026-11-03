@@ -84,7 +84,7 @@ The first feature lets a player harvest the tree in the world. The server checks
   <img src="assets/collaboration.svg" alt="Proposed four-lane collaboration flow. Friends discuss an idea in Discord; friends or a Hermes agent create a branch and pull request; GitHub Actions checks StyLua, Selene, a Rojo build, and Jest tests; then staging is playtested before a production Roblox release." />
 </p>
 
-Friends start with an idea or bug in Discord. A contributor or the planned Hermes profile in pepper turns the agreed change into code on a branch and opens a pull request. GitHub Actions checks formatting with StyLua, lint with Selene, build with Rojo, and run Jest tests. Passing changes reach a staging place for playtesting before a production release.
+Friends start with an idea or bug in Discord. A contributor or Lemon, the Hermes agent in pepper, turns the agreed change into code on a branch and opens a pull request. GitHub Actions checks formatting with StyLua, lint with Selene, build with Rojo, and run Jest tests. Passing changes reach a staging place for playtesting before a production release.
 
 ## Technologies
 
