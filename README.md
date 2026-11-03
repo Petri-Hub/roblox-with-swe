@@ -86,6 +86,8 @@ The first feature lets a player harvest the tree in the world. The server checks
 
 Friends start with an idea or bug in Discord. A contributor or Lemon, the Hermes agent in pepper, turns the agreed change into code on a branch and opens a pull request. GitHub Actions checks formatting with StyLua, lint with Selene, build with Rojo, and run Jest tests. Passing changes reach a staging place for playtesting before a production release.
 
+The project keeps its development skills in `.agents/skills/`, covering setup, previews, design, implementation, tests, documentation and delivery.
+
 ## Technologies
 
 <table align="center">
@@ -202,6 +204,8 @@ What is working now:
 
 ```sh
 .
+├── .agents/skills/              # project-specific agent workflows
+│
 ├── .github/
 │   └── workflows/
 │       ├── quality.yml          # format, lint, build, and Jest checks
