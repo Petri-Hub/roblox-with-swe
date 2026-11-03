@@ -132,17 +132,15 @@ local function forestProblems(forest: Instance?, spawn: Instance?, character: Mo
 	if not forest or not forest:IsA("Model") then
 		table.insert(problems, "GeneratedForest")
 	else
-		local trees = forest:FindFirstChild("Trees")
-		local expected = forest:GetAttribute("ExpectedTreeCount")
+		-- The server sets Ready after the last tree is in place. Do not compare
+		-- the tree count here: the client can still be missing a few children
+		-- when the attribute arrives, and that used to hold the curtain up
+		-- forever while the forest itself was already finished.
 		if forest:GetAttribute("Ready") ~= true then
 			table.insert(problems, "forest Ready")
 		end
-		if not trees then
+		if not forest:FindFirstChild("Trees") then
 			table.insert(problems, "Trees folder")
-		elseif typeof(expected) ~= "number" then
-			table.insert(problems, "ExpectedTreeCount")
-		elseif #trees:GetChildren() < expected then
-			table.insert(problems, `trees {#trees:GetChildren()}/{expected}`)
 		end
 	end
 
