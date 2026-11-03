@@ -173,7 +173,7 @@ local function forestProblems(forest: Instance?, spawn: Instance?, character: Mo
 	return problems
 end
 
-local WAIT_LIMIT = 45
+local WAIT_LIMIT = 25
 local REPORT_EVERY = 8
 
 -- Returns the forest and character, or nil plus the reasons it gave up. The
@@ -272,7 +272,7 @@ end
 local ready = false
 local failed = false
 local slow = false
-task.spawn(function()
+local function prepareScene()
 	local forest, character, problems = waitForForest()
 	if not forest or not character then
 		if problems then
@@ -303,6 +303,14 @@ task.spawn(function()
 		RunService.RenderStepped:Wait()
 	end
 	ready = true
+end
+
+task.spawn(function()
+	local finished, message = pcall(prepareScene)
+	if not finished then
+		warn("ForestIntro could not finish: " .. tostring(message))
+		ready = true
+	end
 end)
 
 local function typeLine(label: TextLabel, delayBetweenLetters: number)
@@ -340,6 +348,10 @@ local fadeCurtain = TweenService:Create(curtain, fade, { BackgroundTransparency 
 TweenService:Create(firstLine, fade, { TextTransparency = 1 }):Play()
 TweenService:Create(secondLine, fade, { TextTransparency = 1 }):Play()
 fadeCurtain:Play()
-fadeCurtain.Completed:Wait()
+task.wait(1.5)
 
-screen:Destroy()
+-- The tween is decoration: the curtain leaves after a fixed time even if the
+-- tween never completes on a busy client.
+if screen.Parent then
+	screen:Destroy()
+end
