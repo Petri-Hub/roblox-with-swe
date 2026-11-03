@@ -28,6 +28,14 @@ Every life starts with the flashlight and the `M9` pistol — kills are the shop
 
 Prices live in `src/shared/ShopCatalog.luau` and the money is the `KILLS` counter. The client only asks to buy; `ShopService` checks the distance to the counter, the price, whether you already own the item, then spends the kills, flips the ownership attribute and puts the purchase in your hands. Combat and the UV lamp check ownership on every use, so an unpaid client cannot shoot the rifle it did not buy.
 
+### The fire magic
+
+The fireball is everyone's spell for now, not a shop item. Press `Z` and the character points the right arm and hand at the cursor; a spinning rune circle, built from neon parts and fire particles, opens in front of the palm and a fireball leaves it. The ball flies at 110 studs per second up to 240 studs with a particle trail and its own light.
+
+On impact it explodes: a flash, an expanding shockwave, fire, sparks, smoke, embers, a boom and a light tremor on the screens of players within 55 studs. A direct hit deals 120 damage — enough to kill a full-health ghost — and the blast splashes up to 100 damage within 12 studs. The surface under the blast gets a scorched crater and eight to eleven radial cracks that follow the terrain and disappear after 30 seconds. Each cast is followed by `SOL CRUEL` above the character and in the chat, and the spell takes 6 seconds to recharge; the badge above the UV battery shows the countdown.
+
+The tuning lives in `src/shared/FireMagic.luau`, the damage, projectile and scorch marks in `src/server/FireMagicService.luau`, the input, first-person arm and cooldown badge in `src/client/FireMagicController.client.luau`, and the circle, ball, blast and screen shake in `src/client/FireMagicEffects.client.luau`.
+
 ### Adding a weapon
 
 Weapons are data. `WeaponSpec` owns the magazine, cadence, reload, spread, recoil and state sync for every gun, and `WeaponRegistry` hands out the validated definitions. To add one:

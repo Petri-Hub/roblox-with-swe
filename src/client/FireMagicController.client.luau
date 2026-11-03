@@ -1,0 +1,457 @@
+-- Fire magic controls: Z aims at the cursor, the character points the right
+-- arm and hand at the target, and a badge shows the cooldown. The spell itself
+-- is simulated and drawn by FireMagicEffects and FireMagicService.
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
+local TweenService = game:GetService("TweenService")
+local UserInputService = game:GetService("UserInputService")
+local Workspace = game:GetService("Workspace")
+
+local Shared = ReplicatedStorage:WaitForChild("Shared")
+local FireMagic = require(Shared.FireMagic)
+local FirstPersonBodyPart = require(Shared.FirstPersonBodyPart)
+
+local player = Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+local remotes = ReplicatedStorage:WaitForChild("FireMagicRemotes")
+local castRemote = remotes:WaitForChild("Cast") :: RemoteEvent
+local castStartedRemote = remotes:WaitForChild("CastStarted") :: RemoteEvent
+local rejectedRemote = remotes:WaitForChild("Rejected") :: RemoteEvent
+
+local READY_ATTRIBUTE = "FireMagicReadyAt"
+local CASTING_ATTRIBUTE = "FireMagicCasting"
+
+local ARM_STEP = "FireMagicArm"
+local SLEEVE_COLOR = Color3.fromRGB(57, 62, 60)
+
+-- Where the hand sits in front of the camera, in camera space. The cast circle
+-- and the ball both start here.
+local HAND_ORIGIN = Vector3.new(0.34, -0.55, -1.65)
+
+local POSE_RAISE = 0.16
+local POSE_HOLD = 0.62
+local POSE_LOWER = 0.9
+
+local SHOULDER = Vector3.new(0.66, -1.06, -0.16)
+local ELBOW = Vector3.new(0.5, -0.8, -0.84)
+local HAND = Vector3.new(0.34, -0.6, -1.45)
+local LOWER_SHOULDER = Vector3.new(0.72, -1.24, -0.14)
+local LOWER_ELBOW = Vector3.new(0.64, -1.36, -0.6)
+local LOWER_HAND = Vector3.new(0.56, -1.28, -1.02)
+
+type ArmRole = "upper" | "forearm" | "hand" | "whole"
+
+type ArmPiece = {
+	part: BasePart,
+	role: ArmRole,
+}
+
+local armModel: Model? = nil
+local armPieces: { ArmPiece } = {}
+local armGeneration = 0
+local castStartedAt: number? = nil
+local castToken = 0
+
+local function now(): number
+	return Workspace:GetServerTimeNow()
+end
+
+local function readyAt(): number?
+	local value = player:GetAttribute(READY_ATTRIBUTE)
+	return if typeof(value) == "number" then value else nil
+end
+
+local function isAlive(): boolean
+	local character = player.Character
+	if not character then
+		return false
+	end
+
+	local humanoid = character:FindFirstChildOfClass("Humanoid")
+	return humanoid ~= nil and humanoid.Health > 0
+end
+
+---------------------------------------------------------------------------
+-- Aim
+---------------------------------------------------------------------------
+
+-- The cursor is the aim: a ray from the camera through the mouse point, then
+-- the hand throws at whatever that ray looks at.
+local function aim()
+	local camera = Workspace.CurrentCamera
+	if not camera then
+		return nil, nil
+	end
+
+	local hand = (camera.CFrame * CFrame.new(HAND_ORIGIN)).Position
+	local mouse = UserInputService:GetMouseLocation()
+	local ray = camera:ViewportPointToRay(mouse.X, mouse.Y)
+	local target = ray.Origin + ray.Direction * 600
+	local direction = target - hand
+	if direction.Magnitude < 1 then
+		direction = camera.CFrame.LookVector
+	end
+
+	return hand, direction.Unit
+end
+
+---------------------------------------------------------------------------
+-- Casting
+---------------------------------------------------------------------------
+
+local function tryCast()
+	if not isAlive() or UserInputService:GetFocusedTextBox() then
+		return
+	end
+
+	if not FireMagic.canCast(readyAt(), now()) then
+		return
+	end
+
+	local hand, direction = aim()
+	if not hand or not direction then
+		return
+	end
+
+	castRemote:FireServer(hand, direction)
+end
+
+---------------------------------------------------------------------------
+-- First-person arm
+---------------------------------------------------------------------------
+
+local function cloneArmPart(source: BasePart, name: string, color: Color3): BasePart
+	local part = FirstPersonBodyPart.clone(source)
+	part.Name = name
+	part.Color = color
+	part.Transparency = 1
+	return part
+end
+
+local function buildArm(character: Model, generation: number)
+	while character:GetAttribute("ForestAppearanceReady") ~= true and player.Character == character do
+		task.wait(0.1)
+	end
+	if player.Character ~= character or generation ~= armGeneration then
+		return
+	end
+
+	local humanoid = character:WaitForChild("Humanoid", 5) :: Humanoid?
+	if not humanoid then
+		return
+	end
+
+	local model = Instance.new("Model")
+	model.Name = "FireMagicCastArm"
+	model.Parent = nil
+
+	armPieces = {}
+	local function add(piece: BasePart, role: ArmRole)
+		piece.Parent = model
+		table.insert(armPieces, { part = piece, role = role })
+	end
+
+	if humanoid.RigType == Enum.HumanoidRigType.R15 then
+		local upper = character:WaitForChild("RightUpperArm", 5)
+		local lower = character:WaitForChild("RightLowerArm", 5)
+		local hand = character:WaitForChild("RightHand", 5)
+		if not upper or not lower or not hand then
+			model:Destroy()
+			return
+		end
+
+		add(cloneArmPart(upper :: BasePart, "CastUpperArm", SLEEVE_COLOR), "upper")
+		add(cloneArmPart(lower :: BasePart, "CastForearm", SLEEVE_COLOR), "forearm")
+		add(cloneArmPart(hand :: BasePart, "CastHand", (hand :: BasePart).Color), "hand")
+	else
+		local arm = character:WaitForChild("Right Arm", 5)
+		if not arm then
+			model:Destroy()
+			return
+		end
+		add(cloneArmPart(arm :: BasePart, "CastArm", SLEEVE_COLOR), "whole")
+	end
+
+	armModel = model
+end
+
+local function onCharacterAdded(character: Model)
+	armGeneration += 1
+	castStartedAt = nil
+	if armModel then
+		armModel:Destroy()
+		armModel = nil
+	end
+	armPieces = {}
+	player:SetAttribute(CASTING_ATTRIBUTE, false)
+	task.spawn(buildArm, character, armGeneration)
+end
+
+local function poseAlpha(): number
+	local startedAt = castStartedAt
+	if not startedAt then
+		return 0
+	end
+
+	local age = os.clock() - startedAt
+	if age <= POSE_RAISE then
+		local t = age / POSE_RAISE
+		return t * t * (3 - 2 * t)
+	end
+	if age <= POSE_HOLD then
+		return 1
+	end
+	if age <= POSE_LOWER then
+		local t = (age - POSE_HOLD) / (POSE_LOWER - POSE_HOLD)
+		return 1 - t * t * (3 - 2 * t)
+	end
+
+	castStartedAt = nil
+	return 0
+end
+
+local function placePiece(piece: ArmPiece, base: CFrame, alpha: number)
+	local part = piece.part
+	if piece.role == "whole" then
+		local a = base * CFrame.new(LOWER_SHOULDER:Lerp(SHOULDER, alpha))
+		local b = base * CFrame.new(LOWER_HAND:Lerp(HAND, alpha))
+		part.Size = Vector3.new(part.Size.X, (b.Position - a.Position).Magnitude, part.Size.Z)
+		part.CFrame = CFrame.lookAt((a.Position + b.Position) / 2, b.Position) * CFrame.Angles(-math.pi / 2, 0, 0)
+	elseif piece.role == "upper" then
+		local from = LOWER_SHOULDER:Lerp(SHOULDER, alpha)
+		local to = LOWER_ELBOW:Lerp(ELBOW, alpha)
+		local a = base * CFrame.new(from)
+		local b = base * CFrame.new(to)
+		part.Size = Vector3.new(part.Size.X, (b.Position - a.Position).Magnitude, part.Size.Z)
+		part.CFrame = CFrame.lookAt((a.Position + b.Position) / 2, b.Position) * CFrame.Angles(-math.pi / 2, 0, 0)
+	elseif piece.role == "forearm" then
+		local from = LOWER_ELBOW:Lerp(ELBOW, alpha)
+		local to = LOWER_HAND:Lerp(HAND, alpha)
+		local a = base * CFrame.new(from)
+		local b = base * CFrame.new(to)
+		part.Size = Vector3.new(part.Size.X, (b.Position - a.Position).Magnitude, part.Size.Z)
+		part.CFrame = CFrame.lookAt((a.Position + b.Position) / 2, b.Position) * CFrame.Angles(-math.pi / 2, 0, 0)
+	else
+		local from = LOWER_ELBOW:Lerp(ELBOW, alpha)
+		local to = LOWER_HAND:Lerp(HAND, alpha)
+		local handPosition = (base * CFrame.new(to)).Position
+		local direction = ((base * CFrame.new(to)).Position - (base * CFrame.new(from)).Position).Unit
+		part.CFrame = CFrame.lookAt(handPosition, handPosition + direction) * CFrame.Angles(-math.pi / 2, 0, 0)
+	end
+end
+
+RunService:BindToRenderStep(ARM_STEP, Enum.RenderPriority.Camera.Value + 3, function()
+	local model = armModel
+	local camera = Workspace.CurrentCamera
+	if not model or not camera then
+		return
+	end
+
+	local alpha = poseAlpha()
+	if alpha <= 0.01 then
+		if model.Parent then
+			model.Parent = nil
+		end
+		return
+	end
+
+	if model.Parent ~= Workspace then
+		model.Parent = Workspace
+	end
+
+	local transparency = math.clamp(1 - alpha * 1.8, 0, 1)
+	for _, piece in armPieces do
+		piece.part.Transparency = transparency
+		placePiece(piece, camera.CFrame, alpha)
+	end
+end)
+
+---------------------------------------------------------------------------
+-- HUD
+---------------------------------------------------------------------------
+
+local badge: Frame? = nil
+local badgeFill: Frame? = nil
+local badgeStatus: TextLabel? = nil
+
+local function buildBadge()
+	local previous = playerGui:FindFirstChild("FireMagicHud")
+	if previous then
+		previous:Destroy()
+	end
+
+	local gui = Instance.new("ScreenGui")
+	gui.Name = "FireMagicHud"
+	gui.ResetOnSpawn = false
+	gui.IgnoreGuiInset = true
+	gui.DisplayOrder = 12
+	gui.Parent = playerGui
+
+	local holder = Instance.new("Frame")
+	holder.Name = "Spell"
+	holder.AnchorPoint = Vector2.new(1, 1)
+	holder.Position = UDim2.new(1, -28, 1, -104)
+	holder.Size = UDim2.fromOffset(214, 54)
+	holder.BackgroundColor3 = Color3.fromRGB(20, 13, 10)
+	holder.BackgroundTransparency = 0.35
+	holder.BorderSizePixel = 0
+	holder.Parent = gui
+
+	local corner = Instance.new("UICorner")
+	corner.CornerRadius = UDim.new(0, 8)
+	corner.Parent = holder
+
+	local key = Instance.new("TextLabel")
+	key.Name = "Key"
+	key.BackgroundColor3 = Color3.fromRGB(46, 27, 18)
+	key.BackgroundTransparency = 0.15
+	key.Position = UDim2.fromOffset(10, 9)
+	key.Size = UDim2.fromOffset(34, 34)
+	key.Font = Enum.Font.GothamBold
+	key.Text = "Z"
+	key.TextColor3 = Color3.fromRGB(255, 206, 122)
+	key.TextSize = 16
+	key.Parent = holder
+
+	local keyCorner = Instance.new("UICorner")
+	keyCorner.CornerRadius = UDim.new(0, 6)
+	keyCorner.Parent = key
+
+	local title = Instance.new("TextLabel")
+	title.Name = "Title"
+	title.BackgroundTransparency = 1
+	title.Position = UDim2.fromOffset(54, 7)
+	title.Size = UDim2.new(1, -64, 0, 16)
+	title.Font = Enum.Font.GothamBold
+	title.Text = FireMagic.CHAT_LINE
+	title.TextColor3 = Color3.fromRGB(255, 206, 122)
+	title.TextSize = 12
+	title.TextXAlignment = Enum.TextXAlignment.Left
+	title.Parent = holder
+
+	local status = Instance.new("TextLabel")
+	status.Name = "Status"
+	status.BackgroundTransparency = 1
+	status.Position = UDim2.fromOffset(54, 24)
+	status.Size = UDim2.new(1, -64, 0, 14)
+	status.Font = Enum.Font.Code
+	status.Text = "magia de fogo"
+	status.TextColor3 = Color3.fromRGB(150, 122, 100)
+	status.TextSize = 11
+	status.TextXAlignment = Enum.TextXAlignment.Left
+	status.Parent = holder
+
+	local track = Instance.new("Frame")
+	track.Name = "Track"
+	track.Position = UDim2.fromOffset(10, 46)
+	track.Size = UDim2.new(1, -20, 0, 3)
+	track.BackgroundColor3 = Color3.fromRGB(52, 33, 24)
+	track.BorderSizePixel = 0
+	track.Parent = holder
+
+	local trackCorner = Instance.new("UICorner")
+	trackCorner.CornerRadius = UDim.new(1, 0)
+	trackCorner.Parent = track
+
+	local fill = Instance.new("Frame")
+	fill.Name = "Fill"
+	fill.Size = UDim2.fromScale(1, 1)
+	fill.BackgroundColor3 = Color3.fromRGB(255, 150, 62)
+	fill.BorderSizePixel = 0
+	fill.Parent = track
+
+	local fillCorner = Instance.new("UICorner")
+	fillCorner.CornerRadius = UDim.new(1, 0)
+	fillCorner.Parent = fill
+
+	badge = holder
+	badgeFill = fill
+	badgeStatus = status
+end
+
+local function paintBadge()
+	local fill = badgeFill
+	local status = badgeStatus
+	local holder = badge
+	if not fill or not status or not holder then
+		return
+	end
+
+	local remaining = FireMagic.cooldownRemaining(readyAt(), now())
+	local ready = remaining <= 0
+
+	if ready then
+		fill.Size = UDim2.fromScale(1, 1)
+		fill.BackgroundColor3 = Color3.fromRGB(255, 150, 62)
+		status.Text = "pronto (Z)"
+		status.TextColor3 = Color3.fromRGB(214, 170, 120)
+	else
+		fill.Size = UDim2.fromScale(math.clamp(1 - remaining / FireMagic.COOLDOWN_SECONDS, 0, 1), 1)
+		fill.BackgroundColor3 = Color3.fromRGB(132, 74, 40)
+		status.Text = string.format("recarregando %.0fs", remaining)
+		status.TextColor3 = Color3.fromRGB(150, 112, 92)
+	end
+end
+
+local function flashBadge()
+	local holder = badge
+	if not holder then
+		return
+	end
+
+	local original = holder.BackgroundColor3
+	holder.BackgroundColor3 = Color3.fromRGB(90, 26, 18)
+	TweenService:Create(holder, TweenInfo.new(0.35), { BackgroundColor3 = original }):Play()
+end
+
+---------------------------------------------------------------------------
+-- Wiring
+---------------------------------------------------------------------------
+
+UserInputService.InputBegan:Connect(function(input: InputObject, processed: boolean)
+	if processed then
+		return
+	end
+
+	if input.KeyCode == Enum.KeyCode.Z or input.KeyCode == Enum.KeyCode.ButtonX then
+		tryCast()
+	end
+end)
+
+castStartedRemote.OnClientEvent:Connect(function(payload)
+	if typeof(payload) ~= "table" or payload.caster ~= player then
+		return
+	end
+
+	castStartedAt = os.clock()
+	castToken += 1
+	local token = castToken
+	player:SetAttribute(CASTING_ATTRIBUTE, true)
+	task.delay(POSE_LOWER, function()
+		if token == castToken then
+			player:SetAttribute(CASTING_ATTRIBUTE, false)
+		end
+	end)
+end)
+
+rejectedRemote.OnClientEvent:Connect(function()
+	flashBadge()
+	paintBadge()
+end)
+
+player:GetAttributeChangedSignal(READY_ATTRIBUTE):Connect(paintBadge)
+
+player.CharacterAdded:Connect(onCharacterAdded)
+if player.Character then
+	onCharacterAdded(player.Character)
+end
+
+buildBadge()
+paintBadge()
+task.spawn(function()
+	while true do
+		task.wait(0.1)
+		paintBadge()
+	end
+end)

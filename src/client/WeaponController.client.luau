@@ -193,7 +193,12 @@ local function poseWeapon(deltaTime: number)
 		return
 	end
 
-	rig.model.Parent = if alive and currentCharacter and isEquipped() then Workspace else nil
+	rig.model.Parent = if alive
+			and currentCharacter
+			and isEquipped()
+			and player:GetAttribute("FireMagicCasting") ~= true
+		then Workspace
+		else nil
 	if not alive or not rig.model.Parent then
 		return
 	end
