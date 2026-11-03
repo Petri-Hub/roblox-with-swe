@@ -6,6 +6,7 @@ local ForestAvatar = require(ReplicatedStorage.Shared.ForestAvatar)
 local GhostService = require(script.GhostService)
 local CombatService = require(script.CombatService)
 local UVService = require(script.UVService)
+local FireMagicService = require(script.FireMagicService)
 local ShopService = require(script.ShopService)
 
 local function onCharacterAdded(character: Model)
@@ -47,4 +48,5 @@ end
 GhostService.start()
 CombatService.start()
 UVService.start()
+FireMagicService.start()
 ShopService.start()

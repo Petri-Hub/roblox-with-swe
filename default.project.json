@@ -119,6 +119,12 @@
         "UVLanternController": {
           "$path": "src/client/UVLanternController.client.luau"
         },
+        "FireMagicController": {
+          "$path": "src/client/FireMagicController.client.luau"
+        },
+        "FireMagicEffects": {
+          "$path": "src/client/FireMagicEffects.client.luau"
+        },
         "ShopClient": {
           "$path": "src/client/ShopClient.client.luau"
         }
