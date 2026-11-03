@@ -1013,6 +1013,9 @@ local function paintHud(deltaTime: number, currentTime: number)
 	updateCrosshair(spread, currentTime)
 end
 
-RunService:BindToRenderStep(RENDER_STEP, Enum.RenderPriority.Camera.Value + 2, paintHud)
+RunService:BindToRenderStep(RENDER_STEP, Enum.RenderPriority.Camera.Value + 2, function(deltaTime: number)
+	-- RenderStep only passes deltaTime; the HUD also needs the server clock.
+	paintHud(deltaTime, now())
+end)
 
 forestCrosshair = playerGui:WaitForChild("ForestCrosshair", 15)
