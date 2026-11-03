@@ -10,6 +10,10 @@ local TweenService = game:GetService("TweenService")
 local Workspace = game:GetService("Workspace")
 
 local player = Players.LocalPlayer
+if not player then
+	-- Run mode has no local player; nothing to show and nothing to fade.
+	return
+end
 local playerGui = player:WaitForChild("PlayerGui")
 if player:GetAttribute("ForestIntroShown") or playerGui:FindFirstChild("ForestIntro") then
 	return
@@ -56,7 +60,16 @@ status.MaxVisibleGraphemes = -1
 
 screen.Parent = playerGui
 player:SetAttribute("ForestIntroShown", true)
-ReplicatedFirst:RemoveDefaultLoadingScreen()
+
+-- Only a ReplicatedFirst LocalScript may remove the default loading screen.
+-- This same file also runs as a StarterPlayerScripts fallback, where the call
+-- errors and leaves the curtain up forever, so the fallback skips it.
+if script:IsDescendantOf(ReplicatedFirst) then
+	local removed, message = pcall(ReplicatedFirst.RemoveDefaultLoadingScreen, ReplicatedFirst)
+	if not removed then
+		warn("Could not remove the default loading screen: " .. tostring(message))
+	end
+end
 
 -- The curtain is already on screen, so waiting for the shared module only
 -- delays the first keystroke, never the black screen itself.
@@ -111,36 +124,90 @@ local function terrainHasReachedSpawn(spawn: SpawnLocation): boolean
 	return result ~= nil and result.Instance == Workspace.Terrain
 end
 
-local function waitForForest(): (Model?, Model?)
+-- Names every reason the opening screen is still up, so a stuck intro says
+-- what it is waiting for instead of spinning forever in silence.
+local function forestProblems(forest: Instance?, spawn: Instance?, character: Model?): { string }
+	local problems = {}
+
+	if not forest or not forest:IsA("Model") then
+		table.insert(problems, "GeneratedForest")
+	else
+		local trees = forest:FindFirstChild("Trees")
+		local expected = forest:GetAttribute("ExpectedTreeCount")
+		if forest:GetAttribute("Ready") ~= true then
+			table.insert(problems, "forest Ready")
+		end
+		if not trees then
+			table.insert(problems, "Trees folder")
+		elseif typeof(expected) ~= "number" then
+			table.insert(problems, "ExpectedTreeCount")
+		elseif #trees:GetChildren() < expected then
+			table.insert(problems, `trees {#trees:GetChildren()}/{expected}`)
+		end
+	end
+
+	if not spawn or not spawn:IsA("SpawnLocation") then
+		table.insert(problems, "ForestSpawn")
+	else
+		if not spawn.CanCollide then
+			table.insert(problems, "spawn CanCollide")
+		end
+		if not terrainHasReachedSpawn(spawn) then
+			table.insert(problems, "terrain at spawn")
+		end
+	end
+
+	if not character then
+		table.insert(problems, "character")
+	elseif character:GetAttribute("ForestAppearanceReady") ~= true then
+		table.insert(problems, "ForestAppearanceReady")
+	end
+
+	if Lighting.ClockTime ~= 0.5 then
+		table.insert(problems, "Lighting.ClockTime")
+	end
+	if not Lighting.GlobalShadows then
+		table.insert(problems, "Lighting.GlobalShadows")
+	end
+
+	return problems
+end
+
+local WAIT_LIMIT = 45
+local REPORT_EVERY = 8
+
+-- Returns the forest and character, or nil plus the reasons it gave up. The
+-- limit matters: a client that waits forever cannot rejoin, retry or even see
+-- an error.
+local function waitForForest(): (Model?, Model?, { string }?)
 	if not game:IsLoaded() then
 		game.Loaded:Wait()
 	end
 
+	local startedAt = os.clock()
+	local lastReport = 0
 	while true do
 		if ReplicatedStorage:GetAttribute("ForestLoadFailed") == true then
-			return nil, nil
+			return nil, nil, nil
 		end
 
 		local forest = Workspace:FindFirstChild("GeneratedForest")
 		local spawn = Workspace:FindFirstChild("ForestSpawn")
 		local character = player.Character
-		if forest and forest:IsA("Model") and spawn and spawn:IsA("SpawnLocation") and character then
-			local trees = forest:FindFirstChild("Trees")
-			local expectedTreeCount = forest:GetAttribute("ExpectedTreeCount")
-			if
-				forest:GetAttribute("Ready") == true
-				and trees
-				and expectedTreeCount
-				and #trees:GetChildren() >= expectedTreeCount
-				and character:GetAttribute("ForestAppearanceReady") == true
-				and spawn.CanCollide
-				and terrainHasReachedSpawn(spawn)
-				and Lighting.ClockTime == 0.5
-				and Lighting.GlobalShadows
-			then
-				return forest, character
-			end
+		local problems = forestProblems(forest, spawn, character)
+		if #problems == 0 then
+			return forest, character
 		end
+
+		local now = os.clock()
+		if now - lastReport >= REPORT_EVERY then
+			lastReport = now
+			warn("ForestIntro is still waiting for: " .. table.concat(problems, ", "))
+		end
+		if now - startedAt >= WAIT_LIMIT then
+			return nil, nil, problems
+		end
+
 		task.wait(0.1)
 	end
 end
@@ -204,10 +271,17 @@ end
 
 local ready = false
 local failed = false
+local slow = false
 task.spawn(function()
-	local forest, character = waitForForest()
+	local forest, character, problems = waitForForest()
 	if not forest or not character then
-		failed = true
+		if problems then
+			warn("ForestIntro gave up waiting: " .. table.concat(problems, ", "))
+			slow = true
+			ready = true
+		else
+			failed = true
+		end
 		return
 	end
 
@@ -253,6 +327,10 @@ end
 if failed then
 	status.Text = "The forest could not form. Please rejoin."
 	return
+end
+if slow then
+	status.Text = "The forest is taking longer than usual. Entering anyway..."
+	task.wait(2)
 end
 
 status.Text = ""
