@@ -21,13 +21,11 @@ local rejectedRemote = remotes:WaitForChild("Rejected") :: RemoteEvent
 
 local READY_ATTRIBUTE = "FireMagicReadyAt"
 local CASTING_ATTRIBUTE = "FireMagicCasting"
+local CHARGING_ATTRIBUTE = "FireMagicCharging"
+local CHARGE_ATTRIBUTE = "FireMagicCharge"
 
 local ARM_STEP = "FireMagicArm"
 local SLEEVE_COLOR = Color3.fromRGB(57, 62, 60)
-
--- Where the hand sits in front of the camera, in camera space. The cast circle
--- and the ball both start here.
-local HAND_ORIGIN = Vector3.new(0.34, -0.55, -1.65)
 
 local POSE_RAISE = 0.16
 local POSE_HOLD = 0.62
@@ -52,9 +50,20 @@ local armPieces: { ArmPiece } = {}
 local armGeneration = 0
 local castStartedAt: number? = nil
 local castToken = 0
+local charging = false
+local chargeStartedAt: number? = nil
 
 local function now(): number
 	return Workspace:GetServerTimeNow()
+end
+
+-- How full the hold is, 0..1. The ball stops growing at CHARGE_SECONDS.
+local function currentCharge(): number
+	if not chargeStartedAt then
+		return 0
+	end
+
+	return FireMagic.charge(os.clock() - chargeStartedAt)
 end
 
 local function readyAt(): number?
@@ -84,38 +93,12 @@ local function aim()
 		return nil, nil
 	end
 
-	local hand = (camera.CFrame * CFrame.new(HAND_ORIGIN)).Position
-	local mouse = UserInputService:GetMouseLocation()
-	local ray = camera:ViewportPointToRay(mouse.X, mouse.Y)
-	local target = ray.Origin + ray.Direction * 600
-	local direction = target - hand
-	if direction.Magnitude < 1 then
-		direction = camera.CFrame.LookVector
-	end
-
-	return hand, direction.Unit
+	return FireMagic.aimRay(camera, UserInputService:GetMouseLocation())
 end
 
 ---------------------------------------------------------------------------
 -- Casting
 ---------------------------------------------------------------------------
-
-local function tryCast()
-	if not isAlive() or UserInputService:GetFocusedTextBox() then
-		return
-	end
-
-	if not FireMagic.canCast(readyAt(), now()) then
-		return
-	end
-
-	local hand, direction = aim()
-	if not hand or not direction then
-		return
-	end
-
-	castRemote:FireServer(hand, direction)
-end
 
 ---------------------------------------------------------------------------
 -- First-person arm
@@ -179,6 +162,10 @@ end
 local function onCharacterAdded(character: Model)
 	armGeneration += 1
 	castStartedAt = nil
+	charging = false
+	chargeStartedAt = nil
+	player:SetAttribute(CHARGING_ATTRIBUTE, false)
+	player:SetAttribute(CHARGE_ATTRIBUTE, 0)
 	if armModel then
 		armModel:Destroy()
 		armModel = nil
@@ -189,6 +176,16 @@ local function onCharacterAdded(character: Model)
 end
 
 local function poseAlpha(): number
+	if charging then
+		local startedAt = chargeStartedAt or os.clock()
+		local age = os.clock() - startedAt
+		if age <= POSE_RAISE then
+			local t = math.clamp(age / POSE_RAISE, 0, 1)
+			return t * t * (3 - 2 * t)
+		end
+		return 1
+	end
+
 	local startedAt = castStartedAt
 	if not startedAt then
 		return 0
@@ -381,7 +378,13 @@ local function paintBadge()
 	local remaining = FireMagic.cooldownRemaining(readyAt(), now())
 	local ready = remaining <= 0
 
-	if ready then
+	if charging then
+		local value = currentCharge()
+		fill.Size = UDim2.fromScale(math.max(0.03, value), 1)
+		fill.BackgroundColor3 = Color3.fromRGB(255, 196, 96)
+		status.Text = string.format("carregando %d%%", math.floor(value * 100 + 0.5))
+		status.TextColor3 = Color3.fromRGB(255, 214, 148)
+	elseif ready then
 		fill.Size = UDim2.fromScale(1, 1)
 		fill.BackgroundColor3 = Color3.fromRGB(255, 150, 62)
 		status.Text = "pronto (Z)"
@@ -409,22 +412,100 @@ end
 -- Wiring
 ---------------------------------------------------------------------------
 
+-- Holding Z charges the spell. The attribute pair is what the effects read to
+-- draw the growing circle, so the visual and the throw stay in step.
+local function beginCharge()
+	if charging or not isAlive() or UserInputService:GetFocusedTextBox() then
+		return
+	end
+
+	if not FireMagic.canCast(readyAt(), now()) then
+		flashBadge()
+		return
+	end
+
+	charging = true
+	chargeStartedAt = os.clock()
+	player:SetAttribute(CHARGING_ATTRIBUTE, true)
+	player:SetAttribute(CHARGE_ATTRIBUTE, 0)
+	player:SetAttribute(CASTING_ATTRIBUTE, true)
+	paintBadge()
+end
+
+local function cancelCharge()
+	if not charging then
+		return
+	end
+
+	charging = false
+	chargeStartedAt = nil
+	castStartedAt = nil
+	player:SetAttribute(CHARGING_ATTRIBUTE, false)
+	player:SetAttribute(CHARGE_ATTRIBUTE, 0)
+	player:SetAttribute(CASTING_ATTRIBUTE, false)
+	paintBadge()
+end
+
+local function releaseCharge()
+	if not charging then
+		return
+	end
+
+	local charge = currentCharge()
+	local hand, direction = aim()
+	charging = false
+	chargeStartedAt = nil
+	player:SetAttribute(CHARGING_ATTRIBUTE, false)
+	player:SetAttribute(CHARGE_ATTRIBUTE, charge)
+
+	if not hand or not direction then
+		cancelCharge()
+		return
+	end
+
+	-- The arm is already up: hold it through the windup instead of letting it
+	-- drop to the idle pose and rise again.
+	castStartedAt = os.clock() - POSE_HOLD
+	castToken += 1
+	local token = castToken
+	player:SetAttribute(CASTING_ATTRIBUTE, true)
+	task.delay(POSE_LOWER, function()
+		if token == castToken and not charging then
+			player:SetAttribute(CASTING_ATTRIBUTE, false)
+		end
+	end)
+
+	castRemote:FireServer(hand, direction, charge)
+	paintBadge()
+end
+
 UserInputService.InputBegan:Connect(function(input: InputObject, processed: boolean)
 	if processed then
 		return
 	end
 
 	if input.KeyCode == Enum.KeyCode.Z or input.KeyCode == Enum.KeyCode.ButtonX then
-		tryCast()
+		beginCharge()
 	end
 end)
+
+UserInputService.InputEnded:Connect(function(input: InputObject)
+	if input.KeyCode == Enum.KeyCode.Z or input.KeyCode == Enum.KeyCode.ButtonX then
+		releaseCharge()
+	end
+end)
+
+-- Alt-tabbing mid-charge must not fire the spell or leave the arm raised.
+UserInputService.WindowFocusReleased:Connect(cancelCharge)
 
 castStartedRemote.OnClientEvent:Connect(function(payload)
 	if typeof(payload) ~= "table" or payload.caster ~= player then
 		return
 	end
 
-	castStartedAt = os.clock()
+	if not castStartedAt or os.clock() - castStartedAt > POSE_LOWER then
+		castStartedAt = os.clock()
+	end
 	castToken += 1
 	local token = castToken
 	player:SetAttribute(CASTING_ATTRIBUTE, true)
