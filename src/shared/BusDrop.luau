@@ -25,6 +25,11 @@ BusDrop.GLIDE_FALL = 46
 BusDrop.GLIDE_DRIFT = 26
 BusDrop.GLIDE_SECONDS = 12
 
+-- The chute lets go this far above the ground, measured from the root. A
+-- velocity constraint with an endless force would keep pressing the character
+-- into the terrain after touchdown and leave it inside the floor.
+BusDrop.CHUTE_RELEASE = 8
+
 function BusDrop.lane(angle: number): Vector3
 	local flat = Vector3.new(math.cos(angle), 0, math.sin(angle))
 
