@@ -14,8 +14,8 @@ local Telekinesis = require(Shared.Telekinesis)
 local FirstPersonBodyPart = require(Shared.FirstPersonBodyPart)
 local Inventory = require(Shared.Inventory)
 
+local SpellBadge = require(script.Parent.SpellBadge)
 local player = Players.LocalPlayer
-local playerGui = player:WaitForChild("PlayerGui")
 local remotes = ReplicatedStorage:WaitForChild("TelekinesisRemotes")
 local grabRemote = remotes:WaitForChild("Grab") :: RemoteEvent
 local aimRemote = remotes:WaitForChild("Aim") :: RemoteEvent
@@ -238,98 +238,22 @@ local badgeFill: Frame? = nil
 local badgeStatus: TextLabel? = nil
 
 local function buildBadge()
-	local previous = playerGui:FindFirstChild("TelekinesisHud")
-	if previous then
-		previous:Destroy()
-	end
-
-	local gui = Instance.new("ScreenGui")
-	gui.Name = "TelekinesisHud"
-	gui.ResetOnSpawn = false
-	gui.IgnoreGuiInset = true
-	gui.DisplayOrder = 12
-	gui.Parent = playerGui
-
-	local holder = Instance.new("Frame")
-	holder.Name = "Spell"
-	holder.AnchorPoint = Vector2.new(1, 1)
-	holder.Position = UDim2.new(1, -28, 1, -168)
-	holder.Size = UDim2.fromOffset(214, 54)
-	holder.BackgroundColor3 = Color3.fromRGB(14, 20, 26)
-	holder.BackgroundTransparency = 0.35
-	holder.BorderSizePixel = 0
-	holder.Parent = gui
-
-	local corner = Instance.new("UICorner")
-	corner.CornerRadius = UDim.new(0, 8)
-	corner.Parent = holder
-
-	local key = Instance.new("TextLabel")
-	key.Name = "Key"
-	key.BackgroundColor3 = Color3.fromRGB(24, 36, 46)
-	key.BackgroundTransparency = 0.15
-	key.Position = UDim2.fromOffset(10, 9)
-	key.Size = UDim2.fromOffset(34, 34)
-	key.Font = Enum.Font.GothamBold
-	key.Text = "X"
-	key.TextColor3 = Color3.fromRGB(226, 242, 255)
-	key.TextSize = 16
-	key.Parent = holder
-
-	local keyCorner = Instance.new("UICorner")
-	keyCorner.CornerRadius = UDim.new(0, 6)
-	keyCorner.Parent = key
-
-	local title = Instance.new("TextLabel")
-	title.Name = "Title"
-	title.BackgroundTransparency = 1
-	title.Position = UDim2.fromOffset(54, 7)
-	title.Size = UDim2.new(1, -64, 0, 16)
-	title.Font = Enum.Font.GothamBold
-	title.Text = Telekinesis.CHAT_LINE
-	title.TextColor3 = Color3.fromRGB(226, 242, 255)
-	title.TextSize = 12
-	title.TextXAlignment = Enum.TextXAlignment.Left
-	title.Parent = holder
-
-	local status = Instance.new("TextLabel")
-	status.Name = "Status"
-	status.BackgroundTransparency = 1
-	status.Position = UDim2.fromOffset(54, 24)
-	status.Size = UDim2.new(1, -64, 0, 14)
-	status.Font = Enum.Font.Code
-	status.Text = "telecinese"
-	status.TextColor3 = Color3.fromRGB(130, 148, 160)
-	status.TextSize = 11
-	status.TextXAlignment = Enum.TextXAlignment.Left
-	status.Parent = holder
-
-	local track = Instance.new("Frame")
-	track.Name = "Track"
-	track.Position = UDim2.fromOffset(10, 46)
-	track.Size = UDim2.new(1, -20, 0, 3)
-	track.BackgroundColor3 = Color3.fromRGB(30, 42, 52)
-	track.BorderSizePixel = 0
-	track.Parent = holder
-
-	local trackCorner = Instance.new("UICorner")
-	trackCorner.CornerRadius = UDim.new(1, 0)
-	trackCorner.Parent = track
-
-	local fill = Instance.new("Frame")
-	fill.Name = "Fill"
-	fill.Size = UDim2.fromScale(1, 1)
-	fill.BackgroundColor3 = Color3.fromRGB(190, 226, 255)
-	fill.BorderSizePixel = 0
-	fill.Parent = track
-
-	local fillCorner = Instance.new("UICorner")
-	fillCorner.CornerRadius = UDim.new(1, 0)
-	fillCorner.Parent = fill
-
-	badge = holder
-	badgeFill = fill
-	badgeStatus = status
+	local built = SpellBadge.build({
+		name = "TelekinesisHud",
+		y = -168,
+		background = Color3.fromRGB(14, 20, 26),
+		keyBackground = Color3.fromRGB(24, 36, 46),
+		key = "X",
+		accent = Color3.fromRGB(226, 242, 255),
+		title = Telekinesis.CHAT_LINE,
+		status = "telecinese",
+		statusColor = Color3.fromRGB(130, 148, 160),
+		track = Color3.fromRGB(30, 42, 52),
+		fill = Color3.fromRGB(190, 226, 255),
+	})
+	badge = built.holder
+	badgeFill = built.fill
+	badgeStatus = built.status
 end
 
 local function paintBadge()

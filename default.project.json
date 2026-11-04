@@ -139,6 +139,12 @@
         },
         "ShopClient": {
           "$path": "src/client/ShopClient.client.luau"
+        },
+        "WeaponHud": {
+          "$path": "src/client/WeaponHud.luau"
+        },
+        "SpellBadge": {
+          "$path": "src/client/SpellBadge.luau"
         }
       }
     },
