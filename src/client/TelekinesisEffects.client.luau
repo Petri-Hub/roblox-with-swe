@@ -44,6 +44,7 @@ type HoldVisual = {
 	sound: Sound?,
 	target: PVInstance,
 	kind: string,
+	caster: Player,
 	radius: number,
 	phase: number,
 }
@@ -306,6 +307,7 @@ local function startHold(payload: any)
 		sound = sound,
 		target = target,
 		kind = if typeof(payload.kind) == "string" then payload.kind else "prop",
+		caster = holderPlayer,
 		radius = radius,
 		phase = math.random() * math.pi * 2,
 	}
@@ -364,7 +366,15 @@ local function updateVisual(visual: HoldVisual, camera: Camera?, now: number)
 		)
 	end
 
+	-- The first-person arm is built and parented a moment after the grab, so
+	-- keep looking for it until it shows up instead of giving up on the first
+	-- frame.
 	local hand = visual.handPart
+	if not hand or not hand.Parent then
+		visual.handPart = holderHand(visual.caster)
+		hand = visual.handPart
+	end
+
 	if hand and hand.Parent then
 		-- In the palm, facing whatever is being lifted.
 		local handPosition = hand.Position
