@@ -7,7 +7,7 @@ local TweenService = game:GetService("TweenService")
 local Workspace = game:GetService("Workspace")
 
 local Shared = ReplicatedStorage:WaitForChild("Shared")
-local ForestLayout = require(Shared.ForestLayout)
+local TownLayout = require(Shared.TownLayout)
 local GhostRules = require(Shared.GhostRules)
 local UVLantern = require(Shared.UVLantern)
 
@@ -410,8 +410,8 @@ local function spawnPositionAround(center: Vector3): Vector3?
 		local x = center.X + math.cos(angle) * radius
 		local z = center.Z + math.sin(angle) * radius
 		local flat = Vector2.new(x, z)
-		if ForestLayout.isInsideWorld(flat, 12) and flat.Magnitude > ForestLayout.SPAWN_CLEARING_RADIUS + 8 then
-			return GhostRules.spawnPoint(center, angle, radius, ForestLayout.heightAt(x, z), settings.hoverHeight)
+		if TownLayout.isInsideWorld(flat, 12) and flat.Magnitude > TownLayout.SPAWN_CLEARING_RADIUS + 8 then
+			return GhostRules.spawnPoint(center, angle, radius, TownLayout.heightAt(x, z), settings.hoverHeight)
 		end
 	end
 
@@ -507,7 +507,7 @@ local function updateGhost(record, deltaTime: number, currentTime: number)
 		position += flat.Unit * step
 	end
 
-	local ground = ForestLayout.heightAt(position.X, position.Z)
+	local ground = TownLayout.heightAt(position.X, position.Z)
 	local bob = math.sin(currentTime * 1.7 + record.phase) * 0.18
 	local hover = ground + settings.floatGap + record.footOffset + bob
 	local nextPosition = Vector3.new(position.X, hover, position.Z)

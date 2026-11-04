@@ -11,7 +11,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Workspace = game:GetService("Workspace")
 
 local Shared = ReplicatedStorage:WaitForChild("Shared")
-local ForestLayout = require(Shared.ForestLayout)
+local TownLayout = require(Shared.TownLayout)
 local Inventory = require(Shared.Inventory)
 local ShopCatalog = require(Shared.ShopCatalog)
 local ShopLayout = require(Shared.ShopLayout)
@@ -21,7 +21,6 @@ local ShopService = {}
 local SHOP_NAME = "Shop"
 local REMOTE_FOLDER = "ShopRemotes"
 local KILLS_ATTRIBUTE = "Kills"
-local SHOP_SEED = ForestLayout.SEED + 91
 -- Nursery Crime 30 (APM): a disconcerting music box, 30 seconds, loops cleanly.
 local MUSIC_ID = 1839910323
 
@@ -106,8 +105,8 @@ end
 -- Trees are planted before the shop exists, so clear the ones standing where the
 -- stall goes instead of letting a trunk grow through the counter.
 local function clearTrees(position: Vector3, radius: number)
-	local forest = Workspace:FindFirstChild("GeneratedForest")
-	local trees = forest and forest:FindFirstChild("Trees")
+	local town = Workspace:FindFirstChild("GeneratedTown")
+	local trees = town and town:FindFirstChild("Trees")
 	if not trees then
 		return
 	end
@@ -317,28 +316,12 @@ function ShopService.position(): Vector3
 	return shopPosition
 end
 
--- The stall is flat and the forest is not. Level a pad under it first, or a
--- slope swallows the floor and the counter ends up below ground.
-local PAD_SIZE = Vector3.new(20, 8, 18)
-
-local function levelPad(x: number, z: number): number
-	local highest = ForestLayout.heightAt(x, z)
-	for _, offset in { Vector2.new(-8, -7), Vector2.new(8, -7), Vector2.new(-8, 7), Vector2.new(8, 7) } do
-		highest = math.max(highest, ForestLayout.heightAt(x + offset.X, z + offset.Y))
-	end
-
-	local level = highest + 0.05
-	Workspace.Terrain:FillBlock(CFrame.new(x, level + PAD_SIZE.Y / 2, z), PAD_SIZE, Enum.Material.Air)
-	Workspace.Terrain:FillBlock(CFrame.new(x, level - PAD_SIZE.Y / 2, z), PAD_SIZE, Enum.Material.Ground)
-	return level
-end
-
+-- The town is flat and the shop lot is reserved by the layout, so the stall
+-- sits on the street corner instead of being placed from the terrain.
 function ShopService.start()
 	buildRemotes()
 
-	local point = ShopLayout.pointFor(SHOP_SEED)
-	local ground = levelPad(point.x, point.z)
-	shopPosition = Vector3.new(point.x, ground, point.z)
+	shopPosition = TownLayout.shopPoint()
 
 	local existing = Workspace:FindFirstChild(SHOP_NAME)
 	if existing then
@@ -346,7 +329,7 @@ function ShopService.start()
 	end
 
 	clearTrees(shopPosition, 13)
-	local stall = buildStall(shopPosition, point.angle + math.pi)
+	local stall = buildStall(shopPosition, TownLayout.SHOP_LOT.rotation)
 	stall:SetAttribute("ShopPosition", shopPosition)
 	ReplicatedStorage:SetAttribute("ShopPosition", shopPosition)
 	ReplicatedStorage:SetAttribute("ShopMusicId", MUSIC_ID)

@@ -134,7 +134,7 @@
       "$properties": {
         "FilteringEnabled": true
       },
-      "ForestSpawn": {
+      "TownSpawn": {
         "$className": "SpawnLocation",
         "$properties": {
           "Anchored": true,

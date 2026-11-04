@@ -72,8 +72,8 @@
         "Specs": {
           "$path": "tests/specs"
         },
-        "ForestGenerator": {
-          "$path": "src/server/ForestGenerator.luau"
+        "TownGenerator": {
+          "$path": "src/server/TownGenerator.luau"
         },
         "DevPackages": {
           "$path": "DevPackages"

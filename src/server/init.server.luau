@@ -1,7 +1,7 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
-local ForestGenerator = require(script.ForestGenerator)
+local TownGenerator = require(script.TownGenerator)
 local ForestAvatar = require(ReplicatedStorage.Shared.ForestAvatar)
 local GhostService = require(script.GhostService)
 local CombatService = require(script.CombatService)
@@ -39,10 +39,10 @@ for _, player in Players:GetPlayers() do
 	onPlayerAdded(player)
 end
 
-local success, message = pcall(ForestGenerator.generate)
+local success, message = pcall(TownGenerator.generate)
 if not success then
-	ReplicatedStorage:SetAttribute("ForestLoadFailed", true)
-	warn("Forest generation failed: " .. tostring(message))
+	ReplicatedStorage:SetAttribute("TownLoadFailed", true)
+	warn("Town generation failed: " .. tostring(message))
 end
 
 GhostService.start()

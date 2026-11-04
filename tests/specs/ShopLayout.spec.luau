@@ -1,7 +1,7 @@
 local root = script.Parent.Parent
 local JestGlobals = require(root.DevPackages.JestGlobals)
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local ForestLayout = require(ReplicatedStorage.Shared.ForestLayout)
+local TownLayout = require(ReplicatedStorage.Shared.TownLayout)
 local ShopLayout = require(ReplicatedStorage.Shared.ShopLayout)
 
 local describe = JestGlobals.describe
@@ -19,7 +19,7 @@ describe("shop layout", function()
 			expect(distance).toBeGreaterThanOrEqual(ShopLayout.RADIUS_MIN - 0.001)
 			expect(distance).toBeLessThanOrEqual(ShopLayout.RADIUS_MAX + 0.001)
 			-- The stall has to land inside the playable disc, not in the rim wall.
-			expect(distance).toBeLessThan(ForestLayout.PLAYABLE_RADIUS - 8)
+			expect(distance).toBeLessThan(TownLayout.PLAYABLE_RADIUS - 8)
 		end
 	end)
 
@@ -58,15 +58,16 @@ describe("shop layout", function()
 		expect(ShopLayout.AUDIBLE_RADIUS).toBeLessThan(ShopLayout.RADIUS_MIN)
 	end)
 
-	it("drops the real stall on walkable ground", function()
-		local point = ShopLayout.pointFor(ForestLayout.SEED + 91)
-		local flat = Vector2.new(point.x, point.z)
-		expect(ForestLayout.isInsideWorld(flat, 10)).toBe(true)
-		expect(ForestLayout.isInsideLandmarkClearing(flat)).toBe(false)
+	it("puts the stall on its reserved lot in the town", function()
+		local point = TownLayout.shopPoint()
+		local flat = Vector2.new(point.X, point.Z)
+		expect(TownLayout.isInsideWorld(flat, 10)).toBe(true)
+		expect(TownLayout.isShopLot(flat.X, flat.Y)).toBe(true)
+		expect(TownLayout.heightAt(point.X, point.Z)).toBe(0)
 
-		local height = ForestLayout.heightAt(point.x, point.z)
-		expect(height).toBeGreaterThan(ForestLayout.TERRAIN_BOTTOM)
-		expect(height).toBeLessThan(ForestLayout.TERRAIN_TOP)
+		for _, lot in TownLayout.houseLots() do
+			expect(TownLayout.isShopLot(lot.x, lot.z)).toBe(false)
+		end
 	end)
 
 	it("gets louder the closer you walk", function()

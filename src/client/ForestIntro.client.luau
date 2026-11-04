@@ -51,7 +51,7 @@ local function makeLine(name: string, text: string, y: number, size: number): Te
 	return label
 end
 
-local firstLine = makeLine("FirstLine", "The forest was darker than any other day.", 0.44, 36)
+local firstLine = makeLine("FirstLine", "The town was darker than any other night.", 0.44, 36)
 local secondLine = makeLine("SecondLine", "You felt lost.", 0.56, 30)
 
 local status = makeLine("Status", "", 0.9, 20)
@@ -116,42 +116,44 @@ end
 
 prepareTypingSounds()
 
-local function terrainHasReachedSpawn(spawn: SpawnLocation): boolean
+local function groundAtSpawn(spawn: SpawnLocation): boolean
 	local raycastParams = RaycastParams.new()
 	raycastParams.FilterType = Enum.RaycastFilterType.Exclude
 	raycastParams.FilterDescendantsInstances = { spawn }
 	local result = Workspace:Raycast(Vector3.new(0, 8, 0), Vector3.new(0, -25, 0), raycastParams)
-	return result ~= nil and result.Instance == Workspace.Terrain
+	-- The town is terrain plus roads and a plaza made of parts, so any solid
+	-- hit under the spawn counts as ground.
+	return result ~= nil
 end
 
 -- Names every reason the opening screen is still up, so a stuck intro says
 -- what it is waiting for instead of spinning forever in silence.
-local function forestProblems(forest: Instance?, spawn: Instance?, character: Model?): { string }
+local function townProblems(town: Instance?, spawn: Instance?, character: Model?): { string }
 	local problems = {}
 
-	if not forest or not forest:IsA("Model") then
-		table.insert(problems, "GeneratedForest")
+	if not town or not town:IsA("Model") then
+		table.insert(problems, "GeneratedTown")
 	else
 		-- The server sets Ready after the last tree is in place. Do not compare
 		-- the tree count here: the client can still be missing a few children
 		-- when the attribute arrives, and that used to hold the curtain up
-		-- forever while the forest itself was already finished.
-		if forest:GetAttribute("Ready") ~= true then
-			table.insert(problems, "forest Ready")
+		-- forever while the town itself was already finished.
+		if town:GetAttribute("Ready") ~= true then
+			table.insert(problems, "town Ready")
 		end
-		if not forest:FindFirstChild("Trees") then
+		if not town:FindFirstChild("Trees") then
 			table.insert(problems, "Trees folder")
 		end
 	end
 
 	if not spawn or not spawn:IsA("SpawnLocation") then
-		table.insert(problems, "ForestSpawn")
+		table.insert(problems, "TownSpawn")
 	else
 		if not spawn.CanCollide then
 			table.insert(problems, "spawn CanCollide")
 		end
-		if not terrainHasReachedSpawn(spawn) then
-			table.insert(problems, "terrain at spawn")
+		if not groundAtSpawn(spawn) then
+			table.insert(problems, "ground at spawn")
 		end
 	end
 
@@ -174,10 +176,10 @@ end
 local WAIT_LIMIT = 25
 local REPORT_EVERY = 8
 
--- Returns the forest and character, or nil plus the reasons it gave up. The
+-- Returns the town and character, or nil plus the reasons it gave up. The
 -- limit matters: a client that waits forever cannot rejoin, retry or even see
 -- an error.
-local function waitForForest(): (Model?, Model?, { string }?)
+local function waitForTown(): (Model?, Model?, { string }?)
 	if not game:IsLoaded() then
 		game.Loaded:Wait()
 	end
@@ -185,16 +187,16 @@ local function waitForForest(): (Model?, Model?, { string }?)
 	local startedAt = os.clock()
 	local lastReport = 0
 	while true do
-		if ReplicatedStorage:GetAttribute("ForestLoadFailed") == true then
+		if ReplicatedStorage:GetAttribute("TownLoadFailed") == true then
 			return nil, nil, nil
 		end
 
-		local forest = Workspace:FindFirstChild("GeneratedForest")
-		local spawn = Workspace:FindFirstChild("ForestSpawn")
+		local town = Workspace:FindFirstChild("GeneratedTown")
+		local spawn = Workspace:FindFirstChild("TownSpawn")
 		local character = player.Character
-		local problems = forestProblems(forest, spawn, character)
+		local problems = townProblems(town, spawn, character)
 		if #problems == 0 then
-			return forest, character
+			return town, character
 		end
 
 		local now = os.clock()
@@ -221,9 +223,9 @@ local function waitForStartingGear()
 	warn("The starting weapon did not appear before the opening screen ended")
 end
 
-local function preloadStartingArea(forest: Model, character: Model)
+local function preloadStartingArea(town: Model, character: Model)
 	local targets = { "rbxassetid://16830673704" }
-	local nearbyTrees = forest.Trees:GetChildren()
+	local nearbyTrees = town.Trees:GetChildren()
 	table.sort(nearbyTrees, function(a, b)
 		return a:GetPivot().Position.Magnitude < b:GetPivot().Position.Magnitude
 	end)
@@ -271,8 +273,8 @@ local ready = false
 local failed = false
 local slow = false
 local function prepareScene()
-	local forest, character, problems = waitForForest()
-	if not forest or not character then
+	local town, character, problems = waitForTown()
+	if not town or not character then
 		if problems then
 			warn("ForestIntro gave up waiting: " .. table.concat(problems, ", "))
 			slow = true
@@ -285,7 +287,7 @@ local function prepareScene()
 
 	local preloadFinished = false
 	task.spawn(function()
-		preloadStartingArea(forest, character)
+		preloadStartingArea(town, character)
 		preloadFinished = true
 	end)
 	local deadline = os.clock() + 20
@@ -325,17 +327,17 @@ typeLine(secondLine, 0.085)
 task.wait(1.2)
 
 if not ready and not failed then
-	status.Text = "The trees are still taking shape..."
+	status.Text = "The town is still taking shape..."
 end
 while not ready and not failed do
 	task.wait(0.1)
 end
 if failed then
-	status.Text = "The forest could not form. Please rejoin."
+	status.Text = "The town could not form. Please rejoin."
 	return
 end
 if slow then
-	status.Text = "The forest is taking longer than usual. Entering anyway..."
+	status.Text = "The town is taking longer than usual. Entering anyway..."
 	task.wait(2)
 end
 
