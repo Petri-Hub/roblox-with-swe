@@ -81,12 +81,6 @@ describe("Telekinesis targets", function()
 
 	it("ignores a broken size", function()
 		expect(Telekinesis.canGrabSize(Vector3.new(0 / 0, 0, 0), 2)).toBe(false)
-
-		-- A tree is taller than a crate but still has its own ceiling.
-		expect(Telekinesis.canGrabSize(Vector3.new(22, 60, 22), 2)).toBe(false)
-		expect(Telekinesis.canGrabSize(Vector3.new(22, 60, 22), 2, true)).toBe(true)
-		expect(Telekinesis.canGrabSize(Vector3.new(22, 90, 22), 2, true)).toBe(false)
-		expect(Telekinesis.canGrabSize(Vector3.new(22, 60, 22), Telekinesis.MAX_TREE_PARTS + 1, true)).toBe(false)
 	end)
 
 	it("only throws along a real direction", function()

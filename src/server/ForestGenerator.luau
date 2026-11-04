@@ -102,34 +102,62 @@ end
 
 -- Daylight. The night configuration kept the distance black so the edge of the
 -- map hid in the fog; during the day the same trick is not needed, so the fog
--- moves far out and gets a cool haze instead of a wall of black.
+-- moves far out and gets a cool haze instead of a wall of black. The post
+-- effects are deliberately gentle: they lift colour and contrast without
+-- costing a second shadow pass.
 local function configureLighting()
 	for _, child in Lighting:GetChildren() do
-		if child:IsA("Atmosphere") then
+		if
+			child:IsA("Atmosphere")
+			or child:IsA("ColorCorrectionEffect")
+			or child:IsA("BloomEffect")
+			or child:IsA("SunRaysEffect")
+		then
 			child:Destroy()
 		end
 	end
 
 	Lighting.ClockTime = 13.4
-	Lighting.Brightness = 2.4
-	Lighting.ExposureCompensation = 0.1
+	Lighting.Brightness = 2.6
+	Lighting.ExposureCompensation = 0.08
 	Lighting.GlobalShadows = true
-	Lighting.Ambient = Color3.fromRGB(74, 82, 88)
-	Lighting.OutdoorAmbient = Color3.fromRGB(132, 140, 148)
-	Lighting.EnvironmentDiffuseScale = 0.35
+	Lighting.Ambient = Color3.fromRGB(78, 86, 94)
+	Lighting.OutdoorAmbient = Color3.fromRGB(140, 148, 156)
+	Lighting.EnvironmentDiffuseScale = 0.3
 	Lighting.EnvironmentSpecularScale = 0.2
-	Lighting.FogColor = Color3.fromRGB(168, 182, 196)
-	Lighting.FogStart = 220
-	Lighting.FogEnd = 900
+	Lighting.FogColor = Color3.fromRGB(178, 192, 206)
+	Lighting.FogStart = 260
+	Lighting.FogEnd = 1100
 
 	local atmosphere = Instance.new("Atmosphere")
-	atmosphere.Density = 0.3
+	atmosphere.Density = 0.32
 	atmosphere.Offset = 0.12
-	atmosphere.Color = Color3.fromRGB(196, 206, 214)
-	atmosphere.Decay = Color3.fromRGB(122, 138, 156)
-	atmosphere.Glare = 0.15
-	atmosphere.Haze = 1.35
+	atmosphere.Color = Color3.fromRGB(200, 212, 222)
+	atmosphere.Decay = Color3.fromRGB(132, 148, 168)
+	atmosphere.Glare = 0.2
+	atmosphere.Haze = 1.6
 	atmosphere.Parent = Lighting
+
+	local colour = Instance.new("ColorCorrectionEffect")
+	colour.Name = "ForestColour"
+	colour.Brightness = 0.015
+	colour.Contrast = 0.06
+	colour.Saturation = 0.08
+	colour.TintColor = Color3.fromRGB(255, 250, 242)
+	colour.Parent = Lighting
+
+	local bloom = Instance.new("BloomEffect")
+	bloom.Name = "ForestBloom"
+	bloom.Intensity = 0.35
+	bloom.Size = 16
+	bloom.Threshold = 1.9
+	bloom.Parent = Lighting
+
+	local rays = Instance.new("SunRaysEffect")
+	rays.Name = "ForestSunRays"
+	rays.Intensity = 0.035
+	rays.Spread = 0.6
+	rays.Parent = Lighting
 end
 
 local function loadForestAsset(name: string): Instance?
@@ -152,7 +180,8 @@ local function placeProp(
 	rotation: number,
 	scale: number?,
 	canCollide: boolean?,
-	embedOffset: number?
+	embedOffset: number?,
+	castShadow: boolean?
 ): Instance?
 	local prop = template:Clone()
 	cleanScripts(prop)
@@ -167,6 +196,10 @@ local function placeProp(
 		for _, child in prop:GetDescendants() do
 			if child:IsA("BasePart") then
 				child.Anchored = true
+				-- Scenery is static: no touch events, and no shadow pass unless
+				-- the piece is big enough for its shadow to be worth it.
+				child.CastShadow = castShadow == true
+				child.CanTouch = false
 				if canCollide ~= nil then
 					child.CanCollide = canCollide
 				end
@@ -180,6 +213,8 @@ local function placeProp(
 		)
 	elseif prop:IsA("BasePart") then
 		prop.Anchored = true
+		prop.CastShadow = castShadow == true
+		prop.CanTouch = false
 		if canCollide ~= nil then
 			prop.CanCollide = canCollide
 		end
@@ -220,13 +255,6 @@ function ForestGenerator.generate(): Model
 	forest.Name = "GeneratedForest"
 	forest.Parent = Workspace
 
-	-- No trees for now: the map is an open field. The folder stays so the rest
-	-- of the game (the shop clearing and the intro check) keeps working, and so
-	-- the telekinesis still finds that path if trees come back.
-	local trees = Instance.new("Folder")
-	trees.Name = "Trees"
-	trees.Parent = forest
-
 	local landmarks = Instance.new("Folder")
 	landmarks.Name = "Landmarks"
 	landmarks.Parent = forest
@@ -243,12 +271,10 @@ function ForestGenerator.generate(): Model
 	scatter.Name = "Scatter"
 	scatter.Parent = forest
 
-	forest:SetAttribute("TreeSource", "None")
-
 	for _, landmark in ForestLayout.LANDMARKS do
 		local template = loadForestAsset(landmark.assetName)
 		if template then
-			local prop = placeProp(landmarks, template, landmark.position, landmark.rotation, 1, true, 0.4)
+			local prop = placeProp(landmarks, template, landmark.position, landmark.rotation, 1, true, 0.4, true)
 			if prop then
 				prop.Name = landmark.id
 			end
@@ -285,7 +311,6 @@ function ForestGenerator.generate(): Model
 		end
 	end
 
-	forest:SetAttribute("ExpectedTreeCount", 0)
 	forest:SetAttribute("LandmarkCount", #landmarks:GetChildren())
 	forest:SetAttribute("BoulderCount", 0)
 	forest:SetAttribute("DebrisCount", #debris:GetChildren())

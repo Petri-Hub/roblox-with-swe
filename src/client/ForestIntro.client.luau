@@ -139,9 +139,6 @@ local function forestProblems(forest: Instance?, spawn: Instance?, character: Mo
 		if forest:GetAttribute("Ready") ~= true then
 			table.insert(problems, "forest Ready")
 		end
-		if not forest:FindFirstChild("Trees") then
-			table.insert(problems, "Trees folder")
-		end
 	end
 
 	if not spawn or not spawn:IsA("SpawnLocation") then
@@ -221,19 +218,8 @@ local function waitForStartingGear()
 	warn("The starting weapon did not appear before the opening screen ended")
 end
 
-local function preloadStartingArea(forest: Model, character: Model)
+local function preloadStartingArea(character: Model)
 	local targets = { "rbxassetid://16830673704" }
-	local nearbyTrees = forest.Trees:GetChildren()
-	table.sort(nearbyTrees, function(a, b)
-		return a:GetPivot().Position.Magnitude < b:GetPivot().Position.Magnitude
-	end)
-	for index = 1, math.min(8, #nearbyTrees) do
-		for _, descendant in nearbyTrees[index]:GetDescendants() do
-			if descendant:IsA("MeshPart") then
-				table.insert(targets, descendant)
-			end
-		end
-	end
 	local clothingDeadline = os.clock() + 5
 	local shirt = character:FindFirstChildOfClass("Shirt")
 	local pants = character:FindFirstChildOfClass("Pants")
@@ -285,7 +271,7 @@ local function prepareScene()
 
 	local preloadFinished = false
 	task.spawn(function()
-		preloadStartingArea(forest, character)
+		preloadStartingArea(character)
 		preloadFinished = true
 	end)
 	local deadline = os.clock() + 20

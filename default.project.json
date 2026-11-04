@@ -144,7 +144,10 @@
     },
     "Workspace": {
       "$properties": {
-        "FilteringEnabled": true
+        "FilteringEnabled": true,
+        "StreamingEnabled": true,
+        "StreamingMinRadius": 96,
+        "StreamingTargetRadius": 512
       },
       "ForestSpawn": {
         "$className": "SpawnLocation",
@@ -169,28 +172,29 @@
     "Lighting": {
       "$properties": {
         "Ambient": [
-          0.0392,
-          0.0549,
-          0.0627
+          0.306,
+          0.337,
+          0.369
         ],
-        "Brightness": 1,
-        "ClockTime": 0.5,
-        "ExposureCompensation": -0.45,
+        "Brightness": 2.6,
+        "ClockTime": 13.4,
+        "ExposureCompensation": 0.08,
         "FogColor": [
-          0.0078,
-          0.0118,
-          0.0157
+          0.698,
+          0.753,
+          0.808
         ],
-        "FogStart": 14,
-        "FogEnd": 82,
+        "FogStart": 260,
+        "FogEnd": 1100,
         "GlobalShadows": true,
         "OutdoorAmbient": [
-          0.0549,
-          0.0784,
-          0.0863
+          0.549,
+          0.58,
+          0.612
         ],
         "Outlines": false,
-        "LightingStyle": "Realistic"
+        "LightingStyle": "Realistic",
+        "Technology": "ShadowMap"
       }
     },
     "TextChatService": {

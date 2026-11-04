@@ -27,12 +27,6 @@ Telekinesis.AIM_INTERVAL = 0.05
 Telekinesis.MAX_OBJECT_SIZE = 14
 Telekinesis.MAX_OBJECT_PARTS = 80
 
--- Trees are the one big thing the spell answers: a whole forest model, so the
--- server can move it as one piece. They are taller and have more parts than a
--- crate, but they are still far smaller than the cabin or the terrain.
-Telekinesis.MAX_TREE_SIZE = 72
-Telekinesis.MAX_TREE_PARTS = 60
-
 Telekinesis.THROW_SPEED = 120
 Telekinesis.THROW_RANGE = 120
 Telekinesis.THROW_DAMAGE = 70
@@ -129,9 +123,8 @@ function Telekinesis.followStep(from: Vector3, to: Vector3, deltaTime: number): 
 	return from + delta.Unit * step
 end
 
--- A grab only answers props of a sane size and part count. Trees get their own
--- ceiling because the forest grows them tall.
-function Telekinesis.canGrabSize(size: Vector3, partCount: number, isTree: boolean?): boolean
+-- A grab only answers props of a sane size and part count.
+function Telekinesis.canGrabSize(size: Vector3, partCount: number): boolean
 	if typeof(size) ~= "Vector3" or size.Magnitude ~= size.Magnitude then
 		return false
 	end
@@ -140,14 +133,12 @@ function Telekinesis.canGrabSize(size: Vector3, partCount: number, isTree: boole
 		return false
 	end
 
-	local partLimit = if isTree then Telekinesis.MAX_TREE_PARTS else Telekinesis.MAX_OBJECT_PARTS
-	if partCount < 1 or partCount > partLimit then
+	if partCount < 1 or partCount > Telekinesis.MAX_OBJECT_PARTS then
 		return false
 	end
 
-	local sizeLimit = if isTree then Telekinesis.MAX_TREE_SIZE else Telekinesis.MAX_OBJECT_SIZE
 	local largest = math.max(size.X, size.Y, size.Z)
-	return largest > 0 and largest <= sizeLimit
+	return largest > 0 and largest <= Telekinesis.MAX_OBJECT_SIZE
 end
 
 -- Splash damage falls from full at the centre to zero at the edge, the same
