@@ -11,6 +11,7 @@ local Workspace = game:GetService("Workspace")
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local FireMagic = require(Shared.FireMagic)
 local FirstPersonBodyPart = require(Shared.FirstPersonBodyPart)
+local Inventory = require(Shared.Inventory)
 
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
@@ -428,6 +429,9 @@ local function beginCharge()
 		flashBadge()
 		return
 	end
+
+	-- The spell needs the hand: put away whatever the player was holding.
+	player:SetAttribute(Inventory.EQUIPPED_ATTRIBUTE, Inventory.EMPTY)
 
 	charging = true
 	chargeStartedAt = os.clock()
