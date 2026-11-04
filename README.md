@@ -52,6 +52,14 @@ The two spells do not overlap. While something floats, the gun is put away, righ
 
 The tuning lives in `src/shared/Telekinesis.luau`, the grab, drag, throw and damage in `src/server/TelekinesisService.luau`, the input, first-person arm and badge in `src/client/TelekinesisController.client.luau`, the white circle in `src/client/MagicCircle.luau`, and the wind, impacts and shake in `src/client/TelekinesisEffects.client.luau`.
 
+### The arena
+
+`ArenaService` builds a coliseum at `Arena.ORIGIN` — 1600, 180, 0 — far above and away from the forest, so the procedural map never collides with it. The sand is 52 studs across, ringed by a wall with four iron gates, four tiers of stone seats, an outer wall with merlons, eight columns, red banners, eight burning torches and a gold `ARENA` plaque over the entrance. It is built from parts at server start, the same way the shop stall is.
+
+Two chat commands move a player between the places. `/arena` (or `/coliseu`) teleports to the spawn facing the sand; `/floresta` (or `/sair`) returns to `ForestSpawn`. They are `TextChatCommand`s created under `TextChatService`, so the command is intercepted and never broadcast; a `Player.Chatted` fallback covers the old chat path, and a debounce makes sure a client that reports both paths only teleports once. The move itself is a server-side `PivotTo` of the character.
+
+The arena has no enemies of its own yet: the ghost spawner places ghosts around players inside the forest and culls the ones too far from every player, so the forest empties while everyone is away.
+
 ### Adding a weapon
 
 Weapons are data. `WeaponSpec` owns the magazine, cadence, reload, spread, recoil and state sync for every gun, and `WeaponRegistry` hands out the validated definitions. To add one:

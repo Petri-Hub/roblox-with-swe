@@ -537,6 +537,15 @@ local function stepHolds(deltaTime: number)
 		end
 
 		local pivot = target:GetPivot()
+
+		-- A teleport (the /arena command, for instance) leaves the object far
+		-- behind the new aim point. Drop it instead of dragging it across the
+		-- map.
+		if (pivot.Position - hold.point).Magnitude > Telekinesis.MAX_HOLD_DISTANCE + 40 then
+			table.insert(toForget, player)
+			continue
+		end
+
 		local nextPosition = Telekinesis.followStep(pivot.Position, hold.point, deltaTime)
 
 		if hold.kind == "ghost" then
