@@ -148,7 +148,7 @@ The first feature of the project let a player harvest a tree in the world. The s
 
 Friends start with an idea or bug in Discord. A contributor or Lemon, the Hermes agent in pepper, turns the agreed change into code on a branch and opens a pull request. GitHub Actions checks formatting with StyLua, lint with Selene, build with Rojo, and run Jest tests. Passing changes reach a staging place for playtesting before a production release.
 
-The project keeps its development skills in `.agents/skills/`, covering setup, previews, design, implementation, tests, documentation and delivery.
+Lemon's development skills live with his profile in [pepper](https://github.com/Petri-Hub/pepper/tree/main/profiles/lemon/skills), covering setup, previews, design, implementation, tests, documentation and delivery.
 
 ## Technologies
 
@@ -266,8 +266,6 @@ What is working now:
 
 ```sh
 .
-├── .agents/skills/              # project-specific agent workflows
-│
 ├── .github/
 │   └── workflows/
 │       ├── quality.yml          # format, lint, build, and Jest checks
