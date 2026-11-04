@@ -7,7 +7,7 @@ local ForestLayout = require(ReplicatedStorage.Shared.ForestLayout)
 
 local ForestGenerator = {}
 
-local TREE_ASSETS = { "TreeLayeredPine", "TreePineSingle" }
+local TREE_ASSETS = { "PonderosaPines" }
 local GROUND_COLOR = Color3.fromRGB(43, 64, 42)
 local DIRT_COLOR = Color3.fromRGB(54, 48, 38)
 local MUD_COLOR = Color3.fromRGB(48, 40, 32)
@@ -232,11 +232,16 @@ local function makeTemplateTree(parent: Instance, source: Model, position: Vecto
 				child:Destroy()
 			else
 				child.Anchored = true
-				-- Only the trunk is solid; browsing the canopy should not bounce
-				-- the player off invisible leaves.
+				-- The tree packs mark their trunks solid and their foliage soft.
+				-- Keep that flag, but never let a clearly leafy part block the
+				-- player: bumping into invisible leaves feels broken.
 				local lowerName = string.lower(child.Name)
-				child.CanCollide = string.find(lowerName, "trunk", 1, true) ~= nil
-					or string.find(lowerName, "bark", 1, true) ~= nil
+				local leafy = string.find(lowerName, "leaf", 1, true) ~= nil
+					or string.find(lowerName, "canopy", 1, true) ~= nil
+					or string.find(lowerName, "foliage", 1, true) ~= nil
+					or string.find(lowerName, "branch", 1, true) ~= nil
+					or string.find(lowerName, "needle", 1, true) ~= nil
+				child.CanCollide = child.CanCollide and not leafy
 			end
 		end
 	end

@@ -34,15 +34,26 @@ describe("forest generation", function()
 				expect(size.Y).toBeGreaterThan(ForestLayout.TREE_MIN_HEIGHT * 0.85)
 				expect(size.Y).toBeLessThan(ForestLayout.TREE_MAX_HEIGHT * 1.15)
 				expect(tree:FindFirstChild("Soil", true)).toBeNil()
+				local solidParts = 0
 				for _, child in tree:GetDescendants() do
 					expect(child:IsA("Script") or child:IsA("LocalScript") or child:IsA("ModuleScript")).toBe(false)
 					if child:IsA("BasePart") then
 						local lowerName = string.lower(child.Name)
-						local solid = string.find(lowerName, "trunk", 1, true) ~= nil
-							or string.find(lowerName, "bark", 1, true) ~= nil
-						expect(child.CanCollide).toBe(solid)
+						local leafy = string.find(lowerName, "leaf", 1, true) ~= nil
+							or string.find(lowerName, "canopy", 1, true) ~= nil
+							or string.find(lowerName, "foliage", 1, true) ~= nil
+							or string.find(lowerName, "branch", 1, true) ~= nil
+							or string.find(lowerName, "needle", 1, true) ~= nil
+						if leafy then
+							expect(child.CanCollide).toBe(false)
+						end
+						if child.CanCollide then
+							solidParts += 1
+						end
 					end
 				end
+				-- The pack marks the trunk solid; something must stop the player.
+				expect(solidParts).toBeGreaterThan(0)
 			end
 		end
 		expect(templatedCount).toBeGreaterThan(0)

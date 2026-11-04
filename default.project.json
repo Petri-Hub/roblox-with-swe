@@ -16,11 +16,8 @@
       },
       "ForestAssets": {
         "$className": "Folder",
-        "TreeLayeredPine": {
-          "$path": "src/assets/trees/TreeLayeredPine.rbxm"
-        },
-        "TreePineSingle": {
-          "$path": "src/assets/trees/TreePineSingle.rbxm"
+        "PonderosaPines": {
+          "$path": "src/assets/trees/PonderosaPines.rbxm"
         },
         "BushTall": {
           "$path": "src/assets/forest/BushTall.rbxm"

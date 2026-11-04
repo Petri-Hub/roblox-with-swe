@@ -7,7 +7,7 @@ local describe = JestGlobals.describe
 local expect = JestGlobals.expect
 local it = JestGlobals.it
 
-local TREE_PACKS = { "TreeLayeredPine", "TreePineSingle" }
+local TREE_PACKS = { "PonderosaPines" }
 
 describe("bundled Creator Store trees", function()
 	it("ships tree packs whose variants all have real meshes and no scripts", function()
