@@ -684,14 +684,9 @@ local function buildHud()
 	}
 end
 
--- The hit marker strokes never change, so collect them once instead of asking
--- for the children on every frame.
+-- The hit marker strokes never change, so they are collected once, right after
+-- the HUD is built.
 local hitMarkerStrokes: { Frame } = {}
-for _, stroke in hud.hitMarker:GetChildren() do
-	if stroke:IsA("Frame") then
-		table.insert(hitMarkerStrokes, stroke)
-	end
-end
 
 local function updateCrosshair(spread: number, currentTime: number)
 	local offset = CROSSHAIR_BASE + spread * CROSSHAIR_SPREAD_SCALE
@@ -1042,6 +1037,11 @@ local function onCharacterAdded(character: Model)
 end
 
 hud = buildHud()
+for _, stroke in hud.hitMarker:GetChildren() do
+	if stroke:IsA("Frame") then
+		table.insert(hitMarkerStrokes, stroke)
+	end
+end
 bindTouchButtons()
 refreshKills()
 
