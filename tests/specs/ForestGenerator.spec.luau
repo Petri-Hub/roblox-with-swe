@@ -108,7 +108,23 @@ describe("town generation", function()
 		expect(spawn.CanCollide).toBe(true)
 		expect(spawn.Position.Y + spawn.Size.Y / 2).toBeGreaterThan(ForestLayout.heightAt(0, 0))
 
-		-- The flat town is still real terrain, written out to the edge of the map.
+		-- The town stands on its own slab: no terrain voxels under the streets,
+		-- where grass blades would grow up through the asphalt.
+		local ground = town:FindFirstChild("Ground")
+		expect(ground).never.toBeNil()
+		expect(ground:IsA("BasePart")).toBe(true)
+		expect(ground.Position.Y + ground.Size.Y / 2).toBeCloseTo(ForestLayout.heightAt(0, 0), 3)
+
+		local underTown = workspace.Terrain:ReadVoxels(Region3.new(Vector3.new(-6, -10, -6), Vector3.new(6, -2, 6)), 4)
+		for x = 1, #underTown do
+			for y = 1, #underTown[x] do
+				for z = 1, #underTown[x][y] do
+					expect(underTown[x][y][z]).toBe(Enum.Material.Air)
+				end
+			end
+		end
+
+		-- The flat town is still real terrain outside it, written out to the edge of the map.
 		expect(workspace.Terrain:CountCells()).toBeGreaterThan(0)
 		local farCorner = Region3.new(Vector3.new(240, -12, 240), Vector3.new(248, 0, 248))
 		local materials = workspace.Terrain:ReadVoxels(farCorner, 4)

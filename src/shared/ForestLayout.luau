@@ -39,6 +39,10 @@ ForestLayout.DOOR_WIDTH = 5
 ForestLayout.DOOR_HEIGHT = 8
 ForestLayout.LOT_OFFSET = 22
 
+-- Inside this square the terrain is not written at all: the town has its own
+-- flat ground, so grass voxels and their blades never push through a street.
+ForestLayout.TOWN_GROUND_RADIUS = 186
+
 -- Props keep this far away from a house lot, or a bush grows through a wall.
 ForestLayout.LOT_CLEAR_RADIUS = 19
 
@@ -252,6 +256,11 @@ function ForestLayout.isShopLot(x: number, z: number): boolean
 end
 
 -- True when a point is too close to a house to put anything else there.
+function ForestLayout.isInsideTownGround(x: number, z: number): boolean
+	local limit = ForestLayout.TOWN_GROUND_RADIUS
+	return math.abs(x) < limit and math.abs(z) < limit
+end
+
 function ForestLayout.isInsideHouseLot(position: Vector2): boolean
 	for _, lot in ForestLayout.houseLots() do
 		if (Vector2.new(lot.x, lot.z) - position).Magnitude < ForestLayout.LOT_CLEAR_RADIUS then
