@@ -52,11 +52,12 @@ describe("battle bus drop", function()
 		expect(cframe.Y).toBeCloseTo(BusDrop.ALTITUDE, PRECISION)
 	end)
 
-	it("lets go of the chute before the character reaches the ground", function()
-		-- One frame of fall is small, so the ray that releases the chute has
-		-- enough room to fire before the feet touch the terrain.
-		expect(BusDrop.CHUTE_RELEASE).toBeGreaterThan(BusDrop.GLIDE_FALL / 60)
-		expect(BusDrop.CHUTE_RELEASE).toBeLessThan(BusDrop.GLIDE_FALL)
+	it("lands on a soft chute instead of a thud", function()
+		-- The chute slows down near the floor, and the pull is finite so the
+		-- ground always wins over it.
+		expect(BusDrop.SOFT_FALL).toBeLessThan(BusDrop.GLIDE_FALL)
+		expect(BusDrop.SOFT_LAND).toBeGreaterThan(BusDrop.SOFT_FALL)
+		expect(BusDrop.CHUTE_FORCE).toBeGreaterThan(0)
 	end)
 
 	it("shares a bus only while its passengers still land inside the forest", function()

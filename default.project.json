@@ -14,6 +14,9 @@
       },
       "Shared": {
         "$path": "src/shared"
+      },
+      "BusHorn": {
+        "$className": "RemoteEvent"
       }
     },
     "ServerStorage": {
@@ -90,6 +93,9 @@
         "LoadCharacterAppearance": false
       },
       "StarterPlayerScripts": {
+        "BusHorn": {
+          "$path": "src/client/BusHorn.client.luau"
+        },
         "FirstPersonMovement": {
           "$path": "src/client/FirstPersonMovement.client.luau"
         },

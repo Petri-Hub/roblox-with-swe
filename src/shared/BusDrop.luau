@@ -25,10 +25,15 @@ BusDrop.GLIDE_FALL = 46
 BusDrop.GLIDE_DRIFT = 26
 BusDrop.GLIDE_SECONDS = 12
 
--- The chute lets go this far above the ground, measured from the root. A
--- velocity constraint with an endless force would keep pressing the character
--- into the terrain after touchdown and leave it inside the floor.
-BusDrop.CHUTE_RELEASE = 8
+-- The chute pulls with a finite force, a few times the character's weight. A
+-- velocity constraint with an endless force keeps pressing the character into
+-- the terrain when the release does not fire; a finite one loses to the ground.
+BusDrop.CHUTE_FORCE = 400
+
+-- Near the ground the chute drops to this slower speed instead of holding the
+-- full fall until the feet touch.
+BusDrop.SOFT_LAND = 20
+BusDrop.SOFT_FALL = 14
 
 -- The Creator Store horn that plays as a player leaves the bus.
 BusDrop.HORN_SOUND_ID = 8255757586

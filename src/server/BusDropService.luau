@@ -5,24 +5,20 @@
 -- life gets the bus, including a respawn after a death. When a bus is already
 -- flying close to the clearing, the next player rides that one instead of
 -- starting a second bus beside it.
-local Debris = game:GetService("Debris")
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 local ServerStorage = game:GetService("ServerStorage")
-local SoundService = game:GetService("SoundService")
 local Workspace = game:GetService("Workspace")
 
 local BusDrop = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("BusDrop"))
+local busHorn = ReplicatedStorage:WaitForChild("BusHorn")
 
 local BusDropService = {}
 
 local TEMPLATE_NAME = "BattleBusTemplate"
 local BUS_NAME = "BattleBus"
 local SKY_SPAWN_NAME = "BusDropSpawn"
-local HORN_NAME = "BattleBusHorn"
-local HORN_VOLUME = 1.2
-local HORN_CLEANUP = 8
 local FOREST_TIMEOUT = 30
 
 type Flight = {
@@ -133,19 +129,15 @@ local function laneForDrop(): Vector3
 end
 
 -- The horn belongs to the whole event, not to a speaker 235 studs up where
--- nobody would hear it, so it plays as a plain 2D sound for everyone.
+-- nobody would hear it. The clients play it themselves, so the sound is already
+-- loaded when the event arrives.
 local function playHorn()
-	local horn = Instance.new("Sound")
-	horn.Name = HORN_NAME
-	horn.SoundId = "rbxassetid://" .. BusDrop.HORN_SOUND_ID
-	horn.Volume = HORN_VOLUME
-	horn.Parent = SoundService
-	horn:Play()
-	Debris:AddItem(horn, HORN_CLEANUP)
+	busHorn:FireAllClients()
 end
 
--- A chute that is not a chute: cap the fall at a walking pace and drift with
--- the lane, then let go as soon as the character touches down.
+-- A chute that is not a chute: hold the fall at a walking pace and drift with
+-- the lane. The pull is finite so the ground always wins, and the chute backs
+-- off to a slow descent just above the floor.
 local function attachChute(character: Model, lane: Vector3)
 	local humanoid = character:FindFirstChildOfClass("Humanoid")
 	local root = character:FindFirstChild("HumanoidRootPart")
@@ -163,55 +155,60 @@ local function attachChute(character: Model, lane: Vector3)
 	chute.RelativeTo = Enum.ActuatorRelativeTo.World
 	chute.VelocityConstraintMode = Enum.VelocityConstraintMode.Vector
 	chute.VectorVelocity = BusDrop.glideVelocity(lane)
-	chute.MaxForce = math.huge
+	-- The limit has to be on and set explicitly: the defaults changed between
+	-- engine versions, and an unlimited constraint pushes the character through
+	-- the floor instead of letting the ground stop it.
+	chute.ForceLimitsEnabled = true
+	chute.ForceLimitMode = Enum.ForceLimitMode.Magnitude
+	chute.MaxForce = root.AssemblyMass * BusDrop.CHUTE_FORCE
 	chute.Parent = root
 
 	humanoid:SetState(Enum.HumanoidStateType.Freefall)
 
-	local released = false
-	local armedAt = os.clock() + 0.5
-	local function release()
-		if released then
-			return
-		end
-		released = true
-		chute:Destroy()
-		attachment:Destroy()
-	end
-
-	-- The humanoid reports Running for a frame or two while it settles on the
-	-- sky spawn, so the chute ignores the first half second.
-	humanoid.StateChanged:Connect(function(_, new)
-		if os.clock() < armedAt then
-			return
-		end
-		-- Anything that is not still falling means the flight is over. Landing
-		-- can arrive as FallingDown instead of Landed, and while the chute is
-		-- held with an endless force it would keep the character under the
-		-- ground for as long as that state lasts.
-		if new ~= Enum.HumanoidStateType.Freefall and new ~= Enum.HumanoidStateType.Jumping then
-			release()
-		end
-	end)
-	humanoid.Died:Connect(release)
-
-	-- Let go just above the ground, so the last studs are a normal landing
-	-- instead of the chute pushing the character through the terrain.
 	local rayParams = RaycastParams.new()
 	rayParams.FilterType = Enum.RaycastFilterType.Exclude
 	rayParams.FilterDescendantsInstances = { character }
 
-	task.spawn(function()
-		while not released do
-			if Workspace:Raycast(root.Position, Vector3.new(0, -BusDrop.CHUTE_RELEASE, 0), rayParams) then
-				release()
-				return
-			end
-			RunService.Heartbeat:Wait()
+	local falling = true
+	local startedAt = os.clock()
+	local connection
+	local function stop()
+		if not falling then
+			return
+		end
+		falling = false
+		if connection then
+			connection:Disconnect()
+		end
+		chute:Destroy()
+		attachment:Destroy()
+	end
+
+	connection = RunService.Heartbeat:Connect(function()
+		if humanoid.Health <= 0 or not root.Parent then
+			stop()
+			return
+		end
+
+		-- Standing on anything at all ends the flight, whatever the humanoid
+		-- state says. This is the release that matters: falling is decided by
+		-- the floor under the feet, not by a state machine.
+		if humanoid.FloorMaterial ~= Enum.Material.Air then
+			stop()
+			return
+		end
+
+		if os.clock() - startedAt > BusDrop.GLIDE_SECONDS then
+			stop()
+			return
+		end
+
+		if Workspace:Raycast(root.Position, Vector3.new(0, -BusDrop.SOFT_LAND, 0), rayParams) then
+			chute.VectorVelocity = Vector3.new(0, -BusDrop.SOFT_FALL, 0)
 		end
 	end)
 
-	task.delay(BusDrop.GLIDE_SECONDS, release)
+	humanoid.Died:Connect(stop)
 end
 
 local function leaveBus(character: Model)
