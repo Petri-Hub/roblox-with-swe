@@ -464,8 +464,23 @@ local function leaveArena(player: Player)
 	teleport(player, forestSpawnCFrame())
 end
 
+-- Roblox only fires commands that live inside TextChatService.TextChatCommands;
+-- anywhere else they exist and do nothing.
+local function commandFolder(): Instance
+	local folder = TextChatService:FindFirstChild("TextChatCommands")
+	if folder then
+		return folder
+	end
+
+	local created = Instance.new("Folder")
+	created.Name = "TextChatCommands"
+	created.Parent = TextChatService
+	return created
+end
+
 local function chatCommand(name: string, alias: string, secondaryAlias: string?): TextChatCommand
-	local existing = TextChatService:WaitForChild(name, 10)
+	local folder = commandFolder()
+	local existing = folder:WaitForChild(name, 10)
 	if existing and existing:IsA("TextChatCommand") then
 		return existing
 	end
@@ -477,28 +492,33 @@ local function chatCommand(name: string, alias: string, secondaryAlias: string?)
 	command.PrimaryAlias = alias
 	command.SecondaryAlias = secondaryAlias
 	command.AutocompleteVisible = true
-	command.Parent = TextChatService
+	command.Parent = folder
 	return command
 end
 
 function ArenaService.start()
 	build()
 
-	local arenaCommand = chatCommand("ArenaCommand", "/arena", "/coliseu")
-	local forestCommand = chatCommand("ForestCommand", "/floresta", "/sair")
+	-- The chat commands are optional furniture and `chatCommand` waits for them
+	-- with a timeout. Wiring them in a task means a missing command can never
+	-- hold up the services that start after this one.
+	task.spawn(function()
+		local arenaCommand = chatCommand("ArenaCommand", "/arena", "/coliseu")
+		local forestCommand = chatCommand("ForestCommand", "/floresta", "/sair")
 
-	arenaCommand.Triggered:Connect(function(source)
-		local player = playerFromSource(source)
-		if player then
-			enterArena(player)
-		end
-	end)
+		arenaCommand.Triggered:Connect(function(source)
+			local player = playerFromSource(source)
+			if player then
+				enterArena(player)
+			end
+		end)
 
-	forestCommand.Triggered:Connect(function(source)
-		local player = playerFromSource(source)
-		if player then
-			leaveArena(player)
-		end
+		forestCommand.Triggered:Connect(function(source)
+			local player = playerFromSource(source)
+			if player then
+				leaveArena(player)
+			end
+		end)
 	end)
 
 	-- Player.Chatted is the fallback for the old chat system; the debounce makes

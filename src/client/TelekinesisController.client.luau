@@ -14,7 +14,6 @@ local Telekinesis = require(Shared.Telekinesis)
 local FirstPersonBodyPart = require(Shared.FirstPersonBodyPart)
 local Inventory = require(Shared.Inventory)
 
-local SpellBadge = require(script.Parent.SpellBadge)
 local player = Players.LocalPlayer
 local remotes = ReplicatedStorage:WaitForChild("TelekinesisRemotes")
 local grabRemote = remotes:WaitForChild("Grab") :: RemoteEvent
@@ -245,7 +244,12 @@ local badgeFill: Frame? = nil
 local badgeStatus: TextLabel? = nil
 
 local function buildBadge()
-	local built = SpellBadge.build({
+	local loaded, SpellBadge = pcall(require, script.Parent:WaitForChild("SpellBadge", 10))
+	if not loaded then
+		return
+	end
+
+	local builtOk, built = pcall(SpellBadge.build, {
 		name = "TelekinesisHud",
 		y = -168,
 		background = Color3.fromRGB(14, 20, 26),
@@ -258,6 +262,10 @@ local function buildBadge()
 		track = Color3.fromRGB(30, 42, 52),
 		fill = Color3.fromRGB(190, 226, 255),
 	})
+	if not builtOk or typeof(built) ~= "table" then
+		return
+	end
+
 	badge = built.holder
 	badgeFill = built.fill
 	badgeStatus = built.status

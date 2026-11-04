@@ -13,7 +13,7 @@ local Inventory = require(Shared.Inventory)
 local WeaponPose = require(Shared.WeaponPose)
 local WeaponRegistry = require(Shared.WeaponRegistry)
 local WeaponSpec = require(Shared.WeaponSpec)
-local WeaponHud = require(script.Parent.WeaponHud)
+local WeaponHud = require(script.Parent:WaitForChild("WeaponHud"))
 
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")

@@ -13,7 +13,6 @@ local FireMagic = require(Shared.FireMagic)
 local FirstPersonBodyPart = require(Shared.FirstPersonBodyPart)
 local Inventory = require(Shared.Inventory)
 
-local SpellBadge = require(script.Parent.SpellBadge)
 local player = Players.LocalPlayer
 local remotes = ReplicatedStorage:WaitForChild("FireMagicRemotes")
 local castRemote = remotes:WaitForChild("Cast") :: RemoteEvent
@@ -273,8 +272,16 @@ local badge: Frame? = nil
 local badgeFill: Frame? = nil
 local badgeStatus: TextLabel? = nil
 
+-- The badge is the only optional part of this script: if the module or the
+-- build fails, the spell still has to aim, charge and throw.
 local function buildBadge()
-	local built = SpellBadge.build({
+	local loaded, SpellBadge = pcall(require, script.Parent:WaitForChild("SpellBadge", 10))
+	if not loaded then
+		warn("Fire magic badge unavailable: " .. tostring(SpellBadge))
+		return
+	end
+
+	local builtOk, built = pcall(SpellBadge.build, {
 		name = "FireMagicHud",
 		y = -104,
 		background = Color3.fromRGB(20, 13, 10),
@@ -287,6 +294,11 @@ local function buildBadge()
 		track = Color3.fromRGB(52, 33, 24),
 		fill = Color3.fromRGB(255, 150, 62),
 	})
+	if not builtOk or typeof(built) ~= "table" then
+		warn("Fire magic badge failed: " .. tostring(built))
+		return
+	end
+
 	badge = built.holder
 	badgeFill = built.fill
 	badgeStatus = built.status
@@ -346,6 +358,7 @@ local function beginCharge()
 
 	-- One spell at a time: the telekinetic hand is already extended.
 	if player:GetAttribute("TelekinesisHolding") == true then
+		flashBadge()
 		return
 	end
 

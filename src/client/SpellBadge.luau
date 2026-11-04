@@ -3,9 +3,13 @@
 -- labels; the controller keeps the meaning of the bar.
 local Players = game:GetService("Players")
 
-local playerGui = Players.LocalPlayer:WaitForChild("PlayerGui")
-
 local SpellBadge = {}
+
+-- Looked up on every build instead of when the module loads: a module that does
+-- no work at require time cannot fail because of when it was required.
+local function playerGui(): PlayerGui
+	return Players.LocalPlayer:WaitForChild("PlayerGui")
+end
 
 export type Options = {
 	name: string,
@@ -31,7 +35,8 @@ export type Badge = {
 }
 
 function SpellBadge.build(options: Options): Badge
-	local previous = playerGui:FindFirstChild(options.name)
+	local guiParent = playerGui()
+	local previous = guiParent:FindFirstChild(options.name)
 	if previous then
 		previous:Destroy()
 	end
@@ -41,7 +46,7 @@ function SpellBadge.build(options: Options): Badge
 	gui.ResetOnSpawn = false
 	gui.IgnoreGuiInset = true
 	gui.DisplayOrder = 12
-	gui.Parent = playerGui
+	gui.Parent = guiParent
 
 	local holder = Instance.new("Frame")
 	holder.Name = "Spell"
