@@ -34,6 +34,14 @@ The valley is built for machines that are not fast, so the cost is kept low on p
 - The HUD only writes a value when it changes: the hit markers are collected once, the reload bar and the crosshair state are gated, and the stamina bar updates only when its value moves.
 - The place uses ShadowMap lighting rather than Future, and the daylight is one atmosphere plus two cheap post effects.
 
+### Code layout
+
+The two largest files are split by responsibility:
+
+- `GhostService` keeps the AI, the damage, the culling and the spawn timing; `GhostFactory` builds the model itself, either from a shipped template or as the procedural fallback.
+- `WeaponController` keeps the shooting, the pose and the input; `WeaponHud` builds the crosshair, ammo, reload bar, hit marker and touch buttons and hands them back as a table.
+- `SpellBadge` builds the spell widget once for both spells, and each controller only decides what its bar means (charge for the fireball, hold or cooldown for the telekinesis).
+
 ### The shop
 
 `ShopService` plants one stall in the forest, built from parts at a point taken from the forest seed (`ShopLayout.pointFor`), 96 to 132 studs out and never on the spawn sightline. Before it builds, it levels a flat pad in the terrain so a slope cannot swallow the floor, hangs two warm lamps and a sign, and drops a `Sound` (`1839910323`, a 30 second music box) on a linear rolloff so the track is at full volume only at the counter and gone past 78 studs: you hear the shop before you see it, but not from across the map.
@@ -50,7 +58,7 @@ Hold `Z` to charge it: the circle in front of the palm grows with the hold, and 
 
 On impact it explodes: a flash, an expanding shockwave, fire, sparks, smoke, embers, a boom and a light tremor on the screens of players within 55 studs. A direct hit deals 120 damage — enough to kill a full-health ghost — and the blast splashes up to 100 damage within 16 studs. A fully charged ball is bigger and meaner: 240 direct damage, 190 splash at the centre, and a 26-stud radius, with the crater, the cracks and the blast particles scaled to match. The surface under the blast gets a scorched crater and eight to eleven radial cracks that follow the terrain and disappear after 30 seconds. Each cast is followed by `SOL CRUEL` above the character and in the chat, and the spell takes 6 seconds to recharge; the badge above the UV battery shows the countdown.
 
-The tuning lives in `src/shared/FireMagic.luau`, the damage, projectile and scorch marks in `src/server/FireMagicService.luau`, the input, first-person arm and cooldown badge in `src/client/FireMagicController.client.luau`, and the circle, ball, blast and screen shake in `src/client/FireMagicEffects.client.luau`.
+The tuning lives in `src/shared/FireMagic.luau`, the damage, projectile and scorch marks in `src/server/FireMagicService.luau`, the input and first-person arm in `src/client/FireMagicController.client.luau`, and the badge in `src/client/SpellBadge.luau`, and the circle, ball, blast and screen shake in `src/client/FireMagicEffects.client.luau`.
 
 ### The telekinesis
 
@@ -62,7 +70,7 @@ A throw flies at 120 studs per second for up to 120 studs and stops on the first
 
 The two spells do not overlap. While something floats, the gun is put away, right mouse throws instead of aiming and `Z` waits. Casting either spell also empties the hand: the item returns to the hotbar, and the player picks it again if wanted.
 
-The tuning lives in `src/shared/Telekinesis.luau`, the grab, drag, throw and damage in `src/server/TelekinesisService.luau`, the input, first-person arm and badge in `src/client/TelekinesisController.client.luau`, the white circle in `src/client/MagicCircle.luau`, and the wind, impacts and shake in `src/client/TelekinesisEffects.client.luau`.
+The tuning lives in `src/shared/Telekinesis.luau`, the grab, drag, throw and damage in `src/server/TelekinesisService.luau`, the input and first-person arm in `src/client/TelekinesisController.client.luau`, and the badge in `src/client/SpellBadge.luau`, the white circle in `src/client/MagicCircle.luau`, and the wind, impacts and shake in `src/client/TelekinesisEffects.client.luau`.
 
 ### The arena
 
