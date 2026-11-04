@@ -13,6 +13,7 @@ local Shared = ReplicatedStorage:WaitForChild("Shared")
 local Telekinesis = require(Shared.Telekinesis)
 local FirstPersonBodyPart = require(Shared.FirstPersonBodyPart)
 local Inventory = require(Shared.Inventory)
+local Powers = require(Shared.Powers)
 
 local player = Players.LocalPlayer
 local remotes = ReplicatedStorage:WaitForChild("TelekinesisRemotes")
@@ -251,7 +252,7 @@ local function buildBadge()
 
 	local builtOk, built = pcall(SpellBadge.build, {
 		name = "TelekinesisHud",
-		y = -168,
+		y = -104,
 		background = Color3.fromRGB(14, 20, 26),
 		keyBackground = Color3.fromRGB(24, 36, 46),
 		key = "X",
@@ -366,6 +367,11 @@ local function hurl()
 end
 
 local function toggle()
+	-- The grip comes from the push fruit.
+	if not Powers.owns(player, "Telekinesis") then
+		return
+	end
+
 	if player:GetAttribute("TransmutationCasting") == true then
 		return
 	end
@@ -496,7 +502,27 @@ RunService.Heartbeat:Connect(function(deltaTime: number)
 	aimRemote:FireServer(point, holdYaw)
 end)
 
-buildBadge()
+-- The ability slot only exists while the power does.
+local function syncBadge()
+	if Powers.owns(player, "Telekinesis") then
+		if not badge then
+			buildBadge()
+		end
+		return
+	end
+
+	local holder = badge
+	badge = nil
+	badgeFill = nil
+	badgeStatus = nil
+	if holder and holder.Parent then
+		holder.Parent:Destroy()
+	end
+end
+
+player:GetAttributeChangedSignal(Powers.ATTRIBUTE):Connect(syncBadge)
+
+syncBadge()
 paintBadge()
 task.spawn(function()
 	while true do
