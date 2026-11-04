@@ -197,8 +197,14 @@ local function resolveProp(instance: Instance?): (PVInstance?, Vector3?, CFrame?
 		return nil, nil, nil, nil
 	end
 
+	local parent = prop.Parent
+	local isTree = parent ~= nil
+		and parent.Name == "Trees"
+		and parent.Parent ~= nil
+		and parent.Parent.Name == "GeneratedForest"
+
 	local bounds, size = prop:GetBoundingBox()
-	if not Telekinesis.canGrabSize(size, parts) then
+	if not Telekinesis.canGrabSize(size, parts, isTree) then
 		return nil, nil, nil, nil
 	end
 
@@ -371,7 +377,7 @@ local function aim(player: Player, point: any)
 		local result = Workspace:Raycast(head.Position, direction, params)
 		if result then
 			local normal = if result.Normal.Magnitude > 0.01 then result.Normal.Unit else Vector3.yAxis
-			clamped = result.Position + normal * (hold.radius * 0.9)
+			clamped = result.Position + normal * (math.min(hold.radius, 8) * 0.9)
 		end
 	end
 
@@ -434,7 +440,7 @@ local function finishFlight(flight: Flight, position: Vector3, normal: Vector3, 
 	impactRemote:FireAllClients({
 		position = position,
 		normal = normal,
-		radius = flight.radius,
+		radius = math.min(flight.radius, 8),
 		kind = flight.kind,
 	})
 end
