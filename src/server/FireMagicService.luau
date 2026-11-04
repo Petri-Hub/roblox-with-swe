@@ -8,6 +8,7 @@ local Workspace = game:GetService("Workspace")
 
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local FireMagic = require(Shared.FireMagic)
+local Powers = require(Shared.Powers)
 
 local GhostService = require(script.Parent.GhostService)
 
@@ -318,6 +319,11 @@ end
 
 local function cast(player: Player, origin: any, direction: any, charge: any)
 	if not isVector(origin) or not isVector(direction) or direction.Magnitude < 0.01 then
+		return
+	end
+
+	-- The fireball belongs to whoever ate the flame fruit.
+	if not Powers.owns(player, "Fire") then
 		return
 	end
 

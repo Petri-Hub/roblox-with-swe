@@ -129,6 +129,9 @@
         "UVLanternController": {
           "$path": "src/client/UVLanternController.client.luau"
         },
+        "FruitController": {
+          "$path": "src/client/FruitController.client.luau"
+        },
         "FireMagicController": {
           "$path": "src/client/FireMagicController.client.luau"
         },

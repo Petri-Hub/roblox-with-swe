@@ -12,6 +12,7 @@ local Shared = ReplicatedStorage:WaitForChild("Shared")
 local FireMagic = require(Shared.FireMagic)
 local FirstPersonBodyPart = require(Shared.FirstPersonBodyPart)
 local Inventory = require(Shared.Inventory)
+local Powers = require(Shared.Powers)
 
 local player = Players.LocalPlayer
 local remotes = ReplicatedStorage:WaitForChild("FireMagicRemotes")
@@ -345,6 +346,34 @@ local function flashBadge()
 	TweenService:Create(holder, TweenInfo.new(0.35), { BackgroundColor3 = original }):Play()
 end
 
+local function removeBadge()
+	local holder = badge
+	if not holder then
+		return
+	end
+
+	badge = nil
+	badgeFill = nil
+	badgeStatus = nil
+
+	local gui = holder.Parent
+	if gui then
+		gui:Destroy()
+	end
+end
+
+-- The ability slot only exists while the power does. Eating another fruit
+-- replaces the power, and the previous badge has to go with it.
+local function syncBadge()
+	if Powers.owns(player, "Fire") then
+		if not badge then
+			buildBadge()
+		end
+	else
+		removeBadge()
+	end
+end
+
 ---------------------------------------------------------------------------
 -- Wiring
 ---------------------------------------------------------------------------
@@ -353,6 +382,12 @@ end
 -- draw the growing circle, so the visual and the throw stay in step.
 local function beginCharge()
 	if charging or not isAlive() or UserInputService:GetFocusedTextBox() then
+		return
+	end
+
+	-- The spell comes from the flame fruit: without the power there is no badge
+	-- and nothing to charge.
+	if not Powers.owns(player, "Fire") then
 		return
 	end
 
@@ -474,7 +509,9 @@ if player.Character then
 	onCharacterAdded(player.Character)
 end
 
-buildBadge()
+player:GetAttributeChangedSignal(Powers.ATTRIBUTE):Connect(syncBadge)
+
+syncBadge()
 paintBadge()
 task.spawn(function()
 	while true do

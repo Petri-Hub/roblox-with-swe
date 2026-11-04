@@ -10,6 +10,7 @@ local Workspace = game:GetService("Workspace")
 
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local Telekinesis = require(Shared.Telekinesis)
+local Powers = require(Shared.Powers)
 
 local GhostService = require(script.Parent.GhostService)
 
@@ -259,6 +260,11 @@ local function settleProp(hold: Hold)
 end
 
 local function grab(player: Player, instance: any)
+	-- The grip belongs to whoever ate the push fruit.
+	if not Powers.owns(player, "Telekinesis") then
+		return
+	end
+
 	if holds[player] then
 		return
 	end
