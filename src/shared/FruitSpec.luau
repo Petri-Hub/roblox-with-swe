@@ -54,10 +54,20 @@ FruitSpec.PICKUP_DISTANCE = 14
 FruitSpec.PROMPT_DISTANCE = 10
 FruitSpec.PROMPT_HOLD = 0.35
 
--- Where a fruit can appear: a ring around the spawn clearing, inside the rim.
+-- Fruit grows by a tree: the green belt around the town is where a player
+-- walks to look for one. It sits this far from the trunk, so it never grows
+-- inside the tree.
+FruitSpec.TREE_MIN_DISTANCE = 3.5
+FruitSpec.TREE_MAX_DISTANCE = 9
+
+-- The fallback when no tree has a free spot: a ring around the town, inside the
+-- rim, so a fruit still appears somewhere instead of being lost.
 FruitSpec.SPAWN_RADIUS_MIN = 45
 FruitSpec.SPAWN_RADIUS_MAX = 235
 FruitSpec.SPAWN_MARGIN = 40
+-- The trees already stand inside the belt, so the spot beside one only needs to
+-- stay clear of the rock rim.
+FruitSpec.TREE_MARGIN = 8
 FruitSpec.SPAWN_TRIES = 24
 -- How high the fruit hovers, so it reads as floating and not as a ball of moss.
 FruitSpec.HOVER_HEIGHT = 2.6
@@ -186,6 +196,15 @@ function FruitSpec.scatter(angleRoll: number, radiusRoll: number): Vector2
 	local radius = FruitSpec.SPAWN_RADIUS_MIN
 		+ math.clamp(radiusRoll, 0, 1) * (FruitSpec.SPAWN_RADIUS_MAX - FruitSpec.SPAWN_RADIUS_MIN)
 	return Vector2.new(math.cos(angle) * radius, math.sin(angle) * radius)
+end
+
+-- Two rolls in and a tree out: the spot a fruit grows on, a short walk from a
+-- trunk in a random direction. Same shape as `scatter`, so it stays testable.
+function FruitSpec.nearTree(tree: Vector2, angleRoll: number, distanceRoll: number): Vector2
+	local angle = math.clamp(angleRoll, 0, 0.999999) * math.pi * 2
+	local distance = FruitSpec.TREE_MIN_DISTANCE
+		+ math.clamp(distanceRoll, 0, 1) * (FruitSpec.TREE_MAX_DISTANCE - FruitSpec.TREE_MIN_DISTANCE)
+	return Vector2.new(tree.X + math.cos(angle) * distance, tree.Y + math.sin(angle) * distance)
 end
 
 function FruitSpec.canSpawn(onGround: number): boolean

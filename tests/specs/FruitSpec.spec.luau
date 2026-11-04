@@ -105,6 +105,22 @@ describe("fruit spec", function()
 		end
 	end)
 
+	it("puts a fruit beside a tree, not inside it", function()
+		local tree = Vector2.new(120, -80)
+
+		for _, roll in { 0, 0.25, 0.5, 0.75, 0.999 } do
+			local spot = FruitSpec.nearTree(tree, roll, roll)
+			local distance = (spot - tree).Magnitude
+			expect(distance).toBeGreaterThanOrEqual(FruitSpec.TREE_MIN_DISTANCE - 0.01)
+			expect(distance).toBeLessThanOrEqual(FruitSpec.TREE_MAX_DISTANCE + 0.01)
+		end
+
+		local first = FruitSpec.nearTree(tree, 0.25, 0.5)
+		local second = FruitSpec.nearTree(tree, 0.25, 0.5)
+		expect(first.X).toBeCloseTo(second.X, 3)
+		expect(first.Y).toBeCloseTo(second.Y, 3)
+	end)
+
 	it("keeps the ground population and the lifetime bounded", function()
 		expect(FruitSpec.canSpawn(0)).toBe(true)
 		expect(FruitSpec.canSpawn(FruitSpec.MAX_ON_GROUND - 1)).toBe(true)
