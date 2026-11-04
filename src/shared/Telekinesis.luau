@@ -16,6 +16,11 @@ Telekinesis.GRAB_RANGE = 55
 Telekinesis.MIN_HOLD_DISTANCE = 7
 Telekinesis.MAX_HOLD_DISTANCE = 45
 
+-- Controls while something floats: the wheel pushes the thing away or pulls it
+-- back, Q and E turn it. Both are capped by the hold distance above.
+Telekinesis.DISTANCE_STEP = 3
+Telekinesis.ROTATE_SPEED = math.rad(160)
+
 -- Studs per second the held thing chases the cursor. Fast enough to feel
 -- controlled, slow enough that it does not snap around like a welded prop.
 Telekinesis.FOLLOW_SPEED = 60
@@ -40,6 +45,10 @@ Telekinesis.SHAKE_RADIUS = 30
 -- the thud when a body or a prop lands.
 Telekinesis.HOLD_SOUND = 9125742111
 Telekinesis.THROW_SOUND = 9113077880
+-- The blow at the caster's hand when a throw starts. It is the throw gust,
+-- pitched up and cut short, so the spell keeps one voice and no extra asset.
+Telekinesis.PUSH_SOUND = Telekinesis.THROW_SOUND
+Telekinesis.PUSH_PITCH = 1.45
 Telekinesis.IMPACT_SOUND = 9116488438
 
 Telekinesis.CHAT_LINE = "TELEQUINESIA"
@@ -75,19 +84,48 @@ function Telekinesis.holdExpired(startedAt: number?, now: number): boolean
 	return Telekinesis.holdSeconds(startedAt, now) >= Telekinesis.MAX_HOLD_SECONDS
 end
 
+-- A hold distance is always inside the spell's reach, whatever the cursor or
+-- the wheel says.
+function Telekinesis.holdDistance(distance: number?): number
+	local value = if typeof(distance) == "number" and distance == distance
+		then distance
+		else Telekinesis.MAX_HOLD_DISTANCE
+	return math.clamp(value, Telekinesis.MIN_HOLD_DISTANCE, Telekinesis.MAX_HOLD_DISTANCE)
+end
+
+-- The wheel asks for a new distance: positive pushes away, negative pulls back.
+function Telekinesis.adjustDistance(current: number?, delta: number): number
+	local base = Telekinesis.holdDistance(current)
+	if typeof(delta) ~= "number" or delta ~= delta then
+		return base
+	end
+
+	return Telekinesis.holdDistance(base + delta)
+end
+
+-- Yaw is kept in one turn so a long spin never loses precision.
+function Telekinesis.wrapYaw(yaw: number): number
+	if typeof(yaw) ~= "number" or yaw ~= yaw then
+		return 0
+	end
+
+	local wrapped = yaw % (2 * math.pi)
+	if wrapped > math.pi then
+		wrapped -= 2 * math.pi
+	end
+
+	return wrapped
+end
+
 -- Where the floating thing should sit: along the aim ray, clamped between the
 -- player's reach and the end of the spell. A missing hit distance means the
 -- cursor found nothing, so the object goes as far as the spell allows.
-function Telekinesis.holdPoint(origin: Vector3, direction: Vector3, hitDistance: number?): Vector3
+function Telekinesis.holdPoint(origin: Vector3, direction: Vector3, distance: number?): Vector3
 	if typeof(direction) ~= "Vector3" or direction.Magnitude < 0.01 then
 		return origin
 	end
 
-	local distance = if typeof(hitDistance) == "number" and hitDistance == hitDistance
-		then hitDistance
-		else Telekinesis.MAX_HOLD_DISTANCE
-
-	return origin + direction.Unit * math.clamp(distance, Telekinesis.MIN_HOLD_DISTANCE, Telekinesis.MAX_HOLD_DISTANCE)
+	return origin + direction.Unit * Telekinesis.holdDistance(distance)
 end
 
 -- The client says where it is pointing; the server only accepts a point within

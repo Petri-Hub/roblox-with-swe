@@ -30,6 +30,7 @@ type Hold = {
 	lift: number,
 	radius: number,
 	point: Vector3,
+	yaw: number,
 	startedAt: number,
 	lastAimAt: number,
 }
@@ -303,6 +304,7 @@ local function grab(player: Player, instance: any)
 			lift = 0,
 			radius = 3.2,
 			point = pivot.Position,
+			yaw = 0,
 			startedAt = now,
 			lastAimAt = 0,
 		}
@@ -331,6 +333,7 @@ local function grab(player: Player, instance: any)
 		lift = lift or 0,
 		radius = radius,
 		point = pivot.Position,
+		yaw = 0,
 		startedAt = now,
 		lastAimAt = 0,
 	}
@@ -340,10 +343,16 @@ end
 
 -- The client points at a spot; the server decides whether that spot is
 -- reachable, and pulls the object out of walls and floors.
-local function aim(player: Player, point: any)
+local function aim(player: Player, point: any, yaw: any)
 	local hold = holds[player]
 	if not hold or not isVector(point) then
 		return
+	end
+
+	-- Turning is a direction, not a position: the server keeps it in one turn
+	-- and ignores anything that is not a number.
+	if typeof(yaw) == "number" then
+		hold.yaw = Telekinesis.wrapYaw(yaw)
 	end
 
 	local now = Workspace:GetServerTimeNow()
@@ -554,7 +563,8 @@ local function stepHolds(deltaTime: number)
 				else nextPosition + pivot.LookVector
 			target:PivotTo(CFrame.lookAt(nextPosition, lookAt))
 		else
-			local spin = CFrame.Angles(0, (now - hold.startedAt) * 0.9, 0)
+			-- The slow drift plus whatever the player turned with Q and E.
+			local spin = CFrame.Angles(0, (now - hold.startedAt) * 0.9 + hold.yaw, 0)
 			target:PivotTo(CFrame.new(nextPosition) * hold.baseRotation * spin)
 		end
 	end

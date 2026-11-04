@@ -39,6 +39,7 @@ type HoldVisual = {
 	holder: Part,
 	circle: Model,
 	circleParts: { BasePart },
+	handPart: BasePart?,
 	rings: { Ring },
 	sound: Sound?,
 	target: PVInstance,
@@ -68,6 +69,30 @@ local function newPart(parent: Instance, name: string, size: Vector3, color: Col
 	part.BottomSurface = Enum.SurfaceType.Smooth
 	part.Parent = parent
 	return part
+end
+
+-- A short, pitched-up gust at the hand: the blow the caster hears when the
+-- thing leaves the grip. It fades out instead of being cut, so it never clicks.
+local function playPush(position: Vector3)
+	local holder = newPart(Workspace, "TelekinesisPush", Vector3.one * 0.2, WHITE, Enum.Material.SmoothPlastic)
+	holder.Transparency = 1
+	holder.CFrame = CFrame.new(position)
+
+	local sound = Instance.new("Sound")
+	sound.SoundId = "rbxassetid://" .. tostring(Telekinesis.PUSH_SOUND)
+	sound.Volume = 0.95
+	sound.PlaybackSpeed = Telekinesis.PUSH_PITCH
+	sound.RollOffMode = Enum.RollOffMode.InverseTapered
+	sound.RollOffMinDistance = 8
+	sound.RollOffMaxDistance = 70
+	sound.Parent = holder
+	sound:Play()
+
+	TweenService:Create(sound, TweenInfo.new(0.22), { Volume = 0 }):Play()
+	task.delay(0.5, function()
+		sound:Stop()
+	end)
+	Debris:AddItem(holder, 1.5)
 end
 
 local function playAt(position: Vector3, soundId: number, volume: number, maxDistance: number, pitch: number?)
@@ -151,6 +176,7 @@ local function buildWind(radius: number): (Part, { Ring })
 		{ radius = scale * 1.15, blades = 12, length = 0.42, tilt = CFrame.Angles(0, 0, 0), speed = 2.1 },
 		{ radius = scale * 1.35, blades = 10, length = 0.5, tilt = CFrame.Angles(math.rad(58), 0, 0), speed = -1.6 },
 		{ radius = scale * 0.95, blades = 14, length = 0.34, tilt = CFrame.Angles(math.rad(-52), 0, 0), speed = 1.3 },
+		{ radius = scale * 1.55, blades = 18, length = 0.16, tilt = CFrame.Angles(math.rad(9), 0, 0), speed = 3.4 },
 	}
 	for index, spec in specs do
 		local ring = buildRing(holder, spec.radius, spec.blades, spec.length, spec.tilt)
@@ -212,6 +238,28 @@ local function fadeTo(parts: { BasePart }, duration: number, transparency: numbe
 	end
 end
 
+-- The spell circle sits in the casting hand, not on the floating thing: the
+-- local player has a first-person arm model, everyone else has their character.
+local function holderHand(holderPlayer: Player): BasePart?
+	if holderPlayer == player then
+		local arm = Workspace:FindFirstChild("TelekinesisArm")
+		if arm then
+			local hand = arm:FindFirstChild("CastHand", true) or arm:FindFirstChild("CastArm", true)
+			if hand and hand:IsA("BasePart") then
+				return hand
+			end
+		end
+	end
+
+	local character = holderPlayer.Character
+	if not character then
+		return nil
+	end
+
+	local hand = character:FindFirstChild("RightHand") or character:FindFirstChild("Right Arm")
+	return if hand and hand:IsA("BasePart") then hand else nil
+end
+
 local stopHold: (Player, boolean) -> ()
 
 local function startHold(payload: any)
@@ -231,7 +279,7 @@ local function startHold(payload: any)
 	local centre = target:GetPivot().Position
 
 	local circle, circleParts = MagicCircle.buildWhite()
-	scaleModel(circle, math.clamp(radius * 1.1 + 1.4, 1.8, 5.2))
+	scaleModel(circle, math.clamp(radius * 0.8 + 1.3, 2.0, 4.4))
 	circle:PivotTo(CFrame.new(centre))
 	circle.Parent = Workspace
 
@@ -253,6 +301,7 @@ local function startHold(payload: any)
 		holder = holder,
 		circle = circle,
 		circleParts = circleParts,
+		handPart = holderHand(holderPlayer),
 		rings = rings,
 		sound = sound,
 		target = target,
@@ -299,6 +348,9 @@ stopHold = function(holderPlayer: Player, burst: boolean)
 
 	if burst then
 		playAt(origin, Telekinesis.THROW_SOUND, 0.9, 130)
+		-- The blow the caster hears as the thing leaves the grip.
+		local hand = visual.handPart
+		playPush(if hand and hand.Parent then hand.Position else origin)
 	end
 end
 
@@ -312,16 +364,27 @@ local function updateVisual(visual: HoldVisual, camera: Camera?, now: number)
 		)
 	end
 
-	-- The circle hangs just behind the object from the viewer's side, a halo
-	-- instead of a disc slicing through it.
-	local facing = if camera then (camera.CFrame.Position - centre) else Vector3.zAxis
-	if facing.Magnitude < 0.01 then
-		facing = Vector3.zAxis
+	local hand = visual.handPart
+	if hand and hand.Parent then
+		-- In the palm, facing whatever is being lifted.
+		local handPosition = hand.Position
+		local toTarget = centre - handPosition
+		local facing = if toTarget.Magnitude > 0.01 then toTarget.Unit else Vector3.zAxis
+		visual.circle:PivotTo(
+			CFrame.lookAt(handPosition + facing * 0.5, handPosition + facing * 2) * CFrame.Angles(0, 0, now * 1.4)
+		)
 	else
-		facing = facing.Unit
+		-- No hand to hang it on: keep the old halo behind the object so the spell
+		-- still reads on screen.
+		local facing = if camera then (camera.CFrame.Position - centre) else Vector3.zAxis
+		if facing.Magnitude < 0.01 then
+			facing = Vector3.zAxis
+		else
+			facing = facing.Unit
+		end
+		local circlePosition = centre - facing * (visual.radius * 0.9 + 0.5)
+		visual.circle:PivotTo(CFrame.lookAt(circlePosition, circlePosition + facing) * CFrame.Angles(0, 0, now * 1.4))
 	end
-	local circlePosition = centre - facing * (visual.radius * 0.9 + 0.5)
-	visual.circle:PivotTo(CFrame.lookAt(circlePosition, circlePosition + facing) * CFrame.Angles(0, 0, now * 1.4))
 end
 
 ---------------------------------------------------------------------------
