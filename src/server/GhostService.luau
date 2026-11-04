@@ -452,6 +452,8 @@ local function spawnGhost(target: Player, position: Vector3): Model?
 		flashUntil = 0,
 		uvDamage = 0,
 		dying = false,
+		suspended = false,
+		stunUntil = 0,
 	}
 
 	ghosts[model] = record
@@ -460,7 +462,7 @@ local function spawnGhost(target: Player, position: Vector3): Model?
 end
 
 local function updateGhost(record, deltaTime: number, currentTime: number)
-	if record.dying then
+	if record.dying or record.suspended then
 		return
 	end
 
@@ -475,6 +477,10 @@ local function updateGhost(record, deltaTime: number, currentTime: number)
 
 	local flat = Vector3.new(targetPosition.X - position.X, 0, targetPosition.Z - position.Z)
 	local distance = flat.Magnitude
+
+	-- A thrown ghost is dazed: it hangs where it landed and cannot chase or
+	-- attack until the stun runs out.
+	local stunned = currentTime < record.stunUntil
 
 	-- UV floodlight: burns slowly and shoves the ghost back out of the beam.
 	-- Any player's lamp counts, not just the ghost's current target.
@@ -502,7 +508,7 @@ local function updateGhost(record, deltaTime: number, currentTime: number)
 				return
 			end
 		end
-	elseif distance > settings.attackRange then
+	elseif distance > settings.attackRange and not stunned then
 		local step = math.min(distance, settings.speed * deltaTime)
 		position += flat.Unit * step
 	end
@@ -540,7 +546,12 @@ local function updateGhost(record, deltaTime: number, currentTime: number)
 	local fill = record.healthFill
 	fill.Size = UDim2.fromScale(math.clamp(record.ghost.health / record.ghost.maxHealth, 0, 1), 1)
 
-	if GhostRules.inAttackRange(settings, distance) and exposure <= 0 and currentTime >= record.attackAt then
+	if
+		not stunned
+		and GhostRules.inAttackRange(settings, distance)
+		and exposure <= 0
+		and currentTime >= record.attackAt
+	then
 		record.attackAt = currentTime + settings.attackCooldown
 		record.flashUntil = currentTime + 0.18
 		local character = nearestPlayer and nearestPlayer.Character
@@ -584,6 +595,28 @@ function GhostService.damage(model: Model, amount: number, attacker: Player?): b
 
 	killGhost(record, attacker)
 	return true
+end
+
+-- Telekinesis freezes a ghost and drives its pivot itself, so the chase AI must
+-- not fight it for the same CFrame. Raw held ghosts skip updateGhost entirely.
+function GhostService.setSuspended(model: Model, value: boolean)
+	local record = ghosts[model]
+	if record then
+		record.suspended = value
+	end
+end
+
+function GhostService.isSuspended(model: Model): boolean
+	local record = ghosts[model]
+	return record ~= nil and record.suspended == true
+end
+
+-- A slammed ghost hangs in place and cannot chase or attack for a moment.
+function GhostService.stun(model: Model, seconds: number)
+	local record = ghosts[model]
+	if record then
+		record.stunUntil = now() + math.max(0, seconds)
+	end
 end
 
 function GhostService.countAlive(): number
