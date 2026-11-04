@@ -159,8 +159,8 @@ local function groundBelow(x: number, z: number, fromY: number): number?
 	return ForestLayout.heightAt(x, z)
 end
 
--- A random spot in the valley ring, away from the landmarks so a fruit never
--- grows inside the cabin.
+-- A random spot in the town, away from the landmarks and the houses, so a
+-- fruit never grows inside a wall.
 local function randomGround(): Vector3?
 	local random = Random.new()
 	for _ = 1, FruitSpec.SPAWN_TRIES do
@@ -168,6 +168,7 @@ local function randomGround(): Vector3?
 		if
 			ForestLayout.isInsideWorld(offset, FruitSpec.SPAWN_MARGIN)
 			and not ForestLayout.isInsideLandmarkClearing(offset)
+			and not ForestLayout.isInsideHouseLot(offset)
 		then
 			local ground = groundBelow(offset.X, offset.Y, 300)
 			if ground then

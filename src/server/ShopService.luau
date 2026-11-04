@@ -21,7 +21,6 @@ local ShopService = {}
 local SHOP_NAME = "Shop"
 local REMOTE_FOLDER = "ShopRemotes"
 local KILLS_ATTRIBUTE = "Kills"
-local SHOP_SEED = ForestLayout.SEED + 91
 -- Nursery Crime 30 (APM): a disconcerting music box, 30 seconds, loops cleanly.
 local MUSIC_ID = 1839910323
 
@@ -297,35 +296,19 @@ function ShopService.position(): Vector3
 	return shopPosition
 end
 
--- The stall is flat and the forest is not. Level a pad under it first, or a
--- slope swallows the floor and the counter ends up below ground.
-local PAD_SIZE = Vector3.new(20, 8, 18)
-
-local function levelPad(x: number, z: number): number
-	local highest = ForestLayout.heightAt(x, z)
-	for _, offset in { Vector2.new(-8, -7), Vector2.new(8, -7), Vector2.new(-8, 7), Vector2.new(8, 7) } do
-		highest = math.max(highest, ForestLayout.heightAt(x + offset.X, z + offset.Y))
-	end
-
-	local level = highest + 0.05
-	Workspace.Terrain:FillBlock(CFrame.new(x, level + PAD_SIZE.Y / 2, z), PAD_SIZE, Enum.Material.Air)
-	Workspace.Terrain:FillBlock(CFrame.new(x, level - PAD_SIZE.Y / 2, z), PAD_SIZE, Enum.Material.Ground)
-	return level
-end
-
 function ShopService.start()
 	buildRemotes()
 
-	local point = ShopLayout.pointFor(SHOP_SEED)
-	local ground = levelPad(point.x, point.z)
-	shopPosition = Vector3.new(point.x, ground, point.z)
+	-- The town is flat and keeps a lot free in the plaza for the stall, so the
+	-- shop needs no levelled pad and no clearing of trees.
+	shopPosition = ForestLayout.shopPoint()
 
 	local existing = Workspace:FindFirstChild(SHOP_NAME)
 	if existing then
 		existing:Destroy()
 	end
 
-	local stall = buildStall(shopPosition, point.angle + math.pi)
+	local stall = buildStall(shopPosition, ForestLayout.SHOP_LOT.rotation)
 	stall:SetAttribute("ShopPosition", shopPosition)
 	ReplicatedStorage:SetAttribute("ShopPosition", shopPosition)
 	ReplicatedStorage:SetAttribute("ShopMusicId", MUSIC_ID)

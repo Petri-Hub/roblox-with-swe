@@ -31,7 +31,7 @@ local skySpawn: SpawnLocation? = nil
 local activeFlight: Flight? = nil
 
 local function forestReady(): boolean
-	local forest = Workspace:FindFirstChild("GeneratedForest")
+	local forest = Workspace:FindFirstChild("GeneratedTown")
 
 	return forest ~= nil and forest:GetAttribute("Ready") == true
 end

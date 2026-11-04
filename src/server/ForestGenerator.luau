@@ -1,3 +1,11 @@
+--[[
+	Builds the town: flat ground, a three by three grid of streets, four houses
+	per block, a lamp in each block corner, a paved plaza where every life
+	starts, trees in the green belt and the rock rim around the edge.
+
+	Everything is written once, from the seed in ForestLayout, and the model
+	carries a Ready attribute so the rest of the game can wait for it.
+]]
 local Lighting = game:GetService("Lighting")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerStorage = game:GetService("ServerStorage")
@@ -13,10 +21,21 @@ local MUD_COLOR = Color3.fromRGB(78, 68, 52)
 local LEAFY_GRASS_COLOR = Color3.fromRGB(66, 96, 52)
 local ROCK_COLOR = Color3.fromRGB(104, 108, 104)
 
+local ASPHALT = Color3.fromRGB(52, 52, 56)
+local PAVING = Color3.fromRGB(138, 134, 126)
+local IRON = Color3.fromRGB(48, 46, 46)
+local LAMP_LIGHT = Color3.fromRGB(255, 214, 158)
+local WINDOW_LIGHT = Color3.fromRGB(255, 206, 150)
+local TRUNK = Color3.fromRGB(72, 58, 44)
+local LEAVES = Color3.fromRGB(58, 88, 46)
+
 -- The terrain is written in chunks. A bigger map would otherwise build one
 -- nesting of tables per voxel for the whole world at once, which is slow and
 -- hungry; a chunk at a time keeps both under control.
 local CHUNK_CELLS = 40
+
+-- Top of the paved plaza, and so the surface a life starts on.
+local PLAZA_SURFACE = 0.18
 
 local function buildTerrain()
 	local terrain = Workspace.Terrain
@@ -90,7 +109,9 @@ local function ensureSpawn(): SpawnLocation
 	local spawn = if existing and existing:IsA("SpawnLocation") then existing else Instance.new("SpawnLocation")
 	spawn.Name = "ForestSpawn"
 	spawn.Size = Vector3.new(10, 1, 10)
-	spawn.Position = Vector3.new(0, ForestLayout.heightAt(0, 0) - 0.45, 0)
+	-- The plaza slab is the first thing underfoot at the middle of the town, so
+	-- the spawn sits level with its surface instead of just under it.
+	spawn.Position = Vector3.new(0, ForestLayout.heightAt(0, 0) + PLAZA_SURFACE - 0.5, 0)
 	spawn.Transparency = 1
 	spawn.CanCollide = true
 	spawn.Anchored = true
@@ -139,7 +160,7 @@ local function configureLighting()
 	atmosphere.Parent = Lighting
 
 	local colour = Instance.new("ColorCorrectionEffect")
-	colour.Name = "ForestColour"
+	colour.Name = "TownColour"
 	colour.Brightness = 0.015
 	colour.Contrast = 0.06
 	colour.Saturation = 0.08
@@ -147,14 +168,14 @@ local function configureLighting()
 	colour.Parent = Lighting
 
 	local bloom = Instance.new("BloomEffect")
-	bloom.Name = "ForestBloom"
+	bloom.Name = "TownBloom"
 	bloom.Intensity = 0.35
 	bloom.Size = 16
 	bloom.Threshold = 1.9
 	bloom.Parent = Lighting
 
 	local rays = Instance.new("SunRaysEffect")
-	rays.Name = "ForestSunRays"
+	rays.Name = "TownSunRays"
 	rays.Intensity = 0.035
 	rays.Spread = 0.6
 	rays.Parent = Lighting
@@ -171,6 +192,295 @@ local function cleanScripts(instance: Instance)
 			child:Destroy()
 		end
 	end
+end
+
+-- A solid, anchored box. Scenery never fires touch events, and only the big
+-- pieces keep their shadow, so a street of two hundred parts stays cheap.
+local function block(
+	parent: Instance,
+	name: string,
+	size: Vector3,
+	color: Color3,
+	cframe: CFrame,
+	material: Enum.Material,
+	canCollide: boolean?,
+	castShadow: boolean?
+): Part
+	local part = Instance.new("Part")
+	part.Name = name
+	part.Size = size
+	part.Color = color
+	part.Material = material
+	part.CFrame = cframe
+	part.Anchored = true
+	part.CanCollide = if canCollide == nil then true else canCollide
+	part.CanTouch = false
+	part.CastShadow = castShadow == true
+	part.TopSurface = Enum.SurfaceType.Smooth
+	part.BottomSurface = Enum.SurfaceType.Smooth
+	part.Parent = parent
+	return part
+end
+
+local function forestHeight(point: { x: number, z: number }): number
+	return ForestLayout.heightAt(point.x, point.z)
+end
+
+local function buildStreets(town: Model)
+	local streets = Instance.new("Folder")
+	streets.Name = "Streets"
+	streets.Parent = town
+
+	local length = ForestLayout.WALL_SPAN
+	for _, line in ForestLayout.streetLines() do
+		block(
+			streets,
+			"StreetX",
+			Vector3.new(length, 0.2, ForestLayout.ROAD_WIDTH),
+			ASPHALT,
+			CFrame.new(0, 0.1, line),
+			Enum.Material.Asphalt,
+			true,
+			false
+		)
+		block(
+			streets,
+			"StreetZ",
+			Vector3.new(ForestLayout.ROAD_WIDTH, 0.2, length),
+			ASPHALT,
+			CFrame.new(line, 0.1, 0),
+			Enum.Material.Asphalt,
+			true,
+			false
+		)
+	end
+
+	-- The plaza: the middle block, paved, one step below the street so the two
+	-- surfaces never fight over the same plane.
+	local plazaSize = ForestLayout.STREET_STEP - ForestLayout.ROAD_WIDTH
+	block(
+		streets,
+		"Plaza",
+		Vector3.new(plazaSize, 0.18, plazaSize),
+		PAVING,
+		CFrame.new(0, PLAZA_SURFACE / 2, 0),
+		Enum.Material.Concrete,
+		true,
+		false
+	)
+
+	return streets
+end
+
+local function buildHouse(parent: Instance, lot: ForestLayout.HouseLot, random: Random, index: number)
+	local width = ForestLayout.HOUSE_WIDTH
+	local depth = ForestLayout.HOUSE_DEPTH
+	local height = ForestLayout.HOUSE_HEIGHT
+	local doorWidth = ForestLayout.DOOR_WIDTH
+	local doorHeight = ForestLayout.DOOR_HEIGHT
+	local wall = 0.8
+
+	local house = Instance.new("Model")
+	house.Name = string.format("House%03d", index)
+
+	local base = CFrame.new(lot.x, forestHeight(lot), lot.z) * CFrame.Angles(0, lot.rotation, 0)
+	local wallColor = ForestLayout.HOUSE_COLORS[random:NextInteger(1, #ForestLayout.HOUSE_COLORS)]
+	local roofColor = ForestLayout.ROOF_COLORS[random:NextInteger(1, #ForestLayout.ROOF_COLORS)]
+
+	local floor = block(
+		house,
+		"Floor",
+		Vector3.new(width, 0.8, depth),
+		wallColor,
+		base * CFrame.new(0, 0.4, 0),
+		Enum.Material.Concrete,
+		true,
+		false
+	)
+
+	block(
+		house,
+		"WallBack",
+		Vector3.new(width, height, wall),
+		wallColor,
+		base * CFrame.new(0, height / 2 + 0.8, -depth / 2 + wall / 2),
+		Enum.Material.Concrete,
+		true,
+		true
+	)
+	for _, side in { -1, 1 } do
+		block(
+			house,
+			"WallSide",
+			Vector3.new(wall, height, depth),
+			wallColor,
+			base * CFrame.new(side * (width / 2 - wall / 2), height / 2 + 0.8, 0),
+			Enum.Material.Concrete,
+			true,
+			true
+		)
+	end
+
+	-- The front wall is split in two so the door stays open: a player can walk
+	-- into every house through the gap.
+	local segment = (width - doorWidth) / 2
+	local segmentOffset = doorWidth / 2 + segment / 2
+	for _, side in { -1, 1 } do
+		block(
+			house,
+			"WallFront",
+			Vector3.new(segment, height, wall),
+			wallColor,
+			base * CFrame.new(side * segmentOffset, height / 2 + 0.8, depth / 2 - wall / 2),
+			Enum.Material.Concrete,
+			true,
+			true
+		)
+	end
+	block(
+		house,
+		"Lintel",
+		Vector3.new(doorWidth, height - doorHeight, wall),
+		wallColor,
+		base * CFrame.new(0, doorHeight + (height - doorHeight) / 2 + 0.8, depth / 2 - wall / 2),
+		Enum.Material.Concrete,
+		true,
+		true
+	)
+
+	for _, side in { -1, 1 } do
+		local pane = block(
+			house,
+			"Window",
+			Vector3.new(segment * 0.6, 3.4, 0.3),
+			WINDOW_LIGHT,
+			base * CFrame.new(side * segmentOffset, 8.4, depth / 2 + 0.02),
+			Enum.Material.SmoothPlastic,
+			false,
+			false
+		)
+		pane.Transparency = 0.15
+	end
+
+	block(
+		house,
+		"Roof",
+		Vector3.new(width + 2, 0.8, depth + 2),
+		roofColor,
+		base * CFrame.new(0, height + 1.2, 0),
+		Enum.Material.Slate,
+		true,
+		true
+	)
+
+	house.PrimaryPart = floor
+	house.Parent = parent
+	return house
+end
+
+local function buildHouses(town: Model)
+	local houses = Instance.new("Folder")
+	houses.Name = "Houses"
+	houses.Parent = town
+
+	local random = Random.new(ForestLayout.SEED + 11)
+	for index, lot in ForestLayout.houseLots() do
+		buildHouse(houses, lot, random, index)
+	end
+
+	return houses
+end
+
+local function buildLamps(town: Model)
+	local lamps = Instance.new("Folder")
+	lamps.Name = "Lamps"
+	lamps.Parent = town
+
+	for index, position in ForestLayout.lampPositions() do
+		local ground = forestHeight({ x = position.X, z = position.Y })
+		local lamp = Instance.new("Model")
+		lamp.Name = string.format("Lamp%03d", index)
+
+		local post = block(
+			lamp,
+			"Post",
+			Vector3.new(0.7, 9, 0.7),
+			IRON,
+			CFrame.new(position.X, ground + 4.5, position.Y),
+			Enum.Material.Metal,
+			true,
+			false
+		)
+		local head = block(
+			lamp,
+			"Head",
+			Vector3.new(1.4, 1.2, 1.4),
+			LAMP_LIGHT,
+			CFrame.new(position.X, ground + 9.3, position.Y),
+			Enum.Material.Neon,
+			false,
+			false
+		)
+
+		local light = Instance.new("PointLight")
+		light.Color = LAMP_LIGHT
+		light.Brightness = 1.2
+		light.Range = 26
+		light.Shadows = false
+		light.Parent = head
+
+		lamp.PrimaryPart = post
+		lamp.Parent = lamps
+	end
+
+	return lamps
+end
+
+local function buildTrees(town: Model)
+	local trees = Instance.new("Folder")
+	trees.Name = "Trees"
+	trees.Parent = town
+
+	local random = Random.new(ForestLayout.SEED + 22)
+	for index, position in ForestLayout.treePositions() do
+		local height = random:NextNumber(15, 21)
+		local trunkWidth = random:NextNumber(1.8, 2.6)
+		local ground = forestHeight({ x = position.X, z = position.Y })
+
+		local tree = Instance.new("Model")
+		tree.Name = string.format("Tree%03d", index)
+
+		local trunk = block(
+			tree,
+			"Trunk",
+			Vector3.new(trunkWidth, height, trunkWidth),
+			TRUNK,
+			CFrame.new(position.X, ground + height / 2, position.Y),
+			Enum.Material.Wood,
+			true,
+			false
+		)
+
+		for tier = 1, 2 do
+			local size = (13 - tier * 3.2) * random:NextNumber(0.9, 1.1)
+			local canopy = block(
+				tree,
+				"Canopy",
+				Vector3.new(size, size * 0.85, size),
+				LEAVES,
+				CFrame.new(position.X, ground + height * (0.78 + tier * 0.11), position.Y),
+				Enum.Material.Grass,
+				false,
+				false
+			)
+			canopy.Shape = Enum.PartType.Ball
+		end
+
+		tree.PrimaryPart = trunk
+		tree.Parent = trees
+	end
+
+	return trees
 end
 
 local function placeProp(
@@ -246,30 +556,33 @@ function ForestGenerator.generate(): Model
 		oldWorld:Destroy()
 	end
 
-	local previousForest = Workspace:FindFirstChild("GeneratedForest")
-	if previousForest then
-		previousForest:Destroy()
+	for _, name in { "GeneratedTown", "GeneratedForest" } do
+		local previous = Workspace:FindFirstChild(name)
+		if previous then
+			previous:Destroy()
+		end
 	end
 
-	local forest = Instance.new("Model")
-	forest.Name = "GeneratedForest"
-	forest.Parent = Workspace
+	local town = Instance.new("Model")
+	town.Name = "GeneratedTown"
+	town.Parent = Workspace
+
+	local streets = buildStreets(town)
+	local houses = buildHouses(town)
+	local lamps = buildLamps(town)
+	local trees = buildTrees(town)
 
 	local landmarks = Instance.new("Folder")
 	landmarks.Name = "Landmarks"
-	landmarks.Parent = forest
-
-	local debris = Instance.new("Folder")
-	debris.Name = "Debris"
-	debris.Parent = forest
+	landmarks.Parent = town
 
 	local foliage = Instance.new("Folder")
 	foliage.Name = "Foliage"
-	foliage.Parent = forest
+	foliage.Parent = town
 
 	local scatter = Instance.new("Folder")
 	scatter.Name = "Scatter"
-	scatter.Parent = forest
+	scatter.Parent = town
 
 	for _, landmark in ForestLayout.LANDMARKS do
 		local template = loadForestAsset(landmark.assetName)
@@ -277,16 +590,6 @@ function ForestGenerator.generate(): Model
 			local prop = placeProp(landmarks, template, landmark.position, landmark.rotation, 1, true, 0.4, true)
 			if prop then
 				prop.Name = landmark.id
-			end
-		end
-	end
-
-	for index, propInfo in ForestLayout.debrisLocations() do
-		local template = loadForestAsset(propInfo.assetName)
-		if template then
-			local prop = placeProp(debris, template, propInfo.position, propInfo.rotation, propInfo.scale, true, 0.25)
-			if prop then
-				prop.Name = string.format("Debris%03d", index)
 			end
 		end
 	end
@@ -311,13 +614,15 @@ function ForestGenerator.generate(): Model
 		end
 	end
 
-	forest:SetAttribute("LandmarkCount", #landmarks:GetChildren())
-	forest:SetAttribute("BoulderCount", 0)
-	forest:SetAttribute("DebrisCount", #debris:GetChildren())
-	forest:SetAttribute("FoliageCount", #foliage:GetChildren())
-	forest:SetAttribute("ScatterCount", #scatter:GetChildren())
-	forest:SetAttribute("Ready", true)
-	return forest
+	town:SetAttribute("HouseCount", #houses:GetChildren())
+	town:SetAttribute("StreetCount", #streets:GetChildren())
+	town:SetAttribute("LampCount", #lamps:GetChildren())
+	town:SetAttribute("TreeCount", #trees:GetChildren())
+	town:SetAttribute("LandmarkCount", #landmarks:GetChildren())
+	town:SetAttribute("FoliageCount", #foliage:GetChildren())
+	town:SetAttribute("ScatterCount", #scatter:GetChildren())
+	town:SetAttribute("Ready", true)
+	return town
 end
 
 return ForestGenerator

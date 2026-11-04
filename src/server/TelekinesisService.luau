@@ -155,7 +155,7 @@ local function resolveProp(instance: Instance?): (PVInstance?, Vector3?, CFrame?
 		return nil, nil, nil, nil
 	end
 
-	if not prop or prop.Name == "GeneratedForest" then
+	if not prop or prop.Name == "GeneratedTown" then
 		return nil, nil, nil, nil
 	end
 
