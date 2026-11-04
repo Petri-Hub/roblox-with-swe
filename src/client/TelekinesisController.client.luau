@@ -54,6 +54,13 @@ local armAlpha = 0
 local heldTarget: PVInstance? = nil
 local lastAimAt = 0
 
+-- Controls that only matter while something floats: the wheel sets how far the
+-- thing sits, Q and E turn it. The server clamps both.
+local holdDistance: number? = nil
+local holdYaw = 0
+local rotateLeft = false
+local rotateRight = false
+
 local function now(): number
 	return Workspace:GetServerTimeNow()
 end
@@ -266,7 +273,8 @@ local function paintBadge()
 	if holding() then
 		fill.Size = UDim2.fromScale(1, 1)
 		fill.BackgroundColor3 = Color3.fromRGB(226, 242, 255)
-		status.Text = "segurando — M2 lança"
+		-- Two hints alternate: what the throw does, then the new controls.
+		status.Text = if math.floor(now() / 3) % 2 == 0 then "M2 lança · scroll move" else "Q/E gira o objeto"
 		status.TextColor3 = Color3.fromRGB(220, 240, 255)
 		return
 	end
@@ -366,6 +374,21 @@ UserInputService.InputBegan:Connect(function(input: InputObject, processed: bool
 		toggle()
 	elseif input.UserInputType == Enum.UserInputType.MouseButton2 and holding() then
 		hurl()
+	elseif input.KeyCode == Enum.KeyCode.Q then
+		rotateLeft = true
+	elseif input.KeyCode == Enum.KeyCode.E then
+		rotateRight = true
+	elseif input.UserInputType == Enum.UserInputType.MouseWheel and holding() then
+		-- Wheel up pulls the thing closer, wheel down pushes it away.
+		holdDistance = Telekinesis.adjustDistance(holdDistance, -input.Position.Z * Telekinesis.DISTANCE_STEP)
+	end
+end)
+
+UserInputService.InputEnded:Connect(function(input: InputObject)
+	if input.KeyCode == Enum.KeyCode.Q then
+		rotateLeft = false
+	elseif input.KeyCode == Enum.KeyCode.E then
+		rotateRight = false
 	end
 end)
 
@@ -385,6 +408,8 @@ heldRemote.OnClientEvent:Connect(function(payload)
 	player:SetAttribute(Inventory.EQUIPPED_ATTRIBUTE, Inventory.EMPTY)
 	heldTarget = payload.target
 	lastAimAt = 0
+	holdDistance = nil
+	holdYaw = 0
 	paintBadge()
 end)
 
@@ -429,9 +454,14 @@ end
 
 -- Follow the cursor while something is held. The server clamps the point and
 -- pulls it out of walls; this only says where the player is pointing.
-RunService.Heartbeat:Connect(function()
+RunService.Heartbeat:Connect(function(deltaTime: number)
 	if not holding() then
 		return
+	end
+
+	if rotateLeft ~= rotateRight then
+		local direction = if rotateRight then 1 else -1
+		holdYaw = Telekinesis.wrapYaw(holdYaw + direction * Telekinesis.ROTATE_SPEED * math.min(deltaTime, 0.1))
 	end
 
 	local stamp = os.clock()
@@ -445,10 +475,13 @@ RunService.Heartbeat:Connect(function()
 		return
 	end
 
-	local result = Workspace:Raycast(ray.Origin, ray.Direction * (Telekinesis.MAX_HOLD_DISTANCE + 20), aimParams())
-	local distance = if result then (result.Position - ray.Origin).Magnitude else nil
-	local point = Telekinesis.holdPoint(ray.Origin, ray.Direction, distance)
-	aimRemote:FireServer(point)
+	if holdDistance == nil then
+		local hit = Workspace:Raycast(ray.Origin, ray.Direction * (Telekinesis.MAX_HOLD_DISTANCE + 20), aimParams())
+		holdDistance = Telekinesis.holdDistance(if hit then (hit.Position - ray.Origin).Magnitude else nil)
+	end
+
+	local point = Telekinesis.holdPoint(ray.Origin, ray.Direction, holdDistance)
+	aimRemote:FireServer(point, holdYaw)
 end)
 
 buildBadge()

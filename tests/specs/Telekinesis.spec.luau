@@ -118,3 +118,32 @@ describe("Telekinesis impact", function()
 		expect(Telekinesis.shakeStrength(8)).toBeGreaterThan(Telekinesis.shakeStrength(20))
 	end)
 end)
+
+describe("Telekinesis controls", function()
+	it("keeps the hold distance inside the spell's reach", function()
+		expect(Telekinesis.holdDistance(nil)).toBe(Telekinesis.MAX_HOLD_DISTANCE)
+		expect(Telekinesis.holdDistance(2)).toBe(Telekinesis.MIN_HOLD_DISTANCE)
+		expect(Telekinesis.holdDistance(20)).toBe(20)
+		expect(Telekinesis.holdDistance(900)).toBe(Telekinesis.MAX_HOLD_DISTANCE)
+		expect(Telekinesis.holdDistance(0 / 0)).toBe(Telekinesis.MAX_HOLD_DISTANCE)
+	end)
+
+	it("pushes away and pulls back by one wheel step", function()
+		local start = 20
+		expect(Telekinesis.adjustDistance(start, Telekinesis.DISTANCE_STEP)).toBe(20 + Telekinesis.DISTANCE_STEP)
+		expect(Telekinesis.adjustDistance(start, -Telekinesis.DISTANCE_STEP)).toBe(20 - Telekinesis.DISTANCE_STEP)
+
+		-- The wheel never pushes past the ends of the spell.
+		expect(Telekinesis.adjustDistance(Telekinesis.MAX_HOLD_DISTANCE, 20)).toBe(Telekinesis.MAX_HOLD_DISTANCE)
+		expect(Telekinesis.adjustDistance(Telekinesis.MIN_HOLD_DISTANCE, -20)).toBe(Telekinesis.MIN_HOLD_DISTANCE)
+		expect(Telekinesis.adjustDistance(20, 0 / 0)).toBe(20)
+	end)
+
+	it("wraps the yaw into one turn", function()
+		expect(Telekinesis.wrapYaw(0)).toBe(0)
+		expect(Telekinesis.wrapYaw(math.pi)).toBeCloseTo(math.pi, 5)
+		expect(Telekinesis.wrapYaw(math.pi + 0.5)).toBeCloseTo(-math.pi + 0.5, 5)
+		expect(Telekinesis.wrapYaw(math.pi * 5)).toBeCloseTo(math.pi, 4)
+		expect(Telekinesis.wrapYaw(0 / 0)).toBe(0)
+	end)
+end)
