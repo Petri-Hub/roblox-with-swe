@@ -366,6 +366,10 @@ local function hurl()
 end
 
 local function toggle()
+	if player:GetAttribute("TransmutationCasting") == true then
+		return
+	end
+
 	if holding() then
 		drop()
 	else
