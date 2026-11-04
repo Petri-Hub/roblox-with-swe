@@ -167,31 +167,106 @@ local function spikePart(parent: Instance, style: any, center: Vector3, axis: Ve
 	return part
 end
 
--- One spike: three shrinking cylinders stacked along the lean, so it reads as a
--- tapered tooth without a mesh asset.
-local function buildSpike(parent: Instance, base: CFrame, spike: any, style: any, parts: { BasePart })
+-- The spike mesh shipped with the place: one faceted stalagmite, coloured and
+-- textured by the material it came from.
+local spikeTemplate: MeshPart? = nil
+
+local function ensureSpikeTemplate(): MeshPart?
+	if spikeTemplate and spikeTemplate.Parent then
+		return spikeTemplate
+	end
+
+	local meshes = ReplicatedStorage:FindFirstChild("TransmutationMeshes")
+	local template = meshes and meshes:FindFirstChild("Spike")
+	if template and template:IsA("MeshPart") then
+		spikeTemplate = template
+		return template
+	end
+
+	return nil
+end
+
+local function leanAxis(spike: any): Vector3
 	local outward = Vector3.new(math.cos(spike.angle), 0, math.sin(spike.angle))
 	local axis = Vector3.new(0, 1, 0):Cross(outward)
 	if axis.Magnitude < 0.01 then
-		axis = Vector3.new(1, 0, 0)
-	else
-		axis = axis.Unit
+		return Vector3.new(1, 0, 0)
 	end
+	return axis.Unit
+end
 
-	local up = CFrame.fromAxisAngle(axis, spike.lean) * Vector3.new(0, 1, 0)
+-- One spike of the mesh, squashed to this spike's height and width and turned
+-- so the facets of neighbouring spikes never line up.
+local function buildMeshSpike(
+	parent: Instance,
+	base: CFrame,
+	spike: any,
+	style: any,
+	parts: { BasePart },
+	template: MeshPart
+)
+	local up = CFrame.fromAxisAngle(leanAxis(spike), spike.lean) * Vector3.new(0, 1, 0)
+	local origin = (base * CFrame.new(spike.x, 0, spike.z)).Position - up * 0.35
+
+	-- Two widths, not one: the spikes are not round, they read as broken stone.
+	local widthX = spike.height * (0.25 + spike.lean * 0.32)
+	local widthZ = spike.height * (0.23 + spike.lean * 0.18)
+	local part = template:Clone()
+	part.Name = "Spike"
+	part.Anchored = true
+	part.CanCollide = false
+	part.CanQuery = false
+	part.CanTouch = false
+	part.CastShadow = false
+	part.Massless = true
+	part.Color = style.color
+	part.Material = style.material
+	part.Reflectance = style.reflectance
+	part.Transparency = style.transparency
+	part.Size = Vector3.new(widthX, spike.height, widthZ)
+
+	local reference = if math.abs(up.Y) < 0.9 then Vector3.new(0, 1, 0) else Vector3.new(1, 0, 0)
+	local across = reference:Cross(up).Unit
+	local along = across:Cross(up).Unit
+	local spin = spike.angle * 3.7
+	part.CFrame = CFrame.fromMatrix(
+		origin + up * (spike.height * 0.5),
+		across * math.cos(spin) + along * math.sin(spin),
+		up,
+		along * math.cos(spin) - across * math.sin(spin)
+	)
+	part.Parent = parent
+
+	table.insert(parts, part)
+end
+
+-- Fallback when the mesh is missing: four shrinking cylinders stacked along
+-- the lean, so the spell still works on a project without the asset.
+local function buildSegmentedSpike(parent: Instance, base: CFrame, spike: any, style: any, parts: { BasePart })
+	local up = CFrame.fromAxisAngle(leanAxis(spike), spike.lean) * Vector3.new(0, 1, 0)
 	local origin = (base * CFrame.new(spike.x, 0, spike.z)).Position
 
-	local segments = 3
+	local segments = 4
 	local segmentHeight = spike.height / segments
-	local baseRadius = 0.5 + spike.height * 0.06
+	local baseRadius = 0.5 + spike.height * 0.05
 
 	for index = 1, segments do
 		local grown = (index - 1) / segments
-		local radius = baseRadius * (1 - grown * 0.62)
+		local radius = baseRadius * (1 - grown * 0.72)
 		local center = origin + up * (segmentHeight * (index - 0.5))
-		local part = spikePart(parent, style, center, up, Vector3.new(segmentHeight * 1.12, radius * 2, radius * 2))
+		local part = spikePart(parent, style, center, up, Vector3.new(segmentHeight * 1.05, radius * 2, radius * 2))
 		table.insert(parts, part)
 	end
+end
+
+local function buildSpike(parent: Instance, base: CFrame, spike: any, style: any, parts: { BasePart })
+	local template = ensureSpikeTemplate()
+	if template then
+		buildMeshSpike(parent, base, spike, style, parts, template)
+		return
+	end
+
+	buildSegmentedSpike(parent, base, spike, style, parts)
 end
 
 local function damageGhosts(position: Vector3, attacker: Player)

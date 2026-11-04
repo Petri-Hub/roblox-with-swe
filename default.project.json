@@ -17,6 +17,12 @@
       },
       "BusHorn": {
         "$className": "RemoteEvent"
+      },
+      "TransmutationMeshes": {
+        "$className": "Folder",
+        "Spike": {
+          "$path": "src/assets/transmutation/Spike.rbxm"
+        }
       }
     },
     "ServerStorage": {
