@@ -69,11 +69,6 @@
         }
       }
     },
-    "ReplicatedFirst": {
-      "ForestIntro": {
-        "$path": "src/client/ForestIntro.client.luau"
-      }
-    },
     "ServerScriptService": {
       "Server": {
         "$path": "src/server"
@@ -89,9 +84,6 @@
         "LoadCharacterAppearance": false
       },
       "StarterPlayerScripts": {
-        "ForestIntroFallback": {
-          "$path": "src/client/ForestIntro.client.luau"
-        },
         "FirstPersonMovement": {
           "$path": "src/client/FirstPersonMovement.client.luau"
         },
