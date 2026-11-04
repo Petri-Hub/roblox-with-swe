@@ -24,7 +24,7 @@ type LoadoutEntry = {
 
 local LOADOUT: { LoadoutEntry } = {
 	{ id = "AK47", slot = 1 },
-	{ id = "Flashlight", slot = 2, label = "Lanterna", hint = "F liga/desliga" },
+	{ id = "Flashlight", slot = 2, label = "Lanterna", hint = "F liga/desliga · 0 solta" },
 	{ id = "Detector", slot = 3, label = "Detector", hint = "lê a cada 3s" },
 	{ id = "UVLantern", slot = 4, label = "Farolete UV", hint = "LMB acende · bateria 10s" },
 	{ id = "M9", slot = 5 },
@@ -51,6 +51,9 @@ local ITEMS: { Item } = buildItems()
 Inventory.EQUIPPED_ATTRIBUTE = "EquippedItem"
 Inventory.FLASHLIGHT_ATTRIBUTE = "FlashlightOn"
 Inventory.DEFAULT_ITEM = "AK47"
+-- The attribute value for empty hands. Tools and weapons all treat anything
+-- that is not their own id as "not in hand", so this hides every viewmodel.
+Inventory.EMPTY = "None"
 Inventory.OWNED_PREFIX = "Owns_"
 
 -- Everyone starts with the lamp and the pistol: kills are the shop currency, so
@@ -125,6 +128,10 @@ end
 
 function Inventory.isValid(id: any): boolean
 	return Inventory.itemById(id) ~= nil
+end
+
+function Inventory.isEmpty(id: any): boolean
+	return id == Inventory.EMPTY
 end
 
 function Inventory.isWeapon(id: any): boolean

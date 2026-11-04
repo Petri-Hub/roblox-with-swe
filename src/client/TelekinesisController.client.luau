@@ -12,6 +12,7 @@ local Workspace = game:GetService("Workspace")
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local Telekinesis = require(Shared.Telekinesis)
 local FirstPersonBodyPart = require(Shared.FirstPersonBodyPart)
+local Inventory = require(Shared.Inventory)
 
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
@@ -456,6 +457,8 @@ heldRemote.OnClientEvent:Connect(function(payload)
 		return
 	end
 
+	-- The extended hand cannot hold a gun or a lamp at the same time.
+	player:SetAttribute(Inventory.EQUIPPED_ATTRIBUTE, Inventory.EMPTY)
 	heldTarget = payload.target
 	lastAimAt = 0
 	paintBadge()

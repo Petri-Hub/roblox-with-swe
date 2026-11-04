@@ -59,6 +59,15 @@ describe("inventory", function()
 		expect(Inventory.DEFAULT_ITEM).toBe("AK47")
 	end)
 
+	it("knows the empty-hands state", function()
+		expect(Inventory.EMPTY).toBe("None")
+		expect(Inventory.isEmpty(Inventory.EMPTY)).toBe(true)
+		expect(Inventory.isEmpty("AK47")).toBe(false)
+		expect(Inventory.isEmpty(nil)).toBe(false)
+		expect(Inventory.isValid(Inventory.EMPTY)).toBe(false)
+		expect(Inventory.itemById(Inventory.EMPTY)).toBeNil()
+	end)
+
 	it("returns copies so callers cannot edit the hotbar", function()
 		local items = Inventory.items()
 		items[1].label = "hacked"
