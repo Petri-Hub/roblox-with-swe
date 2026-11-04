@@ -17,6 +17,9 @@
       }
     },
     "ServerStorage": {
+      "BattleBusTemplate": {
+        "$path": "src/assets/BattleBus.rbxm"
+      },
       "GhostTemplate": {
         "$path": "src/assets/Ghost.rbxm"
       },
