@@ -20,7 +20,7 @@ local struckRemote = remotes:WaitForChild("Struck") :: RemoteEvent
 local RITUAL_STEP = "TransmutationRitual"
 local RITUAL_LIFETIME = Transmutation.WINDUP_SECONDS + 0.55
 local ARC_COUNT = 6
-local ARC_RADIUS = 2.1
+local ARC_RADIUS = 2.9
 local SPARK_TEXTURE = "rbxasset://textures/particles/sparkles_main.dds"
 
 local RED = {
@@ -123,7 +123,7 @@ local function startRitual(caster: Player, centre: Vector3)
 	local circle, parts = MagicCircle.buildWhite(RED)
 	circle.Name = "TransmutationCircle"
 	circle.Parent = model
-	scaleModel(circle, 1.7)
+	scaleModel(circle, 2.45)
 
 	local base: { number } = {}
 	for index, part in parts do
