@@ -59,6 +59,17 @@ describe("battle bus drop", function()
 		expect(BusDrop.CHUTE_RELEASE).toBeLessThan(BusDrop.GLIDE_FALL)
 	end)
 
+	it("shares a bus only while its passengers still land inside the forest", function()
+		expect(BusDrop.canRide(0)).toBe(true)
+		expect(BusDrop.canRide(BusDrop.RIDE_WINDOW)).toBe(true)
+		expect(BusDrop.canRide(BusDrop.RIDE_WINDOW + 1)).toBe(false)
+		expect(BusDrop.canRide(-1)).toBe(false)
+
+		-- The worst case: a passenger jumping in at the end of the window still
+		-- drifts to a spot inside the playable forest.
+		expect(BusDrop.RIDE_WINDOW + BusDrop.driftDistance()).toBeLessThan(ForestLayout.PLAYABLE_RADIUS)
+	end)
+
 	it("brings the player down slowly and inside the forest", function()
 		local lane = BusDrop.lane(1.9)
 		local velocity = BusDrop.glideVelocity(lane)

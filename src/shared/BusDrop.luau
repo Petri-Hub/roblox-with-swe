@@ -30,6 +30,22 @@ BusDrop.GLIDE_SECONDS = 12
 -- into the terrain after touchdown and leave it inside the floor.
 BusDrop.CHUTE_RELEASE = 8
 
+-- The Creator Store horn that plays as a player leaves the bus.
+BusDrop.HORN_SOUND_ID = 8255757586
+
+-- A flying bus can take another passenger while it is still this far from the
+-- clearing. Past that the jump would land outside the playable forest, so the
+-- passenger gets a fresh bus instead.
+BusDrop.RIDE_WINDOW = 120
+
+function BusDrop.canRide(travelled: number): boolean
+	if typeof(travelled) ~= "number" or travelled ~= travelled or travelled < 0 then
+		return false
+	end
+
+	return travelled <= BusDrop.RIDE_WINDOW
+end
+
 function BusDrop.lane(angle: number): Vector3
 	local flat = Vector3.new(math.cos(angle), 0, math.sin(angle))
 
