@@ -1,7 +1,7 @@
 local ForestLayout = {}
 
 ForestLayout.SEED = 2417
-ForestLayout.MAP_SIZE = 384
+ForestLayout.MAP_SIZE = 640
 ForestLayout.VOXEL_SIZE = 4
 ForestLayout.TERRAIN_BOTTOM = -16
 ForestLayout.TERRAIN_TOP = 84
@@ -12,10 +12,10 @@ ForestLayout.SPAWN_CLEARING_RADIUS = 26
 
 -- A ring of steep rock closes the map. It starts well inside the fog so the
 -- player never sees the sky through the edge of the terrain.
-ForestLayout.RIM_START = 148
+ForestLayout.RIM_START = 276
 ForestLayout.RIM_WIDTH = 26
 ForestLayout.RIM_HEIGHT = 70
-ForestLayout.PLAYABLE_RADIUS = 146
+ForestLayout.PLAYABLE_RADIUS = 274
 
 export type Landmark = {
 	id: string,

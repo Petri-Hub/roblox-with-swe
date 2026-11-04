@@ -30,7 +30,7 @@ mist.Name = "DriftingMist"
 mist.Texture = "rbxassetid://16830673704"
 mist.Shape = Enum.ParticleEmitterShape.Box
 mist.ShapeStyle = Enum.ParticleEmitterShapeStyle.Volume
-mist.Rate = 5
+mist.Rate = 3
 mist.Lifetime = NumberRange.new(8, 12)
 mist.Speed = NumberRange.new(0.4, 1.1)
 mist.SpreadAngle = Vector2.new(180, 180)
@@ -45,7 +45,7 @@ mist.Transparency = NumberSequence.new({
 	NumberSequenceKeypoint.new(0.7, 0.82),
 	NumberSequenceKeypoint.new(1, 1),
 })
-mist.Color = ColorSequence.new(Color3.fromRGB(116, 134, 136))
+mist.Color = ColorSequence.new(Color3.fromRGB(198, 208, 216))
 mist.LightInfluence = 0.8
 mist.LightEmission = 0
 mist.LockedToPart = false

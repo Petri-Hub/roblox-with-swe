@@ -19,9 +19,6 @@
     "ServerStorage": {
       "ForestAssets": {
         "$className": "Folder",
-        "PonderosaPines": {
-          "$path": "src/assets/trees/PonderosaPines.rbxm"
-        },
         "BushTall": {
           "$path": "src/assets/forest/BushTall.rbxm"
         },
