@@ -197,6 +197,7 @@ local function poseWeapon(deltaTime: number)
 			and currentCharacter
 			and isEquipped()
 			and player:GetAttribute("FireMagicCasting") ~= true
+			and player:GetAttribute("TelekinesisHolding") ~= true
 			and player:GetAttribute("ShopOpen") ~= true
 		then Workspace
 		else nil
@@ -775,7 +776,7 @@ local function setAiming(value: boolean)
 end
 
 local function onInputBegan(input: InputObject, processed: boolean)
-	if processed or GuiService.MenuIsOpen then
+	if processed or GuiService.MenuIsOpen or player:GetAttribute("TelekinesisHolding") == true then
 		return
 	end
 
@@ -798,6 +799,15 @@ end
 
 UserInputService.InputBegan:Connect(onInputBegan)
 UserInputService.InputEnded:Connect(onInputEnded)
+
+-- While something floats in the hand, the gun is put away and M2 belongs to
+-- the throw instead of the iron sights.
+player:GetAttributeChangedSignal("TelekinesisHolding"):Connect(function()
+	if player:GetAttribute("TelekinesisHolding") == true then
+		setFiring(false)
+		setAiming(false)
+	end
+end)
 UserInputService.InputChanged:Connect(function(input)
 	if input.UserInputType == Enum.UserInputType.MouseMovement then
 		swayYaw -= input.Delta.X * 0.0007

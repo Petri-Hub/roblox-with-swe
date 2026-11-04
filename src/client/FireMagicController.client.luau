@@ -419,6 +419,11 @@ local function beginCharge()
 		return
 	end
 
+	-- One spell at a time: the telekinetic hand is already extended.
+	if player:GetAttribute("TelekinesisHolding") == true then
+		return
+	end
+
 	if not FireMagic.canCast(readyAt(), now()) then
 		flashBadge()
 		return

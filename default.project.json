@@ -125,6 +125,15 @@
         "FireMagicEffects": {
           "$path": "src/client/FireMagicEffects.client.luau"
         },
+        "MagicCircle": {
+          "$path": "src/client/MagicCircle.luau"
+        },
+        "TelekinesisController": {
+          "$path": "src/client/TelekinesisController.client.luau"
+        },
+        "TelekinesisEffects": {
+          "$path": "src/client/TelekinesisEffects.client.luau"
+        },
         "ShopClient": {
           "$path": "src/client/ShopClient.client.luau"
         }
