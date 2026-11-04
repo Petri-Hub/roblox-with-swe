@@ -103,26 +103,6 @@ local function buildMusic(stall: Model, base: CFrame)
 	sound:Play()
 end
 
--- Trees are planted before the shop exists, so clear the ones standing where the
--- stall goes instead of letting a trunk grow through the counter.
-local function clearTrees(position: Vector3, radius: number)
-	local forest = Workspace:FindFirstChild("GeneratedForest")
-	local trees = forest and forest:FindFirstChild("Trees")
-	if not trees then
-		return
-	end
-
-	for _, tree in trees:GetChildren() do
-		if tree:IsA("Model") then
-			local _, size = tree:GetBoundingBox()
-			local offset = Vector2.new(tree:GetPivot().Position.X - position.X, tree:GetPivot().Position.Z - position.Z)
-			if offset.Magnitude < radius + size.X * 0.5 then
-				tree:Destroy()
-			end
-		end
-	end
-end
-
 local function buildStall(position: Vector3, angle: number): Model
 	local stall = Instance.new("Model")
 	stall.Name = SHOP_NAME
@@ -345,7 +325,6 @@ function ShopService.start()
 		existing:Destroy()
 	end
 
-	clearTrees(shopPosition, 13)
 	local stall = buildStall(shopPosition, point.angle + math.pi)
 	stall:SetAttribute("ShopPosition", shopPosition)
 	ReplicatedStorage:SetAttribute("ShopPosition", shopPosition)

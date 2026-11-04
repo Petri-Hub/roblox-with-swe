@@ -22,6 +22,18 @@ This AI-assisted horror game is taking shape in a procedurally generated valley:
 
 Every life starts with the flashlight and the `M9` pistol — kills are the shop currency, so you need a gun to earn the first ones — and the rest is bought with ghost kills at a shop the forest generates for you. The guns are meshed Creator Store models — the AK-47 (`8413055627`) and the M9 (`8321118198`) — normalised by the client into first-person viewmodels. The AK-47 (30 rounds, 600 rounds per minute, iron sights while holding right mouse, `R` to reload) costs 4 kills, the `M9` pistol — semi automatic, 15 rounds — costs 2 kills, and the UV floodlight costs 6. Until you pay, that slot is empty — it keeps only its number, with no item name — and refuses to equip it. Both guns run on the same engine and differ only in their definition file. The flashlight lives in the hotbar: press `2` to take it out or put it away, and `F` to turn its beam on or off. Press the slot that is in hand again, or `0`, to walk with empty hands. Casting a spell puts the item away too, because the fireball and the telekinesis need the hand. Slot `3` is the ghost detector, which reads the distance to the nearest ghost in studs every three seconds. Slot `4` is the UV floodlight: hold left mouse to wash ghosts in violet light, which burns them slowly and pushes them back, until the 8 second battery runs dry; it refills on its own in 10 seconds. The handheld flashlight runs a wide 110-degree flood cone, so it lights a clearing instead of a pencil beam. Ghosts drift out of the fog at 4.4 studs per second groaning, and every one you put down adds a point to the `KILLS` counter in the corner. They come in two shipped looks (`src/assets/Ghost.rbxm` and `src/assets/GhostAlt2.rbxm`, Creator Store assets `16371325697` and `14659873441`) with a random tint and height, all scaled to about seven studs.
 
+### Performance
+
+The valley is built for machines that are not fast, so the cost is kept low on purpose:
+
+- `StreamingEnabled` is on in the place, with a 96-stud minimum and a 512-stud target, so the client only holds the part of the 640-stud map around the player.
+- The terrain is written in 40-cell chunks, and the generator clears it first, so generation never builds the whole world in one Lua table.
+- Scenery props cast no shadows and do not fire touch events; only the four landmarks do.
+- The scenery density was pulled back for the bigger map, so the bushes and debris sit at about two thirds of the count the old spacing would give.
+- The camera mist is thin now: a handful of small particles instead of a full-screen blanket.
+- The HUD only writes a value when it changes: the hit markers are collected once, the reload bar and the crosshair state are gated, and the stamina bar updates only when its value moves.
+- The place uses ShadowMap lighting rather than Future, and the daylight is one atmosphere plus two cheap post effects.
+
 ### The shop
 
 `ShopService` plants one stall in the forest, built from parts at a point taken from the forest seed (`ShopLayout.pointFor`), 96 to 132 studs out and never on the spawn sightline. Before it builds, it levels a flat pad in the terrain so a slope cannot swallow the floor, hangs two warm lamps and a sign, and drops a `Sound` (`1839910323`, a 30 second music box) on a linear rolloff so the track is at full volume only at the counter and gone past 78 studs: you hear the shop before you see it, but not from across the map.
@@ -44,7 +56,7 @@ The tuning lives in `src/shared/FireMagic.luau`, the damage, projectile and scor
 
 The second spell, also free. Point the cursor at a prop or a ghost and press `X`: it leaves the ground and floats where you point. It chases the cursor at 60 studs per second, never further than 45 studs from you, with a white rune circle behind it — the fireball's circle in white, but with an eight-pointed star of two squares instead of the double triangle — three rings of white wind blades, a swirl of wind particles and a looping gust. `X` again lowers it: a prop settles back on the ground, a ghost drifts down. Press right mouse while it floats to hurl it.
 
-Only props of a sane size answer the spell: the largest side of the bounding box up to 14 studs and at most 80 parts. Barrels, crates, logs, stumps and bushes fly. If trees come back, a whole forest pine up to 72 studs tall and 60 parts is under the spell's control too, so the trunk and canopy lift together as one piece. The cabin, the shop stall, the spawn pad and the terrain stay where they are. A ghost is grabbed whole: its chase AI is suspended and the server drives its pivot while the spell holds it. One object can only be under one spell at a time.
+Only props of a sane size answer the spell: the largest side of the bounding box up to 14 studs and at most 80 parts. Barrels, crates, logs, stumps and bushes fly. The cabin, the shop stall, the spawn pad and the terrain stay where they are. A ghost is grabbed whole: its chase AI is suspended and the server drives its pivot while the spell holds it. One object can only be under one spell at a time.
 
 A throw flies at 120 studs per second for up to 120 studs and stops on the first surface or ghost it meets. The hit deals 70 damage and splashes up to 45 more within 9 studs; a thrown ghost takes the same hit, hangs dazed for 2 seconds afterwards, and a heavy prop that lands on a ghost counts as a direct hit. The impact raises dust, wind sparks, a white shockwave, a thud and a small screen tremor, and the throw itself plays the ascending gust. The spell recharges in 2.5 seconds after the object leaves your hand; the small badge above the fireball badge shows the countdown.
 
@@ -105,12 +117,12 @@ The GitHub repository holds the Luau and world files. On Linux, a local checkout
 | Dependency management | Wally | `wally.toml` declares packages; `wally.lock` records the resolved versions. Jest Roblox is already installed as a development dependency. |
 | Formatting | StyLua and pre-commit | Luau gets a consistent style before it enters Git. |
 | Static analysis | Selene | Linting catches suspicious Luau code without launching the game. |
-| Regression testing | Jest Roblox and jest-roblox-cli | A separate test place runs the tree harvesting rules, locally through Studio on Linux or remotely through Roblox Open Cloud. |
+| Regression testing | Jest Roblox and jest-roblox-cli | A separate test place runs the game's rules, locally through Studio on Linux or remotely through Roblox Open Cloud. |
 | Continuous integration and delivery | GitHub Actions and Roblox Open Cloud | Pull requests run formatting, linting, builds, and engine tests; merges publish separate staging and production places. |
 
 The tools have different jobs. Rojo moves files into Roblox's DataModel; it does not decide whether the code is correct. Selene checks code without running it; Jest checks behavior by running it. A successful build is therefore only one part of a trustworthy change.
 
-The first feature lets a player harvest the tree in the world. The server checks the player's distance and the tree's regrowth timer, awards one wood, then hides the canopy for eight seconds. A client HUD shows the wood count. The harvest rules live in a shared module so they can be tested without waiting for a real timer.
+The first feature of the project let a player harvest a tree in the world. The server checks the player's distance and the tree's regrowth timer, awards one wood, then hides the canopy for eight seconds. A client HUD shows the wood count. The harvest rules live in a shared module so they can be tested without waiting for a real timer.
 
 ## Collaboration
 

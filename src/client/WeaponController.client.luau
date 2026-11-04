@@ -310,7 +310,7 @@ local function poseWeapon(deltaTime: number)
 		return
 	end
 
-	rig.model.Parent = if alive
+	local targetParent = if alive
 			and currentCharacter
 			and isEquipped()
 			and player:GetAttribute("FireMagicCasting") ~= true
@@ -318,6 +318,9 @@ local function poseWeapon(deltaTime: number)
 			and player:GetAttribute("ShopOpen") ~= true
 		then Workspace
 		else nil
+	if rig.model.Parent ~= targetParent then
+		rig.model.Parent = targetParent
+	end
 	if not alive or not rig.model.Parent then
 		return
 	end
@@ -681,6 +684,15 @@ local function buildHud()
 	}
 end
 
+-- The hit marker strokes never change, so collect them once instead of asking
+-- for the children on every frame.
+local hitMarkerStrokes: { Frame } = {}
+for _, stroke in hud.hitMarker:GetChildren() do
+	if stroke:IsA("Frame") then
+		table.insert(hitMarkerStrokes, stroke)
+	end
+end
+
 local function updateCrosshair(spread: number, currentTime: number)
 	local offset = CROSSHAIR_BASE + spread * CROSSHAIR_SPREAD_SCALE
 	local marks = hud.marks
@@ -691,10 +703,8 @@ local function updateCrosshair(spread: number, currentTime: number)
 	hud.dot.BackgroundTransparency = 0.3 + aimAlpha * 0.45
 
 	local markerVisible = currentTime < hitMarkerUntil
-	for _, stroke in hud.hitMarker:GetChildren() do
-		if stroke:IsA("Frame") then
-			stroke.BackgroundTransparency = if markerVisible then 0 else 1
-		end
+	for _, stroke in hitMarkerStrokes do
+		stroke.BackgroundTransparency = if markerVisible then 0 else 1
 	end
 end
 
@@ -750,8 +760,13 @@ local function refreshAmmoLabels()
 	end
 end
 
+local lastReloadProgress = -1
 local function refreshReloadBar()
 	local progress = if state.reloading then WeaponSpec.reloadProgress(spec, state, now()) else 0
+	if math.abs(progress - lastReloadProgress) < 0.004 then
+		return
+	end
+	lastReloadProgress = progress
 	hud.reloadFill.Size = UDim2.fromScale(progress, 1)
 	hud.reloadFill.BackgroundColor3 = if state.reloading
 		then Color3.fromRGB(214, 196, 140)
@@ -1112,13 +1127,24 @@ player.CharacterRemoving:Connect(function()
 	player:SetAttribute(AIM_ATTRIBUTE, 1)
 end)
 
+-- Writes the HUD only when the state really flips, and hands the plain forest
+-- crosshair back when the player is not holding a gun (empty hands, casting).
+local lastHudVisible: boolean? = nil
 local function refreshWeaponHudVisibility()
 	local equipped = isEquipped() and alive
+	if equipped == lastHudVisible then
+		return
+	end
+
+	lastHudVisible = equipped
 	hud.crosshair.Visible = equipped
 	hud.ammoFrame.Visible = equipped
 	hud.reloadTrack.Visible = equipped
 	hud.hitMarker.Visible = equipped
 	hud.touchControls.Visible = equipped and UserInputService.TouchEnabled
+	if forestCrosshair then
+		forestCrosshair.Enabled = not equipped
+	end
 end
 
 local function paintHud(deltaTime: number, currentTime: number)
@@ -1131,10 +1157,6 @@ local function paintHud(deltaTime: number, currentTime: number)
 		end
 	end
 	updateFiring(currentTime)
-
-	if forestCrosshair then
-		forestCrosshair.Enabled = false
-	end
 
 	refreshWeaponHudVisibility()
 	refreshAmmoLabels()
@@ -1150,5 +1172,3 @@ RunService:BindToRenderStep(RENDER_STEP, Enum.RenderPriority.Camera.Value + 2, f
 	-- RenderStep only passes deltaTime; the HUD also needs the server clock.
 	paintHud(deltaTime, now())
 end)
-
-forestCrosshair = playerGui:WaitForChild("ForestCrosshair", 15)

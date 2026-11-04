@@ -18,14 +18,11 @@ describe("forest generation", function()
 		oldWorld.Parent = workspace
 
 		local forest = ForestGenerator.generate()
-		local trees = forest.Trees:GetChildren()
 
 		expect(workspace:FindFirstChild("Baseplate")).toBeNil()
 		expect(workspace:FindFirstChild("World")).toBeNil()
-		-- The map is an open field now: the folder exists, but nothing is planted.
-		expect(forest:GetAttribute("TreeSource")).toBe("None")
-		expect(#trees).toBe(0)
-		expect(forest:GetAttribute("ExpectedTreeCount")).toBe(0)
+		-- The map is an open field: no tree folder is built at all.
+		expect(forest:FindFirstChild("Trees")).toBeNil()
 		expect(forest:GetAttribute("Ready")).toBe(true)
 
 		local landmarks = forest:FindFirstChild("Landmarks")
@@ -36,6 +33,8 @@ describe("forest generation", function()
 				expect(child:IsA("Script") or child:IsA("LocalScript") or child:IsA("ModuleScript")).toBe(false)
 				if child:IsA("BasePart") then
 					expect(child.Anchored).toBe(true)
+					-- Landmarks are the only scenery that keeps its shadow.
+					expect(child.CastShadow).toBe(true)
 				end
 			end
 		end
@@ -47,11 +46,13 @@ describe("forest generation", function()
 			if prop:IsA("BasePart") then
 				expect(prop.Anchored).toBe(true)
 				expect(prop.CanCollide).toBe(false)
+				expect(prop.CastShadow).toBe(false)
 			else
 				for _, child in prop:GetDescendants() do
 					if child:IsA("BasePart") then
 						expect(child.Anchored).toBe(true)
 						expect(child.CanCollide).toBe(false)
+						expect(child.CastShadow).toBe(false)
 					end
 				end
 			end

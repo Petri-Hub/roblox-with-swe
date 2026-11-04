@@ -197,14 +197,8 @@ local function resolveProp(instance: Instance?): (PVInstance?, Vector3?, CFrame?
 		return nil, nil, nil, nil
 	end
 
-	local parent = prop.Parent
-	local isTree = parent ~= nil
-		and parent.Name == "Trees"
-		and parent.Parent ~= nil
-		and parent.Parent.Name == "GeneratedForest"
-
 	local bounds, size = prop:GetBoundingBox()
-	if not Telekinesis.canGrabSize(size, parts, isTree) then
+	if not Telekinesis.canGrabSize(size, parts) then
 		return nil, nil, nil, nil
 	end
 

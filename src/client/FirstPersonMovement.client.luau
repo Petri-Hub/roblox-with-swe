@@ -53,6 +53,10 @@ local cameraRoll = 0
 local rollVelocity = 0
 local stamina = SprintStamina.new()
 local staminaFill: Frame
+-- Filled once per spawn: the tilt pass used to walk the character's children on
+-- every frame just to find the same handful of parts.
+local visibleBodyParts: { BasePart } = {}
+local lastStaminaShown = -1
 
 local function createCrosshair(): ScreenGui
 	local playerGui = player:WaitForChild("PlayerGui")
@@ -145,6 +149,13 @@ local function onCharacterAdded(character: Model)
 
 	humanoid = nextHumanoid
 	stamina = SprintStamina.new()
+	lastStaminaShown = -1
+	visibleBodyParts = {}
+	for _, part in character:GetChildren() do
+		if part:IsA("BasePart") and VISIBLE_BODY_PARTS[part.Name] then
+			table.insert(visibleBodyParts, part)
+		end
+	end
 	staminaFill.Size = UDim2.fromScale(1, 1)
 	sprintHeld = false
 	stepPhase = 0
@@ -182,13 +193,8 @@ local function updateCameraTilt(deltaTime: number)
 	cameraRoll, rollVelocity =
 		TweenService:SmoothDamp(cameraRoll, targetRoll, rollVelocity, TILT_SMOOTH_TIME, math.huge, deltaTime)
 	camera.CFrame *= CFrame.Angles(0, 0, cameraRoll)
-	local character = activeHumanoid.Parent
-	if character then
-		for _, part in character:GetChildren() do
-			if part:IsA("BasePart") and VISIBLE_BODY_PARTS[part.Name] then
-				part.LocalTransparencyModifier = 0
-			end
-		end
+	for _, part in visibleBodyParts do
+		part.LocalTransparencyModifier = 0
 	end
 end
 
@@ -202,8 +208,11 @@ local function updateMovement(deltaTime: number)
 	local isMoving = activeHumanoid.MoveDirection.Magnitude > 0.1
 	local isGrounded = activeHumanoid.FloorMaterial ~= Enum.Material.Air
 	local isRunning = SprintStamina.update(stamina, sprintHeld and isMoving and isGrounded, deltaTime)
-	staminaFill.Size = UDim2.fromScale(stamina.value, 1)
-	staminaFill.BackgroundColor3 = Color3.fromRGB(190, 135, 108):Lerp(Color3.fromRGB(185, 211, 197), stamina.value)
+	if math.abs(stamina.value - lastStaminaShown) > 0.002 then
+		lastStaminaShown = stamina.value
+		staminaFill.Size = UDim2.fromScale(stamina.value, 1)
+		staminaFill.BackgroundColor3 = Color3.fromRGB(190, 135, 108):Lerp(Color3.fromRGB(185, 211, 197), stamina.value)
+	end
 	local targetSpeed = if isRunning then RUN_SPEED else WALK_SPEED
 	local targetFieldOfView = (if isRunning then RUN_FIELD_OF_VIEW else WALK_FIELD_OF_VIEW) * aimFovScale()
 
