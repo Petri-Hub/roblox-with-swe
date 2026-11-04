@@ -357,7 +357,7 @@ local function beginCharge()
 	end
 
 	-- One spell at a time: the telekinetic hand is already extended.
-	if player:GetAttribute("TelekinesisHolding") == true then
+	if player:GetAttribute("TelekinesisHolding") == true or player:GetAttribute("TransmutationCasting") == true then
 		flashBadge()
 		return
 	end

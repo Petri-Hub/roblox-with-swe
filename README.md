@@ -68,7 +68,15 @@ Only props of a sane size answer the spell: the largest side of the bounding box
 
 A throw flies at 120 studs per second for up to 120 studs and stops on the first surface or ghost it meets. The hit deals 70 damage and splashes up to 45 more within 9 studs; a thrown ghost takes the same hit, hangs dazed for 2 seconds afterwards, and a heavy prop that lands on a ghost counts as a direct hit. The impact raises dust, wind sparks, a white shockwave, a thud and a small screen tremor, and the throw itself plays the ascending gust. The spell recharges in 2.5 seconds after the object leaves your hand; the small badge above the fireball badge shows the countdown.
 
-The two spells do not overlap. While something floats, the gun is put away, right mouse throws instead of aiming and `Z` waits. Casting either spell also empties the hand: the item returns to the hotbar, and the player picks it again if wanted.
+### The transmutation
+
+The third spell, also free. Point the cursor at the ground and press `C`: the character kneels and puts both hands on the ground — two first-person arms drop and meet in front of the body — a red rune circle opens under the feet with a red light, six red lightning arcs crackle around it and a shock plays. When the windup ends the spikes come out of exactly what the cursor was pointing at, in that material: metal where the cursor is on metal, wood on wood, brick on brick, ice on ice. Eleven spikes in a loose spiral, the tall one in the middle, three shrinking cylinders each, tinted and textured by the surface they come from. The badge above the telekinesis badge names what came out of the ground for a moment.
+
+The cast reads the surface with a ray from the head, so a client cannot call spikes behind a wall, and the material comes from the surface the server actually hit. The cluster hits for 58 damage at the centre, fading to nothing at 7 studs, and stuns ghosts for 1.1 seconds. The spikes crumble back into the ground after 4.2 seconds, and the spell recharges in 8 seconds.
+
+The tuning, the material table and the spike layout live in `src/shared/Transmutation.luau`; the ground read, the spikes and the damage in `src/server/TransmutationService.luau`; the input, the two hands and the badge in `src/client/TransmutationController.client.luau`; the red circle, the arcs, the shock and the burst in `src/client/TransmutationEffects.client.luau`.
+
+The three spells do not overlap. While something floats, the gun is put away, right mouse throws instead of aiming and `Z` waits. While the hands are on the ground, `Z` and `X` wait. Casting a spell also empties the hand: the item returns to the hotbar, and the player picks it again if wanted.
 
 The tuning lives in `src/shared/Telekinesis.luau`, the grab, drag, throw and damage in `src/server/TelekinesisService.luau`, the input and first-person arm in `src/client/TelekinesisController.client.luau`, and the badge in `src/client/SpellBadge.luau`, the white circle in `src/client/MagicCircle.luau`, and the wind, impacts and shake in `src/client/TelekinesisEffects.client.luau`.
 

@@ -145,6 +145,12 @@
         },
         "SpellBadge": {
           "$path": "src/client/SpellBadge.luau"
+        },
+        "TransmutationController": {
+          "$path": "src/client/TransmutationController.client.luau"
+        },
+        "TransmutationEffects": {
+          "$path": "src/client/TransmutationEffects.client.luau"
         }
       }
     },

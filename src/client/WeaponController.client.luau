@@ -316,6 +316,7 @@ local function poseWeapon(deltaTime: number)
 			and isEquipped()
 			and player:GetAttribute("FireMagicCasting") ~= true
 			and player:GetAttribute("TelekinesisHolding") ~= true
+			and player:GetAttribute("TransmutationCasting") ~= true
 			and player:GetAttribute("ShopOpen") ~= true
 		then Workspace
 		else nil
