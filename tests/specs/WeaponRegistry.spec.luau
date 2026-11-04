@@ -37,11 +37,16 @@ describe("weapon registry", function()
 		expect(WeaponRegistry.ids()).toEqual({ "AK47", "M9" })
 
 		for _, spec in WeaponRegistry.all() do
-			local names = {}
-			for _, part in spec.viewmodel.parts do
-				names[part.name] = true
+			if spec.viewmodel.model then
+				expect(typeof(spec.viewmodel.model)).toBe("string")
+				expect(spec.viewmodel.modelLength).toBeGreaterThan(0)
+			else
+				local names = {}
+				for _, part in spec.viewmodel.parts do
+					names[part.name] = true
+				end
+				expect(names[spec.viewmodel.muzzlePart]).toBe(true)
 			end
-			expect(names[spec.viewmodel.muzzlePart]).toBe(true)
 		end
 	end)
 
