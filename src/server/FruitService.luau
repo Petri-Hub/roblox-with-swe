@@ -161,23 +161,62 @@ end
 
 -- A random spot in the town, away from the landmarks and the houses, so a
 -- fruit never grows inside a wall.
-local function randomGround(): Vector3?
-	local random = Random.new()
+local function freeSpot(offset: Vector2, margin: number): Vector3?
+	if not ForestLayout.isInsideWorld(offset, margin) then
+		return nil
+	end
+
+	if
+		ForestLayout.isInsideLandmarkClearing(offset)
+		or ForestLayout.isInsideHouseLot(offset)
+		or ForestLayout.isOnStreet(offset)
+	then
+		return nil
+	end
+
+	local ground = groundBelow(offset.X, offset.Y, 300)
+	if not ground then
+		return nil
+	end
+
+	return Vector3.new(offset.X, ground + FruitSpec.HOVER_HEIGHT, offset.Y)
+end
+
+-- A fruit grows by a tree. The green belt is where a player walks to look for
+-- one, so the trunk is the landmark and the fruit sits a few studs from it.
+local function treeGround(random: Random): Vector3?
+	local trees = ForestLayout.treePositions()
+	if #trees == 0 then
+		return nil
+	end
+
 	for _ = 1, FruitSpec.SPAWN_TRIES do
-		local offset = FruitSpec.scatter(random:NextNumber(), random:NextNumber())
-		if
-			ForestLayout.isInsideWorld(offset, FruitSpec.SPAWN_MARGIN)
-			and not ForestLayout.isInsideLandmarkClearing(offset)
-			and not ForestLayout.isInsideHouseLot(offset)
-		then
-			local ground = groundBelow(offset.X, offset.Y, 300)
-			if ground then
-				return Vector3.new(offset.X, ground + FruitSpec.HOVER_HEIGHT, offset.Y)
-			end
+		local tree = trees[random:NextInteger(1, #trees)]
+		local spot = freeSpot(FruitSpec.nearTree(tree, random:NextNumber(), random:NextNumber()), FruitSpec.TREE_MARGIN)
+		if spot then
+			return spot
 		end
 	end
 
 	return nil
+end
+
+-- The fallback when no tree has a free spot: anywhere in the town that is not a
+-- street, a house or a landmark, so a fruit still appears.
+local function openGround(random: Random): Vector3?
+	for _ = 1, FruitSpec.SPAWN_TRIES do
+		local spot = freeSpot(FruitSpec.scatter(random:NextNumber(), random:NextNumber()), FruitSpec.SPAWN_MARGIN)
+		if spot then
+			return spot
+		end
+	end
+
+	return nil
+end
+
+local function randomGround(): Vector3?
+	local random = Random.new()
+	return treeGround(random) or openGround(random)
 end
 
 ---------------------------------------------------------------------------
