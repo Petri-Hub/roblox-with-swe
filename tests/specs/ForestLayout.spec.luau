@@ -7,24 +7,17 @@ local expect = JestGlobals.expect
 local it = JestGlobals.it
 
 describe("forest layout", function()
-	it("keeps the spawn clearing level and free of trees", function()
-		expect(ForestLayout.heightAt(0, 0)).toBe(0)
-
-		for _, location in ForestLayout.treeLocations() do
-			expect(location.Magnitude).toBeGreaterThan(ForestLayout.SPAWN_CLEARING_RADIUS)
-			expect(ForestLayout.isInsideLandmarkClearing(location)).toBe(false)
-		end
-	end)
-
-	it("creates a repeatable, gently varied forest", function()
-		local first = ForestLayout.treeLocations()
-		local second = ForestLayout.treeLocations()
-		expect(#first).toBeGreaterThan(100)
+	it("builds a repeatable, gently varied forest", function()
+		local first = ForestLayout.debrisLocations()
+		local second = ForestLayout.debrisLocations()
+		expect(#first).toBeGreaterThan(50)
 		expect(#first).toBe(#second)
 
-		for index, location in first do
-			expect(location).toEqual(second[index])
+		for index, placement in first do
+			expect(placement).toEqual(second[index])
 		end
+
+		expect(#ForestLayout.foliageLocations()).toBeGreaterThan(100)
 
 		local heightA = ForestLayout.heightAt(-75, 60)
 		local heightB = ForestLayout.heightAt(80, -90)

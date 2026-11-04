@@ -103,26 +103,6 @@ local function buildMusic(stall: Model, base: CFrame)
 	sound:Play()
 end
 
--- Trees are planted before the shop exists, so clear the ones standing where the
--- stall goes instead of letting a trunk grow through the counter.
-local function clearTrees(position: Vector3, radius: number)
-	local forest = Workspace:FindFirstChild("GeneratedForest")
-	local trees = forest and forest:FindFirstChild("Trees")
-	if not trees then
-		return
-	end
-
-	for _, tree in trees:GetChildren() do
-		if tree:IsA("Model") then
-			local _, size = tree:GetBoundingBox()
-			local offset = Vector2.new(tree:GetPivot().Position.X - position.X, tree:GetPivot().Position.Z - position.Z)
-			if offset.Magnitude < radius + size.X * 0.5 then
-				tree:Destroy()
-			end
-		end
-	end
-end
-
 local function buildStall(position: Vector3, angle: number): Model
 	local stall = Instance.new("Model")
 	stall.Name = SHOP_NAME
@@ -317,11 +297,27 @@ function ShopService.position(): Vector3
 	return shopPosition
 end
 
+-- The stall is flat and the forest is not. Level a pad under it first, or a
+-- slope swallows the floor and the counter ends up below ground.
+local PAD_SIZE = Vector3.new(20, 8, 18)
+
+local function levelPad(x: number, z: number): number
+	local highest = ForestLayout.heightAt(x, z)
+	for _, offset in { Vector2.new(-8, -7), Vector2.new(8, -7), Vector2.new(-8, 7), Vector2.new(8, 7) } do
+		highest = math.max(highest, ForestLayout.heightAt(x + offset.X, z + offset.Y))
+	end
+
+	local level = highest + 0.05
+	Workspace.Terrain:FillBlock(CFrame.new(x, level + PAD_SIZE.Y / 2, z), PAD_SIZE, Enum.Material.Air)
+	Workspace.Terrain:FillBlock(CFrame.new(x, level - PAD_SIZE.Y / 2, z), PAD_SIZE, Enum.Material.Ground)
+	return level
+end
+
 function ShopService.start()
 	buildRemotes()
 
 	local point = ShopLayout.pointFor(SHOP_SEED)
-	local ground = ForestLayout.heightAt(point.x, point.z)
+	local ground = levelPad(point.x, point.z)
 	shopPosition = Vector3.new(point.x, ground, point.z)
 
 	local existing = Workspace:FindFirstChild(SHOP_NAME)
@@ -329,7 +325,6 @@ function ShopService.start()
 		existing:Destroy()
 	end
 
-	clearTrees(shopPosition, 13)
 	local stall = buildStall(shopPosition, point.angle + math.pi)
 	stall:SetAttribute("ShopPosition", shopPosition)
 	ReplicatedStorage:SetAttribute("ShopPosition", shopPosition)

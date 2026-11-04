@@ -13,6 +13,7 @@ local Inventory = require(Shared.Inventory)
 local WeaponPose = require(Shared.WeaponPose)
 local WeaponRegistry = require(Shared.WeaponRegistry)
 local WeaponSpec = require(Shared.WeaponSpec)
+local WeaponHud = require(script.Parent:WaitForChild("WeaponHud"))
 
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
@@ -120,10 +121,126 @@ end
 -- Viewmodel
 ---------------------------------------------------------------------------
 
+local MODEL_FOLDER = "WeaponModels"
+
+-- Loads a meshed gun from ReplicatedStorage.WeaponModels, points it forward,
+-- scales it to the length in its definition and centres it on its own pivot, so
+-- the pose code below moves it exactly like a part-built gun.
+local function buildModelRig(weaponSpec: WeaponSpec.Spec)
+	local view = weaponSpec.viewmodel
+	local folder = ReplicatedStorage:FindFirstChild(MODEL_FOLDER)
+	local template = if folder then folder:FindFirstChild(view.model :: string) else nil
+	if not template or not template:IsA("Model") then
+		warn(`WeaponController: no model "{view.model}" in ReplicatedStorage.{MODEL_FOLDER}`)
+		return nil
+	end
+
+	local model = template:Clone()
+	model.Name = "WeaponViewmodel"
+	for _, child in model:GetDescendants() do
+		if
+			child:IsA("Camera")
+			or child:IsA("Light")
+			or child:IsA("Script")
+			or child:IsA("LocalScript")
+			or child:IsA("ModuleScript")
+			or child:IsA("ParticleEmitter")
+			or child:IsA("Sound")
+		then
+			child:Destroy()
+		elseif child:IsA("BasePart") then
+			child.Anchored = true
+			child.CanCollide = false
+			child.CanTouch = false
+			child.CanQuery = false
+			child.CastShadow = false
+			child.Massless = true
+			child.TopSurface = Enum.SurfaceType.Smooth
+			child.BottomSurface = Enum.SurfaceType.Smooth
+		end
+	end
+
+	local rotation = view.modelRotation
+	if rotation and rotation ~= CFrame.identity then
+		local bounds = model:GetBoundingBox()
+		model:PivotTo(CFrame.new(bounds.Position) * rotation * CFrame.new(-bounds.Position) * model:GetPivot())
+	end
+
+	local _, raw = model:GetBoundingBox()
+	local longest = math.max(raw.X, raw.Y, raw.Z)
+	if longest <= 0 then
+		model:Destroy()
+		return nil
+	end
+	model:ScaleTo(model:GetScale() * ((view.modelLength :: number) / longest))
+
+	-- Put the middle of the gun on the model pivot, so PivotTo with the hold and
+	-- aim CFrames lands the gun exactly where a part-built one would sit.
+	local centre = model:GetBoundingBox()
+	local pivot = model:GetPivot()
+	model:PivotTo(CFrame.new(pivot.Position - centre.Position) * pivot)
+
+	local bounds, size = model:GetBoundingBox()
+	local muzzleOffset =
+		Vector3.new(bounds.Position.X, bounds.Position.Y + size.Y / 2 - 0.06, bounds.Position.Z - size.Z / 2 + 0.02)
+	local function newEffectPart(name: string, position: Vector3): Part
+		local part = Instance.new("Part")
+		part.Name = name
+		part.Size = Vector3.one * 0.08
+		part.Transparency = 1
+		part.Anchored = true
+		part.CanCollide = false
+		part.CanTouch = false
+		part.CanQuery = false
+		part.CastShadow = false
+		part.CFrame = CFrame.new(position)
+		part.Parent = model
+		return part
+	end
+
+	local muzzle = newEffectPart("Muzzle", muzzleOffset)
+
+	local flash = newEffectPart("Flash", muzzleOffset + Vector3.new(0, 0, -0.06))
+	flash.Shape = Enum.PartType.Ball
+	flash.Size = Vector3.one * 0.22
+	flash.Color = Color3.fromRGB(255, 224, 160)
+	flash.Material = Enum.Material.Neon
+
+	local light = Instance.new("PointLight")
+	light.Name = "MuzzleLight"
+	light.Color = Color3.fromRGB(255, 224, 160)
+	light.Brightness = 0
+	light.Range = 14
+	light.Shadows = false
+	light.Parent = flash
+
+	model.Parent = Workspace
+
+	return {
+		model = model,
+		isModel = true,
+		parts = {},
+		offsets = {},
+		hold = view.hold,
+		aim = view.aim,
+		hidden = {},
+		muzzle = muzzle,
+		bolt = nil,
+		magazine = nil,
+		flash = flash,
+		flashLight = light,
+	}
+end
+
 -- Builds the first-person model from the weapon definition. Nothing about the
--- AK-47 is hardcoded here: a new gun just ships different parts.
+-- AK-47 is hardcoded here: a new gun just ships different parts, or a meshed
+-- model in ReplicatedStorage.WeaponModels.
 local function buildRig(weaponSpec: WeaponSpec.Spec)
 	local view = weaponSpec.viewmodel
+	if view.model then
+		return buildModelRig(weaponSpec)
+	end
+
 	local model = Instance.new("Model")
 	model.Name = "WeaponViewmodel"
 
@@ -164,6 +281,7 @@ local function buildRig(weaponSpec: WeaponSpec.Spec)
 	local flash = parts.Flash
 	return {
 		model = model,
+		isModel = false,
 		parts = parts,
 		offsets = offsets,
 		hold = view.hold,
@@ -193,7 +311,18 @@ local function poseWeapon(deltaTime: number)
 		return
 	end
 
-	rig.model.Parent = if alive and currentCharacter and isEquipped() then Workspace else nil
+	local targetParent = if alive
+			and currentCharacter
+			and isEquipped()
+			and player:GetAttribute("FireMagicCasting") ~= true
+			and player:GetAttribute("TelekinesisHolding") ~= true
+			and player:GetAttribute("TransmutationCasting") ~= true
+			and player:GetAttribute("ShopOpen") ~= true
+		then Workspace
+		else nil
+	if rig.model.Parent ~= targetParent then
+		rig.model.Parent = targetParent
+	end
 	if not alive or not rig.model.Parent then
 		return
 	end
@@ -238,6 +367,11 @@ local function poseWeapon(deltaTime: number)
 			WeaponPose.recoil(recoil),
 			WeaponPose.sway(swayYaw * (1 - aimAlpha * 0.6), swayPitch * (1 - aimAlpha * 0.6))
 		)
+
+	if rig.isModel then
+		rig.model:PivotTo(base)
+		return
+	end
 
 	local magazineOffset = WeaponPose.reloadMagazine(progress)
 	local boltOffset = WeaponPose.reloadBolt(progress)
@@ -349,208 +483,9 @@ end
 -- HUD
 ---------------------------------------------------------------------------
 
-local function newLabel(parent: Instance, name: string, text: string, size: number, font: Enum.Font): TextLabel
-	local label = Instance.new("TextLabel")
-	label.Name = name
-	label.BackgroundTransparency = 1
-	label.Size = UDim2.fromScale(1, 1)
-	label.Font = font
-	label.TextSize = size
-	label.Text = text
-	label.TextColor3 = Color3.fromRGB(214, 226, 216)
-	label.TextXAlignment = Enum.TextXAlignment.Right
-	label.TextYAlignment = Enum.TextYAlignment.Center
-	label.Parent = parent
-	return label
-end
-
-local function buildHud()
-	local existing = playerGui:FindFirstChild("WeaponHud")
-	if existing then
-		existing:Destroy()
-	end
-
-	local gui = Instance.new("ScreenGui")
-	gui.Name = "WeaponHud"
-	gui.ResetOnSpawn = false
-	gui.IgnoreGuiInset = true
-	gui.DisplayOrder = 12
-	gui.Parent = playerGui
-
-	local crosshair = Instance.new("Frame")
-	crosshair.Name = "Crosshair"
-	crosshair.BackgroundTransparency = 1
-	crosshair.AnchorPoint = Vector2.new(0.5, 0.5)
-	crosshair.Position = UDim2.fromScale(0.5, 0.5)
-	crosshair.Size = UDim2.fromOffset(120, 120)
-	crosshair.Parent = gui
-
-	local marks = {}
-	local function addMark(name: string, horizontal: boolean)
-		local mark = Instance.new("Frame")
-		mark.Name = name
-		mark.AnchorPoint = Vector2.new(0.5, 0.5)
-		mark.BackgroundColor3 = Color3.fromRGB(226, 236, 226)
-		mark.BackgroundTransparency = 0.12
-		mark.BorderSizePixel = 0
-		mark.Size = if horizontal then UDim2.fromOffset(9, 2) else UDim2.fromOffset(2, 9)
-		mark.Parent = crosshair
-		marks[name] = mark
-	end
-
-	addMark("Left", true)
-	addMark("Right", true)
-	addMark("Top", false)
-	addMark("Bottom", false)
-
-	local dot = Instance.new("Frame")
-	dot.Name = "Dot"
-	dot.AnchorPoint = Vector2.new(0.5, 0.5)
-	dot.Position = UDim2.fromScale(0.5, 0.5)
-	dot.Size = UDim2.fromOffset(2, 2)
-	dot.BackgroundColor3 = Color3.fromRGB(226, 236, 226)
-	dot.BackgroundTransparency = 0.3
-	dot.BorderSizePixel = 0
-	dot.Parent = crosshair
-
-	local arenaLabel = Instance.new("TextLabel")
-	arenaLabel.Name = "Kills"
-	arenaLabel.BackgroundTransparency = 1
-	arenaLabel.AnchorPoint = Vector2.new(1, 0)
-	arenaLabel.Position = UDim2.new(1, -34, 0, 28)
-	arenaLabel.Size = UDim2.fromOffset(190, 26)
-	arenaLabel.Font = Enum.Font.Code
-	arenaLabel.TextSize = 18
-	arenaLabel.Text = "KILLS  0"
-	arenaLabel.TextColor3 = Color3.fromRGB(190, 214, 199)
-	arenaLabel.TextXAlignment = Enum.TextXAlignment.Right
-	arenaLabel.Parent = gui
-
-	local ammoFrame = Instance.new("Frame")
-	ammoFrame.Name = "Ammo"
-	ammoFrame.BackgroundTransparency = 1
-	ammoFrame.AnchorPoint = Vector2.new(1, 1)
-	ammoFrame.Position = UDim2.new(1, -34, 1, -30)
-	ammoFrame.Size = UDim2.fromOffset(210, 60)
-	ammoFrame.Parent = gui
-
-	local reloadTrack = Instance.new("Frame")
-	reloadTrack.Name = "ReloadTrack"
-	reloadTrack.AnchorPoint = Vector2.new(1, 1)
-	reloadTrack.Position = UDim2.new(1, 0, 0, -6)
-	reloadTrack.Size = UDim2.fromOffset(150, 3)
-	reloadTrack.BackgroundColor3 = Color3.fromRGB(28, 36, 33)
-	reloadTrack.BackgroundTransparency = 0.25
-	reloadTrack.BorderSizePixel = 0
-	reloadTrack.Parent = ammoFrame
-
-	local reloadFill = Instance.new("Frame")
-	reloadFill.Name = "ReloadFill"
-	reloadFill.Size = UDim2.fromScale(0, 1)
-	reloadFill.BackgroundColor3 = Color3.fromRGB(190, 214, 199)
-	reloadFill.BorderSizePixel = 0
-	reloadFill.Parent = reloadTrack
-
-	local ammoLabel = newLabel(ammoFrame, "AmmoCount", "30", 34, Enum.Font.Code)
-	ammoLabel.AnchorPoint = Vector2.new(1, 1)
-	ammoLabel.Position = UDim2.fromScale(1, 1)
-	ammoLabel.Size = UDim2.fromOffset(120, 44)
-
-	local reserveLabel = newLabel(ammoFrame, "ReserveCount", "/ 90", 16, Enum.Font.Code)
-	reserveLabel.AnchorPoint = Vector2.new(1, 1)
-	reserveLabel.Position = UDim2.new(1, -132, 1, -8)
-	reserveLabel.Size = UDim2.fromOffset(90, 24)
-	reserveLabel.TextColor3 = Color3.fromRGB(150, 168, 156)
-
-	local hintLabel = newLabel(ammoFrame, "Hint", "", 13, Enum.Font.Code)
-	hintLabel.AnchorPoint = Vector2.new(1, 1)
-	hintLabel.Position = UDim2.new(1, 0, 0, -16)
-	hintLabel.Size = UDim2.fromOffset(220, 20)
-	hintLabel.TextColor3 = Color3.fromRGB(150, 168, 156)
-
-	local hitMarker = Instance.new("Frame")
-	hitMarker.Name = "HitMarker"
-	hitMarker.BackgroundTransparency = 1
-	hitMarker.AnchorPoint = Vector2.new(0.5, 0.5)
-	hitMarker.Position = UDim2.fromScale(0.5, 0.5)
-	hitMarker.Size = UDim2.fromOffset(34, 34)
-	hitMarker.Parent = gui
-
-	for _, rotation in { 45, -45 } do
-		local stroke = Instance.new("Frame")
-		stroke.Name = "Stroke"
-		stroke.AnchorPoint = Vector2.new(0.5, 0.5)
-		stroke.Position = UDim2.fromScale(0.5, 0.5)
-		stroke.Size = UDim2.fromOffset(22, 2)
-		stroke.Rotation = rotation
-		stroke.BackgroundColor3 = Color3.fromRGB(255, 226, 178)
-		stroke.BackgroundTransparency = 1
-		stroke.BorderSizePixel = 0
-		stroke.Parent = hitMarker
-	end
-
-	local damage = Instance.new("Frame")
-	damage.Name = "DamageFlash"
-	damage.BackgroundColor3 = Color3.fromRGB(148, 24, 24)
-	damage.BackgroundTransparency = 1
-	damage.BorderSizePixel = 0
-	damage.Size = UDim2.fromScale(1, 1)
-	damage.Parent = gui
-
-	local touchControls = Instance.new("Frame")
-	touchControls.Name = "TouchControls"
-	touchControls.BackgroundTransparency = 1
-	touchControls.Size = UDim2.fromScale(1, 1)
-	touchControls.Visible = UserInputService.TouchEnabled
-	touchControls.Parent = gui
-
-	local function touchButton(name: string, text: string, position: UDim2, size: UDim2): TextButton
-		local button = Instance.new("TextButton")
-		button.Name = name
-		button.Text = text
-		button.Font = Enum.Font.Code
-		button.TextSize = 16
-		button.TextColor3 = Color3.fromRGB(220, 232, 220)
-		button.BackgroundColor3 = Color3.fromRGB(20, 26, 24)
-		button.BackgroundTransparency = 0.55
-		button.AnchorPoint = Vector2.new(1, 1)
-		button.Position = position
-		button.Size = size
-		button.AutoButtonColor = false
-		button.BorderSizePixel = 0
-		button.Parent = touchControls
-
-		local corner = Instance.new("UICorner")
-		corner.CornerRadius = UDim.new(0.2, 0)
-		corner.Parent = button
-
-		return button
-	end
-
-	local fireButton = touchButton("FireButton", "FIRE", UDim2.new(1, -24, 1, -130), UDim2.fromOffset(86, 86))
-	local aimButton = touchButton("AimButton", "AIM", UDim2.new(1, -122, 1, -142), UDim2.fromOffset(60, 60))
-	local reloadButton = touchButton("ReloadButton", "RELOAD", UDim2.new(1, -24, 1, -228), UDim2.fromOffset(76, 44))
-
-	return {
-		gui = gui,
-		marks = marks,
-		dot = dot,
-		crosshair = crosshair,
-		ammoFrame = ammoFrame,
-		reloadTrack = reloadTrack,
-		touchControls = touchControls,
-		ammoLabel = ammoLabel,
-		reserveLabel = reserveLabel,
-		hintLabel = hintLabel,
-		reloadFill = reloadFill,
-		killsLabel = arenaLabel,
-		hitMarker = hitMarker,
-		damage = damage,
-		fireButton = fireButton,
-		aimButton = aimButton,
-		reloadButton = reloadButton,
-	}
-end
+-- The hit marker strokes never change, so they are collected once, right after
+-- the HUD is built.
+local hitMarkerStrokes: { Frame } = {}
 
 local function updateCrosshair(spread: number, currentTime: number)
 	local offset = CROSSHAIR_BASE + spread * CROSSHAIR_SPREAD_SCALE
@@ -562,10 +497,8 @@ local function updateCrosshair(spread: number, currentTime: number)
 	hud.dot.BackgroundTransparency = 0.3 + aimAlpha * 0.45
 
 	local markerVisible = currentTime < hitMarkerUntil
-	for _, stroke in hud.hitMarker:GetChildren() do
-		if stroke:IsA("Frame") then
-			stroke.BackgroundTransparency = if markerVisible then 0 else 1
-		end
+	for _, stroke in hitMarkerStrokes do
+		stroke.BackgroundTransparency = if markerVisible then 0 else 1
 	end
 end
 
@@ -621,8 +554,13 @@ local function refreshAmmoLabels()
 	end
 end
 
+local lastReloadProgress = -1
 local function refreshReloadBar()
 	local progress = if state.reloading then WeaponSpec.reloadProgress(spec, state, now()) else 0
+	if math.abs(progress - lastReloadProgress) < 0.004 then
+		return
+	end
+	lastReloadProgress = progress
 	hud.reloadFill.Size = UDim2.fromScale(progress, 1)
 	hud.reloadFill.BackgroundColor3 = if state.reloading
 		then Color3.fromRGB(214, 196, 140)
@@ -769,7 +707,7 @@ local function setAiming(value: boolean)
 end
 
 local function onInputBegan(input: InputObject, processed: boolean)
-	if processed or GuiService.MenuIsOpen then
+	if processed or GuiService.MenuIsOpen or player:GetAttribute("TelekinesisHolding") == true then
 		return
 	end
 
@@ -792,6 +730,15 @@ end
 
 UserInputService.InputBegan:Connect(onInputBegan)
 UserInputService.InputEnded:Connect(onInputEnded)
+
+-- While something floats in the hand, the gun is put away and M2 belongs to
+-- the throw instead of the iron sights.
+player:GetAttributeChangedSignal("TelekinesisHolding"):Connect(function()
+	if player:GetAttribute("TelekinesisHolding") == true then
+		setFiring(false)
+		setAiming(false)
+	end
+end)
 UserInputService.InputChanged:Connect(function(input)
 	if input.UserInputType == Enum.UserInputType.MouseMovement then
 		swayYaw -= input.Delta.X * 0.0007
@@ -888,7 +835,12 @@ local function onCharacterAdded(character: Model)
 	end)
 end
 
-hud = buildHud()
+hud = WeaponHud.build()
+for _, stroke in hud.hitMarker:GetChildren() do
+	if stroke:IsA("Frame") then
+		table.insert(hitMarkerStrokes, stroke)
+	end
+end
 bindTouchButtons()
 refreshKills()
 
@@ -974,13 +926,24 @@ player.CharacterRemoving:Connect(function()
 	player:SetAttribute(AIM_ATTRIBUTE, 1)
 end)
 
+-- Writes the HUD only when the state really flips, and hands the plain forest
+-- crosshair back when the player is not holding a gun (empty hands, casting).
+local lastHudVisible: boolean? = nil
 local function refreshWeaponHudVisibility()
 	local equipped = isEquipped() and alive
+	if equipped == lastHudVisible then
+		return
+	end
+
+	lastHudVisible = equipped
 	hud.crosshair.Visible = equipped
 	hud.ammoFrame.Visible = equipped
 	hud.reloadTrack.Visible = equipped
 	hud.hitMarker.Visible = equipped
 	hud.touchControls.Visible = equipped and UserInputService.TouchEnabled
+	if forestCrosshair then
+		forestCrosshair.Enabled = not equipped
+	end
 end
 
 local function paintHud(deltaTime: number, currentTime: number)
@@ -994,10 +957,6 @@ local function paintHud(deltaTime: number, currentTime: number)
 	end
 	updateFiring(currentTime)
 
-	if forestCrosshair then
-		forestCrosshair.Enabled = false
-	end
-
 	refreshWeaponHudVisibility()
 	refreshAmmoLabels()
 	refreshReloadBar()
@@ -1008,6 +967,7 @@ local function paintHud(deltaTime: number, currentTime: number)
 	updateCrosshair(spread, currentTime)
 end
 
-RunService:BindToRenderStep(RENDER_STEP, Enum.RenderPriority.Camera.Value + 2, paintHud)
-
-forestCrosshair = playerGui:WaitForChild("ForestCrosshair", 15)
+RunService:BindToRenderStep(RENDER_STEP, Enum.RenderPriority.Camera.Value + 2, function(deltaTime: number)
+	-- RenderStep only passes deltaTime; the HUD also needs the server clock.
+	paintHud(deltaTime, now())
+end)

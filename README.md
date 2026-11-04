@@ -18,21 +18,83 @@
 
 ## Play the game
 
-This AI-assisted horror game is taking shape in a procedurally generated forest, planted with Creator Store pine models (`src/assets/trees/TreeLayeredPine.rbxm`, `TreePineSingle.rbxm`) at random heights and rotations on top of the generated terrain. The current build is an early playtest of the map, first-person movement, and the first weapon.
+This AI-assisted horror game is taking shape in a procedurally generated valley: a 640-stud square of rolling grass and mud, ringed by a wall of rock, with a cabin, a collapsed shed, a wrecked car and scattered props. There are no trees right now — the map is an open field while the group looks at it — but the forest still plants bushes, ferns and debris. The current build is an early playtest of the map, first-person movement, and the weapons. The valley is in daylight now: the sun sits at 13:24, the fog is a light haze far away, and the sky is open, so the ground and the rock rim are visible all the way out.
 
-Every life starts with the flashlight and the `M9` pistol — kills are the shop currency, so you need a gun to earn the first ones — and the rest is bought with ghost kills at a shop the forest generates for you. The AK-47 (30 rounds, 600 rounds per minute, iron sights while holding right mouse, `R` to reload) costs 4 kills, the `M9` pistol — semi automatic, 15 rounds — costs 2 kills, and the UV floodlight costs 6. Until you pay, the hotbar shows the slot as `[LOJA]` and refuses to equip it. Both guns run on the same engine and differ only in their definition file. The flashlight lives in the hotbar instead of the hand: press `2` for the flashlight and `F` to turn its beam on or off. Slot `3` is the ghost detector, which reads the distance to the nearest ghost in studs every three seconds. Slot `4` is the UV floodlight: hold left mouse to wash ghosts in violet light, which burns them slowly and pushes them back, until the 8 second battery runs dry; it refills on its own in 10 seconds. The handheld flashlight runs a wide 110-degree flood cone, so it lights a clearing instead of a pencil beam. Ghosts drift out of the fog at 4.4 studs per second groaning, and every one you put down adds a point to the `KILLS` counter in the corner. They come in two shipped looks (`src/assets/Ghost.rbxm` and `src/assets/GhostAlt2.rbxm`, Creator Store assets `16371325697` and `14659873441`) with a random tint and height, all scaled to about seven studs.
+Every life starts with the flashlight and the `M9` pistol — kills are the shop currency, so you need a gun to earn the first ones — and the rest is bought with ghost kills at a shop the forest generates for you. The guns are meshed Creator Store models — the AK-47 (`8413055627`) and the M9 (`8321118198`) — normalised by the client into first-person viewmodels. The AK-47 (30 rounds, 600 rounds per minute, iron sights while holding right mouse, `R` to reload) costs 4 kills, the `M9` pistol — semi automatic, 15 rounds — costs 2 kills, and the UV floodlight costs 6. Until you pay, that slot is empty — it keeps only its number, with no item name — and refuses to equip it. Both guns run on the same engine and differ only in their definition file. The flashlight lives in the hotbar: press `2` to take it out or put it away, and `F` to turn its beam on or off. Press the slot that is in hand again, or `0`, to walk with empty hands. Casting a spell puts the item away too, because the fireball and the telekinesis need the hand. Slot `3` is the ghost detector, which reads the distance to the nearest ghost in studs every three seconds. Slot `4` is the UV floodlight: hold left mouse to wash ghosts in violet light, which burns them slowly and pushes them back, until the 8 second battery runs dry; it refills on its own in 10 seconds. The handheld flashlight runs a wide 110-degree flood cone, so it lights a clearing instead of a pencil beam. Ghosts drift out of the fog at 4.4 studs per second groaning, and every one you put down adds a point to the `KILLS` counter in the corner. They come in two shipped looks (`src/assets/Ghost.rbxm` and `src/assets/GhostAlt2.rbxm`, Creator Store assets `16371325697` and `14659873441`) with a random tint and height, all scaled to about seven studs.
+
+### Performance
+
+The valley is built for machines that are not fast, so the cost is kept low on purpose:
+
+- `StreamingEnabled` is on in the place, with a 96-stud minimum and a 512-stud target, so the client only holds the part of the 640-stud map around the player.
+- The terrain is written in 40-cell chunks, and the generator clears it first, so generation never builds the whole world in one Lua table.
+- Scenery props cast no shadows and do not fire touch events; only the four landmarks do.
+- The scenery density was pulled back for the bigger map, so the bushes and debris sit at about two thirds of the count the old spacing would give.
+- The camera mist is thin now: a handful of small particles instead of a full-screen blanket.
+- The HUD only writes a value when it changes: the hit markers are collected once, the reload bar and the crosshair state are gated, and the stamina bar updates only when its value moves.
+- The place uses ShadowMap lighting rather than Future, and the daylight is one atmosphere plus two cheap post effects.
+
+### Code layout
+
+The two largest files are split by responsibility:
+
+- `GhostService` keeps the AI, the damage, the culling and the spawn timing; `GhostFactory` builds the model itself, either from a shipped template or as the procedural fallback.
+- `WeaponController` keeps the shooting, the pose and the input; `WeaponHud` builds the crosshair, ammo, reload bar, hit marker and touch buttons and hands them back as a table.
+- `SpellBadge` builds the spell widget once for both spells, and each controller only decides what its bar means (charge for the fireball, hold or cooldown for the telekinesis).
 
 ### The shop
 
-`ShopService` plants one stall in the forest, built from parts at a point taken from the forest seed (`ShopLayout.pointFor`), 96 to 132 studs out and never on the spawn sightline. It clears the trees standing where the counter goes, hangs two warm lamps and a sign, and drops a `Sound` (`1839910323`, a 30 second music box) on a linear rolloff so the track is at full volume only at the counter and gone past 78 studs: you hear the shop before you see it, but not from across the map.
+`ShopService` plants one stall in the forest, built from parts at a point taken from the forest seed (`ShopLayout.pointFor`), 96 to 132 studs out and never on the spawn sightline. Before it builds, it levels a flat pad in the terrain so a slope cannot swallow the floor, hangs two warm lamps and a sign, and drops a `Sound` (`1839910323`, a 30 second music box) on a linear rolloff so the track is at full volume only at the counter and gone past 78 studs: you hear the shop before you see it, but not from across the map.
+
+The game is first person, and first person locks the cursor to the centre, so `ShopClient` steps the camera back and frees the mouse while you stand at the counter; walk away and the first-person camera comes back.
 
 Prices live in `src/shared/ShopCatalog.luau` and the money is the `KILLS` counter. The client only asks to buy; `ShopService` checks the distance to the counter, the price, whether you already own the item, then spends the kills, flips the ownership attribute and puts the purchase in your hands. Combat and the UV lamp check ownership on every use, so an unpaid client cannot shoot the rifle it did not buy.
+
+### The fire magic
+
+The fireball is everyone's spell for now, not a shop item. Press `Z` and the character points the right arm and hand at the cursor; a spinning rune circle, built from neon parts and fire particles, opens in front of the palm and a fireball leaves it. The ball flies at 110 studs per second up to 240 studs with a particle trail and its own light.
+
+Hold `Z` to charge it: the circle in front of the palm grows with the hold, and so does the ball, up to a ceiling of 1.6 seconds and 2.2 times its size. Let go to throw. A tap still throws the small ball.
+
+On impact it explodes: a flash, an expanding shockwave, fire, sparks, smoke, embers, a boom and a light tremor on the screens of players within 55 studs. A direct hit deals 120 damage — enough to kill a full-health ghost — and the blast splashes up to 100 damage within 16 studs. A fully charged ball is bigger and meaner: 240 direct damage, 190 splash at the centre, and a 26-stud radius, with the crater, the cracks and the blast particles scaled to match. The surface under the blast gets a scorched crater and eight to eleven radial cracks that follow the terrain and disappear after 30 seconds. Each cast is followed by `SOL CRUEL` above the character and in the chat, and the spell takes 6 seconds to recharge; the badge above the UV battery shows the countdown.
+
+The tuning lives in `src/shared/FireMagic.luau`, the damage, projectile and scorch marks in `src/server/FireMagicService.luau`, the input and first-person arm in `src/client/FireMagicController.client.luau`, and the badge in `src/client/SpellBadge.luau`, and the circle, ball, blast and screen shake in `src/client/FireMagicEffects.client.luau`.
+
+### The telekinesis
+
+The second spell, also free. Point the cursor at a prop or a ghost and press `X`: it leaves the ground and floats where you point. It chases the cursor at 60 studs per second, never further than 45 studs from you, with a white rune circle in the casting hand — the fireball's circle in white, but with an eight-pointed star of two squares instead of the double triangle — four rings of white wind blades around the floating thing, a swirl of wind particles and a looping gust. While it floats, the mouse wheel pushes it away or pulls it back in 3-stud steps between 7 and 45 studs, and `Q` and `E` turn it left and right on top of the slow drift. `X` again lowers it: a prop settles back on the ground, a ghost drifts down. Press right mouse while it floats to hurl it, and the throw starts with a short wind push at the hand before the object leaves the grip.
+
+Only props of a sane size answer the spell: the largest side of the bounding box up to 14 studs and at most 80 parts. Barrels, crates, logs, stumps and bushes fly. The cabin, the shop stall, the spawn pad and the terrain stay where they are. A ghost is grabbed whole: its chase AI is suspended and the server drives its pivot while the spell holds it. One object can only be under one spell at a time.
+
+A throw flies at 120 studs per second for up to 120 studs and stops on the first surface or ghost it meets. The hit deals 70 damage and splashes up to 45 more within 9 studs; a thrown ghost takes the same hit, hangs dazed for 2 seconds afterwards, and a heavy prop that lands on a ghost counts as a direct hit. The impact raises dust, wind sparks, a white shockwave, a thud and a small screen tremor, and the throw itself plays the ascending gust. The spell recharges in 2.5 seconds after the object leaves your hand; the small badge above the fireball badge shows the countdown.
+
+### The transmutation
+
+The third spell, also free. Point the cursor at the ground and press `C`: the character kneels and puts both hands on the ground — two first-person arms drop and meet in front of the body — a red rune circle opens under the feet with a red light, six red lightning arcs crackle around it and a shock plays. When the windup ends the spikes come out of exactly what the cursor was pointing at, in that material: metal where the cursor is on metal, wood on wood, brick on brick, ice on ice. Eleven spikes in a loose spiral, the tall one in the middle, three shrinking cylinders each, tinted and textured by the surface they come from. The badge above the telekinesis badge names what came out of the ground for a moment.
+
+The cast reads the surface with a ray from the head, so a client cannot call spikes behind a wall, and the material comes from the surface the server actually hit. The cluster hits for 58 damage at the centre, fading to nothing at 7 studs, and stuns ghosts for 1.1 seconds. The spikes crumble back into the ground after 4.2 seconds, and the spell recharges in 8 seconds.
+
+The tuning, the material table and the spike layout live in `src/shared/Transmutation.luau`; the ground read, the spikes and the damage in `src/server/TransmutationService.luau`; the input, the two hands and the badge in `src/client/TransmutationController.client.luau`; the red circle, the arcs, the shock and the burst in `src/client/TransmutationEffects.client.luau`.
+
+The three spells do not overlap. While something floats, the gun is put away, right mouse throws instead of aiming and `Z` waits. While the hands are on the ground, `Z` and `X` wait. Casting a spell also empties the hand: the item returns to the hotbar, and the player picks it again if wanted.
+
+The tuning lives in `src/shared/Telekinesis.luau`, the grab, drag, throw and damage in `src/server/TelekinesisService.luau`, the input and first-person arm in `src/client/TelekinesisController.client.luau`, and the badge in `src/client/SpellBadge.luau`, the white circle in `src/client/MagicCircle.luau`, and the wind, impacts and shake in `src/client/TelekinesisEffects.client.luau`.
+
+### The arena
+
+`ArenaService` builds a coliseum at `Arena.ORIGIN` — 1600, 180, 0 — far above and away from the forest, so the procedural map never collides with it. The sand is 52 studs across, ringed by a wall with four iron gates, four tiers of stone seats, an outer wall with merlons, eight columns, red banners, eight burning torches and a gold `ARENA` plaque over the entrance. It is built from parts at server start, the same way the shop stall is.
+
+Two chat commands move a player between the places. `/arena` (or `/coliseu`) teleports to the spawn facing the sand; `/floresta` (or `/sair`) returns to `ForestSpawn`. They are `TextChatCommand`s created under `TextChatService`, so the command is intercepted and never broadcast; a `Player.Chatted` fallback covers the old chat path, and a debounce makes sure a client that reports both paths only teleports once. The move itself is a server-side `PivotTo` of the character.
+
+The arena has no enemies of its own yet: the ghost spawner places ghosts around players inside the forest and culls the ones too far from every player, so the forest empties while everyone is away.
 
 ### Adding a weapon
 
 Weapons are data. `WeaponSpec` owns the magazine, cadence, reload, spread, recoil and state sync for every gun, and `WeaponRegistry` hands out the validated definitions. To add one:
 
-1. Copy `src/shared/weapons/M9.luau` to `src/shared/weapons/<Gun>.luau` and change the numbers: `id`, `name`, `fireMode` (`auto` or `semi`), `damage`, `roundsPerMinute`, `magazine`, `startingReserve`, `maxReserve`, `reloadTime`, `range`, the three spreads, the recoil pairs, `sounds`, and the `viewmodel` part list (including `muzzlePart`, `boltPart` and `magazinePart`).
+1. Copy `src/shared/weapons/M9.luau` to `src/shared/weapons/<Gun>.luau` and change the numbers: `id`, `name`, `fireMode` (`auto` or `semi`), `damage`, `roundsPerMinute`, `magazine`, `startingReserve`, `maxReserve`, `reloadTime`, `range`, the three spreads, the recoil pairs and `sounds`.
+   - For a meshed gun, also set `viewmodel.model` (the name under `ReplicatedStorage.WeaponModels`), `modelLength`, `modelRotation`, `hold` and `aim`. Drop the model in `src/assets/weapons/` and map it in `default.project.json` and `test.project.json`.
+   - For a part-built gun, list the parts in `viewmodel.parts` and name `muzzlePart`, `boltPart` and `magazinePart`.
 2. Register it once in `src/shared/WeaponRegistry.luau`.
 3. Add it to the hotbar in `src/shared/Inventory.luau` — the label and the hint come from the definition.
 
@@ -71,12 +133,12 @@ The GitHub repository holds the Luau and world files. On Linux, a local checkout
 | Dependency management | Wally | `wally.toml` declares packages; `wally.lock` records the resolved versions. Jest Roblox is already installed as a development dependency. |
 | Formatting | StyLua and pre-commit | Luau gets a consistent style before it enters Git. |
 | Static analysis | Selene | Linting catches suspicious Luau code without launching the game. |
-| Regression testing | Jest Roblox and jest-roblox-cli | A separate test place runs the tree harvesting rules, locally through Studio on Linux or remotely through Roblox Open Cloud. |
+| Regression testing | Jest Roblox and jest-roblox-cli | A separate test place runs the game's rules, locally through Studio on Linux or remotely through Roblox Open Cloud. |
 | Continuous integration and delivery | GitHub Actions and Roblox Open Cloud | Pull requests run formatting, linting, builds, and engine tests; merges publish separate staging and production places. |
 
 The tools have different jobs. Rojo moves files into Roblox's DataModel; it does not decide whether the code is correct. Selene checks code without running it; Jest checks behavior by running it. A successful build is therefore only one part of a trustworthy change.
 
-The first feature lets a player harvest the tree in the world. The server checks the player's distance and the tree's regrowth timer, awards one wood, then hides the canopy for eight seconds. A client HUD shows the wood count. The harvest rules live in a shared module so they can be tested without waiting for a real timer.
+The first feature of the project let a player harvest a tree in the world. The server checks the player's distance and the tree's regrowth timer, awards one wood, then hides the canopy for eight seconds. A client HUD shows the wood count. The harvest rules live in a shared module so they can be tested without waiting for a real timer.
 
 ## Collaboration
 

@@ -7,202 +7,82 @@ local ForestLayout = require(ReplicatedStorage.Shared.ForestLayout)
 
 local ForestGenerator = {}
 
-local TREE_ASSETS = { "TreeLayeredPine", "TreePineSingle" }
-local GROUND_COLOR = Color3.fromRGB(43, 64, 42)
-local DIRT_COLOR = Color3.fromRGB(54, 48, 38)
-local MUD_COLOR = Color3.fromRGB(48, 40, 32)
-local LEAFY_GRASS_COLOR = Color3.fromRGB(38, 56, 36)
-local ROCK_COLOR = Color3.fromRGB(65, 70, 68)
-local TRUNK_COLOR = Color3.fromRGB(56, 42, 32)
-local CANOPY_COLORS = {
-	Color3.fromRGB(29, 54, 41),
-	Color3.fromRGB(36, 62, 46),
-	Color3.fromRGB(43, 69, 49),
-}
+local GROUND_COLOR = Color3.fromRGB(74, 102, 58)
+local DIRT_COLOR = Color3.fromRGB(96, 82, 60)
+local MUD_COLOR = Color3.fromRGB(78, 68, 52)
+local LEAFY_GRASS_COLOR = Color3.fromRGB(66, 96, 52)
+local ROCK_COLOR = Color3.fromRGB(104, 108, 104)
+
+-- The terrain is written in chunks. A bigger map would otherwise build one
+-- nesting of tables per voxel for the whole world at once, which is slow and
+-- hungry; a chunk at a time keeps both under control.
+local CHUNK_CELLS = 40
 
 local function buildTerrain()
 	local terrain = Workspace.Terrain
 	local voxelSize = ForestLayout.VOXEL_SIZE
 	local halfSize = ForestLayout.MAP_SIZE / 2
-	local region = Region3.new(
-		Vector3.new(-halfSize, ForestLayout.TERRAIN_BOTTOM, -halfSize),
-		Vector3.new(halfSize, ForestLayout.TERRAIN_TOP, halfSize)
-	)
-	local horizontalCells = ForestLayout.MAP_SIZE / voxelSize
+	local cellsPerAxis = ForestLayout.MAP_SIZE / voxelSize
 	local verticalCells = (ForestLayout.TERRAIN_TOP - ForestLayout.TERRAIN_BOTTOM) / voxelSize
-	local materials = {}
-	local occupancies = {}
+	local chunksPerAxis = cellsPerAxis / CHUNK_CELLS
 
-	for xCell = 1, horizontalCells do
-		materials[xCell] = {}
-		occupancies[xCell] = {}
-		local x = -halfSize + (xCell - 0.5) * voxelSize
-
-		for yCell = 1, verticalCells do
-			materials[xCell][yCell] = {}
-			occupancies[xCell][yCell] = {}
-			local cellBottom = ForestLayout.TERRAIN_BOTTOM + (yCell - 1) * voxelSize
-
-			for zCell = 1, horizontalCells do
-				local z = -halfSize + (zCell - 0.5) * voxelSize
-				local height = ForestLayout.heightAt(x, z)
-				local occupancy = math.clamp((height - cellBottom) / voxelSize, 0, 1)
-				local material
-				if occupancy == 0 then
-					material = Enum.Material.Air
-				elseif cellBottom < height - voxelSize then
-					material = Enum.Material.Ground
-				else
-					local slope = ForestLayout.slopeAt(x, z)
-					material = ForestLayout.surfaceMaterialAt(x, z, slope)
-				end
-
-				materials[xCell][yCell][zCell] = material
-				occupancies[xCell][yCell][zCell] = occupancy
-			end
-		end
-	end
-
+	terrain:Clear()
 	terrain:SetMaterialColor(Enum.Material.Grass, GROUND_COLOR)
 	terrain:SetMaterialColor(Enum.Material.Ground, DIRT_COLOR)
 	terrain:SetMaterialColor(Enum.Material.Mud, MUD_COLOR)
 	terrain:SetMaterialColor(Enum.Material.LeafyGrass, LEAFY_GRASS_COLOR)
 	terrain:SetMaterialColor(Enum.Material.Rock, ROCK_COLOR)
-	terrain:WriteVoxels(region, voxelSize, materials, occupancies)
-end
 
-local function makePart(
-	parent: Instance,
-	name: string,
-	shape: Enum.PartType,
-	size: Vector3,
-	color: Color3,
-	cframe: CFrame
-): Part
-	local part = Instance.new("Part")
-	part.Name = name
-	part.Shape = shape
-	part.Size = size
-	part.Color = color
-	part.Material = Enum.Material.SmoothPlastic
-	part.Anchored = true
-	part.CFrame = cframe
-	part.Parent = parent
-	return part
-end
+	for chunkX = 0, chunksPerAxis - 1 do
+		for chunkZ = 0, chunksPerAxis - 1 do
+			local originX = -halfSize + chunkX * CHUNK_CELLS * voxelSize
+			local originZ = -halfSize + chunkZ * CHUNK_CELLS * voxelSize
+			local materials = table.create(CHUNK_CELLS)
+			local occupancies = table.create(CHUNK_CELLS)
 
-local function makeTree(parent: Instance, position: Vector2, random: Random, index: number)
-	local groundHeight = ForestLayout.heightAt(position.X, position.Y)
-	local treeHeight = random:NextNumber(ForestLayout.TREE_MIN_HEIGHT, ForestLayout.TREE_MAX_HEIGHT)
-	local trunkWidth = random:NextNumber(2.5, 3.7)
-	local foliageColor = CANOPY_COLORS[random:NextInteger(1, #CANOPY_COLORS)]
-	local tree = Instance.new("Model")
-	tree.Name = string.format("Pine%03d", index)
-	tree.Parent = parent
+			for xCell = 1, CHUNK_CELLS do
+				materials[xCell] = table.create(verticalCells)
+				occupancies[xCell] = table.create(verticalCells)
+				local x = originX + (xCell - 0.5) * voxelSize
 
-	local trunk = makePart(
-		tree,
-		"Trunk",
-		Enum.PartType.Cylinder,
-		Vector3.new(treeHeight, trunkWidth, trunkWidth),
-		TRUNK_COLOR,
-		CFrame.new(position.X, groundHeight + treeHeight / 2 - 2, position.Y) * CFrame.Angles(0, 0, math.pi / 2)
-	)
-	tree.PrimaryPart = trunk
+				for yCell = 1, verticalCells do
+					local materialColumn = table.create(CHUNK_CELLS)
+					local occupancyColumn = table.create(CHUNK_CELLS)
+					materials[xCell][yCell] = materialColumn
+					occupancies[xCell][yCell] = occupancyColumn
+					local cellBottom = ForestLayout.TERRAIN_BOTTOM + (yCell - 1) * voxelSize
 
-	for tier = 1, 4 do
-		local fraction = (tier - 1) / 3
-		local width = (10 - fraction * 5) * random:NextNumber(0.9, 1.1)
-		local height = 17 - fraction * 5
-		local centerY = groundHeight + treeHeight * (0.48 + fraction * 0.17)
-		local canopy = makePart(
-			tree,
-			"Canopy" .. tier,
-			Enum.PartType.Ball,
-			Vector3.new(width * 2, height, width * 2),
-			foliageColor,
-			CFrame.new(position.X, centerY, position.Y)
-		)
-		canopy.CanCollide = false
-	end
-end
+					for zCell = 1, CHUNK_CELLS do
+						local z = originZ + (zCell - 0.5) * voxelSize
+						local height = ForestLayout.heightAt(x, z)
+						local occupancy = math.clamp((height - cellBottom) / voxelSize, 0, 1)
+						local material
+						if occupancy == 0 then
+							material = Enum.Material.Air
+						elseif cellBottom < height - voxelSize then
+							material = Enum.Material.Ground
+						else
+							local slope = ForestLayout.slopeAt(x, z)
+							material = ForestLayout.surfaceMaterialAt(x, z, slope)
+						end
 
--- A tree pack is a model holding one model per variant; a single tree asset is
--- just one model. Both arrive the same way, so flatten one level and treat every
--- model inside as a variant.
-local function wrapPart(part: BasePart): Model
-	local model = Instance.new("Model")
-	model.Name = part.Name
-	local clone = part:Clone()
-	clone.Anchored = true
-	clone.Parent = model
-	model.PrimaryPart = clone
-	return model
-end
-
-local function expandVariants(asset: Instance): { Model }
-	local variants = {}
-	if asset:IsA("BasePart") then
-		-- A single-part tree still has to behave like a model so the spawner can
-		-- measure, scale and pivot it.
-		table.insert(variants, wrapPart(asset))
-		return variants
-	end
-
-	if not asset:IsA("Model") then
-		return variants
-	end
-
-	for _, child in asset:GetChildren() do
-		if child:IsA("Model") then
-			table.insert(variants, child)
-		end
-	end
-
-	if #variants == 0 then
-		table.insert(variants, asset)
-	end
-
-	return variants
-end
-
-local function hasUsableMeshes(model: Model): boolean
-	local meshes = 0
-	for _, descendant in model:GetDescendants() do
-		if descendant:IsA("MeshPart") then
-			if descendant.MeshId == "" then
-				return false
-			end
-			meshes += 1
-		end
-	end
-
-	return meshes > 0
-end
-
-local function loadTreeVariants(): ({ Model }, string)
-	local folder = ServerStorage:FindFirstChild("ForestAssets")
-	local variants = {}
-
-	if folder then
-		for _, name in TREE_ASSETS do
-			local asset = folder:FindFirstChild(name)
-			if asset then
-				for _, variant in expandVariants(asset) do
-					if hasUsableMeshes(variant) then
-						table.insert(variants, variant)
+						materialColumn[zCell] = material
+						occupancyColumn[zCell] = occupancy
 					end
 				end
 			end
+
+			local region = Region3.new(
+				Vector3.new(originX, ForestLayout.TERRAIN_BOTTOM, originZ),
+				Vector3.new(
+					originX + CHUNK_CELLS * voxelSize,
+					ForestLayout.TERRAIN_TOP,
+					originZ + CHUNK_CELLS * voxelSize
+				)
+			)
+			terrain:WriteVoxels(region, voxelSize, materials, occupancies)
 		end
 	end
-
-	if #variants > 0 then
-		return variants, "Bundled"
-	end
-
-	warn("No usable bundled tree models; using procedural trees")
-	return {}, "Procedural"
 end
 
 local function ensureSpawn(): SpawnLocation
@@ -220,60 +100,64 @@ local function ensureSpawn(): SpawnLocation
 	return spawn
 end
 
-local function makeTemplateTree(parent: Instance, source: Model, position: Vector2, random: Random, index: number)
-	local tree = source:Clone()
-	tree.Name = string.format("Tree%03d", index)
-
-	for _, child in tree:GetDescendants() do
-		if child:IsA("Script") or child:IsA("LocalScript") or child:IsA("ModuleScript") then
-			child:Destroy()
-		elseif child:IsA("BasePart") then
-			if child.Name == "Soil" then
-				child:Destroy()
-			else
-				child.Anchored = true
-				-- Only the trunk is solid; browsing the canopy should not bounce
-				-- the player off invisible leaves.
-				local lowerName = string.lower(child.Name)
-				child.CanCollide = string.find(lowerName, "trunk", 1, true) ~= nil
-					or string.find(lowerName, "bark", 1, true) ~= nil
-			end
-		end
-	end
-
-	local _, originalSize = tree:GetBoundingBox()
-	local targetHeight = random:NextNumber(ForestLayout.TREE_MIN_HEIGHT, ForestLayout.TREE_MAX_HEIGHT)
-	tree:ScaleTo(tree:GetScale() * targetHeight / originalSize.Y)
-
-	local bounds, size = tree:GetBoundingBox()
-	local lowestY = bounds.Position.Y - size.Y / 2
-	local pivotOffsetY = tree:GetPivot().Position.Y - lowestY
-	local groundHeight = ForestLayout.heightAt(position.X, position.Y)
-	tree:PivotTo(
-		CFrame.new(position.X, groundHeight + pivotOffsetY - 1, position.Y)
-			* CFrame.Angles(0, random:NextNumber(0, 2 * math.pi), 0)
-	)
-	tree.Parent = parent
-end
-
+-- Daylight. The night configuration kept the distance black so the edge of the
+-- map hid in the fog; during the day the same trick is not needed, so the fog
+-- moves far out and gets a cool haze instead of a wall of black. The post
+-- effects are deliberately gentle: they lift colour and contrast without
+-- costing a second shadow pass.
 local function configureLighting()
 	for _, child in Lighting:GetChildren() do
-		if child:IsA("Atmosphere") then
+		if
+			child:IsA("Atmosphere")
+			or child:IsA("ColorCorrectionEffect")
+			or child:IsA("BloomEffect")
+			or child:IsA("SunRaysEffect")
+		then
 			child:Destroy()
 		end
 	end
 
-	Lighting.ClockTime = 0.5
-	Lighting.Brightness = 1
-	Lighting.ExposureCompensation = -0.45
+	Lighting.ClockTime = 13.4
+	Lighting.Brightness = 2.6
+	Lighting.ExposureCompensation = 0.08
 	Lighting.GlobalShadows = true
-	Lighting.Ambient = Color3.fromRGB(10, 14, 16)
-	Lighting.OutdoorAmbient = Color3.fromRGB(14, 20, 22)
-	-- Near-black fog keeps the distance dark instead of the blue-gray haze
-	-- that made the edge of the map visible against the night sky.
-	Lighting.FogColor = Color3.fromRGB(2, 3, 4)
-	Lighting.FogStart = 14
-	Lighting.FogEnd = 82
+	Lighting.Ambient = Color3.fromRGB(78, 86, 94)
+	Lighting.OutdoorAmbient = Color3.fromRGB(140, 148, 156)
+	Lighting.EnvironmentDiffuseScale = 0.3
+	Lighting.EnvironmentSpecularScale = 0.2
+	Lighting.FogColor = Color3.fromRGB(178, 192, 206)
+	Lighting.FogStart = 260
+	Lighting.FogEnd = 1100
+
+	local atmosphere = Instance.new("Atmosphere")
+	atmosphere.Density = 0.32
+	atmosphere.Offset = 0.12
+	atmosphere.Color = Color3.fromRGB(200, 212, 222)
+	atmosphere.Decay = Color3.fromRGB(132, 148, 168)
+	atmosphere.Glare = 0.2
+	atmosphere.Haze = 1.6
+	atmosphere.Parent = Lighting
+
+	local colour = Instance.new("ColorCorrectionEffect")
+	colour.Name = "ForestColour"
+	colour.Brightness = 0.015
+	colour.Contrast = 0.06
+	colour.Saturation = 0.08
+	colour.TintColor = Color3.fromRGB(255, 250, 242)
+	colour.Parent = Lighting
+
+	local bloom = Instance.new("BloomEffect")
+	bloom.Name = "ForestBloom"
+	bloom.Intensity = 0.35
+	bloom.Size = 16
+	bloom.Threshold = 1.9
+	bloom.Parent = Lighting
+
+	local rays = Instance.new("SunRaysEffect")
+	rays.Name = "ForestSunRays"
+	rays.Intensity = 0.035
+	rays.Spread = 0.6
+	rays.Parent = Lighting
 end
 
 local function loadForestAsset(name: string): Instance?
@@ -296,7 +180,8 @@ local function placeProp(
 	rotation: number,
 	scale: number?,
 	canCollide: boolean?,
-	embedOffset: number?
+	embedOffset: number?,
+	castShadow: boolean?
 ): Instance?
 	local prop = template:Clone()
 	cleanScripts(prop)
@@ -311,6 +196,10 @@ local function placeProp(
 		for _, child in prop:GetDescendants() do
 			if child:IsA("BasePart") then
 				child.Anchored = true
+				-- Scenery is static: no touch events, and no shadow pass unless
+				-- the piece is big enough for its shadow to be worth it.
+				child.CastShadow = castShadow == true
+				child.CanTouch = false
 				if canCollide ~= nil then
 					child.CanCollide = canCollide
 				end
@@ -324,6 +213,8 @@ local function placeProp(
 		)
 	elseif prop:IsA("BasePart") then
 		prop.Anchored = true
+		prop.CastShadow = castShadow == true
+		prop.CanTouch = false
 		if canCollide ~= nil then
 			prop.CanCollide = canCollide
 		end
@@ -364,10 +255,6 @@ function ForestGenerator.generate(): Model
 	forest.Name = "GeneratedForest"
 	forest.Parent = Workspace
 
-	local trees = Instance.new("Folder")
-	trees.Name = "Trees"
-	trees.Parent = forest
-
 	local landmarks = Instance.new("Folder")
 	landmarks.Name = "Landmarks"
 	landmarks.Parent = forest
@@ -384,23 +271,10 @@ function ForestGenerator.generate(): Model
 	scatter.Name = "Scatter"
 	scatter.Parent = forest
 
-	local treeVariants, treeSource = loadTreeVariants()
-	forest:SetAttribute("TreeSource", treeSource)
-
-	local random = Random.new(ForestLayout.SEED + 3)
-	for index, position in ForestLayout.treeLocations() do
-		if #treeVariants > 0 then
-			local source = treeVariants[random:NextInteger(1, #treeVariants)]
-			makeTemplateTree(trees, source, position, random, index)
-		else
-			makeTree(trees, position, random, index)
-		end
-	end
-
 	for _, landmark in ForestLayout.LANDMARKS do
 		local template = loadForestAsset(landmark.assetName)
 		if template then
-			local prop = placeProp(landmarks, template, landmark.position, landmark.rotation, 1, true, 0.4)
+			local prop = placeProp(landmarks, template, landmark.position, landmark.rotation, 1, true, 0.4, true)
 			if prop then
 				prop.Name = landmark.id
 			end
@@ -437,7 +311,6 @@ function ForestGenerator.generate(): Model
 		end
 	end
 
-	forest:SetAttribute("ExpectedTreeCount", #trees:GetChildren())
 	forest:SetAttribute("LandmarkCount", #landmarks:GetChildren())
 	forest:SetAttribute("BoulderCount", 0)
 	forest:SetAttribute("DebrisCount", #debris:GetChildren())

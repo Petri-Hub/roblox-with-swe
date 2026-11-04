@@ -3,6 +3,15 @@
   "tree": {
     "$className": "DataModel",
     "ReplicatedStorage": {
+      "WeaponModels": {
+        "$className": "Folder",
+        "AK47": {
+          "$path": "src/assets/weapons/AK47.rbxm"
+        },
+        "M9": {
+          "$path": "src/assets/weapons/M9.rbxm"
+        }
+      },
       "Shared": {
         "$path": "src/shared"
       }
@@ -10,12 +19,6 @@
     "ServerStorage": {
       "ForestAssets": {
         "$className": "Folder",
-        "TreeLayeredPine": {
-          "$path": "src/assets/trees/TreeLayeredPine.rbxm"
-        },
-        "TreePineSingle": {
-          "$path": "src/assets/trees/TreePineSingle.rbxm"
-        },
         "BushTall": {
           "$path": "src/assets/forest/BushTall.rbxm"
         },

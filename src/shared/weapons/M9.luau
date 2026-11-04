@@ -6,10 +6,6 @@
 	magazine and its own real gunshot sample.
 ]]
 
-local STEEL = Color3.fromRGB(46, 48, 50)
-local STEEL_LIGHT = Color3.fromRGB(74, 78, 82)
-local POLYMER = Color3.fromRGB(28, 30, 32)
-
 return {
 	id = "M9",
 	name = "M9",
@@ -41,89 +37,12 @@ return {
 	},
 
 	viewmodel = {
-		hold = CFrame.new(0.34, -0.42, -1.05) * CFrame.Angles(math.rad(2), math.rad(-11), 0),
-		aim = CFrame.new(0, -0.2, -0.62),
-		muzzlePart = "Muzzle",
-		boltPart = "Slide",
-		magazinePart = "Magazine",
-		parts = {
-			{
-				name = "Slide",
-				size = Vector3.new(0.19, 0.21, 0.92),
-				offset = CFrame.new(0, 0.07, -0.36),
-				color = STEEL_LIGHT,
-				material = Enum.Material.Metal,
-			},
-			{
-				name = "SlideRear",
-				size = Vector3.new(0.2, 0.16, 0.1),
-				offset = CFrame.new(0, 0.09, 0.1),
-				color = STEEL,
-				material = Enum.Material.Metal,
-			},
-			{
-				name = "Frame",
-				size = Vector3.new(0.17, 0.15, 0.78),
-				offset = CFrame.new(0, -0.08, -0.3),
-				color = POLYMER,
-				material = Enum.Material.Plastic,
-			},
-			{
-				name = "Barrel",
-				size = Vector3.new(0.09, 0.09, 0.34),
-				offset = CFrame.new(0, 0.03, -0.86),
-				color = STEEL,
-				material = Enum.Material.Metal,
-			},
-			{
-				name = "Muzzle",
-				size = Vector3.new(0.1, 0.1, 0.12),
-				offset = CFrame.new(0, 0.03, -1.0),
-				color = STEEL_LIGHT,
-				material = Enum.Material.Metal,
-			},
-			{
-				name = "Grip",
-				size = Vector3.new(0.17, 0.46, 0.22),
-				offset = CFrame.new(0, -0.36, -0.02) * CFrame.Angles(math.rad(-14), 0, 0),
-				color = POLYMER,
-				material = Enum.Material.Plastic,
-			},
-			{
-				name = "Magazine",
-				size = Vector3.new(0.13, 0.42, 0.15),
-				offset = CFrame.new(0, -0.38, -0.04) * CFrame.Angles(math.rad(-14), 0, 0),
-				color = STEEL,
-				material = Enum.Material.Metal,
-			},
-			{
-				name = "TriggerGuard",
-				size = Vector3.new(0.12, 0.05, 0.2),
-				offset = CFrame.new(0, -0.19, -0.26),
-				color = POLYMER,
-				material = Enum.Material.Plastic,
-			},
-			{
-				name = "RearSight",
-				size = Vector3.new(0.12, 0.04, 0.04),
-				offset = CFrame.new(0, 0.19, 0.02),
-				color = STEEL,
-				material = Enum.Material.Metal,
-			},
-			{
-				name = "FrontSight",
-				size = Vector3.new(0.03, 0.05, 0.03),
-				offset = CFrame.new(0, 0.19, -0.74),
-				color = STEEL,
-				material = Enum.Material.Metal,
-			},
-			{
-				name = "Flash",
-				size = Vector3.new(0.26, 0.26, 0.3),
-				offset = CFrame.new(0, 0.03, -1.16),
-				color = Color3.fromRGB(255, 238, 190),
-				material = Enum.Material.Neon,
-			},
-		},
+		-- The pistol model already points down -Z; it only needs scaling and a
+		-- grip-height pose.
+		model = "M9",
+		modelLength = 1.15,
+		modelRotation = CFrame.identity,
+		hold = CFrame.new(0.3, -0.44, -1.3) * CFrame.Angles(math.rad(2), math.rad(-9), 0),
+		aim = CFrame.new(0, -0.37, -0.95),
 	},
 }

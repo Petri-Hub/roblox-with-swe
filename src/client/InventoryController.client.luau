@@ -23,7 +23,7 @@ local SLOT_KEYS = {
 local slotButtons = {}
 local hintLabel: TextLabel
 
-local LOCKED_COLOR = Color3.fromRGB(96, 104, 98)
+local LOCKED_COLOR = Color3.fromRGB(66, 74, 70)
 
 local function owned(id: string): boolean
 	return Inventory.owns(player, id)
@@ -31,6 +31,9 @@ end
 
 local function equippedId(): string
 	local id = player:GetAttribute(Inventory.EQUIPPED_ATTRIBUTE)
+	if Inventory.isEmpty(id) then
+		return Inventory.EMPTY
+	end
 	if Inventory.isValid(id) and owned(id) then
 		return id
 	end
@@ -41,7 +44,7 @@ local function equippedId(): string
 		end
 	end
 
-	return Inventory.STARTER_ITEMS[1]
+	return Inventory.EMPTY
 end
 
 local function refreshHud()
@@ -50,10 +53,12 @@ local function refreshHud()
 		local entry = Inventory.itemById(id)
 		local unlocked = owned(id)
 		local active = unlocked and id == current
+		-- A slot for something you have not bought is simply empty. It keeps
+		-- its number so the keys stay learnable, and says nothing else.
 		button.Text = if unlocked
 			then string.format("%d  %s", entry.slot, string.upper(entry.label))
-			else string.format("%d  [LOJA]", entry.slot)
-		button.BackgroundTransparency = if active then 0.15 else 0.6
+			else tostring(entry.slot)
+		button.BackgroundTransparency = if not unlocked then 0.82 elseif active then 0.15 else 0.6
 		button.TextColor3 = if not unlocked
 			then LOCKED_COLOR
 			else if active then Color3.fromRGB(236, 242, 232) else Color3.fromRGB(148, 164, 152)
@@ -65,11 +70,23 @@ local function refreshHud()
 	end
 
 	local item = Inventory.itemById(current)
-	hintLabel.Text = if item then item.hint else ""
+	hintLabel.Text = if item then item.hint else if current == Inventory.EMPTY then "mãos vazias · 0" else ""
 end
 
 local function equip(id: string)
+	if id == Inventory.EMPTY then
+		player:SetAttribute(Inventory.EQUIPPED_ATTRIBUTE, Inventory.EMPTY)
+		return
+	end
+
 	if not Inventory.isValid(id) or not owned(id) then
+		return
+	end
+
+	-- Pressing the slot that is already in hand puts it away, so the player can
+	-- walk around with empty hands.
+	if player:GetAttribute(Inventory.EQUIPPED_ATTRIBUTE) == id then
+		player:SetAttribute(Inventory.EQUIPPED_ATTRIBUTE, Inventory.EMPTY)
 		return
 	end
 
@@ -176,7 +193,14 @@ local function onInputBegan(input: InputObject, processed: boolean)
 		return
 	end
 
+	if input.KeyCode == Enum.KeyCode.Zero then
+		equip(Inventory.EMPTY)
+		return
+	end
+
 	if input.KeyCode == Enum.KeyCode.F or input.KeyCode == Enum.KeyCode.ButtonL1 then
+		-- F only flips the beam of a lamp that is already in hand; use the slot
+		-- key or 0 to take it out or put it away.
 		local on = player:GetAttribute(Inventory.FLASHLIGHT_ATTRIBUTE) == true
 		player:SetAttribute(Inventory.FLASHLIGHT_ATTRIBUTE, not on)
 	end

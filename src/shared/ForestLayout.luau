@@ -1,21 +1,18 @@
 local ForestLayout = {}
 
 ForestLayout.SEED = 2417
-ForestLayout.MAP_SIZE = 384
+ForestLayout.MAP_SIZE = 640
 ForestLayout.VOXEL_SIZE = 4
 ForestLayout.TERRAIN_BOTTOM = -16
 ForestLayout.TERRAIN_TOP = 84
-ForestLayout.TREE_SPACING = 18
-ForestLayout.TREE_MIN_HEIGHT = 46
-ForestLayout.TREE_MAX_HEIGHT = 65
 ForestLayout.SPAWN_CLEARING_RADIUS = 26
 
 -- A ring of steep rock closes the map. It starts well inside the fog so the
 -- player never sees the sky through the edge of the terrain.
-ForestLayout.RIM_START = 148
+ForestLayout.RIM_START = 276
 ForestLayout.RIM_WIDTH = 26
 ForestLayout.RIM_HEIGHT = 70
-ForestLayout.PLAYABLE_RADIUS = 146
+ForestLayout.PLAYABLE_RADIUS = 274
 
 export type Landmark = {
 	id: string,
@@ -127,31 +124,6 @@ function ForestLayout.isInsideWorld(position: Vector2, margin: number?): boolean
 	return position.Magnitude < limit
 end
 
-function ForestLayout.treeLocations(): { Vector2 }
-	local random = Random.new(ForestLayout.SEED)
-	local locations = {}
-	local halfSize = ForestLayout.PLAYABLE_RADIUS
-	local halfSpacing = ForestLayout.TREE_SPACING / 2
-
-	for x = -halfSize + halfSpacing, halfSize - halfSpacing, ForestLayout.TREE_SPACING do
-		for z = -halfSize + halfSpacing, halfSize - halfSpacing, ForestLayout.TREE_SPACING do
-			local position = Vector2.new(x + random:NextNumber(-5, 5), z + random:NextNumber(-5, 5))
-			local density = math.clamp(0.72 + math.noise(x / 75, z / 75, ForestLayout.SEED + 2) * 0.28, 0.35, 0.9)
-			local rimFade = math.clamp(1 - (position.Magnitude - ForestLayout.RIM_START + 14) / 14, 0, 1)
-
-			if
-				position.Magnitude > ForestLayout.SPAWN_CLEARING_RADIUS
-				and not ForestLayout.isInsideLandmarkClearing(position)
-				and random:NextNumber() < density * rimFade
-			then
-				table.insert(locations, position)
-			end
-		end
-	end
-
-	return locations
-end
-
 function ForestLayout.debrisLocations(): { PropPlacement }
 	local random = Random.new(ForestLayout.SEED + 202)
 	local placements = {}
@@ -188,7 +160,7 @@ function ForestLayout.foliageLocations(): { PropPlacement }
 	local random = Random.new(ForestLayout.SEED + 303)
 	local placements = {}
 	local halfSize = ForestLayout.PLAYABLE_RADIUS
-	local spacing = 12
+	local spacing = 15
 	local halfSpacing = spacing / 2
 
 	for x = -halfSize + halfSpacing, halfSize - halfSpacing, spacing do

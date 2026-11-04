@@ -6,6 +6,7 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
 
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local ShopCatalog = require(Shared.ShopCatalog)
@@ -19,6 +20,9 @@ local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 
 local PANEL_SHOW_DISTANCE = ShopLayout.BUY_RADIUS + 16
+-- How far the camera steps back while the counter is open. Far enough to free
+-- the cursor, close enough that the stall still fills the screen.
+local SHOP_ZOOM = 11
 local ACCENT = Color3.fromRGB(255, 214, 148)
 local TEXT = Color3.fromRGB(232, 226, 210)
 local MUTED = Color3.fromRGB(140, 136, 124)
@@ -209,6 +213,36 @@ local function localPosition(): Vector3?
 	return if root then root.Position else nil
 end
 
+local shopping = false
+local defaultMinZoom = player.CameraMinZoomDistance
+local defaultMaxZoom = player.CameraMaxZoomDistance
+
+-- The game is first person, and first person locks the cursor to the centre,
+-- so a button cannot be clicked. At the counter the camera steps back and
+-- hands the mouse over; walking away puts the game back in first person.
+local function setShopping(active: boolean)
+	if shopping == active then
+		return
+	end
+	shopping = active
+	-- Hide the first-person weapon while the camera is out at the counter: a
+	-- viewmodel glued to the camera would float between you and the shop.
+	player:SetAttribute("ShopOpen", active)
+
+	if active then
+		player.CameraMaxZoomDistance = SHOP_ZOOM
+		player.CameraMinZoomDistance = SHOP_ZOOM
+		player.CameraMode = Enum.CameraMode.Classic
+		UserInputService.MouseIconEnabled = true
+		UserInputService.MouseBehavior = Enum.MouseBehavior.Default
+	else
+		player.CameraMode = Enum.CameraMode.LockFirstPerson
+		player.CameraMinZoomDistance = defaultMinZoom
+		player.CameraMaxZoomDistance = defaultMaxZoom
+		UserInputService.MouseIconEnabled = true
+	end
+end
+
 local gui = buildPanel()
 local lastVisible = false
 local lastReach = false
@@ -217,6 +251,13 @@ RunService.Heartbeat:Connect(function()
 	local shop = shopPosition()
 	local me = localPosition()
 	if not shop or not me then
+		-- Dead or still loading: never leave the counter (or the free cursor)
+		-- hanging over the game.
+		if lastVisible then
+			gui.Enabled = false
+			lastVisible = false
+		end
+		setShopping(false)
 		return
 	end
 
@@ -228,6 +269,7 @@ RunService.Heartbeat:Connect(function()
 		gui.Enabled = visible
 		lastVisible = visible
 	end
+	setShopping(reach)
 
 	if reach ~= lastReach then
 		lastReach = reach
