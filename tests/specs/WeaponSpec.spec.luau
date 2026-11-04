@@ -109,6 +109,26 @@ describe("WeaponSpec.derive", function()
 		expectError({ fireMode = "burst" }, 'must be "auto" or "semi"')
 	end)
 
+	it("accepts a meshed model viewmodel and needs its length", function()
+		local definition = testDefinition()
+		definition.viewmodel = { model = "TestGun", modelLength = 1.4, modelRotation = CFrame.identity }
+		local spec = WeaponSpec.derive(definition)
+		expect(spec.viewmodel.model).toBe("TestGun")
+		expect(spec.viewmodel.modelLength).toBe(1.4)
+
+		local noLength = testDefinition()
+		noLength.viewmodel = { model = "TestGun" }
+		expect(function()
+			WeaponSpec.derive(noLength)
+		end).toThrow()
+
+		local noName = testDefinition()
+		noName.viewmodel = { model = "", modelLength = 1 }
+		expect(function()
+			WeaponSpec.derive(noName)
+		end).toThrow()
+	end)
+
 	it("rejects a viewmodel with a duplicate part or a missing muzzle", function()
 		local duplicate = testDefinition()
 		duplicate.viewmodel.target = "Muzzle"

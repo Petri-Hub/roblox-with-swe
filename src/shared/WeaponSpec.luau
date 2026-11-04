@@ -63,9 +63,16 @@ export type PartSpec = {
 	material: Enum.Material,
 }
 
+-- A viewmodel is either a list of parts built from data, or a meshed model
+-- shipped in ReplicatedStorage.WeaponModels. The model path keeps the same hold
+-- and aim CFrames; the client normalises the model (rotate, scale, centre) so
+-- the spec stays a table of numbers and CFrames.
 export type Viewmodel = {
-	parts: { PartSpec },
-	muzzlePart: string,
+	model: string?,
+	modelLength: number?,
+	modelRotation: CFrame?,
+	parts: { PartSpec }?,
+	muzzlePart: string?,
 	boltPart: string?,
 	magazinePart: string?,
 	hold: CFrame?,
@@ -127,13 +134,27 @@ local function readNumber(raw: { [string]: any }, field: string): number
 end
 
 local function validateParts(id: string, viewmodel: any): Viewmodel
-	if typeof(viewmodel) ~= "table" then
-		fail("viewmodel", `is missing on "{id}"`)
+	local model = viewmodel.model
+	if model ~= nil then
+		if typeof(model) ~= "string" or model == "" then
+			fail("viewmodel.model", `must be a non-empty model name on "{id}"`)
+		end
+
+		local modelLength = viewmodel.modelLength
+		if typeof(modelLength) ~= "number" or modelLength ~= modelLength or modelLength <= 0 then
+			fail("viewmodel.modelLength", `must be a number greater than zero on "{id}"`)
+		end
+
+		if viewmodel.modelRotation ~= nil and typeof(viewmodel.modelRotation) ~= "CFrame" then
+			fail("viewmodel.modelRotation", `must be a CFrame on "{id}"`)
+		end
+
+		return viewmodel :: Viewmodel
 	end
 
 	local parts = viewmodel.parts
 	if typeof(parts) ~= "table" or #parts == 0 then
-		fail("viewmodel.parts", `is empty on "{id}"`)
+		fail("viewmodel.parts", `is empty on "{id}" (or set viewmodel.model)`)
 	end
 
 	local seen: { [string]: boolean } = {}

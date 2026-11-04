@@ -120,10 +120,126 @@ end
 -- Viewmodel
 ---------------------------------------------------------------------------
 
+local MODEL_FOLDER = "WeaponModels"
+
+-- Loads a meshed gun from ReplicatedStorage.WeaponModels, points it forward,
+-- scales it to the length in its definition and centres it on its own pivot, so
+-- the pose code below moves it exactly like a part-built gun.
+local function buildModelRig(weaponSpec: WeaponSpec.Spec)
+	local view = weaponSpec.viewmodel
+	local folder = ReplicatedStorage:FindFirstChild(MODEL_FOLDER)
+	local template = if folder then folder:FindFirstChild(view.model :: string) else nil
+	if not template or not template:IsA("Model") then
+		warn(`WeaponController: no model "{view.model}" in ReplicatedStorage.{MODEL_FOLDER}`)
+		return nil
+	end
+
+	local model = template:Clone()
+	model.Name = "WeaponViewmodel"
+	for _, child in model:GetDescendants() do
+		if
+			child:IsA("Camera")
+			or child:IsA("Light")
+			or child:IsA("Script")
+			or child:IsA("LocalScript")
+			or child:IsA("ModuleScript")
+			or child:IsA("ParticleEmitter")
+			or child:IsA("Sound")
+		then
+			child:Destroy()
+		elseif child:IsA("BasePart") then
+			child.Anchored = true
+			child.CanCollide = false
+			child.CanTouch = false
+			child.CanQuery = false
+			child.CastShadow = false
+			child.Massless = true
+			child.TopSurface = Enum.SurfaceType.Smooth
+			child.BottomSurface = Enum.SurfaceType.Smooth
+		end
+	end
+
+	local rotation = view.modelRotation
+	if rotation and rotation ~= CFrame.identity then
+		local bounds = model:GetBoundingBox()
+		model:PivotTo(CFrame.new(bounds.Position) * rotation * CFrame.new(-bounds.Position) * model:GetPivot())
+	end
+
+	local _, raw = model:GetBoundingBox()
+	local longest = math.max(raw.X, raw.Y, raw.Z)
+	if longest <= 0 then
+		model:Destroy()
+		return nil
+	end
+	model:ScaleTo(model:GetScale() * ((view.modelLength :: number) / longest))
+
+	-- Put the middle of the gun on the model pivot, so PivotTo with the hold and
+	-- aim CFrames lands the gun exactly where a part-built one would sit.
+	local centre = model:GetBoundingBox()
+	local pivot = model:GetPivot()
+	model:PivotTo(CFrame.new(pivot.Position - centre.Position) * pivot)
+
+	local bounds, size = model:GetBoundingBox()
+	local muzzleOffset =
+		Vector3.new(bounds.Position.X, bounds.Position.Y + size.Y / 2 - 0.06, bounds.Position.Z - size.Z / 2 + 0.02)
+	local function newEffectPart(name: string, position: Vector3): Part
+		local part = Instance.new("Part")
+		part.Name = name
+		part.Size = Vector3.one * 0.08
+		part.Transparency = 1
+		part.Anchored = true
+		part.CanCollide = false
+		part.CanTouch = false
+		part.CanQuery = false
+		part.CastShadow = false
+		part.CFrame = CFrame.new(position)
+		part.Parent = model
+		return part
+	end
+
+	local muzzle = newEffectPart("Muzzle", muzzleOffset)
+
+	local flash = newEffectPart("Flash", muzzleOffset + Vector3.new(0, 0, -0.06))
+	flash.Shape = Enum.PartType.Ball
+	flash.Size = Vector3.one * 0.22
+	flash.Color = Color3.fromRGB(255, 224, 160)
+	flash.Material = Enum.Material.Neon
+
+	local light = Instance.new("PointLight")
+	light.Name = "MuzzleLight"
+	light.Color = Color3.fromRGB(255, 224, 160)
+	light.Brightness = 0
+	light.Range = 14
+	light.Shadows = false
+	light.Parent = flash
+
+	model.Parent = Workspace
+
+	return {
+		model = model,
+		isModel = true,
+		parts = {},
+		offsets = {},
+		hold = view.hold,
+		aim = view.aim,
+		hidden = {},
+		muzzle = muzzle,
+		bolt = nil,
+		magazine = nil,
+		flash = flash,
+		flashLight = light,
+	}
+end
+
 -- Builds the first-person model from the weapon definition. Nothing about the
--- AK-47 is hardcoded here: a new gun just ships different parts.
+-- AK-47 is hardcoded here: a new gun just ships different parts, or a meshed
+-- model in ReplicatedStorage.WeaponModels.
 local function buildRig(weaponSpec: WeaponSpec.Spec)
 	local view = weaponSpec.viewmodel
+	if view.model then
+		return buildModelRig(weaponSpec)
+	end
+
 	local model = Instance.new("Model")
 	model.Name = "WeaponViewmodel"
 
@@ -164,6 +280,7 @@ local function buildRig(weaponSpec: WeaponSpec.Spec)
 	local flash = parts.Flash
 	return {
 		model = model,
+		isModel = false,
 		parts = parts,
 		offsets = offsets,
 		hold = view.hold,
@@ -245,6 +362,11 @@ local function poseWeapon(deltaTime: number)
 			WeaponPose.recoil(recoil),
 			WeaponPose.sway(swayYaw * (1 - aimAlpha * 0.6), swayPitch * (1 - aimAlpha * 0.6))
 		)
+
+	if rig.isModel then
+		rig.model:PivotTo(base)
+		return
+	end
 
 	local magazineOffset = WeaponPose.reloadMagazine(progress)
 	local boltOffset = WeaponPose.reloadBolt(progress)
