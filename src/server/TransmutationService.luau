@@ -10,6 +10,7 @@ local Workspace = game:GetService("Workspace")
 
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local Transmutation = require(Shared.Transmutation)
+local Powers = require(Shared.Powers)
 local GhostService = require(script.Parent.GhostService)
 
 local READY_ATTRIBUTE = "TransmutationReadyAt"
@@ -258,6 +259,11 @@ end
 
 local function cast(player: Player, point: any)
 	if not isVector(point) then
+		return
+	end
+
+	-- The spikes belong to whoever ate the earth fruit.
+	if not Powers.owns(player, "Transmutation") then
 		return
 	end
 

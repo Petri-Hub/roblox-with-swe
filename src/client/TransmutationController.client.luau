@@ -13,6 +13,7 @@ local Shared = ReplicatedStorage:WaitForChild("Shared")
 local Transmutation = require(Shared.Transmutation)
 local FirstPersonBodyPart = require(Shared.FirstPersonBodyPart)
 local Inventory = require(Shared.Inventory)
+local Powers = require(Shared.Powers)
 
 local player = Players.LocalPlayer
 local remotes = ReplicatedStorage:WaitForChild("TransmutationRemotes")
@@ -310,7 +311,7 @@ local function buildBadge()
 
 	local builtOk, built = pcall(SpellBadge.build, {
 		name = "TransmutationHud",
-		y = -232,
+		y = -104,
 		background = Color3.fromRGB(24, 10, 12),
 		keyBackground = Color3.fromRGB(56, 18, 20),
 		key = "C",
@@ -417,6 +418,10 @@ UserInputService.InputBegan:Connect(function(input: InputObject, processed: bool
 	end
 
 	if input.KeyCode == Enum.KeyCode.C then
+		-- The spikes come from the earth fruit.
+		if not Powers.owns(player, "Transmutation") then
+			return
+		end
 		cast()
 	end
 end)
@@ -455,7 +460,27 @@ if player.Character then
 	onCharacterAdded(player.Character)
 end
 
-buildBadge()
+-- The ability slot only exists while the power does.
+local function syncBadge()
+	if Powers.owns(player, "Transmutation") then
+		if not badge then
+			buildBadge()
+		end
+		return
+	end
+
+	local holder = badge
+	badge = nil
+	badgeFill = nil
+	badgeStatus = nil
+	if holder and holder.Parent then
+		holder.Parent:Destroy()
+	end
+end
+
+player:GetAttributeChangedSignal(Powers.ATTRIBUTE):Connect(syncBadge)
+
+syncBadge()
 paintBadge()
 task.spawn(function()
 	while true do

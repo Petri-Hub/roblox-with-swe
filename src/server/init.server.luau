@@ -12,6 +12,7 @@ local TelekinesisService = require(script.TelekinesisService)
 local TransmutationService = require(script.TransmutationService)
 local ShopService = require(script.ShopService)
 local BusDropService = require(script.BusDropService)
+local FruitService = require(script.FruitService)
 
 local function onCharacterAdded(character: Model)
 	local humanoid = character:WaitForChild("Humanoid") :: Humanoid
@@ -58,3 +59,4 @@ TelekinesisService.start()
 TransmutationService.start()
 BusDropService.start()
 ShopService.start()
+FruitService.start()
