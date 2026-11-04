@@ -11,7 +11,7 @@ local Workspace = game:GetService("Workspace")
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local Telekinesis = require(Shared.Telekinesis)
 
-local MagicCircle = require(script.Parent.MagicCircle)
+local MagicCircle = require(script.Parent:WaitForChild("MagicCircle"))
 
 local player = Players.LocalPlayer
 local remotes = ReplicatedStorage:WaitForChild("TelekinesisRemotes")

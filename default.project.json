@@ -204,20 +204,23 @@
       }
     },
     "TextChatService": {
-      "ArenaCommand": {
-        "$className": "TextChatCommand",
-        "$properties": {
-          "AutocompleteVisible": true,
-          "PrimaryAlias": "/arena",
-          "SecondaryAlias": "/coliseu"
-        }
-      },
-      "ForestCommand": {
-        "$className": "TextChatCommand",
-        "$properties": {
-          "AutocompleteVisible": true,
-          "PrimaryAlias": "/floresta",
-          "SecondaryAlias": "/sair"
+      "TextChatCommands": {
+        "$className": "Folder",
+        "ArenaCommand": {
+          "$className": "TextChatCommand",
+          "$properties": {
+            "AutocompleteVisible": true,
+            "PrimaryAlias": "/arena",
+            "SecondaryAlias": "/coliseu"
+          }
+        },
+        "ForestCommand": {
+          "$className": "TextChatCommand",
+          "$properties": {
+            "AutocompleteVisible": true,
+            "PrimaryAlias": "/floresta",
+            "SecondaryAlias": "/sair"
+          }
         }
       }
     },
