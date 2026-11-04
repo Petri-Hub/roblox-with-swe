@@ -1,13 +1,16 @@
--- The battle bus: every first life starts in the air.
+-- The battle bus: every life starts in the air.
 --
--- When a player joins, a bus leaves from above the spawn clearing, flies out
--- over the forest and the player leaves it in the air behind it, coming down
--- with a chute. Only the first life of a session gets the bus; a respawn puts
--- the player back on the ground like before.
+-- A bus leaves from above the spawn clearing, flies out over the forest and
+-- the player leaves it in the air behind it, coming down with a chute. Every
+-- life gets the bus, including a respawn after a death. When a bus is already
+-- flying close to the clearing, the next player rides that one instead of
+-- starting a second bus beside it.
+local Debris = game:GetService("Debris")
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 local ServerStorage = game:GetService("ServerStorage")
+local SoundService = game:GetService("SoundService")
 local Workspace = game:GetService("Workspace")
 
 local BusDrop = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("BusDrop"))
@@ -17,9 +20,19 @@ local BusDropService = {}
 local TEMPLATE_NAME = "BattleBusTemplate"
 local BUS_NAME = "BattleBus"
 local SKY_SPAWN_NAME = "BusDropSpawn"
-local SKY_SPAWN_CLEANUP = 6
+local HORN_NAME = "BattleBusHorn"
+local HORN_VOLUME = 1.2
+local HORN_CLEANUP = 8
+local FOREST_TIMEOUT = 30
 
-local drops: { [Player]: { lane: Vector3, skySpawn: SpawnLocation } } = {}
+type Flight = {
+	lane: Vector3,
+	startedAt: number,
+	bus: Model,
+}
+
+local skySpawn: SpawnLocation? = nil
+local activeFlight: Flight? = nil
 
 local function forestReady(): boolean
 	local forest = Workspace:FindFirstChild("GeneratedForest")
@@ -27,9 +40,14 @@ local function forestReady(): boolean
 	return forest ~= nil and forest:GetAttribute("Ready") == true
 end
 
--- A sky spawn above the clearing: the character is created up there instead of
--- on the ground, so the first thing a player sees is the forest from above.
-local function makeSkySpawn(): SpawnLocation
+-- One sky spawn above the clearing, shared by every life: a character is
+-- created up there instead of on the ground, so the drop starts from the air
+-- on a join and on a respawn alike.
+local function ensureSkySpawn(): SpawnLocation
+	if skySpawn and skySpawn.Parent then
+		return skySpawn
+	end
+
 	local spawn = Instance.new("SpawnLocation")
 	spawn.Name = SKY_SPAWN_NAME
 	spawn.Size = Vector3.new(8, 1, 8)
@@ -43,6 +61,7 @@ local function makeSkySpawn(): SpawnLocation
 	spawn.Enabled = true
 	spawn.Parent = Workspace
 
+	skySpawn = spawn
 	return spawn
 end
 
@@ -63,20 +82,21 @@ local function prepareBus(bus: Model): Model
 	return bus
 end
 
-local function fly(bus: Model, lane: Vector3)
-	local startedAt = os.clock()
-
-	while bus.Parent do
-		local distance = (os.clock() - startedAt) * BusDrop.BUS_SPEED
+local function fly(flight: Flight)
+	while flight.bus.Parent do
+		local distance = (os.clock() - flight.startedAt) * BusDrop.BUS_SPEED
 		if distance > BusDrop.BUS_TRAVEL then
 			break
 		end
 
-		bus:PivotTo(BusDrop.busCFrame(lane, distance))
+		flight.bus:PivotTo(BusDrop.busCFrame(flight.lane, distance))
 		RunService.Heartbeat:Wait()
 	end
 
-	bus:Destroy()
+	flight.bus:Destroy()
+	if activeFlight == flight then
+		activeFlight = nil
+	end
 end
 
 local function spawnBus(lane: Vector3)
@@ -91,7 +111,37 @@ local function spawnBus(lane: Vector3)
 	bus:PivotTo(BusDrop.busCFrame(lane, 0))
 	bus.Parent = Workspace
 
-	task.spawn(fly, bus, lane)
+	local flight = { lane = lane, startedAt = os.clock(), bus = bus } :: Flight
+	activeFlight = flight
+	task.spawn(fly, flight)
+end
+
+-- The lane the next player drops along: the bus already in the air when it is
+-- still close enough to the clearing, otherwise a fresh bus.
+local function laneForDrop(): Vector3
+	local flight = activeFlight
+	if flight and flight.bus.Parent then
+		local travelled = (os.clock() - flight.startedAt) * BusDrop.BUS_SPEED
+		if BusDrop.canRide(travelled) then
+			return flight.lane
+		end
+	end
+
+	local lane = BusDrop.lane(math.random() * math.pi * 2)
+	spawnBus(lane)
+	return lane
+end
+
+-- The horn belongs to the whole event, not to a speaker 235 studs up where
+-- nobody would hear it, so it plays as a plain 2D sound for everyone.
+local function playHorn()
+	local horn = Instance.new("Sound")
+	horn.Name = HORN_NAME
+	horn.SoundId = "rbxassetid://" .. BusDrop.HORN_SOUND_ID
+	horn.Volume = HORN_VOLUME
+	horn.Parent = SoundService
+	horn:Play()
+	Debris:AddItem(horn, HORN_CLEANUP)
 end
 
 -- A chute that is not a chute: cap the fall at a walking pace and drift with
@@ -164,7 +214,7 @@ local function attachChute(character: Model, lane: Vector3)
 	task.delay(BusDrop.GLIDE_SECONDS, release)
 end
 
-local function leaveBus(player: Player, character: Model, lane: Vector3, skySpawn: SpawnLocation)
+local function leaveBus(character: Model)
 	local humanoid = character:WaitForChild("Humanoid", 10)
 	local root = character:WaitForChild("HumanoidRootPart", 10)
 
@@ -178,35 +228,12 @@ local function leaveBus(player: Player, character: Model, lane: Vector3, skySpaw
 		root.Anchored = false
 	end
 
+	local lane = laneForDrop()
 	attachChute(character, lane)
-
-	if player.RespawnLocation == skySpawn then
-		player.RespawnLocation = nil
-	end
-
-	task.delay(SKY_SPAWN_CLEANUP, function()
-		if skySpawn.Parent then
-			skySpawn:Destroy()
-		end
-	end)
+	playHorn()
 end
 
 local function onCharacterAdded(player: Player, character: Model)
-	local drop = drops[player]
-	if not drop then
-		return
-	end
-
-	drops[player] = nil
-	player.RespawnLocation = nil
-	task.spawn(leaveBus, player, character, drop.lane, drop.skySpawn)
-end
-
-local function onPlayerAdded(player: Player)
-	if drops[player] then
-		return
-	end
-
 	if not forestReady() then
 		-- The forest is still being generated; this life starts on the ground
 		-- rather than falling into a map that is not there yet.
@@ -214,11 +241,15 @@ local function onPlayerAdded(player: Player)
 		return
 	end
 
-	local lane = BusDrop.lane(math.random() * math.pi * 2)
-	local skySpawn = makeSkySpawn()
-	drops[player] = { lane = lane, skySpawn = skySpawn }
-	player.RespawnLocation = skySpawn
-	spawnBus(lane)
+	-- Every life, including the next respawn, starts in the air.
+	player.RespawnLocation = ensureSkySpawn()
+	task.spawn(leaveBus, character)
+end
+
+local function onPlayerAdded(player: Player)
+	if forestReady() then
+		player.RespawnLocation = ensureSkySpawn()
+	end
 
 	player.CharacterAdded:Connect(function(character)
 		onCharacterAdded(player, character)
@@ -229,21 +260,33 @@ local function onPlayerAdded(player: Player)
 	end
 end
 
-local function onPlayerRemoving(player: Player)
-	local drop = drops[player]
-	drops[player] = nil
-	if drop and drop.skySpawn.Parent then
-		drop.skySpawn:Destroy()
+-- Players who joined while the forest was still generating get their sky spawn
+-- as soon as it is ready.
+local function watchForest()
+	local deadline = os.clock() + FOREST_TIMEOUT
+	while not forestReady() and os.clock() < deadline do
+		task.wait(0.5)
+	end
+
+	if not forestReady() then
+		warn("The battle bus is not running: the forest never reported Ready")
+		return
+	end
+
+	local spawn = ensureSkySpawn()
+	for _, player in Players:GetPlayers() do
+		player.RespawnLocation = spawn
 	end
 end
 
 function BusDropService.start()
 	Players.PlayerAdded:Connect(onPlayerAdded)
-	Players.PlayerRemoving:Connect(onPlayerRemoving)
 
 	for _, player in Players:GetPlayers() do
 		onPlayerAdded(player)
 	end
+
+	task.spawn(watchForest)
 end
 
 return BusDropService
