@@ -135,17 +135,32 @@ local function attachChute(character: Model, lane: Vector3)
 		if os.clock() < armedAt then
 			return
 		end
-		if
-			new == Enum.HumanoidStateType.Landed
-			or new == Enum.HumanoidStateType.Running
-			or new == Enum.HumanoidStateType.RunningNoPhysics
-			or new == Enum.HumanoidStateType.Climbing
-			or new == Enum.HumanoidStateType.Swimming
-		then
+		-- Anything that is not still falling means the flight is over. Landing
+		-- can arrive as FallingDown instead of Landed, and while the chute is
+		-- held with an endless force it would keep the character under the
+		-- ground for as long as that state lasts.
+		if new ~= Enum.HumanoidStateType.Freefall and new ~= Enum.HumanoidStateType.Jumping then
 			release()
 		end
 	end)
 	humanoid.Died:Connect(release)
+
+	-- Let go just above the ground, so the last studs are a normal landing
+	-- instead of the chute pushing the character through the terrain.
+	local rayParams = RaycastParams.new()
+	rayParams.FilterType = Enum.RaycastFilterType.Exclude
+	rayParams.FilterDescendantsInstances = { character }
+
+	task.spawn(function()
+		while not released do
+			if Workspace:Raycast(root.Position, Vector3.new(0, -BusDrop.CHUTE_RELEASE, 0), rayParams) then
+				release()
+				return
+			end
+			RunService.Heartbeat:Wait()
+		end
+	end)
+
 	task.delay(BusDrop.GLIDE_SECONDS, release)
 end
 

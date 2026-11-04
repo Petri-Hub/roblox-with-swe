@@ -52,6 +52,13 @@ describe("battle bus drop", function()
 		expect(cframe.Y).toBeCloseTo(BusDrop.ALTITUDE, PRECISION)
 	end)
 
+	it("lets go of the chute before the character reaches the ground", function()
+		-- One frame of fall is small, so the ray that releases the chute has
+		-- enough room to fire before the feet touch the terrain.
+		expect(BusDrop.CHUTE_RELEASE).toBeGreaterThan(BusDrop.GLIDE_FALL / 60)
+		expect(BusDrop.CHUTE_RELEASE).toBeLessThan(BusDrop.GLIDE_FALL)
+	end)
+
 	it("brings the player down slowly and inside the forest", function()
 		local lane = BusDrop.lane(1.9)
 		local velocity = BusDrop.glideVelocity(lane)
