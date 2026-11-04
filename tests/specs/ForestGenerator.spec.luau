@@ -8,7 +8,7 @@ local expect = JestGlobals.expect
 local it = JestGlobals.it
 
 describe("forest generation", function()
-	it("builds terrain, trees, a spawn, and fog in the engine", function()
+	it("builds an open terrain, no trees, a spawn and daylight", function()
 		local oldBaseplate = Instance.new("Part")
 		oldBaseplate.Name = "Baseplate"
 		oldBaseplate.Parent = workspace
@@ -19,44 +19,14 @@ describe("forest generation", function()
 
 		local forest = ForestGenerator.generate()
 		local trees = forest.Trees:GetChildren()
-		expect(forest:GetAttribute("TreeSource")).toBe("Bundled")
 
 		expect(workspace:FindFirstChild("Baseplate")).toBeNil()
 		expect(workspace:FindFirstChild("World")).toBeNil()
-		expect(#trees).toBe(#ForestLayout.treeLocations())
+		-- The map is an open field now: the folder exists, but nothing is planted.
+		expect(forest:GetAttribute("TreeSource")).toBe("None")
+		expect(#trees).toBe(0)
+		expect(forest:GetAttribute("ExpectedTreeCount")).toBe(0)
 		expect(forest:GetAttribute("Ready")).toBe(true)
-		expect(forest:GetAttribute("ExpectedTreeCount")).toBe(#trees)
-		local templatedCount = 0
-		for _, tree in trees do
-			if tree.Name:find("Tree") then
-				templatedCount += 1
-				local _, size = tree:GetBoundingBox()
-				expect(size.Y).toBeGreaterThan(ForestLayout.TREE_MIN_HEIGHT * 0.85)
-				expect(size.Y).toBeLessThan(ForestLayout.TREE_MAX_HEIGHT * 1.15)
-				expect(tree:FindFirstChild("Soil", true)).toBeNil()
-				local solidParts = 0
-				for _, child in tree:GetDescendants() do
-					expect(child:IsA("Script") or child:IsA("LocalScript") or child:IsA("ModuleScript")).toBe(false)
-					if child:IsA("BasePart") then
-						local lowerName = string.lower(child.Name)
-						local leafy = string.find(lowerName, "leaf", 1, true) ~= nil
-							or string.find(lowerName, "canopy", 1, true) ~= nil
-							or string.find(lowerName, "foliage", 1, true) ~= nil
-							or string.find(lowerName, "branch", 1, true) ~= nil
-							or string.find(lowerName, "needle", 1, true) ~= nil
-						if leafy then
-							expect(child.CanCollide).toBe(false)
-						end
-						if child.CanCollide then
-							solidParts += 1
-						end
-					end
-				end
-				-- The pack marks the trunk solid; something must stop the player.
-				expect(solidParts).toBeGreaterThan(0)
-			end
-		end
-		expect(templatedCount).toBeGreaterThan(0)
 
 		local landmarks = forest:FindFirstChild("Landmarks")
 		expect(landmarks).never.toBeNil()
@@ -96,13 +66,29 @@ describe("forest generation", function()
 		expect(spawn:IsA("SpawnLocation")).toBe(true)
 		expect(spawn.CanCollide).toBe(true)
 		expect(spawn.Position.Y + spawn.Size.Y / 2).toBeGreaterThan(ForestLayout.heightAt(0, 0))
+
+		-- The bigger map is really written: terrain exists out where the old
+		-- 384-stud map used to end.
 		expect(workspace.Terrain:CountCells()).toBeGreaterThan(0)
+		expect(ForestLayout.MAP_SIZE).toBe(640)
+		local farCorner = Region3.new(Vector3.new(240, -12, 240), Vector3.new(248, 0, 248))
+		local materials = workspace.Terrain:ReadVoxels(farCorner, 4)
+		local solidCells = 0
+		for x = 1, #materials do
+			for y = 1, #materials[x] do
+				for z = 1, #materials[x][y] do
+					if materials[x][y][z] ~= Enum.Material.Air then
+						solidCells += 1
+					end
+				end
+			end
+		end
+		expect(solidCells).toBeGreaterThan(0)
+
 		local lighting = game:GetService("Lighting")
-		expect(lighting.ClockTime).toBe(0.5)
-		expect(lighting.FogEnd).toBeLessThan(ForestLayout.MAP_SIZE / 2)
-		expect(lighting.FogColor.R).toBeLessThan(0.02)
-		expect(lighting.FogColor.G).toBeLessThan(0.02)
-		expect(lighting.FogColor.B).toBeLessThan(0.02)
-		expect(lighting:FindFirstChildOfClass("Atmosphere")).toBeNil()
+		expect(lighting.ClockTime).toBeCloseTo(13.4, 2)
+		expect(lighting.FogEnd).toBeGreaterThan(ForestLayout.MAP_SIZE)
+		expect(lighting.FogColor.R).toBeGreaterThan(0.5)
+		expect(lighting:FindFirstChildOfClass("Atmosphere")).never.toBeNil()
 	end)
 end)
