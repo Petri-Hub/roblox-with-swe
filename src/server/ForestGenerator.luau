@@ -73,6 +73,16 @@ local function buildTerrain()
 
 					for zCell = 1, CHUNK_CELLS do
 						local z = originZ + (zCell - 0.5) * voxelSize
+
+						-- The town lays its own flat ground. Writing terrain here too
+						-- would put a layer of grass right under the streets, and the
+						-- grass blades of the top voxel grow up through the asphalt.
+						if ForestLayout.isInsideTownGround(x, z) then
+							materialColumn[zCell] = Enum.Material.Air
+							occupancyColumn[zCell] = 0
+							continue
+						end
+
 						local height = ForestLayout.heightAt(x, z)
 						local occupancy = math.clamp((height - cellBottom) / voxelSize, 0, 1)
 						local material
@@ -220,6 +230,23 @@ local function block(
 	part.BottomSurface = Enum.SurfaceType.Smooth
 	part.Parent = parent
 	return part
+end
+
+-- The town floor: one thick slab, flush with the grass outside it, so the town
+-- has a real surface with no terrain voxels under the streets.
+local function buildGround(town: Model)
+	local span = ForestLayout.TOWN_GROUND_RADIUS * 2
+	local depth = ForestLayout.heightAt(0, 0) - ForestLayout.TERRAIN_BOTTOM
+	return block(
+		town,
+		"Ground",
+		Vector3.new(span, depth, span),
+		GROUND_COLOR,
+		CFrame.new(0, ForestLayout.TERRAIN_BOTTOM + depth / 2, 0),
+		Enum.Material.Grass,
+		true,
+		false
+	)
 end
 
 local function forestHeight(point: { x: number, z: number }): number
@@ -567,6 +594,7 @@ function ForestGenerator.generate(): Model
 	town.Name = "GeneratedTown"
 	town.Parent = Workspace
 
+	buildGround(town)
 	local streets = buildStreets(town)
 	local houses = buildHouses(town)
 	local lamps = buildLamps(town)
