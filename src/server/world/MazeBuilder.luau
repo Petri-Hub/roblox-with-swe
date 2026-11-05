@@ -37,90 +37,101 @@ local function box(parent: Instance, size: Vector3, cframe: CFrame, material: En
 	})
 end
 
--- The seamless dark-wood image, tiled once per six studs on both broad faces.
-local function textureFaces(part: Part, alongZ: boolean)
-	local faces = alongZ and { Enum.NormalId.Left, Enum.NormalId.Right } or { Enum.NormalId.Front, Enum.NormalId.Back }
-	for _, face in faces do
-		local texture = Instance.new("Texture")
-		texture.Face = face
-		texture.Texture = MazeConfig.WoodTexture
-		texture.StudsPerTileU = 6
-		texture.StudsPerTileV = PANEL_HEIGHT
-		texture.Parent = part
-	end
-end
-
--- One wall segment, dressed the way the reference rooms are: dark wood up to
--- the chair rail, dark plaster above, with baseboard, rail and crown.
+-- One wall run, dressed the way the reference rooms are: mahogany from floor to
+-- ceiling, a darker wainscot field, board-and-batten stiles, baseboard, chair
+-- rail and a three-step cornice.
 local function dressedWall(
 	parent: Instance,
 	center: Vector3,
 	length: number,
 	alongZ: boolean,
 	baseY: number,
-	height: number?
+	height: number?,
+	spacing: number?
 )
 	local long = length + THICKNESS
 	local across = THICKNESS
 	local wallHeight = height or WALL_HEIGHT
-	local panelHeight = math.min(PANEL_HEIGHT, wallHeight)
-	local function size(width: number, tall: number): Vector3
+	local panelHeight = math.min(PANEL_HEIGHT, wallHeight * 0.45)
+	local rhythm = spacing or CELL
+
+	-- thick runs through the wall; wide runs along it.
+	local function strip(thick: number, tall: number, wide: number): Vector3
 		if alongZ then
-			return Vector3.new(width, tall, long)
+			return Vector3.new(thick, tall, wide)
 		end
-		return Vector3.new(long, tall, width)
+		return Vector3.new(wide, tall, thick)
 	end
 
-	local panel = box(
+	local core = box(
 		parent,
-		size(across, panelHeight),
-		CFrame.new(center.X, baseY + panelHeight / 2, center.Z),
+		strip(across, wallHeight, long),
+		CFrame.new(center.X, baseY + wallHeight / 2, center.Z),
 		Enum.Material.Wood,
 		PALETTE.Wood
 	)
-	textureFaces(panel, alongZ)
+	core.Reflectance = 0.05
 
-	box(
+	local field = box(
 		parent,
-		size(across, wallHeight - panelHeight),
-		CFrame.new(center.X, baseY + panelHeight + (wallHeight - panelHeight) / 2, center.Z),
-		Enum.Material.Plaster,
-		PALETTE.Wall
+		strip(across + 0.12, panelHeight - 0.9, long),
+		CFrame.new(center.X, baseY + 0.9 + (panelHeight - 0.9) / 2, center.Z),
+		Enum.Material.Wood,
+		PALETTE.WoodDeep
 	)
+	field.Reflectance = 0.03
 
+	-- Board and batten under the rail.
+	local stileHeight = panelHeight - 1.05
+	for index = 1, math.floor(length / rhythm) - 1 do
+		local offset = index * rhythm - length / 2
+		local position
+		if alongZ then
+			position = Vector3.new(center.X, baseY + 0.9 + stileHeight / 2, center.Z + offset)
+		else
+			position = Vector3.new(center.X + offset, baseY + 0.9 + stileHeight / 2, center.Z)
+		end
+		box(parent, strip(across + 0.26, stileHeight, 0.5), CFrame.new(position), Enum.Material.Wood, PALETTE.WoodTrim)
+	end
+
+	-- Baseboard and chair rail.
 	box(
 		parent,
-		size(across + 0.4, 1.0),
-		CFrame.new(center.X, baseY + 0.5, center.Z),
+		strip(across + 0.5, 0.9, long),
+		CFrame.new(center.X, baseY + 0.45, center.Z),
 		Enum.Material.Wood,
 		PALETTE.WoodTrim
 	)
-
 	box(
 		parent,
-		size(across + 0.5, 0.5),
+		strip(across + 0.6, 0.32, long),
 		CFrame.new(center.X, baseY + panelHeight, center.Z),
 		Enum.Material.Wood,
 		PALETTE.WoodTrim
 	)
 
-	if length >= CELL * 2 then
-		box(
-			parent,
-			size(across + 0.6, 0.8),
-			CFrame.new(center.X, baseY + wallHeight - 0.4, center.Z),
-			Enum.Material.Wood,
-			PALETTE.WoodTrim
-		)
-		-- Ceiling beam following the wall, like the coffered rooms.
-		box(
-			parent,
-			alongZ and Vector3.new(THICKNESS + 1.6, 1.4, long) or Vector3.new(long, 1.4, THICKNESS + 1.6),
-			CFrame.new(center.X, baseY + wallHeight - 1.1, center.Z),
-			Enum.Material.Wood,
-			PALETTE.Wood
-		)
-	end
+	-- Cornice in three steps: fillet, bed, crown.
+	box(
+		parent,
+		strip(across + 0.3, 0.3, long),
+		CFrame.new(center.X, baseY + wallHeight - 1.2, center.Z),
+		Enum.Material.Wood,
+		PALETTE.WoodTrim
+	)
+	box(
+		parent,
+		strip(across + 0.75, 0.45, long),
+		CFrame.new(center.X, baseY + wallHeight - 0.78, center.Z),
+		Enum.Material.Wood,
+		PALETTE.WoodTrim
+	)
+	box(
+		parent,
+		strip(across + 1.15, 0.3, long),
+		CFrame.new(center.X, baseY + wallHeight - 0.32, center.Z),
+		Enum.Material.Wood,
+		PALETTE.Wood
+	)
 end
 
 -- A flat slab built from cell-sized strips, with rectangular holes cut out.
@@ -217,8 +228,8 @@ local function candleLantern(parent: Instance, position: Vector3, normal: Vector
 
 	local light = Instance.new("PointLight")
 	light.Color = PALETTE.CandleLight
-	light.Brightness = 3.8
-	light.Range = 36
+	light.Brightness = 3.2
+	light.Range = 30
 	light.Shadows = true
 	light.Parent = candle
 
@@ -266,8 +277,8 @@ local function placeLightModel(parent: Instance, name: string, cframe: CFrame, s
 	for _, child in model:GetDescendants() do
 		if child:IsA("PointLight") then
 			child.Color = PALETTE.CandleLight
-			child.Range = math.max(child.Range, 32)
-			child.Brightness = math.max(child.Brightness, 2.2)
+			child.Range = math.max(child.Range, 28)
+			child.Brightness = math.max(child.Brightness, 1.8)
 			child.Shadows = true
 		end
 	end
@@ -288,12 +299,12 @@ local function buildSafeRoom(parent: Instance)
 	-- North wall, split around the stair opening.
 	local northSpan = halfWidth - 4 - THICKNESS
 	local northCenter = 4 + northSpan / 2 + THICKNESS / 2
-	dressedWall(parent, Vector3.new(-northCenter, 0, northZ), northSpan, false, 0, ceilingY)
-	dressedWall(parent, Vector3.new(northCenter, 0, northZ), northSpan, false, 0, ceilingY)
+	dressedWall(parent, Vector3.new(-northCenter, 0, northZ), northSpan, false, 0, ceilingY, 8)
+	dressedWall(parent, Vector3.new(northCenter, 0, northZ), northSpan, false, 0, ceilingY, 8)
 	-- Side and south walls.
-	dressedWall(parent, Vector3.new(-halfWidth, 0, (northZ + southZ) / 2), depth, true, 0, ceilingY)
-	dressedWall(parent, Vector3.new(halfWidth, 0, (northZ + southZ) / 2), depth, true, 0, ceilingY)
-	dressedWall(parent, Vector3.new(0, 0, southZ), width, false, 0, ceilingY)
+	dressedWall(parent, Vector3.new(-halfWidth, 0, (northZ + southZ) / 2), depth, true, 0, ceilingY, 8)
+	dressedWall(parent, Vector3.new(halfWidth, 0, (northZ + southZ) / 2), depth, true, 0, ceilingY, 8)
+	dressedWall(parent, Vector3.new(0, 0, southZ), width, false, 0, ceilingY, 8)
 
 	local spawn = Instance.new("SpawnLocation")
 	spawn.Anchored = true
@@ -305,18 +316,19 @@ local function buildSafeRoom(parent: Instance)
 	spawn.Parent = parent
 
 	local centerZ = (northZ + southZ) / 2
-	placeLightModel(parent, MazeConfig.Assets.Chandelier, CFrame.new(0, 12, centerZ), 0.8)
-	fillLight(parent, Vector3.new(0, 12, centerZ), 55, 3.2)
-	fillLight(parent, Vector3.new(0, 8, southZ - 8), 34, 1.6)
+	local lightY = ceilingY - 2.2
+	placeLightModel(parent, MazeConfig.Assets.Chandelier, CFrame.new(0, lightY, centerZ), 0.7)
+	fillLight(parent, Vector3.new(0, lightY, centerZ), 44, 2.2)
+	fillLight(parent, Vector3.new(0, ceilingY - 5, southZ - 8), 28, 1.2)
 	placeLightModel(
 		parent,
 		MazeConfig.Assets.WallCandle,
-		CFrame.lookAt(Vector3.new(-halfWidth + 0.6, 9, centerZ), Vector3.new(0, 9, centerZ))
+		CFrame.lookAt(Vector3.new(-halfWidth + 0.6, lightY - 1, centerZ), Vector3.new(0, lightY - 1, centerZ))
 	)
 	placeLightModel(
 		parent,
 		MazeConfig.Assets.WallCandle,
-		CFrame.lookAt(Vector3.new(halfWidth - 0.6, 9, centerZ), Vector3.new(0, 9, centerZ))
+		CFrame.lookAt(Vector3.new(halfWidth - 0.6, lightY - 1, centerZ), Vector3.new(0, lightY - 1, centerZ))
 	)
 end
 
@@ -351,8 +363,8 @@ local function buildStaircase(parent: Instance, well)
 			parent,
 			Vector3.new(1, shaftHeight, shaftDepth),
 			CFrame.new(side * (MazeConfig.StairWidth / 2 + 0.5), shaftHeight / 2, (well.z0 + well.z1) / 2),
-			Enum.Material.Plaster,
-			PALETTE.Wall
+			Enum.Material.Wood,
+			PALETTE.Wood
 		)
 	end
 
@@ -373,6 +385,27 @@ local function buildStaircase(parent: Instance, well)
 			Enum.Material.Wood,
 			PALETTE.WoodTrim
 		)
+	end
+end
+
+-- One iron sconce on the west wall of every carved room. The foyer is left out:
+-- the staircase arrives there and the eye is already busy.
+local function dressRooms(parent: Instance, grid)
+	local folder = Instance.new("Folder")
+	folder.Name = "RoomSconces"
+	folder.Parent = parent
+
+	for index, room in grid.rooms do
+		if index ~= #grid.rooms then
+			local midZ = (cellCenterZ(room.y) + cellCenterZ(room.y + room.depth - 1)) / 2
+			local westX = cellCenterX(room.x) - CELL / 2
+			local y = FLOOR_Y + MazeConfig.SconceHeight
+			placeLightModel(
+				folder,
+				MazeConfig.Assets.WallCandle,
+				CFrame.lookAt(Vector3.new(westX + 0.8, y, midZ), Vector3.new(westX + 6, y, midZ))
+			)
+		end
 	end
 end
 
@@ -447,7 +480,7 @@ function MazeBuilder.build(random: Random?)
 	local halfD = MazeConfig.GridDepth * CELL / 2
 
 	slab(root, -halfW, halfW, -halfD, halfD, FLOOR_Y, Enum.Material.WoodPlanks, PALETTE.Floor, { well })
-	slab(root, -halfW, halfW, -halfD, halfD, FLOOR_Y + WALL_HEIGHT, Enum.Material.Plaster, PALETTE.Ceiling, {})
+	slab(root, -halfW, halfW, -halfD, halfD, FLOOR_Y + WALL_HEIGHT, Enum.Material.Wood, PALETTE.Ceiling, {})
 
 	local lightSpots = buildWalls(root, grid, rng)
 
@@ -487,6 +520,7 @@ function MazeBuilder.build(random: Random?)
 
 	buildStaircase(root, well)
 	buildSafeRoom(root)
+	dressRooms(root, grid)
 
 	return root, grid
 end

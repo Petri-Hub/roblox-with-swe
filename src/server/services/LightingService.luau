@@ -34,9 +34,9 @@ function LightingService:_base()
 	-- Lighting.Technology is RobloxScriptSecurity: a server script cannot read
 	-- or write it. It stays in default.project.json with the place settings.
 	Lighting.ClockTime = 0
-	Lighting.Brightness = 1
-	Lighting.Ambient = Color3.fromRGB(38, 33, 28)
-	Lighting.OutdoorAmbient = Color3.fromRGB(26, 23, 20)
+	Lighting.Brightness = 0.8
+	Lighting.Ambient = Color3.fromRGB(28, 25, 22)
+	Lighting.OutdoorAmbient = Color3.fromRGB(18, 16, 15)
 	Lighting.ExposureCompensation = 0
 	Lighting.GlobalShadows = true
 	Lighting.ShadowSoftness = 0.4
@@ -46,23 +46,23 @@ end
 
 function LightingService:_effects()
 	local atmosphere = ensure("Atmosphere", "Atmosphere") :: Atmosphere
-	atmosphere.Color = Color3.fromRGB(31, 26, 23)
-	atmosphere.Decay = Color3.fromRGB(20, 15, 13)
-	atmosphere.Density = 0.4
+	atmosphere.Color = Color3.fromRGB(26, 21, 18)
+	atmosphere.Decay = Color3.fromRGB(16, 12, 10)
+	atmosphere.Density = 0.32
 	atmosphere.Glare = 0
-	atmosphere.Haze = 2
+	atmosphere.Haze = 1.6
 	atmosphere.Offset = 0.1
 
 	local bloom = ensure("BloomEffect", "Bloom") :: BloomEffect
-	bloom.Intensity = 0.55
-	bloom.Size = 26
-	bloom.Threshold = 1.5
+	bloom.Intensity = 0.28
+	bloom.Size = 34
+	bloom.Threshold = 2.1
 
 	local warmth = ensure("ColorCorrectionEffect", "Warmth") :: ColorCorrectionEffect
-	warmth.Brightness = 0.02
-	warmth.Contrast = 0
-	warmth.Saturation = -0.06
-	warmth.TintColor = Color3.fromRGB(255, 240, 219)
+	warmth.Brightness = 0
+	warmth.Contrast = 0.06
+	warmth.Saturation = -0.12
+	warmth.TintColor = Color3.fromRGB(255, 246, 235)
 
 	self._atmosphere = atmosphere
 end
@@ -73,8 +73,8 @@ function LightingService:Start()
 
 	-- Fog only makes sense once there are corridors to walk through.
 	self._bus:On(Topics.MazeBuilt, function()
-		self._atmosphere.Density = 0.35
-		self._atmosphere.Haze = 2.4
+		self._atmosphere.Density = 0.28
+		self._atmosphere.Haze = 2
 	end)
 
 	self._bus:On(Topics.MazeFailed, function(reason)
