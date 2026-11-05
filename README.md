@@ -115,6 +115,10 @@ Every fruit used to carry one spell on one key. Each one carries four now: the m
 
 **Earth** — `T` Terremoto: 26 studs of ground slam, 100 damage and a 1.2 second stumble. `V` Muralha de Pedra: a 22-stud wall of rock 12 studs ahead that stands for 12 seconds — a ghost only walks, so it has to go around. `B` Punho de Pedra: a fist of rock out of the ground on the aimed point, up to 70 studs away, 260 damage in 9 studs. The spike field of the main spell keeps cutting while it stands: 14 damage every 0.6 seconds.
 
+The row of key caps (`AbilityHud`) sits right beside the main spell badge in the bottom-right corner, in the same dark rounded style and at the same height, so the four abilities of a fruit read as one strip: `T`, `V`, `B` and then the main spell. Each cap shows the short name, the hint while ready and the seconds left while charging back.
+
+The look is the client's: `src/client/AbilityEffects.luau` builds the show out of short lived parts — an expanding dome, rings that run along the ground, flame tongues that grow and fade, rock thrown out of the crater, and a fist made of a palm, four knuckles and a thumb instead of a ball. The walls are split: the server keeps an invisible damage volume for the fire wall and solid slabs for the stone wall, and the client draws the fire on top. Sounds reuse the ids the main spells already ship, pitched per ability.
+
 ### Adding a fruit
 
 Fruit are data, the same way weapons are. To add one:
