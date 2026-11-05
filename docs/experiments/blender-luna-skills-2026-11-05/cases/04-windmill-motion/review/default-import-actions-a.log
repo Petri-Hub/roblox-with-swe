@@ -1,0 +1,103 @@
+Failed to create secure directory (/home/agent/.config/pulse): Read-only file system
+Extensions: writing cache failed ([Errno 30] Read-only file system: '/home/agent/.config/blender/5.2').
+22:54:08 | INFO: Data are loaded, start creating Blender stuff
+22:54:08 | INFO: Blender create Mesh node Cone.007
+22:54:08 | INFO: Blender create Mesh node Cone.008
+22:54:08 | INFO: Blender create Mesh node Cone.009
+22:54:08 | INFO: Blender create Mesh node Cone.010
+22:54:08 | INFO: Blender create Mesh node Cone.011
+22:54:08 | INFO: Blender create Mesh node Cone.012
+22:54:08 | INFO: Blender create Mesh node Cone.013
+22:54:08 | INFO: Blender create Mesh node Cone.014
+22:54:08 | INFO: Blender create Mesh node Cone.015
+22:54:08 | INFO: Blender create Mesh node Cone.016
+22:54:08 | INFO: Blender create Mesh node Cone.017
+22:54:08 | INFO: Blender create Mesh node Cone.018
+22:54:08 | INFO: Blender create Mesh node Cone.019
+22:54:08 | INFO: Blender create Mesh node Cone.020
+22:54:08 | INFO: Blender create Mesh node Cone.021
+22:54:08 | INFO: Blender create Mesh node Cube.011
+22:54:08 | INFO: Blender create Mesh node Cube.012
+22:54:08 | INFO: Blender create Mesh node Cube.013
+22:54:08 | INFO: Blender create Mesh node Cube.014
+22:54:08 | INFO: Blender create Mesh node Icosphere.014
+22:54:08 | INFO: Blender create Mesh node Icosphere.015
+22:54:08 | INFO: Blender create Mesh node Icosphere.016
+22:54:08 | INFO: Blender create Mesh node Icosphere.017
+22:54:08 | INFO: Blender create Mesh node BladeMesh
+22:54:08 | INFO: Blender create Mesh node BladeMesh.001
+22:54:08 | INFO: Blender create Mesh node BladeMesh.002
+22:54:08 | INFO: Blender create Mesh node BladeMesh.003
+22:54:08 | INFO: Blender create Mesh node Icosphere.013
+22:54:08 | INFO: Blender create Mesh node Icosphere.012
+22:54:08 | INFO: Blender create Mesh node Cube.001
+22:54:08 | INFO: Blender create Mesh node Cube.006
+22:54:08 | INFO: Blender create Mesh node Cube.002
+22:54:08 | INFO: Blender create Mesh node Cube.003
+22:54:08 | INFO: Blender create Mesh node Cube.004
+22:54:08 | INFO: Blender create Mesh node Cube.005
+22:54:08 | INFO: Blender create Mesh node Cube
+22:54:08 | INFO: Blender create Mesh node Cone.004
+22:54:08 | INFO: Blender create Mesh node Cube.029
+22:54:08 | INFO: Blender create Mesh node Cube.035
+22:54:08 | INFO: Blender create Mesh node Cube.041
+22:54:08 | INFO: Blender create Mesh node Cube.034
+22:54:08 | INFO: Blender create Mesh node Cube.040
+22:54:08 | INFO: Blender create Mesh node Cube.046
+22:54:08 | INFO: Blender create Mesh node Cube.030
+22:54:08 | INFO: Blender create Mesh node Cube.031
+22:54:08 | INFO: Blender create Mesh node Cube.032
+22:54:08 | INFO: Blender create Mesh node Cube.033
+22:54:08 | INFO: Blender create Mesh node Cube.036
+22:54:08 | INFO: Blender create Mesh node Cube.037
+22:54:08 | INFO: Blender create Mesh node Cube.038
+22:54:08 | INFO: Blender create Mesh node Cube.039
+22:54:08 | INFO: Blender create Mesh node Cube.042
+22:54:08 | INFO: Blender create Mesh node Cube.043
+22:54:08 | INFO: Blender create Mesh node Cube.044
+22:54:08 | INFO: Blender create Mesh node Cube.045
+22:54:08 | INFO: Blender create Mesh node Cube.015
+22:54:08 | INFO: Blender create Mesh node Cube.016
+22:54:08 | INFO: Blender create Mesh node Cube.017
+22:54:08 | INFO: Blender create Mesh node Cube.018
+22:54:08 | INFO: Blender create Mesh node Cube.019
+22:54:08 | INFO: Blender create Mesh node Cube.022
+22:54:08 | INFO: Blender create Mesh node Cube.023
+22:54:08 | INFO: Blender create Mesh node Cube.024
+22:54:08 | INFO: Blender create Mesh node Cube.025
+22:54:08 | INFO: Blender create Mesh node Cube.026
+22:54:08 | INFO: Blender create Mesh node Cube.020
+22:54:08 | INFO: Blender create Mesh node Cube.021
+22:54:08 | INFO: Blender create Mesh node Cube.027
+22:54:08 | INFO: Blender create Mesh node Cube.028
+22:54:08 | INFO: Blender create Mesh node Cone.003
+22:54:08 | INFO: Blender create Mesh node Cylinder
+22:54:08 | INFO: Blender create Mesh node Cone
+22:54:08 | INFO: Blender create Mesh node Cone.001
+22:54:08 | INFO: Blender create Mesh node Icosphere
+22:54:08 | INFO: Blender create Mesh node Icosphere.001
+22:54:08 | INFO: Blender create Mesh node Icosphere.002
+22:54:08 | INFO: Blender create Mesh node Icosphere.003
+22:54:08 | INFO: Blender create Mesh node Icosphere.004
+22:54:08 | INFO: Blender create Mesh node Icosphere.005
+22:54:08 | INFO: Blender create Mesh node Icosphere.006
+22:54:08 | INFO: Blender create Mesh node Icosphere.007
+22:54:08 | INFO: Blender create Mesh node Icosphere.008
+22:54:08 | INFO: Blender create Mesh node Icosphere.009
+22:54:08 | INFO: Blender create Mesh node Icosphere.010
+22:54:08 | INFO: Blender create Mesh node Icosphere.011
+22:54:08 | INFO: Blender create Mesh node Cone.005
+22:54:08 | INFO: Blender create Mesh node Cone.006
+22:54:08 | INFO: Blender create Mesh node Cone.002
+22:54:08 | INFO: Blender create Mesh node Cube.007
+22:54:08 | INFO: Blender create Mesh node Cube.009
+22:54:08 | INFO: Blender create Mesh node Cube.008
+22:54:08 | INFO: Blender create Mesh node Cube.010
+22:54:08 | INFO: glTF import finished in 0.06s
+ANIM ANIM_Grass_Sway_0 action Grass_Sway_Loop_0 tracks [('Grass_Sway_Loop_0', True, False, [('Grass_Sway_Loop_0', 1.0, 49.0, False)])]
+ANIM ANIM_Grass_Sway_1 action None tracks [('Grass_Sway_Loop_1', True, False, [('Grass_Sway_Loop_1', 1.0, 49.0, False)])]
+ANIM ANIM_Grass_Sway_2 action None tracks [('Grass_Sway_Loop_2', True, False, [('Grass_Sway_Loop_2', 1.0, 49.0, False)])]
+ANIM ANIM_Rotor_Hub action None tracks [('Windmill_Rotor_Loop', True, False, [('Windmill_Rotor_Loop', 1.0, 49.0, False)])]
+Blender 5.2.3 LTS (hash e13b728c6880 built 2026-10-22 01:35:05)
+
+Blender quit

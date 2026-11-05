@@ -1,0 +1,679 @@
+{
+  "a": {
+    "animation_playback_setup": "each object with a sole imported clip activated explicitly; NLA muted to avoid double evaluation",
+    "activated_single_clip_objects": [
+      {
+        "object": "ANIM_Grass_Sway_0",
+        "action": "Grass_Sway_Loop_0",
+        "frame_range": [
+          1.0,
+          49.0
+        ]
+      },
+      {
+        "object": "ANIM_Grass_Sway_1",
+        "action": "Grass_Sway_Loop_1",
+        "frame_range": [
+          1.0,
+          49.0
+        ]
+      },
+      {
+        "object": "ANIM_Grass_Sway_2",
+        "action": "Grass_Sway_Loop_2",
+        "frame_range": [
+          1.0,
+          49.0
+        ]
+      },
+      {
+        "object": "ANIM_Rotor_Hub",
+        "action": "Windmill_Rotor_Loop",
+        "frame_range": [
+          1.0,
+          49.0
+        ]
+      }
+    ],
+    "source": "/workspace/roblox-with-swe-report/docs/experiments/blender-luna-skills-2026-11-05/cases/04-windmill-motion/run-a/asset.glb",
+    "load_ok": true,
+    "blender": "5.2.3 LTS",
+    "mesh_objects": 92,
+    "triangles": 1680,
+    "materials": 11,
+    "bounds": [
+      [
+        -3.219881534576416,
+        3.219881534576416
+      ],
+      [
+        -3.169217586517334,
+        3.169217586517334
+      ],
+      [
+        -0.25999999046325684,
+        4.123086452484131
+      ]
+    ],
+    "dimensions": [
+      6.439763069152832,
+      6.338435173034668,
+      4.383086442947388
+    ],
+    "armatures": 0,
+    "bones": 0,
+    "mesh_with_armature_modifier": 0,
+    "actions": 4,
+    "fps": 24,
+    "frame_start": 1,
+    "frame_end": 250,
+    "max_vertex_displacement_from_frame_1": {
+      "1": 0.0,
+      "12": 1.872542477703746,
+      "16": 2.3613740271310397,
+      "24": 2.8339195533242902,
+      "32": 2.5471190821229803,
+      "36": 2.135225039796653,
+      "48": 0.1857443486478051,
+      "49": 5.092623081992585e-07
+    },
+    "object_max_displacement_sampled": {
+      "SM_Grass_Blade_0_0": 0.06306048162369934,
+      "SM_Grass_Blade_0_1": 0.06506812466413466,
+      "SM_Grass_Blade_0_2": 0.06082945253883694,
+      "SM_Grass_Blade_0_3": 0.06853908307902876,
+      "SM_Grass_Blade_0_4": 0.056938454785613525,
+      "SM_Grass_Blade_1_0": 0.06306050285373027,
+      "SM_Grass_Blade_1_1": 0.06506834148394285,
+      "SM_Grass_Blade_1_2": 0.06082955684077186,
+      "SM_Grass_Blade_1_3": 0.06853925399285817,
+      "SM_Grass_Blade_1_4": 0.05693843616074919,
+      "SM_Grass_Blade_2_0": 0.06306048162369934,
+      "SM_Grass_Blade_2_1": 0.06506825392863538,
+      "SM_Grass_Blade_2_2": 0.0608295066036237,
+      "SM_Grass_Blade_2_3": 0.06853916460816328,
+      "SM_Grass_Blade_2_4": 0.05693852040386917,
+      "SM_Blade_Spar_0": 2.595244011845142,
+      "SM_Blade_Spar_1": 2.59524410371264,
+      "SM_Blade_Spar_2": 2.5952441955801353,
+      "SM_Blade_Spar_3": 2.595244287447627,
+      "SM_Blade_Tip_0": 2.733537861878783,
+      "SM_Blade_Tip_1": 2.716481896028202,
+      "SM_Blade_Tip_2": 2.7335376874392114,
+      "SM_Blade_Tip_3": 2.716481896028202,
+      "SM_Rotor_Blade_0": 2.8339194691939618,
+      "SM_Rotor_Blade_1": 2.8339195533242902,
+      "SM_Rotor_Blade_2": 2.8339195533242902,
+      "SM_Rotor_Blade_3": 2.833919385063631,
+      "SM_Rotor_Hub": 0.4390580453760185,
+      "SM_Door_Knob": 0.0,
+      "SM_Door_Leaf": 0.0,
+      "SM_Door_Lintel": 0.0,
+      "SM_Door_Plank": 0.0,
+      "SM_Door_Plank.001": 0.0,
+      "SM_Door_Plank.002": 0.0,
+      "SM_Door_Plank.003": 0.0,
+      "SM_Door_Recess": 0.0,
+      "SM_Eave_Beam": 0.0,
+      "SM_Fence_Back_Post": 0.0,
+      "SM_Fence_Back_Post.001": 0.0,
+      "SM_Fence_Back_Post.002": 0.0,
+      "SM_Fence_Back_Rail": 0.0,
+      "SM_Fence_Back_Rail.001": 0.0,
+      "SM_Fence_Back_Rail.002": 0.0,
+      "SM_Fence_Picket": 0.0,
+      "SM_Fence_Picket.001": 0.0,
+      "SM_Fence_Picket.002": 0.0,
+      "SM_Fence_Picket.003": 0.0,
+      "SM_Fence_Picket.004": 0.0,
+      "SM_Fence_Picket.005": 0.0,
+      "SM_Fence_Picket.006": 0.0,
+      "SM_Fence_Picket.007": 0.0,
+      "SM_Fence_Picket.008": 0.0,
+      "SM_Fence_Picket.009": 0.0,
+      "SM_Fence_Picket.010": 0.0,
+      "SM_Fence_Picket.011": 0.0,
+      "SM_Fence_Post": 0.0,
+      "SM_Fence_Post.001": 0.0,
+      "SM_Fence_Post.002": 0.0,
+      "SM_Fence_Post.003": 0.0,
+      "SM_Fence_Post.004": 0.0,
+      "SM_Fence_Post.005": 0.0,
+      "SM_Fence_Post.006": 0.0,
+      "SM_Fence_Post.007": 0.0,
+      "SM_Fence_Post.008": 0.0,
+      "SM_Fence_Post.009": 0.0,
+      "SM_Fence_Rail": 0.0,
+      "SM_Fence_Rail.001": 0.0,
+      "SM_Fence_Rail.002": 0.0,
+      "SM_Fence_Rail.003": 0.0,
+      "SM_Foundation": 0.0,
+      "SM_Hub_Axle": 0.0,
+      "SM_Island_Earth": 0.0,
+      "SM_Island_Top": 0.0,
+      "SM_Rim_Stone_00": 0.0,
+      "SM_Rim_Stone_01": 0.0,
+      "SM_Rim_Stone_02": 0.0,
+      "SM_Rim_Stone_03": 0.0,
+      "SM_Rim_Stone_04": 0.0,
+      "SM_Rim_Stone_05": 0.0,
+      "SM_Rim_Stone_06": 0.0,
+      "SM_Rim_Stone_07": 0.0,
+      "SM_Rim_Stone_08": 0.0,
+      "SM_Rim_Stone_09": 0.0,
+      "SM_Rim_Stone_10": 0.0,
+      "SM_Rim_Stone_11": 0.0,
+      "SM_Roof": 0.0,
+      "SM_Roof_Cap": 0.0,
+      "SM_Tower": 0.0,
+      "SM_Window_Frame": 0.0,
+      "SM_Window_Frame.001": 0.0,
+      "SM_Window_Glass": 0.0,
+      "SM_Window_Glass.001": 0.0
+    },
+    "external_images": [],
+    "elapsed_seconds_reported": 1222.0,
+    "duration_basis": "A: 22:31:35–22:51:57 UTC; B: 22:33:07–22:45:25 UTC (até reexportação, documentação posterior não cronometrada). Janelas de logs, não custo de raciocínio.",
+    "skills_read_reported": 8,
+    "skills_names_reported": [
+      "blender-animation",
+      "blender-asset-qa",
+      "blender-core",
+      "blender-export-pipelines",
+      "blender-lighting-lookdev",
+      "blender-pbr-materials",
+      "blender-rendering",
+      "blender-scene-setup"
+    ],
+    "tokens": null,
+    "files_bytes": {
+      "README.md": 1967,
+      "asset.blend": 149785,
+      "asset.glb": 196908,
+      "back.png": 651259,
+      "execution-log.txt": 3382,
+      "front.png": 668066,
+      "generate.py": 9401,
+      "logs/env-report.txt": 202,
+      "logs/generate-final.log": 9245,
+      "logs/generate.log": 9243,
+      "logs/glb-inspect.log": 5343,
+      "logs/inspect_glb.py": 1042,
+      "logs/qa-check.log": 28299,
+      "logs/qa-help.log": 833,
+      "logs/repair-front.log": 324,
+      "logs/repair-geometry.log": 8693,
+      "logs/repair_front.py": 1026,
+      "logs/repair_geometry.py": 1021,
+      "logs/review-help.log": 756,
+      "logs/review-shots.log": 1057,
+      "logs/review-shots.png": 674866,
+      "logs/review-shots_back.png": 240885,
+      "logs/review-shots_front.png": 247898,
+      "logs/review-shots_three_quarter.png": 254229,
+      "logs/select_export.py": 239,
+      "motion-01.png": 696168,
+      "motion-16.png": 694803,
+      "motion-32.png": 692704,
+      "presentation.png": 696168,
+      "skills-read.txt": 343
+    },
+    "images": {
+      "back.png": {
+        "size": [
+          768,
+          768
+        ],
+        "bytes": 651259
+      },
+      "motion-16.png": {
+        "size": [
+          768,
+          768
+        ],
+        "bytes": 694803
+      },
+      "motion-01.png": {
+        "size": [
+          768,
+          768
+        ],
+        "bytes": 696168
+      },
+      "presentation.png": {
+        "size": [
+          768,
+          768
+        ],
+        "bytes": 696168
+      },
+      "motion-32.png": {
+        "size": [
+          768,
+          768
+        ],
+        "bytes": 692704
+      },
+      "front.png": {
+        "size": [
+          768,
+          768
+        ],
+        "bytes": 668066
+      }
+    },
+    "glb_structure": {
+      "valid_header": true,
+      "animations": [
+        {
+          "name": "Grass_Sway_Loop_0",
+          "channels": 1,
+          "paths": [
+            "rotation"
+          ],
+          "target_nodes": [
+            "ANIM_Grass_Sway_0"
+          ],
+          "samplers": 1,
+          "time_bounds": [
+            [
+              2.0416666666666665
+            ]
+          ]
+        },
+        {
+          "name": "Grass_Sway_Loop_1",
+          "channels": 1,
+          "paths": [
+            "rotation"
+          ],
+          "target_nodes": [
+            "ANIM_Grass_Sway_1"
+          ],
+          "samplers": 1,
+          "time_bounds": [
+            [
+              2.0416666666666665
+            ]
+          ]
+        },
+        {
+          "name": "Grass_Sway_Loop_2",
+          "channels": 1,
+          "paths": [
+            "rotation"
+          ],
+          "target_nodes": [
+            "ANIM_Grass_Sway_2"
+          ],
+          "samplers": 1,
+          "time_bounds": [
+            [
+              2.0416666666666665
+            ]
+          ]
+        },
+        {
+          "name": "Windmill_Rotor_Loop",
+          "channels": 1,
+          "paths": [
+            "rotation"
+          ],
+          "target_nodes": [
+            "ANIM_Rotor_Hub"
+          ],
+          "samplers": 1,
+          "time_bounds": [
+            [
+              2.0416666666666665
+            ]
+          ]
+        }
+      ],
+      "skins": 0,
+      "external_uris": [],
+      "nodes": 96,
+      "camera_nodes": [],
+      "light_nodes": []
+    },
+    "module_exports": {}
+  },
+  "b": {
+    "animation_playback_setup": "each object with a sole imported clip activated explicitly; NLA muted to avoid double evaluation",
+    "activated_single_clip_objects": [
+      {
+        "object": "Rotor assembly",
+        "action": "Rotor assemblyAction",
+        "frame_range": [
+          1.0,
+          49.0
+        ]
+      },
+      {
+        "object": "Swaying grass tuft 1",
+        "action": "Swaying grass tuft 1Action",
+        "frame_range": [
+          1.0,
+          49.0
+        ]
+      },
+      {
+        "object": "Swaying grass tuft 2",
+        "action": "Swaying grass tuft 2Action",
+        "frame_range": [
+          1.0,
+          49.0
+        ]
+      },
+      {
+        "object": "Swaying grass tuft 3",
+        "action": "Swaying grass tuft 3Action",
+        "frame_range": [
+          1.0,
+          49.0
+        ]
+      }
+    ],
+    "source": "/workspace/roblox-with-swe-report/docs/experiments/blender-luna-skills-2026-11-05/cases/04-windmill-motion/run-b/asset.glb",
+    "load_ok": true,
+    "blender": "5.2.3 LTS",
+    "mesh_objects": 112,
+    "triangles": 2002,
+    "materials": 10,
+    "bounds": [
+      [
+        -3.4200000762939453,
+        3.4200000762939453
+      ],
+      [
+        -3.4200000762939453,
+        3.4200000762939453
+      ],
+      [
+        -0.3499999940395355,
+        4.710000038146973
+      ]
+    ],
+    "dimensions": [
+      6.840000152587891,
+      6.840000152587891,
+      5.060000032186508
+    ],
+    "armatures": 0,
+    "bones": 0,
+    "mesh_with_armature_modifier": 0,
+    "actions": 4,
+    "fps": 24,
+    "frame_start": 1,
+    "frame_end": 250,
+    "max_vertex_displacement_from_frame_1": {
+      "1": 0.0,
+      "12": 1.9580687553834049,
+      "16": 2.4692271290625905,
+      "24": 2.9633555343015514,
+      "32": 2.6634554576883818,
+      "36": 2.2327488670598252,
+      "48": 0.19422797114425797,
+      "49": 4.76837158203125e-07
+    },
+    "object_max_displacement_sampled": {
+      "Brass door knob": 0.0,
+      "Door inset": 0.0,
+      "Fence lower rail": 0.0,
+      "Fence lower rail.001": 0.0,
+      "Fence lower rail.002": 0.0,
+      "Fence lower rail.003": 0.0,
+      "Fence lower rail.004": 0.0,
+      "Fence lower rail.005": 0.0,
+      "Fence lower rail.006": 0.0,
+      "Fence lower rail.007": 0.0,
+      "Fence lower rail.008": 0.0,
+      "Fence lower rail.009": 0.0,
+      "Fence lower rail.010": 0.0,
+      "Fence lower rail.011": 0.0,
+      "Fence lower rail.012": 0.0,
+      "Fence lower rail.013": 0.0,
+      "Fence lower rail.014": 0.0,
+      "Fence lower rail.015": 0.0,
+      "Fence lower rail.016": 0.0,
+      "Fence lower rail.017": 0.0,
+      "Fence lower rail.018": 0.0,
+      "Fence lower rail.019": 0.0,
+      "Fence lower rail.020": 0.0,
+      "Fence lower rail.021": 0.0,
+      "Fence lower rail.022": 0.0,
+      "Fence lower rail.023": 0.0,
+      "Fence picket 00": 0.0,
+      "Fence picket 01": 0.0,
+      "Fence picket 02": 0.0,
+      "Fence picket 03": 0.0,
+      "Fence picket 04": 0.0,
+      "Fence picket 05": 0.0,
+      "Fence picket 06": 0.0,
+      "Fence picket 07": 0.0,
+      "Fence picket 08": 0.0,
+      "Fence picket 09": 0.0,
+      "Fence picket 10": 0.0,
+      "Fence picket 11": 0.0,
+      "Fence picket 12": 0.0,
+      "Fence picket 13": 0.0,
+      "Fence picket 14": 0.0,
+      "Fence picket 15": 0.0,
+      "Fence picket 16": 0.0,
+      "Fence picket 17": 0.0,
+      "Fence picket 18": 0.0,
+      "Fence picket 19": 0.0,
+      "Fence picket 20": 0.0,
+      "Fence picket 21": 0.0,
+      "Fence picket 22": 0.0,
+      "Fence picket 23": 0.0,
+      "Fence picket 24": 0.0,
+      "Fence picket 25": 0.0,
+      "Fence picket 26": 0.0,
+      "Fence picket 27": 0.0,
+      "Fence rail": 0.0,
+      "Fence rail.001": 0.0,
+      "Fence rail.002": 0.0,
+      "Fence rail.003": 0.0,
+      "Fence rail.004": 0.0,
+      "Fence rail.005": 0.0,
+      "Fence rail.006": 0.0,
+      "Fence rail.007": 0.0,
+      "Fence rail.008": 0.0,
+      "Fence rail.009": 0.0,
+      "Fence rail.010": 0.0,
+      "Fence rail.011": 0.0,
+      "Fence rail.012": 0.0,
+      "Fence rail.013": 0.0,
+      "Fence rail.014": 0.0,
+      "Fence rail.015": 0.0,
+      "Fence rail.016": 0.0,
+      "Fence rail.017": 0.0,
+      "Fence rail.018": 0.0,
+      "Fence rail.019": 0.0,
+      "Fence rail.020": 0.0,
+      "Fence rail.021": 0.0,
+      "Fence rail.022": 0.0,
+      "Fence rail.023": 0.0,
+      "Floating island earth": 0.0,
+      "Lagoon disk": 0.0,
+      "Meadow top": 0.0,
+      "Oak door": 0.0,
+      "Roof eave": 0.0,
+      "Hub cap": 0.17961471446597438,
+      "Oak sail 1": 2.9633555343015514,
+      "Oak sail 2": 2.9633555311980393,
+      "Oak sail 3": 2.9633555343015514,
+      "Oak sail 4": 2.9633555311980393,
+      "Rotor brass hub": 0.2993577738765426,
+      "Rotor axle": 0.0,
+      "Rotor support bracket": 0.0,
+      "Meadow blade": 0.07991986292812148,
+      "Meadow blade.001": 0.09729105585110186,
+      "Meadow blade.002": 0.12078836411144146,
+      "Meadow blade.003": 0.08052532637047047,
+      "Meadow blade.004": 0.0970067907729077,
+      "Meadow blade.005": 0.07622562057485044,
+      "Meadow blade.006": 0.09945483614005018,
+      "Meadow blade.007": 0.1215064290549288,
+      "Meadow blade.008": 0.07468020595680411,
+      "Meadow blade.009": 0.10047227203234424,
+      "Meadow blade.010": 0.07558827232958164,
+      "Meadow blade.011": 0.10347589819116361,
+      "Meadow blade.012": 0.11869491426500851,
+      "Meadow blade.013": 0.08142338481578253,
+      "Meadow blade.014": 0.09886373987921049,
+      "Tapered mill tower": 0.0,
+      "Terracotta conical roof": 0.0,
+      "Window dark glass": 0.0,
+      "Window frame": 0.0,
+      "Window mullion cross": 0.0,
+      "Window mullion vertical": 0.0
+    },
+    "external_images": [],
+    "elapsed_seconds_reported": 738.0,
+    "duration_basis": "A: 22:31:35–22:51:57 UTC; B: 22:33:07–22:45:25 UTC (até reexportação, documentação posterior não cronometrada). Janelas de logs, não custo de raciocínio.",
+    "skills_read_reported": 0,
+    "skills_names_reported": [],
+    "tokens": null,
+    "files_bytes": {
+      "README.md": 764,
+      "asset.blend": 166598,
+      "asset.glb": 208364,
+      "back.png": 712778,
+      "front.png": 717368,
+      "generate.py": 11455,
+      "logs/blender-final.log": 11336,
+      "logs/blender-run.log": 11248,
+      "logs/execution-log.txt": 3326,
+      "logs/export-loop.log": 10545,
+      "logs/export_loop.py": 626,
+      "logs/qa-glb.log": 6647,
+      "logs/qa_glb.py": 1349,
+      "motion-01.png": 717301,
+      "motion-16.png": 723564,
+      "motion-32.png": 722766,
+      "presentation.png": 717301,
+      "skills-read.txt": 99
+    },
+    "images": {
+      "back.png": {
+        "size": [
+          768,
+          768
+        ],
+        "bytes": 712778
+      },
+      "motion-16.png": {
+        "size": [
+          768,
+          768
+        ],
+        "bytes": 723564
+      },
+      "motion-01.png": {
+        "size": [
+          768,
+          768
+        ],
+        "bytes": 717301
+      },
+      "presentation.png": {
+        "size": [
+          768,
+          768
+        ],
+        "bytes": 717301
+      },
+      "motion-32.png": {
+        "size": [
+          768,
+          768
+        ],
+        "bytes": 722766
+      },
+      "front.png": {
+        "size": [
+          768,
+          768
+        ],
+        "bytes": 717368
+      }
+    },
+    "glb_structure": {
+      "valid_header": true,
+      "animations": [
+        {
+          "name": "Rotor assemblyAction",
+          "channels": 1,
+          "paths": [
+            "rotation"
+          ],
+          "target_nodes": [
+            "Rotor assembly"
+          ],
+          "samplers": 1,
+          "time_bounds": [
+            [
+              2.0416666666666665
+            ]
+          ]
+        },
+        {
+          "name": "Swaying grass tuft 1Action",
+          "channels": 1,
+          "paths": [
+            "rotation"
+          ],
+          "target_nodes": [
+            "Swaying grass tuft 1"
+          ],
+          "samplers": 1,
+          "time_bounds": [
+            [
+              2.0416666666666665
+            ]
+          ]
+        },
+        {
+          "name": "Swaying grass tuft 2Action",
+          "channels": 1,
+          "paths": [
+            "rotation"
+          ],
+          "target_nodes": [
+            "Swaying grass tuft 2"
+          ],
+          "samplers": 1,
+          "time_bounds": [
+            [
+              2.0416666666666665
+            ]
+          ]
+        },
+        {
+          "name": "Swaying grass tuft 3Action",
+          "channels": 1,
+          "paths": [
+            "rotation"
+          ],
+          "target_nodes": [
+            "Swaying grass tuft 3"
+          ],
+          "samplers": 1,
+          "time_bounds": [
+            [
+              2.0416666666666665
+            ]
+          ]
+        }
+      ],
+      "skins": 0,
+      "external_uris": [],
+      "nodes": 116,
+      "camera_nodes": [],
+      "light_nodes": []
+    },
+    "module_exports": {}
+  }
+}

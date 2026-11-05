@@ -1,0 +1,174 @@
+{
+  "animation_playback_setup": "each object with a sole imported clip activated explicitly; NLA muted to avoid double evaluation",
+  "activated_single_clip_objects": [
+    {
+      "object": "ANIM_Grass_Sway_0",
+      "action": "Grass_Sway_Loop_0",
+      "frame_range": [
+        1.0,
+        49.0
+      ]
+    },
+    {
+      "object": "ANIM_Grass_Sway_1",
+      "action": "Grass_Sway_Loop_1",
+      "frame_range": [
+        1.0,
+        49.0
+      ]
+    },
+    {
+      "object": "ANIM_Grass_Sway_2",
+      "action": "Grass_Sway_Loop_2",
+      "frame_range": [
+        1.0,
+        49.0
+      ]
+    },
+    {
+      "object": "ANIM_Rotor_Hub",
+      "action": "Windmill_Rotor_Loop",
+      "frame_range": [
+        1.0,
+        49.0
+      ]
+    }
+  ],
+  "source": "/workspace/roblox-with-swe-report/docs/experiments/blender-luna-skills-2026-11-05/cases/04-windmill-motion/run-a/asset.glb",
+  "load_ok": true,
+  "blender": "5.2.3 LTS",
+  "mesh_objects": 92,
+  "triangles": 1680,
+  "materials": 11,
+  "bounds": [
+    [
+      -3.219881534576416,
+      3.219881534576416
+    ],
+    [
+      -3.169217586517334,
+      3.169217586517334
+    ],
+    [
+      -0.25999999046325684,
+      4.123086452484131
+    ]
+  ],
+  "dimensions": [
+    6.439763069152832,
+    6.338435173034668,
+    4.383086442947388
+  ],
+  "armatures": 0,
+  "bones": 0,
+  "mesh_with_armature_modifier": 0,
+  "actions": 4,
+  "fps": 24,
+  "frame_start": 1,
+  "frame_end": 250,
+  "max_vertex_displacement_from_frame_1": {
+    "1": 0.0,
+    "12": 1.872542477703746,
+    "16": 2.3613740271310397,
+    "24": 2.8339195533242902,
+    "32": 2.5471190821229803,
+    "36": 2.135225039796653,
+    "48": 0.1857443486478051,
+    "49": 5.092623081992585e-07
+  },
+  "object_max_displacement_sampled": {
+    "SM_Grass_Blade_0_0": 0.06306048162369934,
+    "SM_Grass_Blade_0_1": 0.06506812466413466,
+    "SM_Grass_Blade_0_2": 0.06082945253883694,
+    "SM_Grass_Blade_0_3": 0.06853908307902876,
+    "SM_Grass_Blade_0_4": 0.056938454785613525,
+    "SM_Grass_Blade_1_0": 0.06306050285373027,
+    "SM_Grass_Blade_1_1": 0.06506834148394285,
+    "SM_Grass_Blade_1_2": 0.06082955684077186,
+    "SM_Grass_Blade_1_3": 0.06853925399285817,
+    "SM_Grass_Blade_1_4": 0.05693843616074919,
+    "SM_Grass_Blade_2_0": 0.06306048162369934,
+    "SM_Grass_Blade_2_1": 0.06506825392863538,
+    "SM_Grass_Blade_2_2": 0.0608295066036237,
+    "SM_Grass_Blade_2_3": 0.06853916460816328,
+    "SM_Grass_Blade_2_4": 0.05693852040386917,
+    "SM_Blade_Spar_0": 2.595244011845142,
+    "SM_Blade_Spar_1": 2.59524410371264,
+    "SM_Blade_Spar_2": 2.5952441955801353,
+    "SM_Blade_Spar_3": 2.595244287447627,
+    "SM_Blade_Tip_0": 2.733537861878783,
+    "SM_Blade_Tip_1": 2.716481896028202,
+    "SM_Blade_Tip_2": 2.7335376874392114,
+    "SM_Blade_Tip_3": 2.716481896028202,
+    "SM_Rotor_Blade_0": 2.8339194691939618,
+    "SM_Rotor_Blade_1": 2.8339195533242902,
+    "SM_Rotor_Blade_2": 2.8339195533242902,
+    "SM_Rotor_Blade_3": 2.833919385063631,
+    "SM_Rotor_Hub": 0.4390580453760185,
+    "SM_Door_Knob": 0.0,
+    "SM_Door_Leaf": 0.0,
+    "SM_Door_Lintel": 0.0,
+    "SM_Door_Plank": 0.0,
+    "SM_Door_Plank.001": 0.0,
+    "SM_Door_Plank.002": 0.0,
+    "SM_Door_Plank.003": 0.0,
+    "SM_Door_Recess": 0.0,
+    "SM_Eave_Beam": 0.0,
+    "SM_Fence_Back_Post": 0.0,
+    "SM_Fence_Back_Post.001": 0.0,
+    "SM_Fence_Back_Post.002": 0.0,
+    "SM_Fence_Back_Rail": 0.0,
+    "SM_Fence_Back_Rail.001": 0.0,
+    "SM_Fence_Back_Rail.002": 0.0,
+    "SM_Fence_Picket": 0.0,
+    "SM_Fence_Picket.001": 0.0,
+    "SM_Fence_Picket.002": 0.0,
+    "SM_Fence_Picket.003": 0.0,
+    "SM_Fence_Picket.004": 0.0,
+    "SM_Fence_Picket.005": 0.0,
+    "SM_Fence_Picket.006": 0.0,
+    "SM_Fence_Picket.007": 0.0,
+    "SM_Fence_Picket.008": 0.0,
+    "SM_Fence_Picket.009": 0.0,
+    "SM_Fence_Picket.010": 0.0,
+    "SM_Fence_Picket.011": 0.0,
+    "SM_Fence_Post": 0.0,
+    "SM_Fence_Post.001": 0.0,
+    "SM_Fence_Post.002": 0.0,
+    "SM_Fence_Post.003": 0.0,
+    "SM_Fence_Post.004": 0.0,
+    "SM_Fence_Post.005": 0.0,
+    "SM_Fence_Post.006": 0.0,
+    "SM_Fence_Post.007": 0.0,
+    "SM_Fence_Post.008": 0.0,
+    "SM_Fence_Post.009": 0.0,
+    "SM_Fence_Rail": 0.0,
+    "SM_Fence_Rail.001": 0.0,
+    "SM_Fence_Rail.002": 0.0,
+    "SM_Fence_Rail.003": 0.0,
+    "SM_Foundation": 0.0,
+    "SM_Hub_Axle": 0.0,
+    "SM_Island_Earth": 0.0,
+    "SM_Island_Top": 0.0,
+    "SM_Rim_Stone_00": 0.0,
+    "SM_Rim_Stone_01": 0.0,
+    "SM_Rim_Stone_02": 0.0,
+    "SM_Rim_Stone_03": 0.0,
+    "SM_Rim_Stone_04": 0.0,
+    "SM_Rim_Stone_05": 0.0,
+    "SM_Rim_Stone_06": 0.0,
+    "SM_Rim_Stone_07": 0.0,
+    "SM_Rim_Stone_08": 0.0,
+    "SM_Rim_Stone_09": 0.0,
+    "SM_Rim_Stone_10": 0.0,
+    "SM_Rim_Stone_11": 0.0,
+    "SM_Roof": 0.0,
+    "SM_Roof_Cap": 0.0,
+    "SM_Tower": 0.0,
+    "SM_Window_Frame": 0.0,
+    "SM_Window_Frame.001": 0.0,
+    "SM_Window_Glass": 0.0,
+    "SM_Window_Glass.001": 0.0
+  },
+  "external_images": []
+}

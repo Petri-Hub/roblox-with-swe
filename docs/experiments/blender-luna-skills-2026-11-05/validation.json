@@ -24,6 +24,12 @@
       "pages": 10,
       "bytes": 4049451,
       "pngs_expected": 6
+    },
+    {
+      "report": "cases/04-windmill-motion/report.pdf",
+      "pages": 12,
+      "bytes": 7412961,
+      "pngs_expected": 12
     }
   ]
 }

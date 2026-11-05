@@ -1,0 +1,120 @@
+Extensions: writing cache failed ([Errno 30] Read-only file system: '/home/agent/.config/blender/5.2').
+22:54:47 | INFO: Data are loaded, start creating Blender stuff
+22:54:47 | INFO: Blender create Mesh node Cylinder.004
+22:54:47 | INFO: Blender create Mesh node Cube.002
+22:54:47 | INFO: Blender create Mesh node Cube.037
+22:54:47 | INFO: Blender create Mesh node Cube.039
+22:54:47 | INFO: Blender create Mesh node Cube.041
+22:54:47 | INFO: Blender create Mesh node Cube.043
+22:54:47 | INFO: Blender create Mesh node Cube.045
+22:54:47 | INFO: Blender create Mesh node Cube.047
+22:54:47 | INFO: Blender create Mesh node Cube.049
+22:54:47 | INFO: Blender create Mesh node Cube.051
+22:54:47 | INFO: Blender create Mesh node Cube.053
+22:54:47 | INFO: Blender create Mesh node Cube.055
+22:54:47 | INFO: Blender create Mesh node Cube.057
+22:54:47 | INFO: Blender create Mesh node Cube.059
+22:54:47 | INFO: Blender create Mesh node Cube.061
+22:54:47 | INFO: Blender create Mesh node Cube.063
+22:54:47 | INFO: Blender create Mesh node Cube.065
+22:54:47 | INFO: Blender create Mesh node Cube.067
+22:54:47 | INFO: Blender create Mesh node Cube.069
+22:54:47 | INFO: Blender create Mesh node Cube.071
+22:54:47 | INFO: Blender create Mesh node Cube.073
+22:54:47 | INFO: Blender create Mesh node Cube.075
+22:54:47 | INFO: Blender create Mesh node Cube.077
+22:54:47 | INFO: Blender create Mesh node Cube.079
+22:54:47 | INFO: Blender create Mesh node Cube.081
+22:54:47 | INFO: Blender create Mesh node Cube.083
+22:54:47 | INFO: Blender create Mesh node Cube.008
+22:54:47 | INFO: Blender create Mesh node Cube.009
+22:54:47 | INFO: Blender create Mesh node Cube.010
+22:54:47 | INFO: Blender create Mesh node Cube.011
+22:54:47 | INFO: Blender create Mesh node Cube.012
+22:54:47 | INFO: Blender create Mesh node Cube.013
+22:54:47 | INFO: Blender create Mesh node Cube.014
+22:54:47 | INFO: Blender create Mesh node Cube.015
+22:54:47 | INFO: Blender create Mesh node Cube.016
+22:54:47 | INFO: Blender create Mesh node Cube.017
+22:54:47 | INFO: Blender create Mesh node Cube.018
+22:54:47 | INFO: Blender create Mesh node Cube.019
+22:54:47 | INFO: Blender create Mesh node Cube.020
+22:54:47 | INFO: Blender create Mesh node Cube.021
+22:54:47 | INFO: Blender create Mesh node Cube.022
+22:54:47 | INFO: Blender create Mesh node Cube.023
+22:54:47 | INFO: Blender create Mesh node Cube.024
+22:54:47 | INFO: Blender create Mesh node Cube.025
+22:54:47 | INFO: Blender create Mesh node Cube.026
+22:54:47 | INFO: Blender create Mesh node Cube.027
+22:54:47 | INFO: Blender create Mesh node Cube.028
+22:54:47 | INFO: Blender create Mesh node Cube.029
+22:54:47 | INFO: Blender create Mesh node Cube.030
+22:54:47 | INFO: Blender create Mesh node Cube.031
+22:54:47 | INFO: Blender create Mesh node Cube.032
+22:54:47 | INFO: Blender create Mesh node Cube.033
+22:54:47 | INFO: Blender create Mesh node Cube.034
+22:54:47 | INFO: Blender create Mesh node Cube.035
+22:54:47 | INFO: Blender create Mesh node Cube.036
+22:54:47 | INFO: Blender create Mesh node Cube.038
+22:54:47 | INFO: Blender create Mesh node Cube.040
+22:54:47 | INFO: Blender create Mesh node Cube.042
+22:54:47 | INFO: Blender create Mesh node Cube.044
+22:54:47 | INFO: Blender create Mesh node Cube.046
+22:54:47 | INFO: Blender create Mesh node Cube.048
+22:54:47 | INFO: Blender create Mesh node Cube.050
+22:54:47 | INFO: Blender create Mesh node Cube.052
+22:54:47 | INFO: Blender create Mesh node Cube.054
+22:54:47 | INFO: Blender create Mesh node Cube.056
+22:54:47 | INFO: Blender create Mesh node Cube.058
+22:54:47 | INFO: Blender create Mesh node Cube.060
+22:54:47 | INFO: Blender create Mesh node Cube.062
+22:54:47 | INFO: Blender create Mesh node Cube.064
+22:54:47 | INFO: Blender create Mesh node Cube.066
+22:54:47 | INFO: Blender create Mesh node Cube.068
+22:54:47 | INFO: Blender create Mesh node Cube.070
+22:54:47 | INFO: Blender create Mesh node Cube.072
+22:54:47 | INFO: Blender create Mesh node Cube.074
+22:54:47 | INFO: Blender create Mesh node Cube.076
+22:54:47 | INFO: Blender create Mesh node Cube.078
+22:54:47 | INFO: Blender create Mesh node Cube.080
+22:54:47 | INFO: Blender create Mesh node Cube.082
+22:54:47 | INFO: Blender create Mesh node Cylinder
+22:54:47 | INFO: Blender create Mesh node Cylinder.002
+22:54:47 | INFO: Blender create Mesh node Cylinder.001
+22:54:47 | INFO: Blender create Mesh node Cube.001
+22:54:47 | INFO: Blender create Mesh node Cylinder.003
+22:54:47 | INFO: Blender create Mesh node Cylinder.007
+22:54:47 | INFO: Blender create Mesh node sail blade mesh
+22:54:47 | INFO: Blender create Mesh node sail blade mesh.001
+22:54:47 | INFO: Blender create Mesh node sail blade mesh.002
+22:54:47 | INFO: Blender create Mesh node sail blade mesh.003
+22:54:47 | INFO: Blender create Mesh node Cylinder.005
+22:54:47 | INFO: Blender create Mesh node Cylinder.006
+22:54:47 | INFO: Blender create Mesh node Cube.007
+22:54:47 | INFO: Blender create Mesh node leaf blade
+22:54:47 | INFO: Blender create Mesh node leaf blade.001
+22:54:47 | INFO: Blender create Mesh node leaf blade.002
+22:54:47 | INFO: Blender create Mesh node leaf blade.003
+22:54:47 | INFO: Blender create Mesh node leaf blade.004
+22:54:47 | INFO: Blender create Mesh node leaf blade.005
+22:54:47 | INFO: Blender create Mesh node leaf blade.006
+22:54:47 | INFO: Blender create Mesh node leaf blade.007
+22:54:47 | INFO: Blender create Mesh node leaf blade.008
+22:54:47 | INFO: Blender create Mesh node leaf blade.009
+22:54:47 | INFO: Blender create Mesh node leaf blade.010
+22:54:47 | INFO: Blender create Mesh node leaf blade.011
+22:54:47 | INFO: Blender create Mesh node leaf blade.012
+22:54:47 | INFO: Blender create Mesh node leaf blade.013
+22:54:47 | INFO: Blender create Mesh node leaf blade.014
+22:54:47 | INFO: Blender create Mesh node faceted tower mesh
+22:54:47 | INFO: Blender create Mesh node Cone
+22:54:47 | INFO: Blender create Mesh node Cube.004
+22:54:47 | INFO: Blender create Mesh node Cube.003
+22:54:47 | INFO: Blender create Mesh node Cube.006
+22:54:47 | INFO: Blender create Mesh node Cube.005
+22:54:47 | INFO: glTF import finished in 0.15s
+AUDIT_OK asset.glb tris 2002 armatures 0 movement {'1': 0.0, '12': 1.9580687553834049, '16': 2.4692271290625905, '24': 2.9633555343015514, '32': 2.6634554576883818, '36': 2.2327488670598252, '48': 0.19422797114425797, '49': 4.76837158203125e-07}
+Blender 5.2.3 LTS (hash e13b728c6880 built 2026-10-22 01:35:05)
+
+Blender quit
+Failed to create secure directory (/home/agent/.config/pulse): Read-only file system

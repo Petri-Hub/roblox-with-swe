@@ -1,0 +1,52 @@
+start_utc=2026-11-05T22:33:07Z
+command: BLENDER_EXE=/workspace/blender-study/tools/blender-5.2.3-linux-x64/blender HOME=/workspace/blender-study/cases/04-windmill-motion/run-b/config TMPDIR=/workspace/blender-study/cases/04-windmill-motion/run-b/cache "$BLENDER_EXE" -b --python generate.py
+exit_code=0
+end_utc=2026-11-05T22:33:07Z
+
+correction: Blender 5.2 actions use layered channelbags; updated animation curve access after AttributeError.
+retry_start_utc=2026-11-05T22:33:23Z
+retry_exit_code=0
+retry_end_utc=2026-11-05T22:38:29Z
+
+visual review: initial images showed low rotor overlapping roof/facade in silhouette; raised rotor to z=3.23, moved it forward, extended axle, added roof support bracket; reduced sample count to 20 for final renders.
+final_start_utc=2026-11-05T22:39:09Z
+final_exit_code=0
+final_end_utc=2026-11-05T22:42:53Z
+qa_exit_code=1
+
+qa final command: blender -b --python-exit-code 1 --python logs/qa_glb.py
+qa final exit_code=0
+
+loop export start UTC: 2026-11-05T22:45:19Z
+command: "$BLENDER_EXE" -b asset.blend --python-exit-code 1 --python logs/export_loop.py
+export_exit_code=0
+command: "$BLENDER_EXE" -b --python-exit-code 1 --python logs/qa_glb.py
+qa_exit_code=0
+loop export end UTC: 2026-11-05T22:45:25Z
+
+Falhas e correções:
+- Primeira execução gerou traceback no acesso antigo `Action.fcurves` do Blender 5.2; adaptado para `Action.layers` e channelbags.
+- O processo Blender da primeira execução retornou código 0 apesar da exceção Python; o traceback foi identificado em `logs/blender-run.log` e corrigido antes das entregas finais.
+- Primeira QA de importação contou câmera e luz padrão da cena de inicialização como parte do GLB; a QA foi corrigida para limpar a cena antes de importar. GLB final: 0 câmeras e 0 luzes.
+- Primeira exportação limitava as curvas ao frame 48 e deixava o último passo do ciclo fora; exportado novamente com curvas completas do frame 1 ao 49 (48 intervalos), duração verificada de 2.0 s para as quatro animações.
+- Revisão visual das imagens finais: quadro do rotor elevado e afastado do edifício, com eixo e suporte visíveis; poses dos quadros 1, 16 e 32 variam sem tocar terreno ou cerca. Materiais e iluminação estão incorporados/na cena, sem texturas externas.
+
+Verificação final dos PNGs:
+front.png:        PNG image data, 768 x 768, 8-bit/color RGBA, non-interlaced
+back.png:         PNG image data, 768 x 768, 8-bit/color RGBA, non-interlaced
+presentation.png: PNG image data, 768 x 768, 8-bit/color RGBA, non-interlaced
+motion-01.png:    PNG image data, 768 x 768, 8-bit/color RGBA, non-interlaced
+motion-16.png:    PNG image data, 768 x 768, 8-bit/color RGBA, non-interlaced
+motion-32.png:    PNG image data, 768 x 768, 8-bit/color RGBA, non-interlaced
+
+Arquivos finais:
+-rw------- 1 agent agent  764 Nov  5 22:45 README.md
+-rw------- 1 agent agent 163K Nov  5 22:42 asset.blend
+-rw------- 1 agent agent 204K Nov  5 22:45 asset.glb
+-rw------- 1 agent agent 697K Nov  5 22:40 back.png
+-rw------- 1 agent agent 701K Nov  5 22:40 front.png
+-rw------- 1 agent agent  12K Nov  5 22:45 generate.py
+-rw------- 1 agent agent 701K Nov  5 22:41 motion-01.png
+-rw------- 1 agent agent 707K Nov  5 22:42 motion-16.png
+-rw------- 1 agent agent 706K Nov  5 22:42 motion-32.png
+-rw------- 1 agent agent 701K Nov  5 22:41 presentation.png

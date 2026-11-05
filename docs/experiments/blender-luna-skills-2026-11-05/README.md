@@ -15,8 +15,8 @@ Comparações pareadas com `gpt-6-luna` (medium), com e sem o pacote `EL4CTEO/bl
 1. [Blaster arcano fictício — PDF concluído](cases/01-arcane-blaster/report.pdf).
 2. [Criatura de terror com rig e idle — PDF concluído](cases/02-horror-creature/report.pdf).
 3. [Pátio de capela abandonada — PDF concluído](cases/03-haunted-courtyard/report.pdf).
-4. Moinho com animação de cenário — em execução.
-5. Kit modular para uso posterior no Roblox.
+4. [Moinho com animação de cenário — PDF concluído](cases/04-windmill-motion/report.pdf).
+5. Kit modular para uso posterior no Roblox — em execução.
 
 Cada caso terá pedido, arquivos dos dois agentes, métricas, imagens e seu próprio PDF. O relatório global será produzido após a conclusão dos cinco casos adicionais.
 
