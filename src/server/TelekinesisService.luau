@@ -332,7 +332,10 @@ local function grab(player: Player, instance: any)
 
 	local radius = boundingRadius(size)
 	propOwners[prop] = player
-	-- A prop picked up again stops counting down to its trip home.
+	-- Where the prop is now is where it goes back to, so the spot is taken
+	-- before the grip moves it. A prop picked up again also stops counting
+	-- down to its trip home.
+	StreetPropService.remember(prop)
 	StreetPropService.cancel(prop)
 	holds[player] = {
 		player = player,
