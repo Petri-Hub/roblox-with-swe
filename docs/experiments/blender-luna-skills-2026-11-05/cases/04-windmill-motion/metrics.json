@@ -336,7 +336,28 @@
       "camera_nodes": [],
       "light_nodes": []
     },
-    "module_exports": {}
+    "module_exports": {},
+    "geometry_export": {
+      "mesh_definitions": 92,
+      "mesh_instances": 92,
+      "triangles_in_mesh_definitions": 1680,
+      "triangles_instantiated": 1680,
+      "position_vertices_in_mesh_definitions": 3658,
+      "position_vertices_instantiated": 3658,
+      "animation_clips": 4,
+      "skins": 0,
+      "vertex_count_definition": "Sum of unique POSITION accessors within each mesh definition, then multiplied by scene nodes using that mesh; UV/normal seams can duplicate vertices. Not welded original Blender vertex counts."
+    },
+    "source_geometry": {
+      "matched_export_objects": 92,
+      "base_polygons": 989,
+      "base_triangles": 1680,
+      "base_vertices": 1034,
+      "base_quad_faces": 459,
+      "base_ngons": 50,
+      "evaluated_triangles_in_blend": 2556,
+      "method": "Only original Blender mesh objects named by mesh nodes in the final GLB; excludes studio/catalog items not exported. Base counts before modifiers; evaluated counts after modifiers."
+    }
   },
   "b": {
     "animation_playback_setup": "each object with a sole imported clip activated explicitly; NLA muted to avoid double evaluation",
@@ -674,6 +695,27 @@
       "camera_nodes": [],
       "light_nodes": []
     },
-    "module_exports": {}
+    "module_exports": {},
+    "geometry_export": {
+      "mesh_definitions": 112,
+      "mesh_instances": 112,
+      "triangles_in_mesh_definitions": 2002,
+      "triangles_instantiated": 2002,
+      "position_vertices_in_mesh_definitions": 3600,
+      "position_vertices_instantiated": 3600,
+      "animation_clips": 4,
+      "skins": 0,
+      "vertex_count_definition": "Sum of unique POSITION accessors within each mesh definition, then multiplied by scene nodes using that mesh; UV/normal seams can duplicate vertices. Not welded original Blender vertex counts."
+    },
+    "source_geometry": {
+      "matched_export_objects": 112,
+      "base_polygons": 799,
+      "base_triangles": 2002,
+      "base_vertices": 1255,
+      "base_quad_faces": 771,
+      "base_ngons": 28,
+      "evaluated_triangles_in_blend": 4968,
+      "method": "Only original Blender mesh objects named by mesh nodes in the final GLB; excludes studio/catalog items not exported. Base counts before modifiers; evaluated counts after modifiers."
+    }
   }
 }

@@ -266,7 +266,28 @@
       "camera_nodes": [],
       "light_nodes": []
     },
-    "module_exports": {}
+    "module_exports": {},
+    "geometry_export": {
+      "mesh_definitions": 151,
+      "mesh_instances": 151,
+      "triangles_in_mesh_definitions": 4108,
+      "triangles_instantiated": 4108,
+      "position_vertices_in_mesh_definitions": 6347,
+      "position_vertices_instantiated": 6347,
+      "animation_clips": 0,
+      "skins": 0,
+      "vertex_count_definition": "Sum of unique POSITION accessors within each mesh definition, then multiplied by scene nodes using that mesh; UV/normal seams can duplicate vertices. Not welded original Blender vertex counts."
+    },
+    "source_geometry": {
+      "matched_export_objects": 151,
+      "base_polygons": 1040,
+      "base_triangles": 1964,
+      "base_vertices": 1284,
+      "base_quad_faces": 756,
+      "base_ngons": 58,
+      "evaluated_triangles_in_blend": 4108,
+      "method": "Only original Blender mesh objects named by mesh nodes in the final GLB; excludes studio/catalog items not exported. Base counts before modifiers; evaluated counts after modifiers."
+    }
   },
   "b": {
     "source": "/workspace/roblox-with-swe-report/docs/experiments/blender-luna-skills-2026-11-05/cases/03-haunted-courtyard/run-b/asset.glb",
@@ -543,6 +564,27 @@
       "camera_nodes": [],
       "light_nodes": []
     },
-    "module_exports": {}
+    "module_exports": {},
+    "geometry_export": {
+      "mesh_definitions": 175,
+      "mesh_instances": 175,
+      "triangles_in_mesh_definitions": 7404,
+      "triangles_instantiated": 7404,
+      "position_vertices_in_mesh_definitions": 9665,
+      "position_vertices_instantiated": 9665,
+      "animation_clips": 0,
+      "skins": 0,
+      "vertex_count_definition": "Sum of unique POSITION accessors within each mesh definition, then multiplied by scene nodes using that mesh; UV/normal seams can duplicate vertices. Not welded original Blender vertex counts."
+    },
+    "source_geometry": {
+      "matched_export_objects": 175,
+      "base_polygons": 1223,
+      "base_triangles": 2296,
+      "base_vertices": 1500,
+      "base_quad_faces": 1009,
+      "base_ngons": 12,
+      "evaluated_triangles_in_blend": 7404,
+      "method": "Only original Blender mesh objects named by mesh nodes in the final GLB; excludes studio/catalog items not exported. Base counts before modifiers; evaluated counts after modifiers."
+    }
   }
 }

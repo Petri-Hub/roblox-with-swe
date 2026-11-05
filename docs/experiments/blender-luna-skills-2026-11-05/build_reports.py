@@ -52,7 +52,7 @@ def charts(folder,m,time_label="Tempo decorrido (min)"):
  for ax,(title,vals) in zip(axs.flat,metrics):
   bars=ax.bar(['A · com skills','B · sem skills'],vals,color=[A,B],width=.54)
   ax.set_title(title,loc='left',weight='bold',pad=14);ax.set_ylim(0,max(max(vals)*1.25,1))
-  for bar,val in zip(bars,vals):ax.text(bar.get_x()+bar.get_width()/2,bar.get_height()+max(max(vals)*.025,.025),f'{val:,.2f}'.replace(',','X').replace('.',',').replace('X','.'),ha='center',fontsize=10)
+  for bar,val in zip(bars,vals):ax.text(bar.get_x()+bar.get_width()/2,bar.get_height()+max(max(vals)*.025,.025),(f'{int(val):,}' if ('Triângulos' in title or 'Skills' in title) else f'{val:,.1f}').replace(',','X').replace('.',',').replace('X','.'),ha='center',fontsize=10)
   ax.grid(axis='y',alpha=.18);ax.set_axisbelow(True)
  fig.suptitle('Medidas observadas · sem pontuação artificial de qualidade',fontsize=14,weight='bold')
  fig.savefig(out/'metrics.png',dpi=180);fig.savefig(out/'metrics.svg');plt.close(fig)
@@ -70,14 +70,22 @@ def case_report(config):
  story += [para('1. Pedido e condições de execução','Heading1'),para((folder/'request.txt').read_text()),para('Condições comuns','Heading2')]
  story+=p_list(['Modelo declarado na chamada: gpt-6-luna; reasoning_effort: medium; fork_turns: none. Os agentes não herdaram a conversa nem souberam que se tratava de uma comparação.','Blender 5.2.3 LTS, modo headless, CPU, até quatro threads. Mesma máquina e mesma disponibilidade de ferramentas de imagem. Não foram utilizados Roblox Studio ou motor de jogo.','Pastas independentes por instrução, sem isolamento por containers. Sem internet, consulta cruzada ou novos subagentes autorizados. Não há auditoria completa dos acessos a arquivos.','A recebeu acesso ao pacote EL4CTEO/blender-skills e escolheu o que consultar; B foi instruído a usar seu conhecimento e a API instalada, sem consultar qualquer skill. Ambos puderam revisar e corrigir o resultado.','Não houve orçamento fixo de tokens, número fixo de revisões ou tempo máximo. Portanto, esforço de revisão e leitura de instruções fazem parte da diferença entre as condições.'])
  story += [para('Versão das skills','Heading2'),para('Commit fixo: fb92cfb4cc5a238c22113a6a230b09f535bd0656. Pacote consultado, sem instalação global e sem alterações nos arquivos rastreados do pacote. Skills lidas não significam scripts executados nem conformidade completa com cada recomendação.'),PageBreak()]
- story += [para('2. Medidas e custo observável','Heading1'),image(chart,510,330)]
+ story += [para('2. Medidas e custo observável','Heading1'),image(chart,510,365),para('Os gráficos mostram medidas da entrega final. A tabela na página seguinte distingue geometria de arquivo, instâncias da cena, arquivos e registros de execução. Nenhuma dessas medidas é uma nota automática de qualidade.'),PageBreak(),para('2.1. Dados de geometria, arquivos e execução','Heading1')]
  rows=[['Medida','A · com skills','B · sem skills']]
  def fmt(x):return str(x).replace('.',',')
  for label,key in [('Tempo registrado (s)','elapsed_seconds_reported'),('Skills lidas','skills_read_reported'),('Triângulos exportados','triangles'),('Objetos de malha exportados','mesh_objects'),('Materiais exportados','materials')]:rows.append([label,fmt(m['a'].get(key,'indisponível')),fmt(m['b'].get(key,'indisponível'))])
  for ext in ['blend','glb']:
   rows.append([f'Arquivo .{ext} (bytes)']+[str(m[v]['files_bytes'].get(f'asset.{ext}',m[v]['files_bytes'].get(f'tower.{ext}',0))) for v in 'ab'])
+ for label,key in [('Polígonos na fonte, antes de modificadores','base_polygons'),('Triângulos na fonte, antes de modificadores','base_triangles'),('Triângulos avaliados no .blend','evaluated_triangles_in_blend')]:
+  rows.append([label]+[str(m[v]['source_geometry'][key]) for v in 'ab'])
+ for label,key in [('Vértices de posição, por instância','position_vertices_instantiated'),('Definições de malha no GLB','mesh_definitions'),('Triângulos nas definições de malha','triangles_in_mesh_definitions'),('Clipes de animação no GLB','animation_clips')]:
+  rows.append([label]+[str(m[v]['geometry_export'][key]) for v in 'ab'])
+ dims=[]
+ for v in 'ab':
+  ds=m[v].get('dimensions',m[v].get('dimensions_m',[]));dims.append(' × '.join(f'{x:.3f}' for x in ds))
+ rows.append(['Dimensões XYZ (unidades da cena)']+dims)
  rows.append(['Tokens reais','não disponíveis','não disponíveis'])
- story += [table(rows,[220,145,145]),Spacer(1,12),para(config.get('timing_note','Tempos conforme registros dos agentes.')),para('Tempo decorrido inclui raciocínio, ferramentas, renderização, revisão e espera em uma máquina compartilhada. Mais tempo não prova maior consumo de tokens. Quantidade de skills lidas também não é medição de tokens. Tamanho de arquivo não mede qualidade, e número de objetos não equivale a draw calls.'),PageBreak()]
+ story += [table(rows,[220,145,145]),Spacer(1,12),para('Triângulos e vértices por instância contam os nós da cena que reutilizam uma malha. Definições contam a geometria armazenada uma vez por malha no arquivo. Vértices de posição do GLB podem ser duplicados por UV/normais e não são a malha original soldada. As contagens foram confrontadas com os dados glTF; objetos auxiliares do importador foram excluídos.','Small'),para(config.get('timing_note','Tempos conforme registros dos agentes.')),para('Tempo decorrido inclui raciocínio, ferramentas, renderização, revisão e espera em uma máquina compartilhada. Mais tempo não prova maior consumo de tokens. Quantidade de skills lidas também não é medição de tokens. Tamanho de arquivo não mede qualidade, e número de objetos não equivale a draw calls.'),PageBreak()]
  for extra_chart in config.get('extra_charts',[]):
   story += [para(extra_chart['title'],'Heading1'),image(folder/extra_chart['file'],510,340),para(extra_chart['note']),PageBreak()]
  for idx,label in enumerate(['Frente','Trás','Apresentação']):
@@ -93,6 +101,11 @@ def case_report(config):
     imgs.append(image(p,180,180) if p.exists() else para('Não entregue'))
    story += [para(frame,'Heading2'),Table([imgs],colWidths=[255,255])]
   story.append(PageBreak())
+ for inspection in config.get('inspection_pages',[]):
+  story += [para(inspection['title'],'Heading1'),para(inspection['note'])]
+  for row in inspection['rows']:
+   story += [para(row['label'],'Heading2'),Table([[image(folder/row['a'],210,210) if row.get('a') else para('Não entregue'),image(folder/row['b'],210,210) if row.get('b') else para('Não entregue')]],colWidths=[255,255])]
+  story.append(PageBreak())
  story += [para('4. Análise do resultado A — com skills','Heading1')]+[para(s) for s in config['analysis_a']]
  story += [para('5. Análise do resultado B — sem skills','Heading1')]+[para(s) for s in config['analysis_b']]+[PageBreak()]
  story += [para('6. Skills consultadas e efeito demonstrável','Heading1'),para('A lista abaixo vem dos registros do agente e de seu uso declarado. Não prova causalidade: não é possível atribuir uma decisão específica a uma skill apenas porque ela foi lida.')]
@@ -100,7 +113,7 @@ def case_report(config):
  story += [table(srows,[190,320]),Spacer(1,12),para('O agente B declarou não consultar skills. Nenhum dos agentes alterou o conteúdo do pacote. “Uso” neste relatório significa consulta declarada, salvo quando há log específico de execução de um script. A checagem automática usada por A não foi aplicada simetricamente por B; taxas de aprovação de QA não são comparáveis.'),para('Fonte versionada: https://github.com/EL4CTEO/blender-skills/tree/fb92cfb4cc5a238c22113a6a230b09f535bd0656/skills','Small'),PageBreak()]
  story += [para('7. Desconstrução da conclusão','Heading1')]+[para(s) for s in config['critique']]
  story += [para('8. Verificação independente e limites','Heading1')]+[para(s) for s in config['verification']]+[PageBreak()]
- story += [para('9. Reprodução, rastreabilidade e próximos passos','Heading1'),para('As pastas run-a/ e run-b/ preservam os projetos, exportações, scripts, renders e logs. metrics.json registra medidas e tamanhos. Os scripts de inspeção e seus JSONs ficam em review/. O pedido literal está em request.txt. O gerador do PDF é build_reports.py, na raiz do estudo.'),para('Para reproduzir a geração: instale Blender 5.2.3 e execute o gerador de cada variante em sua própria pasta. Os scripts podem conter caminhos absolutos desta sessão: ajuste apenas o caminho do executável/saída conforme o README. Renderizações podem variar com versão, hardware e seed.'),para('Os GLBs foram medidos após importação para contar a geometria efetivamente exportada, incluindo modificadores aplicados. As contagens de malha base em métricas do .blend são distintas. Métricas não registradas permanecem ausentes; não há estimativa de tokens disfarçada de medição.')]
+ story += [para('9. Reprodução, rastreabilidade e próximos passos','Heading1'),para('As pastas run-a/ e run-b/ preservam os projetos, exportações, scripts, renders e logs. metrics.json registra medidas e tamanhos. Os scripts de inspeção e seus JSONs ficam em review/. O pedido literal está em request.txt. O gerador do PDF é build_reports.py, na raiz do estudo.'),para('Para reproduzir a geração: instale Blender 5.2.3 e execute o gerador de cada variante em sua própria pasta. Os scripts podem conter caminhos absolutos desta sessão: ajuste apenas o caminho do executável/saída conforme o README. Renderizações podem variar com versão, hardware e seed.'),para('Os GLBs foram medidos após importação para contar a geometria efetivamente exportada, com as opções escolhidas pelos agentes. A tabela distingue polígonos/triângulos da malha-base, triângulos avaliados no .blend e triângulos realmente exportados. Alguns exports omitiram modificadores presentes no render. Métricas não registradas permanecem ausentes; não há estimativa de tokens disfarçada de medição.')]
  story += p_list(config['next_steps'])
  story += [para('Integridade e arquivos','Heading2'),para('SHA256 dos artefatos preservados em SHA256SUMS.txt. O código do jogo não foi modificado. A branch guarda evidências e documentação; ela não integra estes assets ao jogo nem atesta compatibilidade no Roblox.'),para('Referências','Heading2'),para('Pacote de skills: https://github.com/EL4CTEO/blender-skills\nPágina de comparação que motivou o estudo: https://el4cteo.github.io/blender-skills/comparison/\nBlender: https://download.blender.org/release/Blender5.2/\nMedições e achados: arquivos locais versionados junto a este relatório.','Small')]
  pdf=folder/'report.pdf';doc=SimpleDocTemplate(str(pdf),pagesize=A4,rightMargin=40,leftMargin=40,topMargin=42,bottomMargin=48,title=title,author='Estudo exploratório assistido por Codex');doc.build(story,onFirstPage=footer,onLaterPages=footer)
@@ -113,7 +126,7 @@ def case_report(config):
  for key,label in [('analysis_a','Resultado A'),('analysis_b','Resultado B'),('critique','Desconstrução da conclusão'),('verification','Verificação e limites'),('next_steps','Próximos passos')]:md += ['## '+label]+config[key]
  md += ['## Skills consultadas']+[f'- **[{n}](https://github.com/EL4CTEO/blender-skills/blob/fb92cfb4cc5a238c22113a6a230b09f535bd0656/skills/{n}/SKILL.md)**: {d}' for n,d in config['skills']]
  md += ['Nenhuma skill foi modificada. Tokens reais indisponíveis. Modelo gpt-6-luna medium, Blender 5.2.3, uma execução por condição; avaliação não cega. Veja o PDF e o manifesto para detalhes.']
- (folder/'REPORT.md').write_text('\n\n'.join(md))
+ (folder/'REPORT.md').write_text(re.sub(r'(?m)(\|[^\n]*\|)\n\n(?=\|)',r'\1\n','\n\n'.join(md)))
  print(pdf)
  return pdf
 

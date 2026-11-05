@@ -1,0 +1,211 @@
+[
+  {
+    "name": "Demo_Floor_1",
+    "verts": 40,
+    "faces": 30,
+    "tris": 60,
+    "dimensions": [
+      4.0,
+      4.0,
+      0.36
+    ]
+  },
+  {
+    "name": "Demo_Floor_2",
+    "verts": 40,
+    "faces": 30,
+    "tris": 60,
+    "dimensions": [
+      4.0,
+      4.0,
+      0.36
+    ]
+  },
+  {
+    "name": "Demo_Floor_3",
+    "verts": 40,
+    "faces": 30,
+    "tris": 60,
+    "dimensions": [
+      4.0,
+      4.0,
+      0.36
+    ]
+  },
+  {
+    "name": "Demo_Wall_South",
+    "verts": 536,
+    "faces": 402,
+    "tris": 804,
+    "dimensions": [
+      4.0,
+      0.46,
+      4.02
+    ]
+  },
+  {
+    "name": "Demo_Wall_East_Lower",
+    "verts": 536,
+    "faces": 402,
+    "tris": 804,
+    "dimensions": [
+      4.0,
+      0.46,
+      4.02
+    ]
+  },
+  {
+    "name": "Demo_Entry_Arch",
+    "verts": 100,
+    "faces": 86,
+    "tris": 172,
+    "dimensions": [
+      4.1,
+      0.5,
+      4.0
+    ]
+  },
+  {
+    "name": "Demo_Wall_North_Upper",
+    "verts": 536,
+    "faces": 402,
+    "tris": 804,
+    "dimensions": [
+      4.0,
+      0.46,
+      4.02
+    ]
+  },
+  {
+    "name": "Demo_Wall_West_Upper",
+    "verts": 536,
+    "faces": 402,
+    "tris": 804,
+    "dimensions": [
+      4.0,
+      0.46,
+      4.02
+    ]
+  },
+  {
+    "name": "Demo_Wall_North_Turn",
+    "verts": 536,
+    "faces": 402,
+    "tris": 804,
+    "dimensions": [
+      4.0,
+      0.46,
+      4.02
+    ]
+  },
+  {
+    "name": "Demo_Wall_South_Turn",
+    "verts": 536,
+    "faces": 402,
+    "tris": 804,
+    "dimensions": [
+      4.0,
+      0.46,
+      4.02
+    ]
+  },
+  {
+    "name": "Demo_Exit_Arch",
+    "verts": 100,
+    "faces": 86,
+    "tris": 172,
+    "dimensions": [
+      4.1,
+      0.5,
+      4.0
+    ]
+  },
+  {
+    "name": "Demo_Torch_1",
+    "verts": 60,
+    "faces": 66,
+    "tris": 100,
+    "dimensions": [
+      0.56,
+      0.38,
+      1.78
+    ]
+  },
+  {
+    "name": "Demo_Torch_2",
+    "verts": 60,
+    "faces": 66,
+    "tris": 100,
+    "dimensions": [
+      0.56,
+      0.38,
+      1.78
+    ]
+  },
+  {
+    "name": "SM_Floor_4m",
+    "verts": 40,
+    "faces": 30,
+    "tris": 60,
+    "dimensions": [
+      4.0,
+      4.0,
+      0.36
+    ]
+  },
+  {
+    "name": "SM_Wall_4m",
+    "verts": 536,
+    "faces": 402,
+    "tris": 804,
+    "dimensions": [
+      4.0,
+      0.46,
+      4.02
+    ]
+  },
+  {
+    "name": "SM_Corner_4m",
+    "verts": 532,
+    "faces": 404,
+    "tris": 800,
+    "dimensions": [
+      4.23,
+      4.23,
+      4.02
+    ]
+  },
+  {
+    "name": "SM_DoorArch_4m",
+    "verts": 100,
+    "faces": 86,
+    "tris": 172,
+    "dimensions": [
+      4.1,
+      0.5,
+      4.0
+    ]
+  },
+  {
+    "name": "SM_Column_4m",
+    "verts": 160,
+    "faces": 160,
+    "tris": 260,
+    "dimensions": [
+      0.84,
+      0.84,
+      4.0
+    ]
+  },
+  {
+    "name": "SM_Torch",
+    "verts": 60,
+    "faces": 66,
+    "tris": 100,
+    "dimensions": [
+      0.56,
+      0.38,
+      1.78
+    ]
+  }
+]

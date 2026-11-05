@@ -1,0 +1,22 @@
+{
+  "a": {
+    "matched_export_objects": 13,
+    "base_polygons": 2806,
+    "base_triangles": 5548,
+    "base_vertices": 3656,
+    "base_quad_faces": 2742,
+    "base_ngons": 0,
+    "evaluated_triangles_in_blend": 19516,
+    "method": "Only original Blender mesh objects named by mesh nodes in the final GLB; excludes studio/catalog items not exported. Base counts before modifiers; evaluated counts after modifiers."
+  },
+  "b": {
+    "matched_export_objects": 217,
+    "base_polygons": 5418,
+    "base_triangles": 9212,
+    "base_vertices": 5040,
+    "base_quad_faces": 3738,
+    "base_ngons": 20,
+    "evaluated_triangles_in_blend": 9212,
+    "method": "Only original Blender mesh objects named by mesh nodes in the final GLB; excludes studio/catalog items not exported. Base counts before modifiers; evaluated counts after modifiers."
+  }
+}

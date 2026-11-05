@@ -13,6 +13,7 @@ for c in configs:
  assert len(pages)>=6,(pdf,'missing sections')
  for idx,p in enumerate(pages,1):assert len(p.strip())>70,(pdf,'suspiciously empty page',idx)
  assert 'Tokens reais' in text and 'não disponíveis' in text
+ assert 'Polígonos na fonte' in text and 'Triângulos avaliados' in text
  for v in 'ab':
   files=c['images'][v]+[f for extra in c.get('extra_images',[]) for f in extra['files']]
   for f in files:assert Image.open(folder/f'run-{v}'/f).size==(768,768),(c['title'],v,f)
@@ -28,7 +29,13 @@ if (ROOT/'global-report.pdf').exists():
  assert len(configs)==6
  text=subprocess.check_output(['pdftotext',str(ROOT/'global-report.pdf'),'-'],text=True)
  assert 'Conclusão global' in text
+ assert all(len(p.strip())>70 for p in text.split('\f') if p.strip()),'Orphan global page'
+ assert 'Dados geométricos completos' in text
  results.append({'report':'global-report.pdf','pages':len([p for p in text.split('\f') if p.strip()]),'bytes':(ROOT/'global-report.pdf').stat().st_size})
+inspection_count=0
+for f in (ROOT/'cases/05-roblox-modular-kit').glob('inspection-*/*.png'):
+ assert Image.open(f).size==(384,384);inspection_count+=1
+assert inspection_count==12
 for f in ROOT.rglob('*'):
  if f.is_file() and '__pycache__' not in f.parts:assert f.stat().st_size<95_000_000,(f,'large file')
 (ROOT/'validation.json').write_text(json.dumps({'checks':'PDF text/pages, PNG size, final GLB file sizes, required files, unavailable tokens kept null; not engine or gameplay tests','reports':results},indent=2,ensure_ascii=False))

@@ -99,7 +99,28 @@
       "external_uris": [],
       "nodes": 36
     },
-    "module_exports": {}
+    "module_exports": {},
+    "geometry_export": {
+      "mesh_definitions": 36,
+      "mesh_instances": 36,
+      "triangles_in_mesh_definitions": 868,
+      "triangles_instantiated": 868,
+      "position_vertices_in_mesh_definitions": 1540,
+      "position_vertices_instantiated": 1540,
+      "animation_clips": 0,
+      "skins": 0,
+      "vertex_count_definition": "Sum of unique POSITION accessors within each mesh definition, then multiplied by scene nodes using that mesh; UV/normal seams can duplicate vertices. Not welded original Blender vertex counts."
+    },
+    "source_geometry": {
+      "matched_export_objects": 36,
+      "base_polygons": 358,
+      "base_triangles": 868,
+      "base_vertices": 504,
+      "base_quad_faces": 328,
+      "base_ngons": 30,
+      "evaluated_triangles_in_blend": 2452,
+      "method": "Only original Blender mesh objects named by mesh nodes in the final GLB; excludes studio/catalog items not exported. Base counts before modifiers; evaluated counts after modifiers."
+    }
   },
   "b": {
     "source": "/workspace/roblox-with-swe-report/docs/experiments/blender-luna-skills-2026-11-05/cases/01-arcane-blaster/run-b/asset.glb",
@@ -191,6 +212,27 @@
       "external_uris": [],
       "nodes": 53
     },
-    "module_exports": {}
+    "module_exports": {},
+    "geometry_export": {
+      "mesh_definitions": 53,
+      "mesh_instances": 53,
+      "triangles_in_mesh_definitions": 5216,
+      "triangles_instantiated": 5216,
+      "position_vertices_in_mesh_definitions": 6979,
+      "position_vertices_instantiated": 6979,
+      "animation_clips": 0,
+      "skins": 0,
+      "vertex_count_definition": "Sum of unique POSITION accessors within each mesh definition, then multiplied by scene nodes using that mesh; UV/normal seams can duplicate vertices. Not welded original Blender vertex counts."
+    },
+    "source_geometry": {
+      "matched_export_objects": 53,
+      "base_polygons": 592,
+      "base_triangles": 1072,
+      "base_vertices": 640,
+      "base_quad_faces": 358,
+      "base_ngons": 14,
+      "evaluated_triangles_in_blend": 5216,
+      "method": "Only original Blender mesh objects named by mesh nodes in the final GLB; excludes studio/catalog items not exported. Base counts before modifiers; evaluated counts after modifiers."
+    }
   }
 }

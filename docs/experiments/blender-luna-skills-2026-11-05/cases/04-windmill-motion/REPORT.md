@@ -13,23 +13,22 @@ Entregue asset.blend, asset.glb, generate.py e README.md, além de três renders
 ## Medidas
 
 | Medida | A · com skills | B · sem skills |
-
 |---|---:|---:|
-
 | Tempo registrado (s) | 1222,0 | 738,0 |
-
 | Skills lidas | 8 | 0 |
-
 | Triângulos exportados | 1680 | 2002 |
-
 | Objetos de malha exportados | 92 | 112 |
-
 | Materiais exportados | 11 | 10 |
-
 | Arquivo .blend (bytes) | 149785 | 166598 |
-
 | Arquivo .glb (bytes) | 196908 | 208364 |
-
+| Polígonos na fonte, antes de modificadores | 989 | 799 |
+| Triângulos na fonte, antes de modificadores | 1680 | 2002 |
+| Triângulos avaliados no .blend | 2556 | 4968 |
+| Vértices de posição, por instância | 3658 | 3600 |
+| Definições de malha no GLB | 92 | 112 |
+| Triângulos nas definições de malha | 1680 | 2002 |
+| Clipes de animação no GLB | 4 | 4 |
+| Dimensões XYZ (unidades da cena) | 6.440 × 6.338 × 4.383 | 6.840 × 6.840 × 5.060 |
 | Tokens reais | não disponíveis | não disponíveis |
 
 ![Gráficos](charts/metrics.png)
@@ -91,6 +90,8 @@ O processo de A evidencia o custo de seguir critérios locais de QA: contatos en
 O próprio avaliador precisou corrigir o método: o importador do Blender deixa outros clipes guardados e ativa apenas um por padrão. Uma auditoria ingênua teria apontado falsamente rotor/vegetação imóveis. Registrei a configuração e repeti a checagem após ativar cada clipe; não alterei os GLBs originais.
 
 O teste de BVH é de superfícies em quadros inteiros, não uma simulação física ou detecção contínua. Pode não detectar contenção total ou interseção entre quadros. Eixos/hubs/suportes de contato intencional e vegetação foram excluídos do confronto das pás; a seleção exata foi preservada.
+
+O .blend avaliado tem 2.556 triângulos em A e 4.968 em B, enquanto os GLBs têm 1.680 e 2.002. Os exports não incorporaram todos os modificadores visíveis nos renders. Assim, as imagens de apresentação não são uma comparação visual padronizada do GLB final; o teste de movimento/interseções, porém, usa os GLBs efetivamente entregues.
 
 ## Verificação e limites
 

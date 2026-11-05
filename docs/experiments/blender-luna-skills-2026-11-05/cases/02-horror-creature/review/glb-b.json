@@ -1,9 +1,12 @@
 {
-  "source": "/workspace/roblox-with-swe-report/docs/experiments/blender-luna-skills-2026-11-05/cases/02-horror-creature/run-b/asset.glb",
+  "excluded_importer_custom_shapes": [
+    "Icosphere"
+  ],
+  "source": "cases/02-horror-creature/run-b/asset.glb",
   "load_ok": true,
   "blender": "5.2.3 LTS",
-  "mesh_objects": 51,
-  "triangles": 5636,
+  "mesh_objects": 50,
+  "triangles": 5556,
   "materials": 4,
   "bounds": [
     [
@@ -11,18 +14,18 @@
       1.4894253015518188
     ],
     [
-      -0.9999999403953552,
-      0.9999999403953552
+      -0.6700001358985901,
+      0.47075214982032776
     ],
     [
-      -1.0,
+      -0.02500009909272194,
       3.306225299835205
     ]
   ],
   "dimensions": [
     2.9716761112213135,
-    1.9999998807907104,
-    4.306225299835205
+    1.1407522857189178,
+    3.331225398927927
   ],
   "armatures": 1,
   "bones": 17,

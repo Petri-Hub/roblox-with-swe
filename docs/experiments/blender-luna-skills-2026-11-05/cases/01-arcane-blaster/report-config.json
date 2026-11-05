@@ -73,17 +73,20 @@
     "O pacote disponibiliza conhecimento útil, mas o uso incorreto do QA remove um benefício que se poderia presumir pela simples presença da skill. Ler oito skills e executar um script não demonstra aplicação correta do processo. A checagem independente de importação foi igual para as duas versões.",
     "A e B escolheram direções artísticas diferentes. Formato do cristal, câmera, brilho e quantidade de bevel não foram fixados. O teste compara entregas completas sob o mesmo pedido, não o efeito isolado de uma regra técnica.",
     "A janela de tempo não mede o total de trabalho dos modelos. A retomada do ambiente e os pedidos de conclusão interferem na duração, e o começo da leitura/raciocínio não foi cronometrado. Não uso os 287/223 segundos para afirmar superioridade de velocidade ou custo.",
-    "Há uma única execução por condição, sem cegamento ou repetição. Não há contagem real de tokens. A conclusão adequada é um achado de caso: a variante sem skills satisfez melhor minha leitura visual do pedido, e a variante com skills teve grande vantagem em economia geométrica."
+    "Há uma única execução por condição, sem cegamento ou repetição. Não há contagem real de tokens. A conclusão adequada é um achado de caso: a variante sem skills satisfez melhor minha leitura visual do pedido, e a variante com skills teve grande vantagem em economia geométrica.",
+    "A economia do GLB de A também reflete uma diferença de pipeline: sua malha-base tem 868 triângulos, o .blend avaliado tem 2.452 e o GLB mantém 868. Em B, a base tem 1.072 e tanto o avaliado quanto o GLB têm 5.216. Portanto, o render de A inclui modificadores que não chegaram integralmente à exportação; não interpreto os 83% a menos como otimização da mesma aparência."
   ],
   "verification": [
     "Reabri os dois .blend e reimportei os GLBs finais com o mesmo audit_asset.py. Conferi as seis imagens (768 × 768), as contagens de objetos/materiais/triângulos da exportação e a ausência de animações, coerente com o pedido. Nenhum GLB declara URI externa.",
     "As imagens foram abertas para análise visual. Não houve alteração posterior de modelagem pelo avaliador. Não testei empunhadura por um personagem, colisões, motor de jogo, texel density ou orçamento de draw calls.",
-    "A retomada do ambiente está registrada em observer-notes.json. As declarações de leitura vêm de skills-read.txt. QA específico e revisão corretiva não foram forçados a ter o mesmo número de ciclos."
+    "A retomada do ambiente está registrada em observer-notes.json. As declarações de leitura vêm de skills-read.txt. QA específico e revisão corretiva não foram forçados a ter o mesmo número de ciclos.",
+    "Medi os polígonos e triângulos-base nos objetos do .blend correspondentes aos nós exportados, além da geometria avaliada. Os dados estão em source-geometry.json. Essa comparação detectou a diferença de modificadores no blaster A."
   ],
   "next_steps": [
     "Se continuar A, tornar o cristal mais explícito e desenvolver o verso; executar o QA sobre a coleção correta.",
     "Se continuar B, reduzir bevels/ornamentos conforme o orçamento do jogo e remover a linha de horizonte das vistas técnicas.",
     "Numa repetição controlada, definir orçamento de geometria, padronizar câmera e separar tempo de leitura, renderização e revisão.",
     "Capturar tokens por chamada no runtime/API; não converter janelas de tempo em estimativas de tokens."
-  ]
+  ],
+  "global_takeaway": "Preferência B no detalhe arcano; A usa muito menos geometria e seu QA verificou o piso."
 }

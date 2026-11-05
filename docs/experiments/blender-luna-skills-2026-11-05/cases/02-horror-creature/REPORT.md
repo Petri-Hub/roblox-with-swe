@@ -1,6 +1,6 @@
 # Vigia do Brejo: criatura com rig e idle
 
-Neste par, a versão com skills (A) foi minha preferência: tem silhueta mais coerente, membros alongados e placas ósseas legíveis com 1.508 triângulos exportados. B também entregou rig e animação funcionais, mas ficou mais volumosa e segmentada, com 5.636 triângulos. Nenhuma transmite plenamente uma criatura curvada e organicamente aterrorizante.
+Neste par, a versão com skills (A) foi minha preferência: tem silhueta mais coerente, membros alongados e placas ósseas legíveis com 1.428 triângulos exportados. B também entregou rig e animação funcionais, mas ficou mais volumosa e segmentada, com 5.556 triângulos. Nenhuma transmite plenamente uma criatura curvada e organicamente aterrorizante.
 
 As duas animações finais mudam de pose depois de reimportadas. A vantagem de A neste caso está na coerência e economia, não em ser a única versão que anima. B detectou e corrigiu um erro de keyframes constantes antes de entregar. O resultado contradiz qualquer regra simples de que dispensar skills seria sempre melhor.
 
@@ -13,23 +13,22 @@ Entregue asset.blend, asset.glb, generate.py e README.md, além de três renders
 ## Medidas
 
 | Medida | A · com skills | B · sem skills |
-
 |---|---:|---:|
-
 | Tempo registrado (s) | 434,0 | 506,0 |
-
 | Skills lidas | 10 | 0 |
-
-| Triângulos exportados | 1508 | 5636 |
-
-| Objetos de malha exportados | 60 | 51 |
-
+| Triângulos exportados | 1428 | 5556 |
+| Objetos de malha exportados | 59 | 50 |
 | Materiais exportados | 6 | 4 |
-
 | Arquivo .blend (bytes) | 148365 | 173806 |
-
 | Arquivo .glb (bytes) | 263736 | 731048 |
-
+| Polígonos na fonte, antes de modificadores | 954 | 3228 |
+| Triângulos na fonte, antes de modificadores | 1428 | 5556 |
+| Triângulos avaliados no .blend | 1428 | 5556 |
+| Vértices de posição, por instância | 3336 | 12012 |
+| Definições de malha no GLB | 59 | 50 |
+| Triângulos nas definições de malha | 1428 | 5556 |
+| Clipes de animação no GLB | 1 | 1 |
+| Dimensões XYZ (unidades da cena) | 1.859 × 1.106 × 2.523 | 2.972 × 1.141 × 3.331 |
 | Tokens reais | não disponíveis | não disponíveis |
 
 ![Gráficos](charts/metrics.png)
@@ -62,7 +61,7 @@ As duas têm iluminação esverdeada e fundo escuro. A me parece mais próxima d
 
 ## Resultado A
 
-A exportou 60 objetos de malha, seis materiais efetivamente importados, uma armature com 17 ossos e 1.508 triângulos. O GLB ocupa 263.736 bytes e contém um skin e uma animação com 51 canais. As medidas são da auditoria independente da exportação, distintas das contagens de malha base e materiais totais citadas pelo agente.
+A exportou 59 objetos de malha, seis materiais efetivamente importados, uma armature com 17 ossos e 1.428 triângulos. O GLB ocupa 263.736 bytes e contém um skin e uma animação com 51 canais. As medidas são da auditoria independente da exportação, distintas das contagens de malha base e materiais totais citadas pelo agente.
 
 A silhueta esguia, os dedos compridos e os elementos pontudos funcionam melhor para meu entendimento do pedido. A região luminosa sem olhos é clara. As placas ósseas se distinguem da pele, mas o resultado ainda parece um personagem montado a partir de primitivas. A postura curvada não é suficientemente marcada.
 
@@ -72,7 +71,7 @@ O agente corrigiu seu teste de reimportação para limpar o cubo, a câmera e a 
 
 ## Resultado B
 
-B exportou 51 objetos de malha, quatro materiais importados, rig com 17 ossos e 5.636 triângulos. O GLB tem 731.048 bytes e inclui um skin e 51 canais de animação. A maior densidade de geometria não produziu, na minha avaliação, uma anatomia mais convincente.
+B exportou 50 objetos de malha, quatro materiais importados, rig com 17 ossos e 5.556 triângulos. O GLB tem 731.048 bytes e inclui um skin e 51 canais de animação. A maior densidade de geometria não produziu, na minha avaliação, uma anatomia mais convincente.
 
 A massa nos ombros e nas articulações, o formato arredondado das placas e a distribuição dos braços fazem a criatura parecer mais um boneco ou robô. O agente adicionou hastes para conectar segmentos após perceber espaços entre as formas. Isso ajuda na ligação, mas a segmentação segue muito visível.
 
@@ -92,13 +91,15 @@ Os renders de 6 e 8 samples e as escolhas de iluminação não foram igualados. 
 
 Movimento confirmado por vértices e canais não prova qualidade de skinning em poses extremas, ausência de interpenetração entre todos os frames ou continuidade perfeita do loop. Não houve walk cycle, retargeting ou teste em engine. Uma amostra por condição e julgamento não cego continuam limitando a conclusão.
 
+Também foi necessário desconstruir minha própria contagem: objetos auxiliares criados pelo importador não pertencem à geometria exportada. Por isso, além de reimportar, conferi as definições e instâncias diretamente no glTF e preservei o erro inicial no histórico. Isso altera números da primeira versão do PDF, sem mudar minha preferência visual por A.
+
 ## Verificação e limites
 
 Apliquei o mesmo audit_asset.py aos dois .blend e aos dois GLBs finais. Ambos abriram, reimportaram e apresentaram movimento em quadros amostrados. A análise registra bones, armatures, modificadores de deformação, skins e canais de animação. Não há URIs externas nos GLBs.
 
 Conferi as dimensões dos doze PNGs de entrega e abri as vistas e amostras de poses para inspeção. Apresentação e pose-01 usam o mesmo enquadramento e estado inicial; não são vistas independentes para avaliar amplitude. A confirmação de movimento vem dos vértices avaliados no .blend e no GLB, não da existência de nomes de arquivos diferentes.
 
-O número de triângulos e materiais nesta tabela é o contado na importação final, não o informado na mensagem do agente A. Os JSONs originais de QA e os logs de reimportação de A foram preservados para confronto. Não alterei a modelagem ou a animação dos agentes.
+A primeira auditoria somava uma Icosphere auxiliar criada pelo importador para exibir ossos: eram 80 triângulos e uma malha a mais em cada variante. Excluí esse objeto por sua referência como custom_shape, repeti a inspeção e confirmei as contagens no próprio glTF: A 1.428 triângulos/59 malhas, B 5.556/50. Os JSONs iniciais foram preservados como *.initial-with-helper.json e o diagnóstico em importer-helper-diagnosis.log. O agente A já havia informado 1.428; a divergência anterior vinha do meu contador. Não alterei os assets.
 
 ## Próximos passos
 

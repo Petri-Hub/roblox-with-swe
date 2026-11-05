@@ -1,5 +1,5 @@
 {
-  "updated_utc": "2026-11-05T22:57:36.061163+00:00",
+  "updated_utc": "2026-11-05T23:41:10.487624+00:00",
   "branch": "docs/blender-luna-skills-study",
   "pull_request": "https://github.com/Petri-Hub/roblox-with-swe/pull/43",
   "completed_pdfs": [
@@ -7,9 +7,12 @@
     "cases/01-arcane-blaster/report.pdf",
     "cases/02-horror-creature/report.pdf",
     "cases/03-haunted-courtyard/report.pdf",
-    "cases/04-windmill-motion/report.pdf"
+    "cases/04-windmill-motion/report.pdf",
+    "cases/05-roblox-modular-kit/report.pdf",
+    "global-report.pdf"
   ],
-  "active_case": "05-roblox-modular-kit",
+  "active_case": null,
   "remaining_cases": [],
-  "global_pdf": "pending until all cases finish"
+  "global_pdf": "global-report.pdf",
+  "status": "complete and verified"
 }

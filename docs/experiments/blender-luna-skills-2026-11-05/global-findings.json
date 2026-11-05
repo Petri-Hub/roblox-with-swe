@@ -1,0 +1,32 @@
+{
+  "conclusion": [
+    "As skills não garantiram melhor qualidade geral em todos os pedidos. Na torre e no blaster, preferi a versão sem skills; na criatura, capela, moinho e kit modular, preferi a versão com skills, com vantagem visual pequena no moinho e pendências importantes no kit. Essas são preferências não cegas de um avaliador, não um placar estatístico.",
+    "O pacote disponibilizou procedimentos de organização, exportação e QA; a aplicação continuou sujeita a erros. No blaster, um pass=true se referia somente ao piso de estúdio. Na torre, um guarda-corpo bloqueava a escada apesar da revisão. No kit sem skills, arquivos válidos coexistem com obstáculos no corredor e na curva. Portanto, o resultado deve ser julgado pelo pedido e pelos dados efetivos, não pela quantidade de skills lidas ou pelo sinal de sucesso de uma ferramenta.",
+    "O fluxo headless é operacionalmente viável: bpy gerou modelos, os agentes produziram e inspecionaram renders e houve exportações estáticas e animadas importáveis. Isso demonstra capacidade do fluxo, mas não mede o benefício isolado da visão, pois os dois grupos tiveram acesso a imagens. Não há evidência de que uma dessas condições sempre seja melhor, nem medição real de tokens ou custo monetário."
+  ],
+  "limits": [
+    "Uma execução por condição em cada categoria; tarefas heterogêneas e sem repetições. Não há intervalo de confiança, teste estatístico ou base para generalização a todos os modelos e skills.",
+    "Avaliação não cega. O avaliador conhecia as pastas e acompanhou o trabalho. Câmeras, iluminação, geometria e número de revisões foram escolhidos pelos agentes. Somente as inspeções de módulos do último caso usaram uma apresentação neutra comum.",
+    "Separação por pasta e instruções, com filesystem e recursos compartilhados; não houve isolamento por containers nem auditoria completa de leituras. Houve erro de cwd no blaster sem skills. “Sem skills” é uma restrição de consulta nesta tarefa, não ausência de conhecimento prévio do modelo.",
+    "Não houve limite igual de tokens, revisões ou tempo de render. Interrupções/retomadas do ambiente afetaram blaster e kit. As janelas de logs começam em etapas diferentes. O estudo não permite um ranking confiável de velocidade ou custo.",
+    "Leituras de skills e horários são registros dos agentes. Tamanhos, PNGs, reaberturas e contagens de exportação foram checados pelo avaliador. Não se inventaram tokens a partir de duração ou quantidade de instruções.",
+    "O próprio método foi revisado no moinho: o importador deixava clipes guardados e ativava só um por padrão. A auditoria foi corrigida e repetida com ativação explícita de cada clipe correspondente, sem alterar os assets.",
+    "Não houve Roblox Studio, gameplay, colisão de engine, avaliação com avatar ou medição de FPS/draw calls. BVH e raios são testes geométricos delimitados, não certificação de navegação ou física.",
+    "Contagens da malha-base, da geometria avaliada do .blend e do GLB podem divergir. No kit A, o GLB tem 19.516 triângulos, contra 5.548 declarados da base; no blaster A e nos dois moinhos, parte dos modificadores do render ficou fora do GLB. A criatura exigiu excluir uma forma auxiliar do importador, correção registrada no histórico."
+  ],
+  "recommendations": [
+    "Manter Blender CLI + bpy + renderização e leitura de PNG como um fluxo de trabalho útil para os agentes headless. A ferramenta visual deve receber vistas de inspeção e de apresentação, não apenas o arquivo .blend ou logs de texto.",
+    "Tratar as skills como ajuda de execução e checklists. Escolher as pertinentes, registrar o que foi lido e verificar se o procedimento foi aplicado ao conjunto certo. Antes de aceitar QA, comparar os objetos inspecionados com os objetos exportados.",
+    "Adicionar verificação semântica explícita: chegada de escada livre, cobertura fechada quando exigida, caminho sem parede atravessada, módulos sem protótipos sobrepostos na exportação. Esses requisitos não se reduzem a malha fechada ou ausência de erro de API.",
+    "Validar peças e montagem separadamente. O caso modular mostrou que seis arquivos importáveis não demonstram que a combinação respeita circulação e encaixes. Documentar a escala, origem e a diferença entre passo da grade e dimensão externa com frisos/chanfros.",
+    "Nas animações, verificar variação real de transformações/vértices e o fechamento do loop. Fazer round-trip em cena limpa e configurar os clipes explicitamente; presença de canais e imagens com nomes distintos não basta.",
+    "Preservar os artefatos dos agentes e avaliar sem consertar silenciosamente o resultado. No jogo real, acrescentar teste no engine e inspeção de avatar, colisões, materiais e desempenho. Neste estudo, as melhorias foram recomendações e não integração dos assets ao jogo.",
+    "Tratar o orçamento de polígonos em três etapas: malha-base, resultado avaliado com modificadores e exportação. Contar instâncias separadamente das definições armazenadas no arquivo. Um GLB pequeno pode reutilizar muita geometria, e um render bonito pode mostrar modificadores ausentes do export."
+  ],
+  "next_experiment": [
+    "Repetir cada categoria várias vezes, alternar ordem e condições de recursos, e usar avaliadores que não saibam a condição. Separar julgamento artístico, cumprimento do pedido e integridade técnica, com critérios definidos antes das execuções.",
+    "Definir orçamento de revisões, tempo de CPU e renderização para comparações de eficiência. Registrar cada chamada pelo runtime/API com tokens de entrada, saída e cache; manter renderização e espera fora da contagem de tokens.",
+    "Separar intervenções: só instruções, só scripts de QA, conjunto completo e eventual acesso à visão. O experimento atual combina esses recursos na condição com skills, portanto não atribui causalidade a cada um.",
+    "Para Roblox, testar a exportação no Studio com o avatar e a escala-alvo. Comparar uso real da montagem, além do render de Blender. Os testes geométricos deste relatório são uma etapa intermediária."
+  ]
+}

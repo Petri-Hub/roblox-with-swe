@@ -1,0 +1,43 @@
+Failed to create secure directory (/home/agent/.config/pulse): Read-only file system
+00:00.351  blend            | Read blend: "/workspace/blender-study/cases/05-roblox-modular-kit/run-a/asset.blend"
+INFO Draco is available, use library at /workspace/blender-study/tools/blender-5.2.3-linux-x64/lib/libbf_intern_draco_bridge.so
+INFO MeshOptimizer is available, use library at /workspace/blender-study/tools/blender-5.2.3-linux-x64/lib/libbf_intern_meshopt_bridge.so
+23:07:26 | INFO: Starting glTF 2.0 export
+23:07:26 | INFO: Extracting primitive: SM_Floor_4mMesh
+23:07:26 | INFO: Primitives created: 3
+23:07:26 | INFO: Finished glTF 2.0 export in 0.016608476638793945 s
+
+EXPORTED_MODULE_AT_ORIGIN SM_Floor_4m
+23:07:26 | INFO: Starting glTF 2.0 export
+23:07:26 | INFO: Extracting primitive: SM_Wall_4mMesh
+23:07:26 | INFO: Primitives created: 4
+23:07:26 | INFO: Finished glTF 2.0 export in 0.012261152267456055 s
+
+EXPORTED_MODULE_AT_ORIGIN SM_Wall_4m
+23:07:26 | INFO: Starting glTF 2.0 export
+23:07:26 | INFO: Extracting primitive: SM_Corner_4mMesh
+23:07:26 | INFO: Primitives created: 4
+23:07:26 | INFO: Finished glTF 2.0 export in 0.012171268463134766 s
+
+EXPORTED_MODULE_AT_ORIGIN SM_Corner_4m
+23:07:26 | INFO: Starting glTF 2.0 export
+23:07:26 | INFO: Extracting primitive: SM_DoorArch_4mMesh
+23:07:26 | INFO: Primitives created: 3
+23:07:26 | INFO: Finished glTF 2.0 export in 0.0064852237701416016 s
+
+EXPORTED_MODULE_AT_ORIGIN SM_DoorArch_4m
+23:07:26 | INFO: Starting glTF 2.0 export
+23:07:26 | INFO: Extracting primitive: SM_Column_4mMesh
+23:07:26 | INFO: Primitives created: 3
+23:07:26 | INFO: Finished glTF 2.0 export in 0.006745815277099609 s
+
+EXPORTED_MODULE_AT_ORIGIN SM_Column_4m
+23:07:26 | INFO: Starting glTF 2.0 export
+23:07:26 | INFO: Extracting primitive: SM_TorchMesh
+23:07:26 | INFO: Primitives created: 2
+23:07:26 | INFO: Finished glTF 2.0 export in 0.004830121994018555 s
+
+EXPORTED_MODULE_AT_ORIGIN SM_Torch
+Blender 5.2.3 LTS (hash e13b728c6880 built 2026-10-22 01:35:05)
+
+Blender quit

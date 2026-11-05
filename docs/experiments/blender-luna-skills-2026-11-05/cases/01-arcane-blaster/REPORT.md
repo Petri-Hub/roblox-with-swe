@@ -13,23 +13,22 @@ Entregue asset.blend, asset.glb, generate.py e README.md, além de três renders
 ## Medidas
 
 | Medida | A · com skills | B · sem skills |
-
 |---|---:|---:|
-
 | Tempo registrado (s) | 287,0 | 223,0 |
-
 | Skills lidas | 8 | 0 |
-
 | Triângulos exportados | 868 | 5216 |
-
 | Objetos de malha exportados | 36 | 53 |
-
 | Materiais exportados | 6 | 6 |
-
 | Arquivo .blend (bytes) | 127386 | 130924 |
-
 | Arquivo .glb (bytes) | 80956 | 287680 |
-
+| Polígonos na fonte, antes de modificadores | 358 | 592 |
+| Triângulos na fonte, antes de modificadores | 868 | 1072 |
+| Triângulos avaliados no .blend | 2452 | 5216 |
+| Vértices de posição, por instância | 1540 | 6979 |
+| Definições de malha no GLB | 36 | 53 |
+| Triângulos nas definições de malha | 868 | 5216 |
+| Clipes de animação no GLB | 0 | 0 |
+| Dimensões XYZ (unidades da cena) | 2.330 × 0.593 × 1.665 | 3.535 × 1.030 × 2.960 |
 | Tokens reais | não disponíveis | não disponíveis |
 
 ![Gráficos](charts/metrics.png)
@@ -92,6 +91,8 @@ A janela de tempo não mede o total de trabalho dos modelos. A retomada do ambie
 
 Há uma única execução por condição, sem cegamento ou repetição. Não há contagem real de tokens. A conclusão adequada é um achado de caso: a variante sem skills satisfez melhor minha leitura visual do pedido, e a variante com skills teve grande vantagem em economia geométrica.
 
+A economia do GLB de A também reflete uma diferença de pipeline: sua malha-base tem 868 triângulos, o .blend avaliado tem 2.452 e o GLB mantém 868. Em B, a base tem 1.072 e tanto o avaliado quanto o GLB têm 5.216. Portanto, o render de A inclui modificadores que não chegaram integralmente à exportação; não interpreto os 83% a menos como otimização da mesma aparência.
+
 ## Verificação e limites
 
 Reabri os dois .blend e reimportei os GLBs finais com o mesmo audit_asset.py. Conferi as seis imagens (768 × 768), as contagens de objetos/materiais/triângulos da exportação e a ausência de animações, coerente com o pedido. Nenhum GLB declara URI externa.
@@ -99,6 +100,8 @@ Reabri os dois .blend e reimportei os GLBs finais com o mesmo audit_asset.py. Co
 As imagens foram abertas para análise visual. Não houve alteração posterior de modelagem pelo avaliador. Não testei empunhadura por um personagem, colisões, motor de jogo, texel density ou orçamento de draw calls.
 
 A retomada do ambiente está registrada em observer-notes.json. As declarações de leitura vêm de skills-read.txt. QA específico e revisão corretiva não foram forçados a ter o mesmo número de ciclos.
+
+Medi os polígonos e triângulos-base nos objetos do .blend correspondentes aos nós exportados, além da geometria avaliada. Os dados estão em source-geometry.json. Essa comparação detectou a diferença de modificadores no blaster A.
 
 ## Próximos passos
 

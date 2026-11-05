@@ -13,23 +13,22 @@ Entregue asset.blend, asset.glb, generate.py e README.md, além de três renders
 ## Medidas
 
 | Medida | A · com skills | B · sem skills |
-
 |---|---:|---:|
-
 | Tempo registrado (s) | 775,0 | 497,0 |
-
 | Skills lidas | 9 | 0 |
-
 | Triângulos exportados | 4108 | 7404 |
-
 | Objetos de malha exportados | 151 | 175 |
-
 | Materiais exportados | 11 | 12 |
-
 | Arquivo .blend (bytes) | 179728 | 196825 |
-
 | Arquivo .glb (bytes) | 337284 | 493376 |
-
+| Polígonos na fonte, antes de modificadores | 1040 | 1223 |
+| Triângulos na fonte, antes de modificadores | 1964 | 2296 |
+| Triângulos avaliados no .blend | 4108 | 7404 |
+| Vértices de posição, por instância | 6347 | 9665 |
+| Definições de malha no GLB | 151 | 175 |
+| Triângulos nas definições de malha | 4108 | 7404 |
+| Clipes de animação no GLB | 0 | 0 |
+| Dimensões XYZ (unidades da cena) | 10.200 × 8.400 × 4.310 | 14.000 × 14.000 × 8.855 |
 | Tokens reais | não disponíveis | não disponíveis |
 
 ![Gráficos](charts/metrics.png)

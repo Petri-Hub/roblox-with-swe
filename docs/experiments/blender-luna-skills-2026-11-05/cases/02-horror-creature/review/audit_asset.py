@@ -7,7 +7,8 @@ bpy.context.scene.render.fps=24
 if src.suffix=='.glb':bpy.ops.import_scene.gltf(filepath=str(src))
 else:bpy.ops.wm.open_mainfile(filepath=str(src))
 scene=bpy.context.scene
-meshes=[o for o in scene.objects if o.type=='MESH']
+helpers={b.custom_shape for o in scene.objects if o.type=='ARMATURE' for b in o.pose.bones if b.custom_shape}
+meshes=[o for o in scene.objects if o.type=='MESH' and o not in helpers]
 armatures=[o for o in scene.objects if o.type=='ARMATURE']
 points=[];triangles=0
 for o in meshes:
@@ -28,5 +29,5 @@ base=samples['1'];movement={}
 for f,vals in samples.items():
  movement[f]=max(((Vector(v)-Vector(b)).length for v,b in zip(vals,base)),default=0) if len(vals)==len(base) else None
 scene.frame_set(original_frame)
-r={'source':str(src),'load_ok':True,'blender':bpy.app.version_string,'mesh_objects':len(meshes),'triangles':triangles,'materials':len(bpy.data.materials),'bounds':bounds,'dimensions':[b-a for a,b in bounds],'armatures':len(armatures),'bones':sum(len(o.data.bones) for o in armatures),'mesh_with_armature_modifier':sum(any(m.type=='ARMATURE' for m in o.modifiers) for o in meshes),'actions':len(bpy.data.actions),'fps':scene.render.fps,'frame_start':scene.frame_start,'frame_end':scene.frame_end,'max_vertex_displacement_from_frame_1':movement,'external_images':[i.filepath for i in bpy.data.images if i.source=='FILE' and not i.packed_file and i.filepath]}
+r={'excluded_importer_custom_shapes':[o.name for o in helpers],'source':str(src),'load_ok':True,'blender':bpy.app.version_string,'mesh_objects':len(meshes),'triangles':triangles,'materials':len(bpy.data.materials),'bounds':bounds,'dimensions':[b-a for a,b in bounds],'armatures':len(armatures),'bones':sum(len(o.data.bones) for o in armatures),'mesh_with_armature_modifier':sum(any(m.type=='ARMATURE' for m in o.modifiers) for o in meshes),'actions':len(bpy.data.actions),'fps':scene.render.fps,'frame_start':scene.frame_start,'frame_end':scene.frame_end,'max_vertex_displacement_from_frame_1':movement,'external_images':[i.filepath for i in bpy.data.images if i.source=='FILE' and not i.packed_file and i.filepath]}
 out.write_text(json.dumps(r,indent=2));print('AUDIT_OK',src.name,'tris',triangles,'armatures',r['armatures'],'movement',movement)

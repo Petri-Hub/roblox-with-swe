@@ -1,0 +1,27 @@
+Início UTC: 2026-11-05T22:57:22Z
+
+Escopo: gerar o kit Roblox em run-a; Blender 5.2.3 headless, Cycles CPU, máximo 4 threads; configuração/cache locais.
+
+Comandos executados:
+1. cat /workspace/blender-study/cases/05-roblox-modular-kit/request.txt; cat /workspace/blender-study/skill-source/AGENTS.md; cat .../skills/blender-core/SKILL.md — leitura das instruções e pedido.
+2. cat .../SKILL.md para blender-scene-setup, blender-hardsurface-modeling, blender-pbr-materials, blender-export-pipelines, blender-rendering, blender-lighting-lookdev, blender-environment-kits, blender-asset-qa; cat referência roblox.md — consulta de procedimentos.
+3. python .../blender-core/scripts/env_report.py — falha: Python do sistema não tem addon_utils.
+4. BLENDER_USER_CONFIG="$PWD/config" BLENDER_USER_CACHE="$PWD/cache" /workspace/blender-study/tools/blender-5.2.3-linux-x64/blender -b --factory-startup --python-exit-code 1 -P .../blender-core/scripts/env_report.py — sucesso; Blender 5.2.3, Cycles presente, GPU ausente. Warning de PulseAudio sem diretório gravável, não afeta render headless.
+
+Falhas/correções: o primeiro env_report foi chamado com Python externo; corrigido para execução dentro do Blender. O início da renderização marcou apenas os avisos de API `use_nodes` e de bibliotecas de GPU indisponíveis; Cycles CPU continuou funcionando.
+
+Iterações e verificações adicionais (UTC, 2026-11-05):
+- 23:00–23:02 — Blender headless `-b --factory-startup --python-exit-code 1 -t 4 -P generate.py`; gerados .blend, GLBs e três renders iniciais. A inspeção com `view_image` revelou a parede bloqueando o caminho e os módulos de amostra aparecendo atrás. Corrigi a montagem/câmeras e escondi os objetos de biblioteca apenas no render.
+- 23:05:14–23:06:58 — segunda geração via Blender headless com Cycles CPU; imagens revisadas novamente. A renderização em cada versão foi salva em `logs/generate*.log`.
+- 23:07 — `qa_check.py --objects SM_Floor_4m SM_Wall_4m SM_Corner_4m SM_DoorArch_4m SM_Column_4m SM_Torch --profile game` — primeira QA apontou UVs ausentes, normais de arco e arestas degeneradas na tocha. Consultei `blender-retopology-uv/SKILL.md`; adicionei UVs Smart Project 0–1, recalculei normais e corrigi a malha da tocha e do canto.
+- 23:09:44–23:10 — terceira geração Blender headless, Cycles CPU/4 threads. Nova QA modular passou sem erros; corrigi mais dois pares coplanares na tampa do canto.
+- 23:11:41–23:12 — geração e revisão visual. A QA completa indicou sobreposição no datum do piso; reposicionei a superfície caminhável para Z=0, com a espessura abaixo do datum.
+- 23:14:41–23:15 — nova geração. A revisão da imagem demonstrou a parede externa ligeiramente acima do fundo de estúdio; ajustei o fundo para tocar a base das paredes. A geração final foi executada às 23:19:31 UTC (ver `logs/generate-studio-fix.log`).
+- `logs/qa-modules-roblox.log`: QA `roblox` das seis peças — pass=true, sem erros, zero faces de borda, zero peças flutuantes, uma UV por malha dentro de 0–1; avisos restantes de faces internas/duplicadas no canto/tocha e do piso sob o datum.
+- `logs/qa-demo-final.log`: inspeção dos 13 objetos da montagem — zero peças flutuantes, mas pass=false por seis pares de faces coplanares nas juntas de parede/canto. As imagens finais foram abertas com `view_image`; não mostram frestas visíveis. As sobreposições podem gerar cintilação de profundidade em tempo real e estão documentadas em README.md.
+- `logs/export-modules.log`: GLBs de módulo exportados por seleção, um nó/uma malha por arquivo, transforms zerados. A geração final atual também exportou os módulos na origem.
+- `logs/output-validation.log`: parser local confirmou GLB 2.0 válido, `asset.glb` com 13 meshes/6 materiais, zero imagens/câmeras/luzes; seis GLBs de módulo com um nó cada e sem transform local; renders PNG 768×768; 5.548 triângulos na montagem.
+
+Comando de geração final: `BLENDER_USER_CONFIG="$PWD/config" BLENDER_USER_CACHE="$PWD/cache" /workspace/blender-study/tools/blender-5.2.3-linux-x64/blender -b --factory-startup --python-exit-code 1 -t 4 -P generate.py`.
+
+Fim UTC: 2026-11-05T23:21:43Z.

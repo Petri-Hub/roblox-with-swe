@@ -30,8 +30,9 @@ Não foram dadas dicas artísticas ou de implementação após os pedidos. Na to
 ## Medidas
 
 - Tamanhos de arquivo, dimensões dos PNGs, reabertura dos `.blend` e reimportação dos GLBs são conferidos independentemente.
-- A geometria principal comparada vem do GLB final reimportado, com modificadores aplicados. Número de malhas não equivale a draw calls medidas.
-- Em casos animados, a auditoria compara posições de vértices avaliados em quadros amostrados, registra rigs e lê a estrutura de animação do GLB. Isso não comprova ausência de artefatos entre amostras.
+- A geometria principal comparada vem do GLB final, com as opções de exportação escolhidas pelos agentes. Polígonos-base e triângulos avaliados do .blend são medidos separadamente para detectar modificadores omitidos ou aumentos na exportação. Número de malhas não equivale a draw calls medidas.
+- Em casos animados, a auditoria compara posições de vértices avaliados em quadros amostrados, registra rigs e lê a estrutura de animação do GLB. Isso não comprova ausência de artefatos entre amostras. No moinho, a checagem foi corrigida para ativar explicitamente o único clipe importado de cada objeto; o Blender deixava os demais guardados por padrão. O teste registra essa configuração e também a chave de fechamento 49.
+- No moinho, um teste BVH de superfícies avaliou pás contra obstáculos selecionados em 48 quadros inteiros. A lista de objetos, exclusões e resultados é preservada. Não é detecção contínua nem certificação de física/colisão no engine.
 - Leituras de skills e horários vêm dos logs dos agentes, sem auditoria total de acessos a arquivos. Onde houver marcação de orquestração, ela é preservada à parte.
 - O consumo de tokens de entrada, saída e cache não foi exposto. Nenhum gráfico estima esse consumo.
 
@@ -40,3 +41,7 @@ Não foram dadas dicas artísticas ou de implementação após os pedidos. Na to
 A avaliação não é cega: o avaliador conhece os caminhos e acompanhou os agentes. Não foram atribuídas notas subjetivas numéricas. Composição e iluminação são escolhidas pelos agentes, portanto a preferência visual mistura qualidade da geometria, materiais e apresentação. Uma amostra por condição e tarefas heterogêneas não permitem inferência estatística ou ranking universal.
 
 QA executado por A faz parte da intervenção; não se afirma uma comparação simétrica de taxas de aprovação desse QA. O avaliador aplica o mesmo teste de abertura/importação e inspeção às duas versões e registra limitações sem alterar os assets.
+
+## Correção da contagem da criatura
+
+A primeira auditoria de reimportação incluiu a Icosphere de 80 triângulos que o Blender cria como custom shape de ossos. O objeto não pertence ao GLB. A auditoria foi corrigida para excluí-lo, os JSONs iniciais foram preservados e todas as contagens finais foram confrontadas diretamente com definições/instâncias do glTF. A contagem final da criatura é 1.428 triângulos em A e 5.556 em B.

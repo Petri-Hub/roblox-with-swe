@@ -12,23 +12,22 @@ Entregue tower.blend, tower.glb e três renders PNG de 768x768 mostrando frente,
 ## Medidas
 
 | Medida | A · com skills | B · sem skills |
-
 |---|---:|---:|
-
 | Tempo registrado (s) | 550 | 344 |
-
 | Skills lidas | 7 | 0 |
-
 | Triângulos exportados | 4929 | 7708 |
-
 | Objetos de malha exportados | 113 | 146 |
-
 | Materiais exportados | 8 | 7 |
-
 | Arquivo .blend (bytes) | 156927 | 177713 |
-
 | Arquivo .glb (bytes) | 320452 | 476400 |
-
+| Polígonos na fonte, antes de modificadores | 673 | 974 |
+| Triângulos na fonte, antes de modificadores | 1345 | 2148 |
+| Triângulos avaliados no .blend | 4929 | 7708 |
+| Vértices de posição, por instância | 6876 | 10770 |
+| Definições de malha no GLB | 113 | 146 |
+| Triângulos nas definições de malha | 4929 | 7708 |
+| Clipes de animação no GLB | 0 | 0 |
+| Dimensões XYZ (unidades da cena) | 3.380 × 3.122 × 8.800 | 3.920 × 4.386 × 9.015 |
 | Tokens reais | não disponíveis | não disponíveis |
 
 ![Gráficos](charts/metrics.png)

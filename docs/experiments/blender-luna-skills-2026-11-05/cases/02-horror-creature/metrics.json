@@ -1,29 +1,29 @@
 {
   "a": {
-    "source": "/workspace/roblox-with-swe-report/docs/experiments/blender-luna-skills-2026-11-05/cases/02-horror-creature/run-a/asset.glb",
+    "source": "cases/02-horror-creature/run-a/asset.glb",
     "load_ok": true,
     "blender": "5.2.3 LTS",
-    "mesh_objects": 60,
-    "triangles": 1508,
+    "mesh_objects": 59,
+    "triangles": 1428,
     "materials": 6,
     "bounds": [
       [
-        -0.9510578513145447,
-        0.9510578513145447
+        -0.9333743453025818,
+        0.9258769154548645
       ],
       [
-        -0.9999999403953552,
-        0.9999999403953552
+        -0.6153097152709961,
+        0.4908945858478546
       ],
       [
-        -1.0,
+        -0.009896360337734222,
         2.5130748748779297
       ]
     ],
     "dimensions": [
-      1.9021157026290894,
-      1.9999998807907104,
-      3.5130748748779297
+      1.8592512607574463,
+      1.1062043011188507,
+      2.522971235215664
     ],
     "armatures": 1,
     "bones": 17,
@@ -298,14 +298,45 @@
       "external_uris": [],
       "nodes": 77
     },
-    "module_exports": {}
+    "module_exports": {},
+    "excluded_importer_custom_shapes": [
+      "Icosphere"
+    ],
+    "initial_importer_count_correction": {
+      "previous": {
+        "triangles": 1508,
+        "mesh_objects": 60
+      },
+      "reason": "Initial auditor included importer-created custom bone shape Icosphere (80 tris, one mesh); excluded via PoseBone.custom_shape references. Original GLBs were unchanged."
+    },
+    "geometry_export": {
+      "mesh_definitions": 59,
+      "mesh_instances": 59,
+      "triangles_in_mesh_definitions": 1428,
+      "triangles_instantiated": 1428,
+      "position_vertices_in_mesh_definitions": 3336,
+      "position_vertices_instantiated": 3336,
+      "animation_clips": 1,
+      "skins": 1,
+      "vertex_count_definition": "Sum of unique POSITION accessors within each mesh definition, then multiplied by scene nodes using that mesh; UV/normal seams can duplicate vertices. Not welded original Blender vertex counts."
+    },
+    "source_geometry": {
+      "matched_export_objects": 59,
+      "base_polygons": 954,
+      "base_triangles": 1428,
+      "base_vertices": 832,
+      "base_quad_faces": 236,
+      "base_ngons": 78,
+      "evaluated_triangles_in_blend": 1428,
+      "method": "Only original Blender mesh objects named by mesh nodes in the final GLB; excludes studio/catalog items not exported. Base counts before modifiers; evaluated counts after modifiers."
+    }
   },
   "b": {
-    "source": "/workspace/roblox-with-swe-report/docs/experiments/blender-luna-skills-2026-11-05/cases/02-horror-creature/run-b/asset.glb",
+    "source": "cases/02-horror-creature/run-b/asset.glb",
     "load_ok": true,
     "blender": "5.2.3 LTS",
-    "mesh_objects": 51,
-    "triangles": 5636,
+    "mesh_objects": 50,
+    "triangles": 5556,
     "materials": 4,
     "bounds": [
       [
@@ -313,18 +344,18 @@
         1.4894253015518188
       ],
       [
-        -0.9999999403953552,
-        0.9999999403953552
+        -0.6700001358985901,
+        0.47075214982032776
       ],
       [
-        -1.0,
+        -0.02500009909272194,
         3.306225299835205
       ]
     ],
     "dimensions": [
       2.9716761112213135,
-      1.9999998807907104,
-      4.306225299835205
+      1.1407522857189178,
+      3.331225398927927
     ],
     "armatures": 1,
     "bones": 17,
@@ -583,6 +614,37 @@
       "external_uris": [],
       "nodes": 68
     },
-    "module_exports": {}
+    "module_exports": {},
+    "excluded_importer_custom_shapes": [
+      "Icosphere"
+    ],
+    "initial_importer_count_correction": {
+      "previous": {
+        "triangles": 5636,
+        "mesh_objects": 51
+      },
+      "reason": "Initial auditor included importer-created custom bone shape Icosphere (80 tris, one mesh); excluded via PoseBone.custom_shape references. Original GLBs were unchanged."
+    },
+    "geometry_export": {
+      "mesh_definitions": 50,
+      "mesh_instances": 50,
+      "triangles_in_mesh_definitions": 5556,
+      "triangles_instantiated": 5556,
+      "position_vertices_in_mesh_definitions": 12012,
+      "position_vertices_instantiated": 12012,
+      "animation_clips": 1,
+      "skins": 1,
+      "vertex_count_definition": "Sum of unique POSITION accessors within each mesh definition, then multiplied by scene nodes using that mesh; UV/normal seams can duplicate vertices. Not welded original Blender vertex counts."
+    },
+    "source_geometry": {
+      "matched_export_objects": 50,
+      "base_polygons": 3228,
+      "base_triangles": 5556,
+      "base_vertices": 2878,
+      "base_quad_faces": 2288,
+      "base_ngons": 8,
+      "evaluated_triangles_in_blend": 5556,
+      "method": "Only original Blender mesh objects named by mesh nodes in the final GLB; excludes studio/catalog items not exported. Base counts before modifiers; evaluated counts after modifiers."
+    }
   }
 }

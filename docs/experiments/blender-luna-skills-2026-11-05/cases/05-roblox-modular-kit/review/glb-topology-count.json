@@ -1,0 +1,14 @@
+{
+  "a": {
+    "unique_meshes": 13,
+    "unique_mesh_triangles": 19516,
+    "instantiated_triangles": 19516,
+    "nodes_with_mesh": 13
+  },
+  "b": {
+    "unique_meshes": 33,
+    "unique_mesh_triangles": 1368,
+    "instantiated_triangles": 9212,
+    "nodes_with_mesh": 217
+  }
+}

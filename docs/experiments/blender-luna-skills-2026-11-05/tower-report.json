@@ -81,5 +81,6 @@
     "Se a pergunta for qualidade visual da modelagem, padronizar câmera e iluminação numa segunda avaliação, preservando também os renders originais.",
     "Repetir por categoria com múltiplas execuções, ordem alternada e avaliação cega por mais de uma pessoa; usar orçamento de revisões e recursos definido previamente.",
     "Para medir custo, executar pelo runtime/API com telemetria real de tokens por chamada, separando entrada, saída e cache. Não inferir tokens a partir de tempo."
-  ]
+  ],
+  "global_takeaway": "Preferência B no visual; A mais leve, com escada bloqueada pelo guarda-corpo."
 }

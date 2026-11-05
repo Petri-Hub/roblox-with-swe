@@ -1,0 +1,69 @@
+{
+  "animation_playback_setup": "each object with a sole imported clip activated explicitly; NLA muted to avoid double evaluation",
+  "activated_single_clip_objects": [],
+  "source": "/workspace/roblox-with-swe-report/docs/experiments/blender-luna-skills-2026-11-05/cases/05-roblox-modular-kit/run-a/asset.blend",
+  "load_ok": true,
+  "blender": "5.2.3 LTS",
+  "mesh_objects": 20,
+  "triangles": 27108,
+  "materials": 7,
+  "bounds": [
+    [
+      -24.0,
+      26.0
+    ],
+    [
+      -18.0,
+      30.0
+    ],
+    [
+      -0.36000001430511475,
+      4.019999980926514
+    ]
+  ],
+  "dimensions": [
+    50.0,
+    48.0,
+    4.379999995231628
+  ],
+  "armatures": 0,
+  "bones": 0,
+  "mesh_with_armature_modifier": 0,
+  "actions": 0,
+  "fps": 24,
+  "frame_start": 1,
+  "frame_end": 250,
+  "max_vertex_displacement_from_frame_1": {
+    "1": 0.0,
+    "12": 0.0,
+    "16": 0.0,
+    "24": 0.0,
+    "32": 0.0,
+    "36": 0.0,
+    "48": 0.0,
+    "49": 0.0
+  },
+  "object_max_displacement_sampled": {
+    "Demo_Floor_1": 0.0,
+    "Demo_Floor_2": 0.0,
+    "Demo_Floor_3": 0.0,
+    "Demo_Wall_South": 0.0,
+    "Demo_Wall_East_Lower": 0.0,
+    "Demo_Entry_Arch": 0.0,
+    "Demo_Wall_North_Upper": 0.0,
+    "Demo_Wall_West_Upper": 0.0,
+    "Demo_Wall_North_Turn": 0.0,
+    "Demo_Wall_South_Turn": 0.0,
+    "Demo_Exit_Arch": 0.0,
+    "Demo_Torch_1": 0.0,
+    "Demo_Torch_2": 0.0,
+    "SM_Floor_4m": 0.0,
+    "SM_Wall_4m": 0.0,
+    "SM_Corner_4m": 0.0,
+    "SM_DoorArch_4m": 0.0,
+    "SM_Column_4m": 0.0,
+    "SM_Torch": 0.0,
+    "Studio_Ground": 0.0
+  },
+  "external_images": []
+}

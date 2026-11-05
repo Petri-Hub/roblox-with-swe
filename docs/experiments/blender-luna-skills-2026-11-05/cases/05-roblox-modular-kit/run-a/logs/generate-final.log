@@ -1,0 +1,76 @@
+Failed to create secure directory (/home/agent/.config/pulse): Read-only file system
+/workspace/blender-study/cases/05-roblox-modular-kit/run-a/generate.py:19: DeprecationWarning: 'Material.use_nodes' is expected to be removed in Blender 6.0
+  m=bpy.data.materials.new(name); m.diffuse_color=(*color,1); m.use_nodes=True
+00:00.483  cycles           | WARNING CUEW initialization failed: Error opening the library
+/workspace/blender-study/cases/05-roblox-modular-kit/run-a/generate.py:191: DeprecationWarning: 'World.use_nodes' is expected to be removed in Blender 6.0
+  world=bpy.data.worlds.new('Studio_World') if not bpy.data.worlds else bpy.data.worlds[0]; scene.world=world; world.use_nodes=True
+00:19.479  render           | Saved: '/workspace/blender-study/cases/05-roblox-modular-kit/run-a/front.png'
+00:41.691  render           | Saved: '/workspace/blender-study/cases/05-roblox-modular-kit/run-a/back.png'
+01:04.027  render           | Saved: '/workspace/blender-study/cases/05-roblox-modular-kit/run-a/presentation.png'
+01:04.032  image.write      | ERROR OpenImageIO write failed: Could not open file "/home/agent/.cache/thumbnails/large/blender_9274_c21cc94d1ced9761e1c726e81ced403d.png.png"
+Info: Saved as "asset.blend"
+INFO Draco is available, use library at /workspace/blender-study/tools/blender-5.2.3-linux-x64/lib/libbf_intern_draco_bridge.so
+INFO MeshOptimizer is available, use library at /workspace/blender-study/tools/blender-5.2.3-linux-x64/lib/libbf_intern_meshopt_bridge.so
+23:12:46 | INFO: Starting glTF 2.0 export
+23:12:46 | INFO: Extracting primitive: Demo_Entry_ArchMesh
+23:12:46 | INFO: Primitives created: 3
+23:12:46 | INFO: Extracting primitive: Demo_Exit_ArchMesh
+23:12:46 | INFO: Primitives created: 3
+23:12:46 | INFO: Extracting primitive: Demo_Floor_1Mesh
+23:12:46 | INFO: Primitives created: 3
+23:12:46 | INFO: Extracting primitive: Demo_Floor_2Mesh
+23:12:46 | INFO: Primitives created: 3
+23:12:46 | INFO: Extracting primitive: Demo_Floor_3Mesh
+23:12:46 | INFO: Primitives created: 3
+23:12:46 | INFO: Extracting primitive: Demo_Torch_1Mesh
+23:12:46 | INFO: Primitives created: 2
+23:12:46 | INFO: Extracting primitive: Demo_Torch_2Mesh
+23:12:46 | INFO: Primitives created: 2
+23:12:46 | INFO: Extracting primitive: Demo_Wall_East_LowerMesh
+23:12:46 | INFO: Primitives created: 4
+23:12:46 | INFO: Extracting primitive: Demo_Wall_North_TurnMesh
+23:12:46 | INFO: Primitives created: 4
+23:12:46 | INFO: Extracting primitive: Demo_Wall_North_UpperMesh
+23:12:46 | INFO: Primitives created: 4
+23:12:46 | INFO: Extracting primitive: Demo_Wall_SouthMesh
+23:12:46 | INFO: Primitives created: 4
+23:12:46 | INFO: Extracting primitive: Demo_Wall_South_TurnMesh
+23:12:46 | INFO: Primitives created: 4
+23:12:46 | INFO: Extracting primitive: Demo_Wall_West_UpperMesh
+23:12:46 | INFO: Primitives created: 4
+23:12:46 | INFO: Finished glTF 2.0 export in 0.09129595756530762 s
+
+23:12:46 | INFO: Starting glTF 2.0 export
+23:12:46 | INFO: Extracting primitive: SM_Floor_4mMesh
+23:12:46 | INFO: Primitives created: 3
+23:12:46 | INFO: Finished glTF 2.0 export in 0.006907224655151367 s
+
+23:12:46 | INFO: Starting glTF 2.0 export
+23:12:46 | INFO: Extracting primitive: SM_Wall_4mMesh
+23:12:46 | INFO: Primitives created: 4
+23:12:46 | INFO: Finished glTF 2.0 export in 0.01557016372680664 s
+
+23:12:46 | INFO: Starting glTF 2.0 export
+23:12:46 | INFO: Extracting primitive: SM_Corner_4mMesh
+23:12:46 | INFO: Primitives created: 4
+23:12:46 | INFO: Finished glTF 2.0 export in 0.014648914337158203 s
+
+23:12:46 | INFO: Starting glTF 2.0 export
+23:12:46 | INFO: Extracting primitive: SM_DoorArch_4mMesh
+23:12:46 | INFO: Primitives created: 3
+23:12:46 | INFO: Finished glTF 2.0 export in 0.008104562759399414 s
+
+23:12:46 | INFO: Starting glTF 2.0 export
+23:12:46 | INFO: Extracting primitive: SM_Column_4mMesh
+23:12:46 | INFO: Primitives created: 3
+23:12:46 | INFO: Finished glTF 2.0 export in 0.007894754409790039 s
+
+23:12:46 | INFO: Starting glTF 2.0 export
+23:12:46 | INFO: Extracting primitive: SM_TorchMesh
+23:12:46 | INFO: Primitives created: 2
+23:12:46 | INFO: Finished glTF 2.0 export in 0.004006862640380859 s
+
+GENERATED 13 demo objects 6 modules [{'name': 'Demo_Floor_1', 'verts': 40, 'faces': 30, 'tris': 60, 'dimensions': [4.0, 4.0, 0.36]}, {'name': 'Demo_Floor_2', 'verts': 40, 'faces': 30, 'tris': 60, 'dimensions': [4.0, 4.0, 0.36]}, {'name': 'Demo_Floor_3', 'verts': 40, 'faces': 30, 'tris': 60, 'dimensions': [4.0, 4.0, 0.36]}, {'name': 'Demo_Wall_South', 'verts': 536, 'faces': 402, 'tris': 804, 'dimensions': [4.0, 0.46, 4.02]}, {'name': 'Demo_Wall_East_Lower', 'verts': 536, 'faces': 402, 'tris': 804, 'dimensions': [4.0, 0.46, 4.02]}, {'name': 'Demo_Entry_Arch', 'verts': 100, 'faces': 86, 'tris': 172, 'dimensions': [4.1, 0.5, 4.0]}]
+Blender 5.2.3 LTS (hash e13b728c6880 built 2026-10-22 01:35:05)
+
+Blender quit

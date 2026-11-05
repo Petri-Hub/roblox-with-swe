@@ -11,7 +11,7 @@ for f in src.rglob('*'):
  if f.suffix not in ['.py','.png','.glb','.blend','.json','.txt','.md','.log']:continue
  target=dst/f.relative_to(src);target.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(f,target)
 review=dst/'review';review.mkdir(exist_ok=True)
-shutil.copy2('/workspace/blender-study/review/audit_asset.py',review/'audit_asset.py')
+shutil.copy2(ROOT/'review/audit_asset.py',review/'audit_asset.py')
 blender=Path('/workspace/blender-study/tools/blender-5.2.3-linux-x64/blender')
 def audit(pair):
  v,ext=pair;file=dst/f'run-{v}'/f'asset.{ext}';out=review/f'{ext}-{v}.json'

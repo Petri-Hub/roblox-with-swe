@@ -12,6 +12,14 @@ for c in configs:
  for i in range(2):parts+=['<div class="pair">'+''.join(pic(v,c['images'][v][i]) for v in 'ab')+'</div>']
  for extra in c.get('extra_images',[]):
   for f in extra['files']:parts+=['<h3>'+html.escape(f)+'</h3><div class="pair">'+''.join(pic(v,f) for v in 'ab' if (ROOT/folder/f'run-{v}'/f).exists())+'</div>']
+ for page in c.get('inspection_pages',[]):
+  parts+=['<h3>'+html.escape(page['title'])+'</h3><p>'+html.escape(page['note'])+'</p>']
+  for row in page['rows']:
+   parts+=['<h4>'+html.escape(row['label'])+'</h4><div class="pair">']
+   for v in 'ab':
+    if row.get(v):
+     path=(folder/row[v]).as_posix();parts+=['<figure><img loading="lazy" src="'+path+'"><figcaption>'+v.upper()+'</figcaption></figure>']
+   parts+=['</div>']
  parts+=['</details></section>']
 parts+=['</main></html>'];(ROOT/'comparison.html').write_text(''.join(parts))
 print(ROOT/'comparison.html')

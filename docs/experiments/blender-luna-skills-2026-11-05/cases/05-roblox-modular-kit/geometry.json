@@ -1,0 +1,24 @@
+{
+  "a": {
+    "mesh_definitions": 13,
+    "mesh_instances": 13,
+    "triangles_in_mesh_definitions": 19516,
+    "triangles_instantiated": 19516,
+    "position_vertices_in_mesh_definitions": 24254,
+    "position_vertices_instantiated": 24254,
+    "animation_clips": 0,
+    "skins": 0,
+    "vertex_count_definition": "Sum of unique POSITION accessors within each mesh definition, then multiplied by scene nodes using that mesh; UV/normal seams can duplicate vertices. Not welded original Blender vertex counts."
+  },
+  "b": {
+    "mesh_definitions": 33,
+    "mesh_instances": 217,
+    "triangles_in_mesh_definitions": 1368,
+    "triangles_instantiated": 9212,
+    "position_vertices_in_mesh_definitions": 1816,
+    "position_vertices_instantiated": 11900,
+    "animation_clips": 0,
+    "skins": 0,
+    "vertex_count_definition": "Sum of unique POSITION accessors within each mesh definition, then multiplied by scene nodes using that mesh; UV/normal seams can duplicate vertices. Not welded original Blender vertex counts."
+  }
+}

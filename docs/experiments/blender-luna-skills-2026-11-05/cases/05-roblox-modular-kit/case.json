@@ -1,0 +1,9 @@
+{
+  "id": "05-roblox-modular-kit",
+  "title": "Kit modular / preparação para Roblox",
+  "request": "Crie no Blender um kit modular low poly de corredor de masmorra para uso posterior no Roblox Studio. Inclua piso, parede, canto, arco de porta, coluna e tocha, além de uma montagem demonstrativa com uma curva e uma entrada atravessável. As peças devem se encaixar numa grade de 4 unidades Blender, com origens úteis para montagem, nomes claros e materiais consistentes. Quero corredores e portas com passagem livre, sem peças soltas ou frestas visíveis. Exporte asset.glb com a montagem demonstrativa e também um GLB separado por tipo de módulo na pasta modules/. Documente a escala usada e como repetir os encaixes; não é necessário abrir o Roblox Studio nem escrever scripts de jogo.\n\nEntregue asset.blend, asset.glb, generate.py e README.md, além de três renders PNG de 768×768 (front.png, back.png e presentation.png), com vistas que permitam avaliar a construção. O GLB deve conter somente o asset e seus materiais; mantenha chão de estúdio, luzes e câmeras fora da exportação. Prefira materiais autossuficientes, sem dependências externas. Revise visualmente suas imagens e corrija os problemas que encontrar antes de concluir. Não basta descrever a cena: gere e verifique os arquivos.",
+  "model": "gpt-6-luna",
+  "reasoning_effort": "medium",
+  "blender": "5.2.3",
+  "skills_commit": "fb92cfb4cc5a238c22113a6a230b09f535bd0656"
+}
