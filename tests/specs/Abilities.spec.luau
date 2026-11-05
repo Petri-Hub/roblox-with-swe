@@ -20,6 +20,11 @@ describe("abilities", function()
 				expect(ability.name).never.toBe("")
 				expect(ability.hint).never.toBe("")
 				expect(ability.cooldown).toBeGreaterThan(0)
+
+				-- The key cap in the corner is small: the short name has to fit.
+				expect(#ability.short).toBeGreaterThan(0)
+				expect(#ability.short).toBeLessThanOrEqual(12)
+				expect(#ability.hint).toBeLessThanOrEqual(18)
 			end
 		end
 	end)

@@ -216,11 +216,18 @@ handlers.FireWall = function(player: Player, character: Model)
 		flame.CastShadow = false
 		flame.Material = Enum.Material.Neon
 		flame.Color = Color3.fromRGB(255, 110, 40)
-		flame.Transparency = 0.25
+		-- The wall is only the damage volume; the client draws the fire on top
+		-- of it, so nobody sees a box of orange glass.
+		flame.Transparency = 1
 		flame.Parent = model
 	end
 
-	announce("FireWall", player, { position = centre, width = tuning.width, height = tuning.height })
+	announce("FireWall", player, {
+		position = centre,
+		direction = direction,
+		width = tuning.width,
+		height = tuning.height,
+	})
 
 	local expiresAt = now() + tuning.duration
 	task.spawn(function()
@@ -376,24 +383,38 @@ handlers.StoneWall = function(player: Player, character: Model)
 	model.Name = "StoneWall"
 	model.Parent = walls
 
-	local blocks = 5
+	-- Six slabs of different heights and greys, each one a little turned, so the
+	-- wall reads as broken rock instead of a row of boxes.
+	local blocks = 6
+	local slabWidth = tuning.width / blocks
+	local random = Random.new(2611)
+	local facing = math.atan2(direction.X, direction.Z)
+
 	for index = 1, blocks do
 		local share = (index - 1) / (blocks - 1) - 0.5
 		local spot = centre + across * (share * tuning.width)
+		local slabHeight = tuning.height * (0.76 + random:NextNumber() * 0.4)
 		local slab = Instance.new("Part")
 		slab.Name = "Slab"
-		slab.Size = Vector3.new(tuning.width / blocks + 0.4, tuning.height, 2.4)
-		slab.CFrame = CFrame.new(spot.X, tuning.height / 2, spot.Z)
-			* CFrame.Angles(0, math.atan2(direction.X, direction.Z), 0)
+		slab.Size = Vector3.new(slabWidth + 0.7, slabHeight, 2.4 + random:NextNumber() * 1.1)
+		slab.CFrame = CFrame.new(spot.X, slabHeight / 2, spot.Z)
+			* CFrame.Angles(0, facing + random:NextNumber(-0.07, 0.07), 0)
 		slab.Anchored = true
 		slab.CanCollide = true
 		slab.CanTouch = false
+		slab.CastShadow = true
 		slab.Material = Enum.Material.Slate
-		slab.Color = Color3.fromRGB(96, 92, 86)
+		local grey = 86 + random:NextInteger(-10, 18)
+		slab.Color = Color3.fromRGB(grey, grey - 6, grey - 14)
 		slab.Parent = model
 	end
 
-	announce("StoneWall", player, { position = centre, width = tuning.width, height = tuning.height })
+	announce("StoneWall", player, {
+		position = centre,
+		direction = direction,
+		width = tuning.width,
+		height = tuning.height,
+	})
 	Debris:AddItem(model, tuning.duration)
 end
 
