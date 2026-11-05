@@ -19,7 +19,15 @@ if existing then
 	existing:Destroy()
 end
 
-local maze = MazeBuilder.build()
+print("[maze] building the house")
+
+local ok, maze, grid = pcall(MazeBuilder.build)
+if not ok then
+	warn("[maze] build failed: " .. tostring(maze))
+	return
+end
+
 maze.Parent = Workspace
+print(string.format("[maze] %d parts over %d x %d cells", #maze:GetDescendants(), grid.width, grid.depth))
 
 -- Keep the sun out of the corridors: the only light comes from the candles.
