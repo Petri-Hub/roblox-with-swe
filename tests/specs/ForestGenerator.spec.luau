@@ -2,6 +2,7 @@ local root = script.Parent.Parent
 local JestGlobals = require(root.DevPackages.JestGlobals)
 local ForestGenerator = require(root.ForestGenerator)
 local ForestLayout = require(game:GetService("ReplicatedStorage").Shared.ForestLayout)
+local Telekinesis = require(game:GetService("ReplicatedStorage").Shared.Telekinesis)
 
 local describe = JestGlobals.describe
 local expect = JestGlobals.expect
@@ -90,9 +91,12 @@ describe("city generation", function()
 			end
 		end
 
+		-- The sidewalks are broken at every crossing: five walk segments on each
+		-- side of each street, on both axes.
+		local segments = ForestLayout.STREET_LINES - 1
 		expect(streetParts).toBe(ForestLayout.STREET_LINES * 2)
-		expect(sidewalkParts).toBe(ForestLayout.STREET_LINES * 4)
-		expect(curbLights).toBe(ForestLayout.STREET_LINES * 4)
+		expect(sidewalkParts).toBe(ForestLayout.STREET_LINES * segments * 4)
+		expect(curbLights).toBe(ForestLayout.STREET_LINES * segments * 4)
 	end)
 
 	it("raises a tower on every lot, with neon and a roof beacon", function()
@@ -158,6 +162,74 @@ describe("city generation", function()
 
 		for _, lamp in lamps:GetChildren() do
 			expect(lamp:FindFirstChildWhichIsA("PointLight", true)).never.toBeNil()
+		end
+	end)
+
+	it("paints a crossing and raises a traffic light at every intersection", function()
+		local town = city()
+		local crossings = ForestLayout.STREET_LINES * ForestLayout.STREET_LINES
+
+		local crosswalks = town:FindFirstChild("Crosswalks")
+		expect(crosswalks).never.toBeNil()
+		expect(#crosswalks:GetChildren()).toBe(crossings * 12)
+		expect(town:GetAttribute("CrosswalkCount")).toBe(#crosswalks:GetChildren())
+		for _, stripe in crosswalks:GetChildren() do
+			expect(stripe:IsA("BasePart")).toBe(true)
+			expect(stripe.CanCollide).toBe(false)
+			expect(stripe.CanQuery).toBe(false)
+		end
+
+		local lights = town:FindFirstChild("TrafficLights")
+		expect(lights).never.toBeNil()
+		expect(#lights:GetChildren()).toBe(crossings)
+		expect(town:GetAttribute("TrafficLightCount")).toBe(#lights:GetChildren())
+		for _, light in lights:GetChildren() do
+			local neon = 0
+			local tallest = 0
+			for _, part in light:GetDescendants() do
+				if part:IsA("BasePart") then
+					neon += if part.Material == Enum.Material.Neon then 1 else 0
+					tallest = math.max(tallest, part.Position.Y + part.Size.Y / 2)
+				end
+			end
+
+			expect(neon).toBe(3)
+			-- Too tall to lift, so the telekinesis leaves it standing.
+			expect(tallest - ForestLayout.SIDEWALK_HEIGHT).toBeGreaterThan(Telekinesis.MAX_OBJECT_SIZE)
+		end
+	end)
+
+	it("fills the sidewalks with props the telekinesis can pick up", function()
+		local town = city()
+		local props = town:FindFirstChild("StreetProps")
+		expect(props).never.toBeNil()
+		expect(#props:GetChildren()).toBeGreaterThan(50)
+		expect(town:GetAttribute("PropCount")).toBe(#props:GetChildren())
+
+		for _, prop in props:GetChildren() do
+			expect(prop:IsA("Model")).toBe(true)
+			expect(prop.PrimaryPart).never.toBeNil()
+
+			-- On the walk, not on the road.
+			local pivot = prop:GetPivot().Position
+			expect(ForestLayout.isOnStreet(Vector2.new(pivot.X, pivot.Z))).toBe(false)
+
+			-- Small enough for the telekinesis, which lifts the whole model.
+			local _, size = prop:GetBoundingBox()
+			expect(Telekinesis.canGrabSize(size, countParts(prop))).toBe(true)
+		end
+	end)
+
+	it("wets the asphalt and hangs cables over the street", function()
+		local town = city()
+		local details = town:FindFirstChild("Details")
+		expect(details).never.toBeNil()
+		expect(#details:GetChildren()).toBeGreaterThan(20)
+		expect(town:GetAttribute("DetailCount")).toBe(#details:GetChildren())
+
+		-- Scenery parts, not Models: the telekinesis cannot pick these up.
+		for _, part in details:GetChildren() do
+			expect(part:IsA("BasePart")).toBe(true)
 		end
 	end)
 

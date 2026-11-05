@@ -33,10 +33,19 @@ The city is built for machines that are not fast, so the cost is kept low on pur
 - There is no terrain at all. The generator clears `Workspace.Terrain` and never writes a voxel: the floor is one anchored slab, and the streets, sidewalks and plaza are slabs on top of it.
 - Towers, streets and lamps are plain parts: each tower is a body, a crown, two to five neon bands, two corner strips, an antenna, a beacon and sometimes a screen — around eleven parts — and only the body casts a shadow.
 - The neon does the lighting: bands, curbs and screens are `Neon` parts with no light of their own, so most of the glow in the city costs nothing to render. One street lamp per crossing carries the only point lights.
+- The street furniture adds a thousand pieces, most of it the zebra paint: every one is anchored, casts no shadow and carries no light of its own.
 - Scenery props cast no shadows and do not fire touch events; only the landmarks in the plaza and the towers do.
 - The camera mist is thin: a handful of small particles instead of a full-screen blanket.
 - The HUD only writes a value when it changes: the hit markers are collected once, the reload bar and the crosshair state are gated, and the stamina bar updates only when its value moves.
 - The place uses ShadowMap lighting rather than Future, and the night is one atmosphere plus two cheap post effects.
+
+### The street
+
+Between the crossings the sidewalks carry the small life of the city. `ForestGenerator` scatters props on the walks — a bin with a neon ring, bags of rubbish, a crate, a barrel, a traffic cone, a hydrant, a bench, a vending machine with a lit panel, a dumpster — from the same seed every server uses, so the street is the same each time. A prop never lands on the plaza, inside a tower or over a crossing.
+
+Two kinds of thing stand there on purpose. A prop the player can lift is a `Model`, because the telekinesis grabs the outermost model under its folder; a fixed piece is a loose part in a folder, so the same code finds the whole town around it and refuses it. That is how a bin flies and a traffic light does not, without a list of names to keep.
+
+Every crossing gets four zebra crossings painted on the asphalt and one traffic light on the far corner with its three lenses. The sidewalk and its neon curb are cut at each crossing, so the road runs clean through the intersection and the paint has somewhere to go. Puddles lie on the asphalt and cables hang over the street between the towers; both are scenery, and neither can be lifted.
 
 ### Code layout
 
@@ -68,7 +77,7 @@ The tuning lives in `src/shared/FireMagic.luau`, the damage, projectile and scor
 
 The second spell, which also comes from a fruit. Point the cursor at a prop or a ghost and press `X`: it leaves the ground and floats where you point. It chases the cursor at 60 studs per second, never further than 45 studs from you, with a white rune circle in the casting hand — the fireball's circle in white, but with an eight-pointed star of two squares instead of the double triangle — four rings of white wind blades around the floating thing, a swirl of wind particles and a looping gust. While it floats, the mouse wheel pushes it away or pulls it back in 3-stud steps between 7 and 45 studs, and `Q` and `E` turn it left and right on top of the slow drift. `X` again lowers it: a prop settles back on the ground, a ghost drifts down. Press right mouse while it floats to hurl it, and the throw starts with a short wind push at the hand before the object leaves the grip.
 
-Only props of a sane size answer the spell: the largest side of the bounding box up to 14 studs and at most 80 parts. Barrels and crates fly. The wrecked car, the shop stall, the spawn pad and the buildings stay where they are. A ghost is grabbed whole: its chase AI is suspended and the server drives its pivot while the spell holds it. One object can only be under one spell at a time.
+Only props of a sane size answer the spell: the largest side of the bounding box up to 14 studs and at most 80 parts. Barrels, crates, bins, cones, benches and the vending machines fly. The wrecked car, the shop stall, the spawn pad, the traffic lights and the buildings stay where they are. A ghost is grabbed whole: its chase AI is suspended and the server drives its pivot while the spell holds it. One object can only be under one spell at a time.
 
 A throw flies at 120 studs per second for up to 120 studs and stops on the first surface or ghost it meets. The hit deals 70 damage and splashes up to 45 more within 9 studs; a thrown ghost takes the same hit, hangs dazed for 2 seconds afterwards, and a heavy prop that lands on a ghost counts as a direct hit. The impact raises dust, wind sparks, a white shockwave, a thud and a small screen tremor, and the throw itself plays the ascending gust. The spell recharges in 2.5 seconds after the object leaves your hand, and the ability slot counts it down.
 
