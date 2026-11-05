@@ -186,6 +186,22 @@ Weapons are data. `WeaponSpec` owns the magazine, cadence, reload, spread, recoi
 
 The GitHub repository holds the Luau and world files. On Linux, a local checkout uses Rokit and Wally for tools and dependencies, StyLua and Selene for source checks, and Rojo to build a place or sync it to Studio through Vinegar. The planned path connects friends and the Hermes profile in pepper through pull requests; GitHub Actions runs checks and publishes staging and production places through Roblox Open Cloud.
 
+## Architecture
+
+The game code is split by how much each part knows about Roblox.
+
+`src/shared/domain` is pure logic: `MazeConfig` holds the numbers, `MazeGrid` holds the cells and the walls between them, and `MazePlan` is the recipe that produces one house from a seed. None of them create a part, so all three can run inside Jest.
+
+`src/shared/core` is the event vocabulary. `Signal` is a small emitter, `EventBus` gives every event a name, and `Topics` is the list of names both realms agree on. A service connects to a topic; it never requires another service.
+
+`src/shared/net` is the only code that knows about the network. `Events` declares each message that crosses the client/server line, and `Remotes` creates or finds one `RemoteEvent` per message.
+
+`src/server` has three services (`MazeService`, `LightingService`, `PlayerService`), the `MazeBuilder` that turns a plan into parts under `world`, one `Bridge` that mirrors bus events to clients, and `init.server.luau` as the composition root that wires them together.
+
+`src/client` mirrors that shape: controllers listen to the local bus, one `Bridge` turns remote messages into bus events, and `init.client.luau` wires them.
+
+A change therefore flows one way. `MazeService` builds the house and emits `MazeBuilt`; `LightingService` reacts by turning the fog on; the server `Bridge` forwards the summary to the clients; the client `Bridge` emits `MazeReady`; `AtmosphereController` fades in from black. Adding a subscriber does not touch any producer.
+
 ## Software engineering in Roblox
 
 | Practice | Tool | What it means here |
@@ -340,10 +356,20 @@ What is working now:
 │   └── how-it-works.svg         # workflow diagram shown above
 │
 ├── src/
-│   ├── client/                  # client-side Luau
-│   ├── server/                  # server-side Luau
-│   ├── shared/                  # shared modules
-│   └── world/                   # world objects for Rojo
+│   ├── client/                  # StarterPlayerScripts.Client (composition root)
+│   │   ├── controllers/         # local bus subscribers
+│   │   ├── Bridge.luau          # remotes -> bus, bus -> remotes
+│   │   └── init.client.luau
+│   ├── server/                  # ServerScriptService.Server (composition root)
+│   │   ├── services/            # MazeService, LightingService, PlayerService
+│   │   ├── world/               # MazeBuilder: plan -> parts
+│   │   ├── Bridge.luau          # bus -> remotes
+│   │   └── init.server.luau
+│   ├── shared/                  # ReplicatedStorage.Shared
+│   │   ├── core/                # Signal, EventBus, Topics
+│   │   ├── domain/              # MazeConfig, MazeGrid, MazePlan (pure)
+│   │   └── net/                 # Events manifest, Remotes
+│   └── assets/                  # models copied into ServerStorage
 │
 ├── tests/                       # Jest regression specs
 ├── scripts/                     # Vinegar launch and plugin setup scripts

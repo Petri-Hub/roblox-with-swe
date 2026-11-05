@@ -3,21 +3,13 @@
   "tree": {
     "$className": "DataModel",
     "Workspace": {
-      "Baseplate": {
-        "$className": "Part",
-        "$properties": {
-          "Anchored": true,
-          "Position": [
-            0,
-            -2,
-            0
-          ],
-          "Size": [
-            512,
-            4,
-            512
-          ]
-        }
+      "$properties": {
+        "FilteringEnabled": true
+      }
+    },
+    "ReplicatedStorage": {
+      "Shared": {
+        "$path": "src/shared"
       }
     },
     "ServerScriptService": {

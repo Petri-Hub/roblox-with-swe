@@ -1,33 +1,33 @@
 --!nonstrict
--- Builds the maze once when the server starts. Every player walks the same
--- layout because the place is built on the server and replicated.
-local Workspace = game:GetService("Workspace")
+-- Composition root of the server.
+--
+-- This is the only file that wires things together: it creates the bus, the
+-- remotes, then starts the services. A service never requires another service;
+-- they talk over the bus.
 
-local MazeBuilder = require(script.MazeBuilder)
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
--- A new Baseplate place arrives with Studio's own plate and spawn. The house
--- brings its own floor and its own spawn, so those would sit in the middle of
--- the starting room and put the player outside it.
-for _, child in Workspace:GetChildren() do
-	if child.Name == "Baseplate" or child:IsA("SpawnLocation") then
-		child:Destroy()
-	end
-end
+local Shared = ReplicatedStorage:WaitForChild("Shared")
+local Topics = require(Shared.core.Topics)
+local EventBus = require(Shared.core.EventBus)
+local Remotes = require(Shared.net.Remotes)
 
-local existing = Workspace:FindFirstChild("Maze")
-if existing then
-	existing:Destroy()
-end
+local MazeService = require(script.services.MazeService)
+local LightingService = require(script.services.LightingService)
+local PlayerService = require(script.services.PlayerService)
+local Bridge = require(script.Bridge)
 
-print("[maze] building the house")
+local bus = EventBus.new({
+	Topics.MazeBuilt,
+	Topics.MazeFailed,
+	Topics.PlayerJoined,
+	Topics.MazeReady,
+	Topics.ClientReady,
+})
 
-local ok, maze, grid = pcall(MazeBuilder.build)
-if not ok then
-	warn("[maze] build failed: " .. tostring(maze))
-	return
-end
+local remotes = Remotes.get()
 
-maze.Parent = Workspace
-print(string.format("[maze] %d parts over %d x %d cells", #maze:GetDescendants(), grid.width, grid.depth))
-
--- Keep the sun out of the corridors: the only light comes from the candles.
+Bridge.new(bus, remotes):Start()
+LightingService.new(bus):Start()
+MazeService.new(bus):Start()
+PlayerService.new(bus):Start()

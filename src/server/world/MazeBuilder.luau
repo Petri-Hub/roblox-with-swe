@@ -4,8 +4,8 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerStorage = game:GetService("ServerStorage")
 
-local MazeConfig = require(ReplicatedStorage.Shared.MazeConfig)
-local MazeGrid = require(ReplicatedStorage.Shared.MazeGrid)
+local MazeConfig = require(ReplicatedStorage.Shared.domain.MazeConfig)
+local MazePlan = require(ReplicatedStorage.Shared.domain.MazePlan)
 
 local MazeBuilder = {}
 
@@ -440,16 +440,7 @@ function MazeBuilder.build(random: Random?)
 	local root = Instance.new("Folder")
 	root.Name = "Maze"
 
-	local grid = MazeGrid.new(MazeConfig.GridWidth, MazeConfig.GridDepth, rng)
-	grid:carve(rng:NextInteger(1, MazeConfig.GridWidth), rng:NextInteger(1, MazeConfig.GridDepth))
-	grid:braid(MazeConfig.BraidChance)
-	grid:carveRooms(MazeConfig.RoomCount, MazeConfig.RoomMinSize, MazeConfig.RoomMaxSize)
-
-	-- The landing room at the top of the stairs, always open.
-	local foyerX = math.floor((MazeConfig.GridWidth - MazeConfig.FoyerWidth) / 2) + 1
-	local foyerY = math.floor((MazeConfig.GridDepth - MazeConfig.FoyerDepth) / 2) + 1
-	grid:addRoom(foyerX, foyerY, MazeConfig.FoyerWidth, MazeConfig.FoyerDepth)
-	grid:openRoomExits()
+	local grid = MazePlan.create(rng)
 
 	local well = stairWell()
 	local halfW = MazeConfig.GridWidth * CELL / 2

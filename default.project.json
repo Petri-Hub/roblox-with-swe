@@ -20,51 +20,6 @@
         }
       }
     },
-    "Lighting": {
-      "$properties": {
-        "Ambient": [0.15, 0.13, 0.11],
-        "Brightness": 1,
-        "ClockTime": 0,
-        "EnvironmentDiffuseScale": 0.5,
-        "EnvironmentSpecularScale": 0.3,
-        "ExposureCompensation": 0,
-        "GlobalShadows": true,
-        "OutdoorAmbient": [0.1, 0.09, 0.08],
-        "Outlines": false,
-        "ShadowSoftness": 0.4,
-        "Technology": "Future"
-      },
-      "Atmosphere": {
-        "$className": "Atmosphere",
-        "$properties": {
-          "Color": [0.12, 0.1, 0.09],
-          "Decay": [0.08, 0.06, 0.05],
-          "Density": 0.4,
-          "Glare": 0,
-          "Haze": 2,
-          "Offset": 0.1
-        }
-      },
-      "Bloom": {
-        "$className": "BloomEffect",
-        "$properties": {
-          "Enabled": true,
-          "Intensity": 0.55,
-          "Size": 26,
-          "Threshold": 1.5
-        }
-      },
-      "Warmth": {
-        "$className": "ColorCorrectionEffect",
-        "$properties": {
-          "Brightness": 0.02,
-          "Contrast": 0,
-          "Enabled": true,
-          "Saturation": -0.06,
-          "TintColor": [1, 0.94, 0.86]
-        }
-      }
-    },
     "ReplicatedStorage": {
       "Shared": {
         "$path": "src/shared"
@@ -78,6 +33,13 @@
     "ServerStorage": {
       "Lighting": {
         "$path": "src/assets/lighting"
+      }
+    },
+    "StarterPlayer": {
+      "StarterPlayerScripts": {
+        "Client": {
+          "$path": "src/client"
+        }
       }
     }
   }
