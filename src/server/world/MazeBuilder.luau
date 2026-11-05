@@ -95,6 +95,31 @@ local function dressedWall(
 		then { Enum.NormalId.Left, Enum.NormalId.Right }
 		else { Enum.NormalId.Front, Enum.NormalId.Back }
 
+	-- A bead is a half-buried cylinder on each face of the wall. Plain parts have
+	-- no other way to give a molding a curved profile: this project has no
+	-- uploaded meshes for trim, so a cove or a torus has to be turned by hand.
+	local function bead(radius: number, y: number, proud: number, colour: Color3)
+		for _, side in { -1, 1 } do
+			local shift = across / 2 + proud - radius
+			local position = if alongZ
+				then Vector3.new(center.X + side * shift, y, center.Z)
+				else Vector3.new(center.X, y, center.Z + side * shift)
+
+			local part = Instance.new("Part")
+			part.Anchored = true
+			part.Material = Enum.Material.Wood
+			part.Color = colour
+			part.Shape = Enum.PartType.Cylinder
+			part.Size = Vector3.new(long, radius * 2, radius * 2)
+			part.TopSurface = Enum.SurfaceType.Smooth
+			part.BottomSurface = Enum.SurfaceType.Smooth
+			part.CFrame = if alongZ
+				then CFrame.new(position) * CFrame.Angles(0, math.pi / 2, 0)
+				else CFrame.new(position)
+			part.Parent = parent
+		end
+	end
+
 	local core = box(
 		parent,
 		strip(across, wallHeight, long),
@@ -196,6 +221,9 @@ local function dressedWall(
 		Enum.Material.Wood,
 		PALETTE.Wood
 	)
+	-- Rounded profile: a bead on the chair rail and a cove under the cornice.
+	bead(0.3, baseY + panelHeight + 0.18, 0.42, PALETTE.WoodTrim)
+	bead(0.38, baseY + wallHeight - 0.62, 0.5, PALETTE.WoodTrim)
 end
 
 -- A flat slab built from cell-sized strips, with rectangular holes cut out.
