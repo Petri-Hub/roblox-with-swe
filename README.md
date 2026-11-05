@@ -18,6 +18,8 @@
 
 ## Play the game
 
+> **This branch (`chore/blank-slate`) is a blank place:** a baseplate, an invisible spawn and default daylight — no scripts, no assets, no map. Everything below describes `staging`. Any part of it can be brought back from Git when the new game needs it.
+
 This AI-assisted horror game is set in a neon city at night. The map is a 1024-stud floor of parts holding a six by six grid of streets: five by five blocks, four towers on every block, a paved plaza where every life starts, street lamps at every crossing and a ring of dark towers that closes the horizon. The tallest towers stand near the middle and the city falls away towards the edge, where the fog swallows the rest. There is no terrain anywhere: the floor, the roads, the sidewalks and the buildings are all parts, and the terrain service is cleared when the city is built. The city is in permanent night: the sky sits near black, a violet fog hides the distance, the only light is neon and the street lamps, and bloom does the rest. The current build is an early playtest of the map, first-person movement, and the weapons.
 
 Every life starts in the air: the battle bus (`src/assets/BattleBus.rbxm`, Creator Store asset `1255341965`) crosses the sky over the spawn clearing at 235 studs, and you leave it right behind it, coming down under a slow chute instead of falling like a rock. Every life gets the bus, respawns included, and its horn (`8255757586`) plays as you leave. `BusDropService` clones the model from `ServerStorage`, flies it along a random lane and glides the player down until the feet touch. A bus still in the air and close to the clearing takes the next player instead of a second bus leaving beside it.
