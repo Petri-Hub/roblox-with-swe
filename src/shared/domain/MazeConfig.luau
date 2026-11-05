@@ -46,9 +46,13 @@ MazeConfig.Assets = {
 	WallCandle = "WallCandle",
 }
 
--- No image texture here on purpose. The Creator Store wood image we liked is a
--- Decal, and a Decal cannot be used as a Texture: the engine rejects it. The
--- wood is built from material, colour and geometry instead.
+-- Set this to an image id that the game's owner uploaded and every wall picks up
+-- real grain, no other change needed. A Creator Store decal id will not work: the
+-- image behind a decal belongs to its author and other games cannot reference it.
+MazeConfig.WoodTexture = nil
+MazeConfig.WoodStudsPerTile = 8
+
+-- Until then the wood is material, colour and geometry.
 -- Brown, not orange. Saturated wood reads as a toy game; real mahogany is a
 -- desaturated dark brown that only picks up warmth where the light hits it.
 MazeConfig.Palette = {

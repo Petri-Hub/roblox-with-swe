@@ -37,6 +37,23 @@ local function box(parent: Instance, size: Vector3, cframe: CFrame, material: En
 	})
 end
 
+-- Real grain, when the project owns an image for it. A Texture covers one face,
+-- so the two broad faces of a wall box each get their own.
+local function grain(part: BasePart, faces: { Enum.NormalId })
+	if not MazeConfig.WoodTexture then
+		return
+	end
+
+	for _, face in faces do
+		local texture = Instance.new("Texture")
+		texture.Texture = MazeConfig.WoodTexture
+		texture.Face = face
+		texture.StudsPerTileU = MazeConfig.WoodStudsPerTile
+		texture.StudsPerTileV = MazeConfig.WoodStudsPerTile
+		texture.Parent = part
+	end
+end
+
 -- One wall run, dressed like the reference rooms: mahogany from floor to
 -- ceiling, a darker wainscot field behind a raised frame, board-and-batten
 -- stiles, baseboard, chair rail, pilasters at both ends and a cornice that
@@ -74,6 +91,10 @@ local function dressedWall(
 	end
 
 	-- Core: the plain mahogany face the moldings sit on.
+	local faces = if alongZ
+		then { Enum.NormalId.Left, Enum.NormalId.Right }
+		else { Enum.NormalId.Front, Enum.NormalId.Back }
+
 	local core = box(
 		parent,
 		strip(across, wallHeight, long),
@@ -82,15 +103,17 @@ local function dressedWall(
 		PALETTE.Wood
 	)
 	core.Reflectance = 0.06
+	grain(core, faces)
 
 	-- Wainscot field: darker, sunk behind the frame.
-	box(
+	local field = box(
 		parent,
 		strip(across + 0.3, fieldTop - 1.1, long),
 		CFrame.new(center.X, baseY + 1.1 + (fieldTop - 1.1) / 2, center.Z),
 		Enum.Material.Wood,
 		PALETTE.WoodField
 	)
+	grain(field, faces)
 
 	local trimTall = fieldTop - 1.3
 	local trimY = baseY + 1.1 + trimTall / 2
