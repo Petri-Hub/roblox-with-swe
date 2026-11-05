@@ -217,6 +217,14 @@ describe("city generation", function()
 			-- Small enough for the telekinesis, which lifts the whole model.
 			local _, size = prop:GetBoundingBox()
 			expect(Telekinesis.canGrabSize(size, countParts(prop))).toBe(true)
+
+			-- The city remembers where it belongs, so it can go home after a
+			-- throw instead of ending up in a corner forever.
+			local home = prop:GetAttribute("HomeCFrame")
+			expect(typeof(home)).toBe("CFrame")
+			expect(home.Position.X).toBeCloseTo(pivot.X, 3)
+			expect(home.Position.Y).toBeCloseTo(pivot.Y, 3)
+			expect(home.Position.Z).toBeCloseTo(pivot.Z, 3)
 		end
 	end)
 

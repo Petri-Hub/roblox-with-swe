@@ -17,6 +17,7 @@ local ServerStorage = game:GetService("ServerStorage")
 local Workspace = game:GetService("Workspace")
 
 local ForestLayout = require(ReplicatedStorage.Shared.ForestLayout)
+local StreetProps = require(ReplicatedStorage.Shared.StreetProps)
 
 local ForestGenerator = {}
 
@@ -1006,6 +1007,14 @@ local function buildStreetProps(town: Model)
 				end
 				along += step
 			end
+		end
+	end
+
+	-- The city remembers where each prop belongs: once it is thrown or set down
+	-- it goes home after a while.
+	for _, prop in props:GetChildren() do
+		if prop:IsA("Model") then
+			prop:SetAttribute(StreetProps.HOME_ATTRIBUTE, prop:GetPivot())
 		end
 	end
 
