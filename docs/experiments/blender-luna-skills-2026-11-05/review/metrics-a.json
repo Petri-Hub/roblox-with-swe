@@ -1,0 +1,1608 @@
+{
+  "file": "/workspace/blender-study/run-a/tower.blend",
+  "blender": "5.2.3 LTS",
+  "objects": 120,
+  "mesh_objects": 114,
+  "triangles_base_mesh": 1357,
+  "vertices": 907,
+  "materials": 10,
+  "external_images": [],
+  "meshes": [
+    {
+      "name": "Brass_Pennant",
+      "vertices": 3,
+      "triangles": 1,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 3,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.47999998927116394,
+        0.0,
+        0.35000038146972656
+      ]
+    },
+    {
+      "name": "Crossbeam_FrontBack",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        2.240000009536743,
+        0.23999999463558197,
+        0.23999999463558197
+      ]
+    },
+    {
+      "name": "Crossbeam_FrontBack_02",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        2.240000009536743,
+        0.23999999463558197,
+        0.23999999463558197
+      ]
+    },
+    {
+      "name": "Crossbeam_FrontBack_03",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        1.9199999570846558,
+        0.23999999463558197,
+        0.23999999463558197
+      ]
+    },
+    {
+      "name": "Crossbeam_FrontBack_04",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        1.9199999570846558,
+        0.23999999463558197,
+        0.23999999463558197
+      ]
+    },
+    {
+      "name": "Crossbeam_FrontBack_05",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        1.6399999856948853,
+        0.23999999463558197,
+        0.23999999463558197
+      ]
+    },
+    {
+      "name": "Crossbeam_FrontBack_06",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        1.6399999856948853,
+        0.23999999463558197,
+        0.23999999463558197
+      ]
+    },
+    {
+      "name": "Crossbeam_Side",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.23999999463558197,
+        2.240000009536743,
+        0.23999999463558197
+      ]
+    },
+    {
+      "name": "Crossbeam_Side_02",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.23999999463558197,
+        2.240000009536743,
+        0.23999999463558197
+      ]
+    },
+    {
+      "name": "Crossbeam_Side_03",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.23999999463558197,
+        1.9199999570846558,
+        0.23999999463558197
+      ]
+    },
+    {
+      "name": "Crossbeam_Side_04",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.23999999463558197,
+        1.9199999570846558,
+        0.23999999463558197
+      ]
+    },
+    {
+      "name": "Crossbeam_Side_05",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.23999999463558197,
+        1.6399999856948853,
+        0.23999999463558197
+      ]
+    },
+    {
+      "name": "Crossbeam_Side_06",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.23999999463558197,
+        1.6399999856948853,
+        0.23999999463558197
+      ]
+    },
+    {
+      "name": "Finial_Pole",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.054999999701976776,
+        0.054999999701976776,
+        0.6999998092651367
+      ]
+    },
+    {
+      "name": "Guard_Rail",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        1.9500000476837158,
+        0.11999999731779099,
+        0.12999999523162842
+      ]
+    },
+    {
+      "name": "Guard_Rail_02",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        1.9500000476837158,
+        0.11999999731779099,
+        0.12999999523162842
+      ]
+    },
+    {
+      "name": "Guard_Rail_03",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        1.9500000476837158,
+        0.11999999731779099,
+        0.12999999523162842
+      ]
+    },
+    {
+      "name": "Guard_Rail_04",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        1.9500000476837158,
+        0.11999999731779099,
+        0.12999999523162842
+      ]
+    },
+    {
+      "name": "Guard_Rail_05",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.11999999731779099,
+        1.7000000476837158,
+        0.12999999523162842
+      ]
+    },
+    {
+      "name": "Guard_Rail_06",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.11999999731779099,
+        1.7000000476837158,
+        0.12999999523162842
+      ]
+    },
+    {
+      "name": "Guard_Rail_07",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.11999999731779099,
+        1.7000000476837158,
+        0.12999999523162842
+      ]
+    },
+    {
+      "name": "Guard_Rail_08",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.11999999731779099,
+        1.7000000476837158,
+        0.12999999523162842
+      ]
+    },
+    {
+      "name": "Iron_Rivet",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.07000000029802322,
+        0.02500000037252903,
+        0.07000000029802322
+      ]
+    },
+    {
+      "name": "Iron_Rivet_02",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.07000000029802322,
+        0.02500000037252903,
+        0.07000000029802322
+      ]
+    },
+    {
+      "name": "Iron_Rivet_03",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.07000000029802322,
+        0.02500000037252903,
+        0.07000000029802322
+      ]
+    },
+    {
+      "name": "Iron_Rivet_04",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.07000000029802322,
+        0.02500000037252903,
+        0.07000000029802322
+      ]
+    },
+    {
+      "name": "Iron_Strap",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.3400000035762787,
+        0.03500000014901161,
+        0.1599999964237213
+      ]
+    },
+    {
+      "name": "Iron_Strap_02",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.3400000035762787,
+        0.03500000014901161,
+        0.1599999964237213
+      ]
+    },
+    {
+      "name": "Iron_Strap_03",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.3400000035762787,
+        0.03500000014901161,
+        0.1599999964237213
+      ]
+    },
+    {
+      "name": "Iron_Strap_04",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.3400000035762787,
+        0.03500000014901161,
+        0.1599999964237213
+      ]
+    },
+    {
+      "name": "Knee_Brace",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.1599999964237213,
+        0.1599999964237213,
+        1.1317684650421143
+      ]
+    },
+    {
+      "name": "Knee_Brace_02",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.1599999964237213,
+        0.1599999964237213,
+        1.1317684650421143
+      ]
+    },
+    {
+      "name": "Knee_Brace_03",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.1599999964237213,
+        0.1599999964237213,
+        1.1317684650421143
+      ]
+    },
+    {
+      "name": "Knee_Brace_04",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.1599999964237213,
+        0.1599999964237213,
+        1.1317684650421143
+      ]
+    },
+    {
+      "name": "Knee_Brace_05",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.1600000411272049,
+        0.1600000411272049,
+        1.1317684650421143
+      ]
+    },
+    {
+      "name": "Knee_Brace_06",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.1599999964237213,
+        0.1599999964237213,
+        1.1317684650421143
+      ]
+    },
+    {
+      "name": "Knee_Brace_07",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.1600000411272049,
+        0.1600000411272049,
+        1.1317684650421143
+      ]
+    },
+    {
+      "name": "Knee_Brace_08",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.1599999964237213,
+        0.1599999964237213,
+        1.1317684650421143
+      ]
+    },
+    {
+      "name": "Ladder_Rail",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.10999999940395355,
+        0.11999999731779099,
+        4.920000076293945
+      ]
+    },
+    {
+      "name": "Ladder_Rail_02",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.10999999940395355,
+        0.11999999731779099,
+        4.920000076293945
+      ]
+    },
+    {
+      "name": "Ladder_Rung",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.949999988079071,
+        0.11999999731779099,
+        0.09000000357627869
+      ]
+    },
+    {
+      "name": "Ladder_Rung_02",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.949999988079071,
+        0.11999999731779099,
+        0.09000000357627869
+      ]
+    },
+    {
+      "name": "Ladder_Rung_03",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.949999988079071,
+        0.11999999731779099,
+        0.09000000357627869
+      ]
+    },
+    {
+      "name": "Ladder_Rung_04",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.949999988079071,
+        0.11999999731779099,
+        0.09000000357627869
+      ]
+    },
+    {
+      "name": "Ladder_Rung_05",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.949999988079071,
+        0.11999999731779099,
+        0.09000000357627869
+      ]
+    },
+    {
+      "name": "Ladder_Rung_06",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.949999988079071,
+        0.11999999731779099,
+        0.09000000357627869
+      ]
+    },
+    {
+      "name": "Ladder_Rung_07",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.949999988079071,
+        0.11999999731779099,
+        0.09000000357627869
+      ]
+    },
+    {
+      "name": "Ladder_Rung_08",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.949999988079071,
+        0.11999999731779099,
+        0.09000000357627869
+      ]
+    },
+    {
+      "name": "Ladder_Rung_09",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.949999988079071,
+        0.11999999731779099,
+        0.09000000357627869
+      ]
+    },
+    {
+      "name": "Ladder_Rung_10",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.949999988079071,
+        0.11999999731779099,
+        0.09000000357627869
+      ]
+    },
+    {
+      "name": "Ladder_Rung_11",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.949999988079071,
+        0.11999999731779099,
+        0.09000000357627869
+      ]
+    },
+    {
+      "name": "Ladder_Rung_12",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.949999988079071,
+        0.11999999731779099,
+        0.09000000357627869
+      ]
+    },
+    {
+      "name": "Ladder_Rung_13",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.949999988079071,
+        0.11999999731779099,
+        0.09000000357627869
+      ]
+    },
+    {
+      "name": "Ladder_Rung_14",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.949999988079071,
+        0.11999999731779099,
+        0.09000000357627869
+      ]
+    },
+    {
+      "name": "Ladder_Rung_15",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.949999988079071,
+        0.11999999731779099,
+        0.09000000357627869
+      ]
+    },
+    {
+      "name": "Ladder_Rung_16",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.949999988079071,
+        0.11999999731779099,
+        0.09000000357627869
+      ]
+    },
+    {
+      "name": "Main_Pylon",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.2900000214576721,
+        0.2900000214576721,
+        4.847845077514648
+      ]
+    },
+    {
+      "name": "Main_Pylon_02",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.28999999165534973,
+        0.28999999165534973,
+        4.847845077514648
+      ]
+    },
+    {
+      "name": "Main_Pylon_03",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.2900000214576721,
+        0.2900000214576721,
+        4.847845077514648
+      ]
+    },
+    {
+      "name": "Main_Pylon_04",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.28999999165534973,
+        0.28999999165534973,
+        4.847845077514648
+      ]
+    },
+    {
+      "name": "Platform_Plank",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.2199999988079071,
+        1.7799999713897705,
+        0.18000000715255737
+      ]
+    },
+    {
+      "name": "Platform_Plank_02",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.2199999988079071,
+        1.7799999713897705,
+        0.18000000715255737
+      ]
+    },
+    {
+      "name": "Platform_Plank_03",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.2199999988079071,
+        1.7799999713897705,
+        0.18000000715255737
+      ]
+    },
+    {
+      "name": "Platform_Plank_04",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.2199999988079071,
+        1.7799999713897705,
+        0.18000000715255737
+      ]
+    },
+    {
+      "name": "Platform_Plank_05",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.2199999988079071,
+        1.7799999713897705,
+        0.18000000715255737
+      ]
+    },
+    {
+      "name": "Platform_Plank_06",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.2199999988079071,
+        1.7799999713897705,
+        0.18000000715255737
+      ]
+    },
+    {
+      "name": "Platform_Plank_07",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.2199999988079071,
+        1.7799999713897705,
+        0.18000000715255737
+      ]
+    },
+    {
+      "name": "Platform_Plank_08",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.2199999988079071,
+        1.7799999713897705,
+        0.18000000715255737
+      ]
+    },
+    {
+      "name": "Platform_Rim",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        2.049999952316284,
+        0.14000000059604645,
+        0.18000000715255737
+      ]
+    },
+    {
+      "name": "Platform_Rim_02",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        2.049999952316284,
+        0.14000000059604645,
+        0.18000000715255737
+      ]
+    },
+    {
+      "name": "Platform_Rim_03",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.14000000059604645,
+        1.899999976158142,
+        0.18000000715255737
+      ]
+    },
+    {
+      "name": "Platform_Rim_04",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.14000000059604645,
+        1.899999976158142,
+        0.18000000715255737
+      ]
+    },
+    {
+      "name": "Post_Cap",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.1599999964237213,
+        0.1599999964237213,
+        0.07999999821186066
+      ]
+    },
+    {
+      "name": "Post_Cap_02",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.1599999964237213,
+        0.1599999964237213,
+        0.07999999821186066
+      ]
+    },
+    {
+      "name": "Post_Cap_03",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.1599999964237213,
+        0.1599999964237213,
+        0.07999999821186066
+      ]
+    },
+    {
+      "name": "Post_Cap_04",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.1599999964237213,
+        0.1599999964237213,
+        0.07999999821186066
+      ]
+    },
+    {
+      "name": "Post_Cap_05",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.1599999964237213,
+        0.1599999964237213,
+        0.07999999821186066
+      ]
+    },
+    {
+      "name": "Post_Cap_06",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.1599999964237213,
+        0.1599999964237213,
+        0.07999999821186066
+      ]
+    },
+    {
+      "name": "Post_Cap_07",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.1599999964237213,
+        0.1599999964237213,
+        0.07999999821186066
+      ]
+    },
+    {
+      "name": "Post_Cap_08",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.1599999964237213,
+        0.1599999964237213,
+        0.07999999821186066
+      ]
+    },
+    {
+      "name": "Rail_Post",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.12999999523162842,
+        0.12999999523162842,
+        1.25
+      ]
+    },
+    {
+      "name": "Rail_Post_02",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.12999999523162842,
+        0.12999999523162842,
+        1.25
+      ]
+    },
+    {
+      "name": "Rail_Post_03",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.12999999523162842,
+        0.12999999523162842,
+        1.25
+      ]
+    },
+    {
+      "name": "Rail_Post_04",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.12999999523162842,
+        0.12999999523162842,
+        1.25
+      ]
+    },
+    {
+      "name": "Rail_Post_05",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.12999999523162842,
+        0.12999999523162842,
+        1.25
+      ]
+    },
+    {
+      "name": "Rail_Post_06",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.12999999523162842,
+        0.12999999523162842,
+        1.25
+      ]
+    },
+    {
+      "name": "Rail_Post_07",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.12999999523162842,
+        0.12999999523162842,
+        1.25
+      ]
+    },
+    {
+      "name": "Rail_Post_08",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.12999999523162842,
+        0.12999999523162842,
+        1.25
+      ]
+    },
+    {
+      "name": "Ridge_Beam",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.17000004649162292,
+        0.17000001668930054,
+        2.700000286102295
+      ]
+    },
+    {
+      "name": "Roof_Fascia",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.14000003039836884,
+        0.18000002205371857,
+        2.260000228881836
+      ]
+    },
+    {
+      "name": "Roof_Fascia_02",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.14000003039836884,
+        0.18000002205371857,
+        2.260000228881836
+      ]
+    },
+    {
+      "name": "Roof_Rafter_L",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.17000000178813934,
+        0.18000000715255737,
+        1.9252010583877563
+      ]
+    },
+    {
+      "name": "Roof_Rafter_L_02",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.17000000178813934,
+        0.18000000715255737,
+        1.9252010583877563
+      ]
+    },
+    {
+      "name": "Roof_Rafter_R",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.17000000178813934,
+        0.18000000715255737,
+        1.9252010583877563
+      ]
+    },
+    {
+      "name": "Roof_Rafter_R_02",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.17000000178813934,
+        0.18000000715255737,
+        1.9252010583877563
+      ]
+    },
+    {
+      "name": "Roof_Shingle_Panel",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.30000004172325134,
+        0.11000001430511475,
+        2.194265842437744
+      ]
+    },
+    {
+      "name": "Roof_Shingle_Panel_02",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.30000004172325134,
+        0.11000001430511475,
+        2.194265842437744
+      ]
+    },
+    {
+      "name": "Roof_Shingle_Panel_03",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.30000004172325134,
+        0.11000001430511475,
+        2.194265842437744
+      ]
+    },
+    {
+      "name": "Roof_Shingle_Panel_04",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.30000004172325134,
+        0.11000001430511475,
+        2.194265842437744
+      ]
+    },
+    {
+      "name": "Roof_Shingle_Panel_05",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.30000004172325134,
+        0.11000001430511475,
+        2.194265842437744
+      ]
+    },
+    {
+      "name": "Roof_Shingle_Panel_06",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.30000004172325134,
+        0.11000001430511475,
+        2.194265842437744
+      ]
+    },
+    {
+      "name": "Roof_Shingle_Panel_07",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.30000004172325134,
+        0.11000001430511475,
+        2.194265842437744
+      ]
+    },
+    {
+      "name": "Roof_Shingle_Panel_08",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.30000004172325134,
+        0.11000001430511475,
+        2.194265842437744
+      ]
+    },
+    {
+      "name": "Roof_Shingle_Panel_09",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.30000004172325134,
+        0.11000001430511475,
+        2.194265842437744
+      ]
+    },
+    {
+      "name": "Roof_Shingle_Panel_10",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.30000004172325134,
+        0.11000001430511475,
+        2.194265842437744
+      ]
+    },
+    {
+      "name": "Roof_Shingle_Panel_11",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.30000004172325134,
+        0.11000001430511475,
+        2.194265842437744
+      ]
+    },
+    {
+      "name": "Roof_Shingle_Panel_12",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.30000004172325134,
+        0.11000001430511475,
+        2.194265842437744
+      ]
+    },
+    {
+      "name": "Roof_Shingle_Panel_13",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.30000004172325134,
+        0.11000001430511475,
+        2.194265842437744
+      ]
+    },
+    {
+      "name": "Roof_Shingle_Panel_14",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.30000004172325134,
+        0.11000001430511475,
+        2.194265842437744
+      ]
+    },
+    {
+      "name": "Stone_Foot",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.6800000071525574,
+        0.6800000071525574,
+        0.36000001430511475
+      ]
+    },
+    {
+      "name": "Stone_Foot_02",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.6800000071525574,
+        0.6800000071525574,
+        0.36000001430511475
+      ]
+    },
+    {
+      "name": "Stone_Foot_03",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.6800000071525574,
+        0.6800000071525574,
+        0.36000001430511475
+      ]
+    },
+    {
+      "name": "Stone_Foot_04",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.6800000071525574,
+        0.6800000071525574,
+        0.36000001430511475
+      ]
+    },
+    {
+      "name": "Studio_Ground",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        2000.0,
+        2000.0,
+        0.11999999731779099
+      ]
+    }
+  ]
+}

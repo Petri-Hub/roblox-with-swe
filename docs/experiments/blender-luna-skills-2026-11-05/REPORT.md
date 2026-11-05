@@ -1,0 +1,132 @@
+# Torre medieval: Blender com e sem skills
+
+Nesta execução, a versão sem skills foi minha preferência visual e meu ponto de partida geral. A versão com skills usou menos geometria, gerou um arquivo menor e investiu mais em revisão técnica. As duas têm problemas de construção que impedem tratá-las como assets finais.
+
+Minha recomendação é contextual: com prioridade artística eu continuaria B; com um orçamento geométrico mais restrito, A merece consideração. Não há vencedor universal demonstrado por este par. Os dois subagentes eram GPT-6 Luna, no mesmo nível de raciocínio.
+
+## Pedido
+
+Crie no Blender uma torre de vigia medieval low poly para um jogo de fantasia. Ela deve ter estrutura de madeira convincente, escada acessível, plataforma com guarda-corpo e cobertura. Busque uma silhueta interessante, boas proporções e materiais que distingam madeira, cobertura e ferragens. Capriche na apresentação e na coerência da construção.
+Entregue tower.blend, tower.glb e três renders PNG de 768x768 mostrando frente, trás e uma perspectiva de apresentação. Inclua o script Python que gera a cena e um README curto explicando suas escolhas e como reproduzir. Revise visualmente o resultado e corrija problemas que encontrar antes de concluir.
+
+## Medidas
+
+| Medida | A · com skills | B · sem skills |
+
+|---|---:|---:|
+
+| Tempo registrado (s) | 550 | 344 |
+
+| Skills lidas | 7 | 0 |
+
+| Triângulos exportados | 4929 | 7708 |
+
+| Objetos de malha exportados | 113 | 146 |
+
+| Materiais exportados | 8 | 7 |
+
+| Arquivo .blend (bytes) | 156927 | 177713 |
+
+| Arquivo .glb (bytes) | 320452 | 476400 |
+
+| Tokens reais | não disponíveis | não disponíveis |
+
+![Gráficos](charts/metrics.png)
+
+## Galeria
+
+### Frente
+
+![A — com skills](run-a/front.png)
+
+![B — sem skills](run-b/tower-front.png)
+
+Na frente, B deixa uma abertura para acesso à plataforma e diferencia as ferragens. A apresenta a escada como elemento central, mas as barras frontais do guarda-corpo atravessam a chegada. A vista chamada frente por A é oblíqua; B usa uma vista mais direta.
+
+### Trás
+
+![A — com skills](run-a/back.png)
+
+![B — sem skills](run-b/tower-back.png)
+
+O verso expõe decisões de contraventamento: B preenche os planos com diagonais em X; A usa travessas horizontais e apoios menores. Mais peças não comprovam resistência: não foi realizada simulação estrutural. Os encontros de ambas precisam de revisão.
+
+### Apresentação
+
+![A — com skills](run-a/presentation.png)
+
+![B — sem skills](run-b/tower-perspective.png)
+
+Na apresentação, B tem maior riqueza de detalhes e enquadramento mais próximo; A tem silhueta simples, telhado de duas águas e bandeirola. Lentes, iluminação e escala na imagem diferem. Minha preferência artística não isola a modelagem da apresentação.
+
+## Resultado A
+
+A organizou o projeto em coleções ASSET_Watchtower e PRESENTATION e deu nomes mais úteis também às malhas. A exportação contém 113 objetos de malha, oito materiais e 4.929 triângulos. O GLB tem 320.452 bytes e o .blend, 156.927 bytes. É uma construção econômica e fácil de reconhecer.
+
+O log registra uma primeira geração, ajustes de apresentação e revisões de QA. O agente corrigiu placas de telhado sobrepostas, bevel degenerado em rebites e UV ausente na bandeirola. O processo terminou em 9 minutos e 10 segundos segundo os horários registrados. O QA declarado como limpo não garante acesso, conectividade ou plausibilidade arquitetônica.
+
+O problema funcional mais claro é a chegada da escada: apesar do comentário “openings at front for ladder”, o laço de Guard_Rail cria barras inteiras na frente e atrás. Não há a abertura prometida. A cobertura e algumas travessas também não têm encontros visualmente convincentes; isso requer inspeção do conjunto, além de verificar cada malha isoladamente.
+
+A imagem apresenta bom contraste entre madeira quente e cobertura azulada. A simplificação ajuda a silhueta, mas o horizonte do fundo nas vistas secundárias e a orientação oblíqua dificultam uma inspeção frontal. A coleção de apresentação ficou fora do GLB.
+
+## Resultado B
+
+B produziu uma cobertura de quatro águas, contraventamentos em X, tiras de ferro, degraus com detalhes e pequenas pedras de apresentação. A diferenciação das peças e o enquadramento favorecem a leitura do asset. Foi a minha preferência visual nesta rodada.
+
+O GLB exportado contém 146 objetos de malha, sete materiais e 7.708 triângulos; ocupa 476.400 bytes. O .blend ocupa 177.713 bytes. O tempo registrado foi 5 minutos e 44 segundos. O agente revisou as três imagens e ajustou a exportação para excluir chão e pedras decorativas soltas.
+
+A escada é muito íngreme e a transição até o piso merece correção. No telhado, a própria construção do gerador deixa uma abertura quadrada no topo: os painéis terminam numa região de 1,1 × 1,1 unidade e a peça de cumeeira tem apenas 0,18 unidade na direção estreita. Ela não fecha toda essa abertura. O defeito é menos perceptível em algumas câmeras e não deve ser omitido por preferência estética.
+
+A divisão frontal do guarda-corpo é mais compatível com a chegada da escada que em A. Ainda assim, não simulei um personagem atravessando a entrada nem validei colisão. A riqueza visual traz maior contagem geométrica e mais objetos; isso não prova um custo de runtime maior sem medir o engine.
+
+## Desconstrução da conclusão
+
+O que contradiz meu veredito inicial? A é cerca de 36% mais econômica em triângulos e seu GLB é aproximadamente 33% menor. Se leveza tiver peso dominante, a escolha pode mudar. Além disso, B tem um defeito real de fechamento do telhado que uma avaliação superficial por imagem poderia ignorar.
+
+A hipótese “skills melhoram qualidade técnica” recebeu apoio parcial: houve organização e um processo explícito de QA. Porém, o guarda-corpo bloqueado e os encaixes pouco convincentes mostram que mais validações não bastam para resolver requisitos semânticos do pedido.
+
+A hipótese “a simplicidade venceu” também não descreve bem este caso: o agente sem skills fez a versão mais detalhada e com mais geometria. O que observamos foi uma preferência pelo resultado visual de B, com um processo mais curto; não uma prova de que menos instruções sempre seja superior.
+
+A leitura das skills, o uso de scripts auxiliares e o número de revisões não foram separados experimentalmente. Não há como atribuir causalmente a diferença a um desses fatores. O agente A escolheu sete skills; isso também não testa todo o potencial das 28 skills do pacote.
+
+O avaliador acompanhou o andamento e conhecia as condições. A avaliação não foi cega, embora essa tenha sido uma intenção inicial. Não usei notas numéricas subjetivas que dariam aparência de precisão a uma preferência individual.
+
+Uma execução por condição não estima variabilidade. Não há intervalos de confiança, significância estatística nem comparação robusta de custo. Os tempos incluem renderização e contenção de CPU. É plausível que A tenha usado mais tokens, mas o consumo não foi exposto e não está medido.
+
+## Verificação e limites
+
+Verifiquei independentemente os seis PNGs (todos 768 × 768), abri as imagens e reabri ambos os .blend finais. Reimportei os dois GLBs finais no Blender 5.2.3 com sucesso e contei triângulos, objetos e materiais após importação. Os GLBs não declaram imagens externas.
+
+As métricas de geometria na tabela são da exportação final, com modificadores aplicados; não são as contagens menores de malha base do .blend. Os scripts inspect_asset.py e check_glb.py e seus JSONs estão em review/.
+
+O agente A relatou QA sem erros/avisos. Esse resultado não foi tratado como certificação e o mesmo QA não foi executado por B. Não houve validação de engine, colisões, passagem de personagem, física, carga em dispositivos ou continuidade estrutural.
+
+Leituras e horários vêm dos logs dos agentes; tamanhos, cabeçalhos PNG, reabertura e contagens do GLB foram checados por mim. Não existe log completo do consumo de tokens, de todos os acessos ao filesystem ou de todas as chamadas internas de cada subagente.
+
+## Próximos passos
+
+Corrigir o guarda-corpo de A e fechar o topo do telhado de B antes de qualquer integração. Rever inclinação e chegada das escadas em ambas.
+
+Se a pergunta for qualidade visual da modelagem, padronizar câmera e iluminação numa segunda avaliação, preservando também os renders originais.
+
+Repetir por categoria com múltiplas execuções, ordem alternada e avaliação cega por mais de uma pessoa; usar orçamento de revisões e recursos definido previamente.
+
+Para medir custo, executar pelo runtime/API com telemetria real de tokens por chamada, separando entrada, saída e cache. Não inferir tokens a partir de tempo.
+
+## Skills consultadas
+
+- **blender-core**: Execução headless, bpy 5.x e encaminhamento a outras skills; consultada.
+
+- **blender-scene-setup**: Unidades, organização e nomes; coleções e nomes úteis são observáveis na entrega.
+
+- **blender-pbr-materials**: Configuração de materiais; há materiais distintos, mas isso não comprova causalidade.
+
+- **blender-export-pipelines**: Exportação e verificação; o GLB foi entregue e reimportado independentemente.
+
+- **blender-rendering**: Renderização e saída multi-câmera; três PNGs foram entregues.
+
+- **blender-lighting-lookdev**: Câmeras, luzes e apresentação; escolhas do agente foram preservadas.
+
+- **blender-asset-qa**: Checagem de malha e revisão visual; o log registra execução e correções. A passagem bloqueada permaneceu.
+
+Nenhuma skill foi modificada. Tokens reais indisponíveis. Modelo gpt-6-luna medium, Blender 5.2.3, uma execução por condição; avaliação não cega. Veja o PDF e o manifesto para detalhes.

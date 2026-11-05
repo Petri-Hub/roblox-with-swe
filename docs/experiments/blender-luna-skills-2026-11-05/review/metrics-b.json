@@ -1,0 +1,2196 @@
+{
+  "file": "/workspace/blender-study/run-b/tower.blend",
+  "blender": "5.2.3 LTS",
+  "objects": 163,
+  "mesh_objects": 156,
+  "triangles_base_mesh": 2268,
+  "vertices": 1448,
+  "materials": 9,
+  "external_images": [],
+  "meshes": [
+    {
+      "name": "Baluster",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.11999999731779099,
+        0.11999999731779099,
+        1.0199999809265137
+      ]
+    },
+    {
+      "name": "Baluster.001",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.11999999731779099,
+        0.11999999731779099,
+        1.0199999809265137
+      ]
+    },
+    {
+      "name": "Baluster.002",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.11999999731779099,
+        0.11999999731779099,
+        1.0199999809265137
+      ]
+    },
+    {
+      "name": "Baluster.003",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.11999999731779099,
+        0.11999999731779099,
+        1.0199999809265137
+      ]
+    },
+    {
+      "name": "Baluster.004",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.11999999731779099,
+        0.11999999731779099,
+        1.0199999809265137
+      ]
+    },
+    {
+      "name": "Display ground",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        200.0,
+        200.0,
+        0.20000000298023224
+      ]
+    },
+    {
+      "name": "Front and back falling brace",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.14000000059604645,
+        0.14000000059604645,
+        3.751586437225342
+      ]
+    },
+    {
+      "name": "Front and back falling brace.001",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.14000001549720764,
+        0.14000001549720764,
+        3.365828275680542
+      ]
+    },
+    {
+      "name": "Front and back falling brace.002",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.14000000059604645,
+        0.14000000059604645,
+        3.751586437225342
+      ]
+    },
+    {
+      "name": "Front and back falling brace.003",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.14000001549720764,
+        0.14000001549720764,
+        3.365828275680542
+      ]
+    },
+    {
+      "name": "Front and back rising brace",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.14000000059604645,
+        0.14000000059604645,
+        3.751586437225342
+      ]
+    },
+    {
+      "name": "Front and back rising brace.001",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.14000001549720764,
+        0.14000001549720764,
+        3.365828275680542
+      ]
+    },
+    {
+      "name": "Front and back rising brace.002",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.14000000059604645,
+        0.14000000059604645,
+        3.751586437225342
+      ]
+    },
+    {
+      "name": "Front and back rising brace.003",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.14000001549720764,
+        0.14000001549720764,
+        3.365828275680542
+      ]
+    },
+    {
+      "name": "Front handrail segment",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.6200000047683716,
+        0.17000000178813934,
+        0.17000000178813934
+      ]
+    },
+    {
+      "name": "Front handrail segment.001",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.6200000047683716,
+        0.17000000178813934,
+        0.17000000178813934
+      ]
+    },
+    {
+      "name": "Front midrail segment",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.6000000238418579,
+        0.09000000357627869,
+        0.09000000357627869
+      ]
+    },
+    {
+      "name": "Front midrail segment.001",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.6000000238418579,
+        0.09000000357627869,
+        0.09000000357627869
+      ]
+    },
+    {
+      "name": "Heavy platform crossbeam",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        2.450000047683716,
+        0.2199999988079071,
+        0.2800000011920929
+      ]
+    },
+    {
+      "name": "Heavy platform crossbeam.001",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        2.450000047683716,
+        0.2199999988079071,
+        0.2800000011920929
+      ]
+    },
+    {
+      "name": "Heavy platform side beam",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.2199999988079071,
+        2.049999952316284,
+        0.2800000011920929
+      ]
+    },
+    {
+      "name": "Heavy platform side beam.001",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.2199999988079071,
+        2.049999952316284,
+        0.2800000011920929
+      ]
+    },
+    {
+      "name": "Iron foot binding",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.3099999725818634,
+        0.3099999725818634,
+        0.44090816378593445
+      ]
+    },
+    {
+      "name": "Iron foot binding.001",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.3099999725818634,
+        0.3100000023841858,
+        0.44090816378593445
+      ]
+    },
+    {
+      "name": "Iron foot binding.002",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.3099999725818634,
+        0.3099999725818634,
+        0.44090816378593445
+      ]
+    },
+    {
+      "name": "Iron foot binding.003",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.3099999725818634,
+        0.3100000023841858,
+        0.44090816378593445
+      ]
+    },
+    {
+      "name": "Iron rim strap",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        2.2200000286102295,
+        0.054999999701976776,
+        0.10000000149011612
+      ]
+    },
+    {
+      "name": "Iron rim strap.001",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        2.2200000286102295,
+        0.054999999701976776,
+        0.10000000149011612
+      ]
+    },
+    {
+      "name": "Iron rim strap.002",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.054999999701976776,
+        1.899999976158142,
+        0.10000000149011612
+      ]
+    },
+    {
+      "name": "Iron rim strap.003",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.054999999701976776,
+        1.899999976158142,
+        0.10000000149011612
+      ]
+    },
+    {
+      "name": "Iron upper collar",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.30000001192092896,
+        0.30000001192092896,
+        0.33120983839035034
+      ]
+    },
+    {
+      "name": "Iron upper collar.001",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.30000001192092896,
+        0.29999998211860657,
+        0.33120983839035034
+      ]
+    },
+    {
+      "name": "Iron upper collar.002",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.30000001192092896,
+        0.30000001192092896,
+        0.33120983839035034
+      ]
+    },
+    {
+      "name": "Iron upper collar.003",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.30000001192092896,
+        0.29999998211860657,
+        0.33120983839035034
+      ]
+    },
+    {
+      "name": "Left stair stringer",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.1600000113248825,
+        0.20000003278255463,
+        5.699201583862305
+      ]
+    },
+    {
+      "name": "Midrail",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.09000000357627869,
+        1.840000033378601,
+        0.09000000357627869
+      ]
+    },
+    {
+      "name": "Midrail.001",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.09000000357627869,
+        1.840000033378601,
+        0.09000000357627869
+      ]
+    },
+    {
+      "name": "Oak ridge cap",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        1.350000023841858,
+        0.18000000715255737,
+        0.18000000715255737
+      ]
+    },
+    {
+      "name": "Oak stair tread",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        1.149999976158142,
+        0.3199999928474426,
+        0.14000000059604645
+      ]
+    },
+    {
+      "name": "Oak stair tread.001",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        1.149999976158142,
+        0.3199999928474426,
+        0.14000000059604645
+      ]
+    },
+    {
+      "name": "Oak stair tread.002",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        1.149999976158142,
+        0.3199999928474426,
+        0.14000000059604645
+      ]
+    },
+    {
+      "name": "Oak stair tread.003",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        1.149999976158142,
+        0.3199999928474426,
+        0.14000000059604645
+      ]
+    },
+    {
+      "name": "Oak stair tread.004",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        1.149999976158142,
+        0.3199999928474426,
+        0.14000000059604645
+      ]
+    },
+    {
+      "name": "Oak stair tread.005",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        1.149999976158142,
+        0.3199999928474426,
+        0.14000000059604645
+      ]
+    },
+    {
+      "name": "Oak stair tread.006",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        1.149999976158142,
+        0.3199999928474426,
+        0.14000000059604645
+      ]
+    },
+    {
+      "name": "Oak stair tread.007",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        1.149999976158142,
+        0.3199999928474426,
+        0.14000000059604645
+      ]
+    },
+    {
+      "name": "Oak stair tread.008",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        1.149999976158142,
+        0.3199999928474426,
+        0.14000000059604645
+      ]
+    },
+    {
+      "name": "Oak stair tread.009",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        1.149999976158142,
+        0.3199999928474426,
+        0.14000000059604645
+      ]
+    },
+    {
+      "name": "Oak stair tread.010",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        1.149999976158142,
+        0.3199999928474426,
+        0.14000000059604645
+      ]
+    },
+    {
+      "name": "Oak stair tread.011",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        1.149999976158142,
+        0.3199999928474426,
+        0.14000000059604645
+      ]
+    },
+    {
+      "name": "Plaque diagonal",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.04500000551342964,
+        0.03500000387430191,
+        0.3280242681503296
+      ]
+    },
+    {
+      "name": "Platform oak planking",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.2150000035762787,
+        1.8799999952316284,
+        0.1599999964237213
+      ]
+    },
+    {
+      "name": "Platform oak planking.001",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.2150000035762787,
+        1.8799999952316284,
+        0.1599999964237213
+      ]
+    },
+    {
+      "name": "Platform oak planking.002",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.2150000035762787,
+        1.8799999952316284,
+        0.1599999964237213
+      ]
+    },
+    {
+      "name": "Platform oak planking.003",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.2150000035762787,
+        1.8799999952316284,
+        0.1599999964237213
+      ]
+    },
+    {
+      "name": "Platform oak planking.004",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.2150000035762787,
+        1.8799999952316284,
+        0.1599999964237213
+      ]
+    },
+    {
+      "name": "Platform oak planking.005",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.2150000035762787,
+        1.8799999952316284,
+        0.1599999964237213
+      ]
+    },
+    {
+      "name": "Platform oak planking.006",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.2150000035762787,
+        1.8799999952316284,
+        0.1599999964237213
+      ]
+    },
+    {
+      "name": "Platform oak planking.007",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.2150000035762787,
+        1.8799999952316284,
+        0.1599999964237213
+      ]
+    },
+    {
+      "name": "Platform oak planking.008",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.2150000035762787,
+        1.8799999952316284,
+        0.1599999964237213
+      ]
+    },
+    {
+      "name": "Post footing stone",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.5199999809265137,
+        0.47999998927116394,
+        0.2199999988079071
+      ]
+    },
+    {
+      "name": "Post footing stone.001",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.5199999809265137,
+        0.47999998927116394,
+        0.2199999988079071
+      ]
+    },
+    {
+      "name": "Post footing stone.002",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.5199999809265137,
+        0.47999998927116394,
+        0.2199999988079071
+      ]
+    },
+    {
+      "name": "Post footing stone.003",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.5199999809265137,
+        0.47999998927116394,
+        0.2199999988079071
+      ]
+    },
+    {
+      "name": "Rear handrail",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        2.0199999809265137,
+        0.17000000178813934,
+        0.17000000178813934
+      ]
+    },
+    {
+      "name": "Rear midrail",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        1.9500000476837158,
+        0.09000000357627869,
+        0.09000000357627869
+      ]
+    },
+    {
+      "name": "Ridge iron spike",
+      "vertices": 12,
+      "triangles": 20,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.07794228941202164,
+        0.07200000435113907,
+        0.3499999940395355
+      ]
+    },
+    {
+      "name": "Ridge iron spike.001",
+      "vertices": 12,
+      "triangles": 20,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.07794228941202164,
+        0.07200000435113907,
+        0.3499999940395355
+      ]
+    },
+    {
+      "name": "Right stair stringer",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.1600000113248825,
+        0.20000003278255463,
+        5.699201583862305
+      ]
+    },
+    {
+      "name": "Roof eave fascia",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        3.3499999046325684,
+        0.18000000715255737,
+        0.25
+      ]
+    },
+    {
+      "name": "Roof eave fascia.001",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        3.3499999046325684,
+        0.18000000715255737,
+        0.25
+      ]
+    },
+    {
+      "name": "Roof eave fascia.002",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.18000000715255737,
+        3.3499999046325684,
+        0.25
+      ]
+    },
+    {
+      "name": "Roof eave fascia.003",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.18000000715255737,
+        3.3499999046325684,
+        0.25
+      ]
+    },
+    {
+      "name": "Roof kingpost",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.14000000059604645,
+        0.14000000059604645,
+        0.6476110816001892
+      ]
+    },
+    {
+      "name": "Roof kingpost.001",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.14000000059604645,
+        0.14000000059604645,
+        0.6476110816001892
+      ]
+    },
+    {
+      "name": "Roof kingpost.002",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.14000000059604645,
+        0.14000000059604645,
+        0.6476110816001892
+      ]
+    },
+    {
+      "name": "Roof kingpost.003",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.14000000059604645,
+        0.14000000059604645,
+        0.6476110816001892
+      ]
+    },
+    {
+      "name": "Shingle course front/back",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        2.812000036239624,
+        0.10000000149011612,
+        0.07000000029802322
+      ]
+    },
+    {
+      "name": "Shingle course front/back.001",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        2.384000062942505,
+        0.10000000149011612,
+        0.07000000029802322
+      ]
+    },
+    {
+      "name": "Shingle course front/back.002",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        1.9559999704360962,
+        0.10000000149011612,
+        0.07000000029802322
+      ]
+    },
+    {
+      "name": "Shingle course front/back.003",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        1.527999997138977,
+        0.10000000149011612,
+        0.07000000029802322
+      ]
+    },
+    {
+      "name": "Shingle course front/back.004",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        2.812000036239624,
+        0.10000000149011612,
+        0.07000000029802322
+      ]
+    },
+    {
+      "name": "Shingle course front/back.005",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        2.384000062942505,
+        0.10000000149011612,
+        0.07000000029802322
+      ]
+    },
+    {
+      "name": "Shingle course front/back.006",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        1.9559999704360962,
+        0.10000000149011612,
+        0.07000000029802322
+      ]
+    },
+    {
+      "name": "Shingle course front/back.007",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        1.527999997138977,
+        0.10000000149011612,
+        0.07000000029802322
+      ]
+    },
+    {
+      "name": "Shingle course side",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.10000000149011612,
+        2.812000036239624,
+        0.07000000029802322
+      ]
+    },
+    {
+      "name": "Shingle course side.001",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.10000000149011612,
+        2.384000062942505,
+        0.07000000029802322
+      ]
+    },
+    {
+      "name": "Shingle course side.002",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.10000000149011612,
+        1.9559999704360962,
+        0.07000000029802322
+      ]
+    },
+    {
+      "name": "Shingle course side.003",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.10000000149011612,
+        1.527999997138977,
+        0.07000000029802322
+      ]
+    },
+    {
+      "name": "Shingle course side.004",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.10000000149011612,
+        2.812000036239624,
+        0.07000000029802322
+      ]
+    },
+    {
+      "name": "Shingle course side.005",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.10000000149011612,
+        2.384000062942505,
+        0.07000000029802322
+      ]
+    },
+    {
+      "name": "Shingle course side.006",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.10000000149011612,
+        1.9559999704360962,
+        0.07000000029802322
+      ]
+    },
+    {
+      "name": "Shingle course side.007",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.10000000149011612,
+        1.527999997138977,
+        0.07000000029802322
+      ]
+    },
+    {
+      "name": "Side falling brace",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.14000000059604645,
+        0.14000000059604645,
+        3.330660581588745
+      ]
+    },
+    {
+      "name": "Side falling brace.001",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.14000000059604645,
+        0.14000000059604645,
+        3.1023378372192383
+      ]
+    },
+    {
+      "name": "Side falling brace.002",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.14000000059604645,
+        0.14000000059604645,
+        3.330660581588745
+      ]
+    },
+    {
+      "name": "Side falling brace.003",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.14000000059604645,
+        0.14000000059604645,
+        3.1023378372192383
+      ]
+    },
+    {
+      "name": "Side handrail",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.17000000178813934,
+        1.8799999952316284,
+        0.17000000178813934
+      ]
+    },
+    {
+      "name": "Side handrail.001",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.17000000178813934,
+        1.8799999952316284,
+        0.17000000178813934
+      ]
+    },
+    {
+      "name": "Side rising brace",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.14000001549720764,
+        0.14000001549720764,
+        3.330660581588745
+      ]
+    },
+    {
+      "name": "Side rising brace.001",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.14000000059604645,
+        0.14000000059604645,
+        3.1023378372192383
+      ]
+    },
+    {
+      "name": "Side rising brace.002",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.14000001549720764,
+        0.14000001549720764,
+        3.330660581588745
+      ]
+    },
+    {
+      "name": "Side rising brace.003",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.14000000059604645,
+        0.14000000059604645,
+        3.1023378372192383
+      ]
+    },
+    {
+      "name": "Small ground stone",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.2199999988079071,
+        0.1599999964237213,
+        0.09000000357627869
+      ]
+    },
+    {
+      "name": "Small ground stone.001",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.2199999988079071,
+        0.1599999964237213,
+        0.09000000357627869
+      ]
+    },
+    {
+      "name": "Small ground stone.002",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.2199999988079071,
+        0.1599999964237213,
+        0.09000000357627869
+      ]
+    },
+    {
+      "name": "Small ground stone.003",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.2199999988079071,
+        0.1599999964237213,
+        0.09000000357627869
+      ]
+    },
+    {
+      "name": "Small ground stone.004",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.2199999839067459,
+        0.15999998152256012,
+        0.09000000357627869
+      ]
+    },
+    {
+      "name": "Small ground stone.005",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.2199999988079071,
+        0.1599999964237213,
+        0.09000000357627869
+      ]
+    },
+    {
+      "name": "Small ground stone.006",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.2199999988079071,
+        0.1599999964237213,
+        0.09000000357627869
+      ]
+    },
+    {
+      "name": "Small ground stone.007",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.2199999839067459,
+        0.15999998152256012,
+        0.09000000357627869
+      ]
+    },
+    {
+      "name": "Small ground stone.008",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.2199999988079071,
+        0.1599999964237213,
+        0.09000000357627869
+      ]
+    },
+    {
+      "name": "Stair railing post",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.09000000357627869,
+        0.09000000357627869,
+        0.5500000715255737
+      ]
+    },
+    {
+      "name": "Stair railing post.001",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.09000000357627869,
+        0.09000000357627869,
+        0.5499999523162842
+      ]
+    },
+    {
+      "name": "Stair railing post.002",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.09000000357627869,
+        0.09000000357627869,
+        0.5499999523162842
+      ]
+    },
+    {
+      "name": "Stair railing post.003",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.09000000357627869,
+        0.09000000357627869,
+        0.5499999523162842
+      ]
+    },
+    {
+      "name": "Stair railing post.004",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.09000000357627869,
+        0.09000000357627869,
+        0.5500001907348633
+      ]
+    },
+    {
+      "name": "Stair railing post.005",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.09000000357627869,
+        0.09000000357627869,
+        0.5499997138977051
+      ]
+    },
+    {
+      "name": "Stair railing post.006",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.09000000357627869,
+        0.09000000357627869,
+        0.5500000715255737
+      ]
+    },
+    {
+      "name": "Stair railing post.007",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.09000000357627869,
+        0.09000000357627869,
+        0.5499999523162842
+      ]
+    },
+    {
+      "name": "Stair railing post.008",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.09000000357627869,
+        0.09000000357627869,
+        0.5499999523162842
+      ]
+    },
+    {
+      "name": "Stair railing post.009",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.09000000357627869,
+        0.09000000357627869,
+        0.5499999523162842
+      ]
+    },
+    {
+      "name": "Stair railing post.010",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.09000000357627869,
+        0.09000000357627869,
+        0.5500001907348633
+      ]
+    },
+    {
+      "name": "Stair railing post.011",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.09000000357627869,
+        0.09000000357627869,
+        0.5499997138977051
+      ]
+    },
+    {
+      "name": "Stair sloped handrail",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.10999999940395355,
+        0.10999999940395355,
+        5.053651809692383
+      ]
+    },
+    {
+      "name": "Stair sloped handrail.001",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.10999999940395355,
+        0.10999999940395355,
+        5.053651809692383
+      ]
+    },
+    {
+      "name": "Steep four-sided shingle roof",
+      "vertices": 8,
+      "triangles": 8,
+      "materials": 2,
+      "uv_layers": 0,
+      "boundary_edges": 8,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        3.214482545852661,
+        3.214482545852661,
+        1.3236794471740723
+      ]
+    },
+    {
+      "name": "Tapered corner post",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.27000007033348083,
+        0.27000007033348083,
+        5.418201446533203
+      ]
+    },
+    {
+      "name": "Tapered corner post.001",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.27000001072883606,
+        0.27000001072883606,
+        5.418201446533203
+      ]
+    },
+    {
+      "name": "Tapered corner post.002",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.27000007033348083,
+        0.27000007033348083,
+        5.418201446533203
+      ]
+    },
+    {
+      "name": "Tapered corner post.003",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.27000001072883606,
+        0.27000001072883606,
+        5.418201446533203
+      ]
+    },
+    {
+      "name": "Tread iron nail",
+      "vertices": 16,
+      "triangles": 28,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.06311170011758804,
+        0.06311170011758804,
+        0.017999999225139618
+      ]
+    },
+    {
+      "name": "Tread iron nail.001",
+      "vertices": 16,
+      "triangles": 28,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.06311170011758804,
+        0.06311170011758804,
+        0.017999999225139618
+      ]
+    },
+    {
+      "name": "Tread iron nail.002",
+      "vertices": 16,
+      "triangles": 28,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.06311170011758804,
+        0.06311170011758804,
+        0.017999999225139618
+      ]
+    },
+    {
+      "name": "Tread iron nail.003",
+      "vertices": 16,
+      "triangles": 28,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.06311170011758804,
+        0.06311170011758804,
+        0.017999999225139618
+      ]
+    },
+    {
+      "name": "Tread iron nail.004",
+      "vertices": 16,
+      "triangles": 28,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.06311170011758804,
+        0.06311170011758804,
+        0.017999999225139618
+      ]
+    },
+    {
+      "name": "Tread iron nail.005",
+      "vertices": 16,
+      "triangles": 28,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.06311170011758804,
+        0.06311170011758804,
+        0.017999999225139618
+      ]
+    },
+    {
+      "name": "Tread iron nail.006",
+      "vertices": 16,
+      "triangles": 28,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.06311170011758804,
+        0.06311170011758804,
+        0.017999999225139618
+      ]
+    },
+    {
+      "name": "Tread iron nail.007",
+      "vertices": 16,
+      "triangles": 28,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.06311170011758804,
+        0.06311170011758804,
+        0.017999999225139618
+      ]
+    },
+    {
+      "name": "Tread iron nail.008",
+      "vertices": 16,
+      "triangles": 28,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.06311170011758804,
+        0.06311170011758804,
+        0.017999999225139618
+      ]
+    },
+    {
+      "name": "Tread iron nail.009",
+      "vertices": 16,
+      "triangles": 28,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.06311170011758804,
+        0.06311170011758804,
+        0.017999999225139618
+      ]
+    },
+    {
+      "name": "Tread iron nail.010",
+      "vertices": 16,
+      "triangles": 28,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.06311170011758804,
+        0.06311170011758804,
+        0.017999999225139618
+      ]
+    },
+    {
+      "name": "Tread iron nail.011",
+      "vertices": 16,
+      "triangles": 28,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.06311170011758804,
+        0.06311170011758804,
+        0.017999999225139618
+      ]
+    },
+    {
+      "name": "Tread iron nail.012",
+      "vertices": 16,
+      "triangles": 28,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.06311170011758804,
+        0.06311170011758804,
+        0.017999999225139618
+      ]
+    },
+    {
+      "name": "Tread iron nail.013",
+      "vertices": 16,
+      "triangles": 28,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.06311170011758804,
+        0.06311170011758804,
+        0.017999999225139618
+      ]
+    },
+    {
+      "name": "Tread iron nail.014",
+      "vertices": 16,
+      "triangles": 28,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.06311170011758804,
+        0.06311170011758804,
+        0.017999999225139618
+      ]
+    },
+    {
+      "name": "Tread iron nail.015",
+      "vertices": 16,
+      "triangles": 28,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.06311170011758804,
+        0.06311170011758804,
+        0.017999999225139618
+      ]
+    },
+    {
+      "name": "Tread iron nail.016",
+      "vertices": 16,
+      "triangles": 28,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.06311170011758804,
+        0.06311170011758804,
+        0.017999999225139618
+      ]
+    },
+    {
+      "name": "Tread iron nail.017",
+      "vertices": 16,
+      "triangles": 28,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.06311170011758804,
+        0.06311170011758804,
+        0.017999999225139618
+      ]
+    },
+    {
+      "name": "Tread iron nail.018",
+      "vertices": 16,
+      "triangles": 28,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.06311170011758804,
+        0.06311170011758804,
+        0.017999999225139618
+      ]
+    },
+    {
+      "name": "Tread iron nail.019",
+      "vertices": 16,
+      "triangles": 28,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.06311170011758804,
+        0.06311170011758804,
+        0.017999999225139618
+      ]
+    },
+    {
+      "name": "Tread iron nail.020",
+      "vertices": 16,
+      "triangles": 28,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.06311170011758804,
+        0.06311170011758804,
+        0.017999999225139618
+      ]
+    },
+    {
+      "name": "Tread iron nail.021",
+      "vertices": 16,
+      "triangles": 28,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.06311170011758804,
+        0.06311170011758804,
+        0.017999999225139618
+      ]
+    },
+    {
+      "name": "Tread iron nail.022",
+      "vertices": 16,
+      "triangles": 28,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.06311170011758804,
+        0.06311170011758804,
+        0.017999999225139618
+      ]
+    },
+    {
+      "name": "Tread iron nail.023",
+      "vertices": 16,
+      "triangles": 28,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.06311170011758804,
+        0.06311170011758804,
+        0.017999999225139618
+      ]
+    },
+    {
+      "name": "Watch emblem plaque",
+      "vertices": 8,
+      "triangles": 12,
+      "materials": 1,
+      "uv_layers": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "dimensions": [
+        0.47999998927116394,
+        0.04500000178813934,
+        0.3400000035762787
+      ]
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+Início UTC: 2026-11-05 21:40:09
+Escopo: /workspace/blender-study/run-b exclusivamente.
+Fim UTC: 2026-11-05 21:45:53 UTC
+Comando relevante (geração final):
+XDG_CACHE_HOME="$PWD/.cache" BLENDER_USER_CONFIG="$PWD/.config" BLENDER_USER_CACHE="$PWD/.cache" /workspace/blender-study/tools/blender-5.2.3-linux-x64/blender --background --python generate_tower.py
+Revisão visual: abertas as três imagens PNG em 768×768 (perspectiva, frente e trás). Ajustada a seleção de exportação do GLB para excluir o chão de apresentação e pedras decorativas soltas; geração final refeita com o script atualizado.
