@@ -13,6 +13,7 @@ local Telekinesis = require(Shared.Telekinesis)
 local Powers = require(Shared.Powers)
 
 local GhostService = require(script.Parent.GhostService)
+local StreetPropService = require(script.Parent.StreetPropService)
 
 local TelekinesisService = {}
 
@@ -331,6 +332,11 @@ local function grab(player: Player, instance: any)
 
 	local radius = boundingRadius(size)
 	propOwners[prop] = player
+	-- Where the prop is now is where it goes back to, so the spot is taken
+	-- before the grip moves it. A prop picked up again also stops counting
+	-- down to its trip home.
+	StreetPropService.remember(prop)
+	StreetPropService.cancel(prop)
 	holds[player] = {
 		player = player,
 		kind = "prop",
@@ -454,6 +460,12 @@ local function finishFlight(flight: Flight, position: Vector3, normal: Vector3, 
 
 	damageGhosts(position, Telekinesis.THROW_SPLASH_RADIUS, flight.attacker, direct)
 
+	-- A thrown prop lands, lies there for a while and then goes back to where
+	-- the city built it.
+	if flight.kind == "prop" then
+		StreetPropService.schedule(target)
+	end
+
 	impactRemote:FireAllClients({
 		position = position,
 		normal = normal,
@@ -526,6 +538,8 @@ local function release(player: Player)
 		GhostService.stun(hold.target, 0.4)
 	else
 		settleProp(hold)
+		-- Set down, not thrown: it still goes home after the same wait.
+		StreetPropService.schedule(hold.target)
 	end
 
 	notifyDropped(player, hold, false, hold.target:GetPivot().Position)

@@ -45,6 +45,8 @@ Between the crossings the sidewalks carry the small life of the city. `ForestGen
 
 Two kinds of thing stand there on purpose. A prop the player can lift is a `Model`, because the telekinesis grabs the outermost model under its folder; a fixed piece is a loose part in a folder, so the same code finds the whole town around it and refuses it. That is how a bin flies and a traffic light does not, without a list of names to keep.
 
+A prop that is thrown or set down goes home. `StreetPropService` stamps each one with the `CFrame` it was built at and starts a clock the moment it lands: twenty seconds later it fades out where it fell, jumps back to its spot and fades back in. Grabbing it again cancels the trip, and the clock starts again when it lands. So a crate hurled across the map does not stay in the middle of the road for good, and the street repairs itself without anyone tidying up.
+
 Every crossing gets four zebra crossings painted on the asphalt and one traffic light on the far corner with its three lenses. The sidewalk and its neon curb are cut at each crossing, so the road runs clean through the intersection and the paint has somewhere to go. Puddles lie on the asphalt and cables hang over the street between the towers; both are scenery, and neither can be lifted.
 
 ### Code layout
