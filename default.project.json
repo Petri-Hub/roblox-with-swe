@@ -20,6 +20,11 @@
         }
       }
     },
+    "Lighting": {
+      "$properties": {
+        "Technology": "Future"
+      }
+    },
     "ReplicatedStorage": {
       "Shared": {
         "$path": "src/shared"

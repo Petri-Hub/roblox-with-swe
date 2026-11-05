@@ -27,7 +27,19 @@ local bus = EventBus.new({
 
 local remotes = Remotes.get()
 
-Bridge.new(bus, remotes):Start()
-LightingService.new(bus):Start()
-MazeService.new(bus):Start()
-PlayerService.new(bus):Start()
+-- A service that throws is reported and skipped. Boot continues, so one broken
+-- module cannot leave the server without a world.
+local function start(name: string, service)
+	local ok, err = pcall(function()
+		service:Start()
+	end)
+
+	if not ok then
+		warn(("[boot] %s failed to start: %s"):format(name, tostring(err)))
+	end
+end
+
+start("bridge", Bridge.new(bus, remotes))
+start("lighting", LightingService.new(bus))
+start("maze", MazeService.new(bus))
+start("players", PlayerService.new(bus))

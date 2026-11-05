@@ -31,7 +31,8 @@ local function ensure(className: string, name: string): Instance
 end
 
 function LightingService:_base()
-	Lighting.Technology = Enum.Technology.Future
+	-- Lighting.Technology is RobloxScriptSecurity: a server script cannot read
+	-- or write it. It stays in default.project.json with the place settings.
 	Lighting.ClockTime = 0
 	Lighting.Brightness = 1
 	Lighting.Ambient = Color3.fromRGB(38, 33, 28)

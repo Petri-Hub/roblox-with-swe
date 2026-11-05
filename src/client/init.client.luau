@@ -22,8 +22,18 @@ local bus = EventBus.new({
 	Topics.ClientReady,
 })
 
-Bridge.new(bus, Remotes.get()):Start()
-AtmosphereController.new(bus):Start()
+local function start(name: string, controller)
+	local ok, err = pcall(function()
+		controller:Start()
+	end)
+
+	if not ok then
+		warn(("[boot] %s failed to start: %s"):format(name, tostring(err)))
+	end
+end
+
+start("bridge", Bridge.new(bus, Remotes.get()))
+start("atmosphere", AtmosphereController.new(bus))
 
 -- Tell the server we are listening, so it can replay the world summary.
 bus:Emit(Topics.ClientReady)
