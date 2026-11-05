@@ -7,57 +7,77 @@
         "FilteringEnabled": true,
         "StreamingEnabled": false
       },
-      "Baseplate": {
+      "Ground": {
         "$className": "Part",
         "$properties": {
           "Anchored": true,
           "BottomSurface": "Smooth",
-          "Color": [
-            0.639,
-            0.635,
-            0.647
-          ],
-          "Material": "Plastic",
-          "Position": [
-            0,
-            -2,
-            0
-          ],
-          "Size": [
-            512,
-            4,
-            512
-          ],
+          "Color": [0.11, 0.09, 0.08],
+          "Material": "Slate",
+          "Position": [0, -3, 0],
+          "Size": [512, 4, 512],
           "TopSurface": "Smooth"
-        }
-      },
-      "SpawnLocation": {
-        "$className": "SpawnLocation",
-        "$properties": {
-          "Anchored": true,
-          "CanCollide": true,
-          "Neutral": true,
-          "Position": [
-            0,
-            1,
-            0
-          ],
-          "Size": [
-            12,
-            1,
-            12
-          ],
-          "Transparency": 1
         }
       }
     },
     "Lighting": {
       "$properties": {
-        "Brightness": 2,
-        "ClockTime": 14,
+        "Ambient": [0.05, 0.04, 0.035],
+        "Brightness": 0.6,
+        "ClockTime": 0,
+        "EnvironmentDiffuseScale": 0.15,
+        "EnvironmentSpecularScale": 0.15,
+        "ExposureCompensation": 0,
         "GlobalShadows": true,
+        "OutdoorAmbient": [0.03, 0.025, 0.02],
         "Outlines": false,
-        "Technology": "ShadowMap"
+        "ShadowSoftness": 0.4,
+        "Technology": "Future"
+      },
+      "Atmosphere": {
+        "$className": "Atmosphere",
+        "$properties": {
+          "Color": [0.12, 0.1, 0.09],
+          "Decay": [0.08, 0.06, 0.05],
+          "Density": 0.4,
+          "Glare": 0,
+          "Haze": 2,
+          "Offset": 0.1
+        }
+      },
+      "Bloom": {
+        "$className": "BloomEffect",
+        "$properties": {
+          "Enabled": true,
+          "Intensity": 0.55,
+          "Size": 26,
+          "Threshold": 1.5
+        }
+      },
+      "Warmth": {
+        "$className": "ColorCorrectionEffect",
+        "$properties": {
+          "Brightness": -0.02,
+          "Contrast": 0.08,
+          "Enabled": true,
+          "Saturation": -0.12,
+          "TintColor": [1, 0.94, 0.86]
+        }
+      }
+    },
+    "ReplicatedStorage": {
+      "Shared": {
+        "$path": "src/shared"
+      }
+    },
+    "ServerScriptService": {
+      "Server": {
+        "$path": "src/server"
+      }
+    },
+    "ServerStorage": {
+      "Lighting": {
+        "$path": "src/assets/lighting"
       }
     }
   }

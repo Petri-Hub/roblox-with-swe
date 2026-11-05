@@ -18,7 +18,21 @@
 
 ## Play the game
 
-> **This branch (`chore/blank-slate`) is a blank place:** a baseplate, an invisible spawn and default daylight — no scripts, no assets, no map. Everything below describes `staging`. Any part of it can be brought back from Git when the new game needs it.
+> **This branch (`feat/dark-wood-maze`) starts a new game.** The city described below still lives on `staging`; this branch replaces the place with a dark-wood labyrinth. Nothing has been deleted from Git — the old map and its systems can be brought back at any time.
+
+### The maze
+
+The whole level is built at server start from a seed, so every player in a server walks the same house. It is a normal-looking manor that connects wrong: rooms with no purpose, corridors that turn back on themselves, no windows and no way out.
+
+The layout comes from three layers. A depth-first carve draws the corridors; a braid step opens about a third of the dead ends so the house loops instead of trapping you; then a handful of rooms are cut open and given at least two ways in. The grid is 25 × 25 cells of 12 studs — a 300-stud square house — with 10 studs of walking room and 2 studs of wall, under a 14-stud ceiling. The maze sits one storey up. Every player starts in a plain room below, crosses it and climbs a staircase that comes out inside the house.
+
+The walls are dressed, not bare: dark wood panelling up to 6 studs with a seamless wood texture (`5332619725`), dark plaster above, and a baseboard, chair rail and crown around every run. Long walls also carry a ceiling beam, so the corners read as coffered rooms. The ceiling and the floor are dark wood; there is no daylight, no sky, no outside.
+
+Lighting is warm and weak: the only light is candles. Corridors get a small iron lantern every few walls — a bracket, a candle, a flame and one shadow-casting point light — spaced out so the house stays dim and the dark between them does the work. The starting room hangs a chandelier (`5672333071`) and two wall candles (`16876389755`) from the Creator Store. The place runs on `Future` lighting with bloom and a warm colour correction.
+
+Everything is aimed at the shape of the house first. There is no furniture, no objective, no exit and no sound yet, and the lantern spacing, the texture scale and the brightness have only been checked in code — they need a Studio playtest before they are called finished.
+
+The numbers live in `src/shared/MazeConfig.luau`, the grid and its rooms in `src/shared/MazeGrid.luau`, and the parts, stairs, lamps and starting room in `src/server/MazeBuilder.luau`.
 
 This AI-assisted horror game is set in a neon city at night. The map is a 1024-stud floor of parts holding a six by six grid of streets: five by five blocks, four towers on every block, a paved plaza where every life starts, street lamps at every crossing and a ring of dark towers that closes the horizon. The tallest towers stand near the middle and the city falls away towards the edge, where the fog swallows the rest. There is no terrain anywhere: the floor, the roads, the sidewalks and the buildings are all parts, and the terrain service is cleared when the city is built. The city is in permanent night: the sky sits near black, a violet fog hides the distance, the only light is neon and the street lamps, and bloom does the rest. The current build is an early playtest of the map, first-person movement, and the weapons.
 
