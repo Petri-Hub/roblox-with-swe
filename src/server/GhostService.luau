@@ -112,12 +112,12 @@ local function spawnPositionAround(center: Vector3): Vector3?
 		local x = center.X + math.cos(angle) * radius
 		local z = center.Z + math.sin(angle) * radius
 		local flat = Vector2.new(x, z)
-		-- Not through a wall either: a ghost that starts inside a house is stuck
-		-- there, because it only walks.
+		-- Not through a wall either: a ghost that starts inside a tower is
+		-- stuck there, because it only walks. The streets are the play space.
 		if
 			ForestLayout.isInsideWorld(flat, 12)
 			and flat.Magnitude > ForestLayout.SPAWN_CLEARING_RADIUS + 8
-			and not ForestLayout.isInsideHouseLot(flat)
+			and not ForestLayout.isInsideTowerLot(flat)
 		then
 			return GhostRules.spawnPoint(center, angle, radius, ForestLayout.heightAt(x, z), settings.hoverHeight)
 		end

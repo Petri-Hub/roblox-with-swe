@@ -54,21 +54,14 @@ FruitSpec.PICKUP_DISTANCE = 14
 FruitSpec.PROMPT_DISTANCE = 10
 FruitSpec.PROMPT_HOLD = 0.35
 
--- Fruit grows by a tree: the green belt around the town is where a player
--- walks to look for one. It sits this far from the trunk, so it never grows
--- inside the tree.
-FruitSpec.TREE_MIN_DISTANCE = 3.5
-FruitSpec.TREE_MAX_DISTANCE = 9
+-- A fruit lies in the middle of a street now: half a road wide, at a random
+-- point along it. The city is walked on foot, so a fruit on the asphalt is
+-- visible from down the block instead of buried in a bush.
+FruitSpec.STREET_SHOULDER = 8
+-- How far from the end of a street a fruit may lie, so it never ends up in the
+-- ring of towers around the city.
+FruitSpec.STREET_END_MARGIN = 34
 
--- The fallback when no tree has a free spot: a ring around the town, inside the
--- rim, so a fruit still appears somewhere instead of being lost.
-FruitSpec.SPAWN_RADIUS_MIN = 45
-FruitSpec.SPAWN_RADIUS_MAX = 235
-FruitSpec.SPAWN_MARGIN = 40
--- The trees already stand inside the belt, so the spot beside one only needs to
--- stay clear of the rock rim.
-FruitSpec.TREE_MARGIN = 8
-FruitSpec.SPAWN_TRIES = 24
 -- How high the fruit hovers, so it reads as floating and not as a ball of moss.
 FruitSpec.HOVER_HEIGHT = 2.6
 -- A dropped fruit lands this far in front of the player who let it go.
@@ -189,22 +182,27 @@ function FruitSpec.pickWeighted(specs: { Spec }, roll: number): Spec?
 	return specs[#specs]
 end
 
--- Two rolls in, one point out: the service supplies the randomness and the
--- geometry stays testable.
-function FruitSpec.scatter(angleRoll: number, radiusRoll: number): Vector2
-	local angle = math.clamp(angleRoll, 0, 0.999999) * math.pi * 2
-	local radius = FruitSpec.SPAWN_RADIUS_MIN
-		+ math.clamp(radiusRoll, 0, 1) * (FruitSpec.SPAWN_RADIUS_MAX - FruitSpec.SPAWN_RADIUS_MIN)
-	return Vector2.new(math.cos(angle) * radius, math.sin(angle) * radius)
-end
+-- Three rolls in and a point on the asphalt out: a street line, how far along
+-- it, and how far across it. The lateral offset stays inside the lane, so a
+-- fruit always lies in the middle of the road. Kept pure, so the tests can feed
+-- it rolls instead of seeding a random generator.
+function FruitSpec.streetSpot(
+	line: number,
+	halfSpan: number,
+	axisRoll: number,
+	alongRoll: number,
+	lateralRoll: number
+): Vector2
+	local reach = math.max(halfSpan - FruitSpec.STREET_END_MARGIN, 0)
+	local along = (math.clamp(alongRoll, 0, 0.999999) * 2 - 1) * reach
+	local lateral = (math.clamp(lateralRoll, 0, 0.999999) * 2 - 1) * FruitSpec.STREET_SHOULDER
 
--- Two rolls in and a tree out: the spot a fruit grows on, a short walk from a
--- trunk in a random direction. Same shape as `scatter`, so it stays testable.
-function FruitSpec.nearTree(tree: Vector2, angleRoll: number, distanceRoll: number): Vector2
-	local angle = math.clamp(angleRoll, 0, 0.999999) * math.pi * 2
-	local distance = FruitSpec.TREE_MIN_DISTANCE
-		+ math.clamp(distanceRoll, 0, 1) * (FruitSpec.TREE_MAX_DISTANCE - FruitSpec.TREE_MIN_DISTANCE)
-	return Vector2.new(tree.X + math.cos(angle) * distance, tree.Y + math.sin(angle) * distance)
+	if math.clamp(axisRoll, 0, 0.999999) < 0.5 then
+		-- The road running north and south at x = line.
+		return Vector2.new(line + lateral, along)
+	end
+
+	return Vector2.new(along, line + lateral)
 end
 
 function FruitSpec.canSpawn(onGround: number): boolean

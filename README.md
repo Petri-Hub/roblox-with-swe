@@ -18,25 +18,34 @@
 
 ## Play the game
 
-This AI-assisted horror game is taking shape in a procedurally generated town: a 640-stud square of flat grass ringed by a wall of rock, with a three by three grid of streets, four one-room houses on every block, a lamp in each block, a paved plaza where every life starts and a belt of trees between the last street and the rock. The town is in daylight: the sun sits at 13:24, the fog is a light haze far away, and the sky is open, so the streets and the rock rim are visible all the way out. The current build is an early playtest of the map, first-person movement, and the weapons.
+This AI-assisted horror game is set in a neon city at night. The map is a 1024-stud floor of parts holding a six by six grid of streets: five by five blocks, four towers on every block, a paved plaza where every life starts, street lamps at every crossing and a ring of dark towers that closes the horizon. The tallest towers stand near the middle and the city falls away towards the edge, where the fog swallows the rest. There is no terrain anywhere: the floor, the roads, the sidewalks and the buildings are all parts, and the terrain service is cleared when the city is built. The city is in permanent night: the sky sits near black, a violet fog hides the distance, the only light is neon and the street lamps, and bloom does the rest. The current build is an early playtest of the map, first-person movement, and the weapons.
 
 Every life starts in the air: the battle bus (`src/assets/BattleBus.rbxm`, Creator Store asset `1255341965`) crosses the sky over the spawn clearing at 235 studs, and you leave it right behind it, coming down under a slow chute instead of falling like a rock. Every life gets the bus, respawns included, and its horn (`8255757586`) plays as you leave. `BusDropService` clones the model from `ServerStorage`, flies it along a random lane and glides the player down until the feet touch. A bus still in the air and close to the clearing takes the next player instead of a second bus leaving beside it.
 
 Every life starts with the flashlight and the `M9` pistol — kills are the shop currency, so you need a gun to earn the first ones — and the rest is bought with ghost kills at a shop the town keeps on the plaza. The guns are meshed Creator Store models — the AK-47 (`8413055627`) and the M9 (`8321118198`) — normalised by the client into first-person viewmodels. The AK-47 (30 rounds, 600 rounds per minute, iron sights while holding right mouse, `R` to reload) costs 4 kills, the `M9` pistol — semi automatic, 15 rounds — costs 2 kills, and the UV floodlight costs 6. Until you pay, that slot is empty — it keeps only its number, with no item name — and refuses to equip it. Both guns run on the same engine and differ only in their definition file. The flashlight lives in the hotbar: press `2` to take it out or put it away, and `F` to turn its beam on or off. Press the slot that is in hand again, or `0`, to walk with empty hands. Casting a spell puts the item away too, because the fireball and the telekinesis need the hand. Slot `3` is the ghost detector, which reads the distance to the nearest ghost in studs every three seconds. Slot `4` is the UV floodlight: hold left mouse to wash ghosts in violet light, which burns them slowly and pushes them back, until the 8 second battery runs dry; it refills on its own in 10 seconds. The handheld flashlight runs a wide 110-degree flood cone, so it lights a clearing instead of a pencil beam. Ghosts drift out of the fog at 4.4 studs per second groaning, and every one you put down adds a point to the `KILLS` counter in the corner. They come in two shipped looks (`src/assets/Ghost.rbxm` and `src/assets/GhostAlt2.rbxm`, Creator Store assets `16371325697` and `14659873441`) with a random tint and height, all scaled to about seven studs.
-The three spells are behind devil fruits now: one fruit appears beside a tree in the belt every minute, and eating one is the only way to get a power.
+The three spells are behind devil fruits now: one fruit appears in the middle of a street every minute, and eating one is the only way to get a power.
 
 ### Performance
 
-The town is built for machines that are not fast, so the cost is kept low on purpose:
+The city is built for machines that are not fast, so the cost is kept low on purpose:
 
-- `StreamingEnabled` is on in the place, with a 96-stud minimum and a 512-stud target, so the client only holds the part of the 640-stud map around the player.
-- The terrain is written in 40-cell chunks, and the generator clears it first, so generation never builds the whole world in one Lua table.
-- Streets, houses and lamps are plain parts: each house is a floor, five walls, a lintel, two window panes and a roof, and the whole town is a few hundred parts.
-- Scenery props cast no shadows and do not fire touch events; only the two landmarks in the plaza do.
-- The scenery density was pulled back for the bigger map, so the bushes and debris sit at about two thirds of the count the old spacing would give.
-- The camera mist is thin now: a handful of small particles instead of a full-screen blanket.
+- `StreamingEnabled` is on in the place, with a 96-stud minimum and a 512-stud target, so the client only holds the part of the city around the player.
+- There is no terrain at all. The generator clears `Workspace.Terrain` and never writes a voxel: the floor is one anchored slab, and the streets, sidewalks and plaza are slabs on top of it.
+- Towers, streets and lamps are plain parts: each tower is a body, a crown, two to five neon bands, two corner strips, an antenna, a beacon and sometimes a screen — around eleven parts — and only the body casts a shadow.
+- The neon does the lighting: bands, curbs and screens are `Neon` parts with no light of their own, so most of the glow in the city costs nothing to render. One street lamp per crossing carries the only point lights.
+- The street furniture adds a thousand pieces, most of it the zebra paint: every one is anchored, casts no shadow and carries no light of its own.
+- Scenery props cast no shadows and do not fire touch events; only the landmarks in the plaza and the towers do.
+- The camera mist is thin: a handful of small particles instead of a full-screen blanket.
 - The HUD only writes a value when it changes: the hit markers are collected once, the reload bar and the crosshair state are gated, and the stamina bar updates only when its value moves.
-- The place uses ShadowMap lighting rather than Future, and the daylight is one atmosphere plus two cheap post effects.
+- The place uses ShadowMap lighting rather than Future, and the night is one atmosphere plus two cheap post effects.
+
+### The street
+
+Between the crossings the sidewalks carry the small life of the city. `ForestGenerator` scatters props on the walks — a bin with a neon ring, bags of rubbish, a crate, a barrel, a traffic cone, a hydrant, a bench, a vending machine with a lit panel, a dumpster — from the same seed every server uses, so the street is the same each time. A prop never lands on the plaza, inside a tower or over a crossing.
+
+Two kinds of thing stand there on purpose. A prop the player can lift is a `Model`, because the telekinesis grabs the outermost model under its folder; a fixed piece is a loose part in a folder, so the same code finds the whole town around it and refuses it. That is how a bin flies and a traffic light does not, without a list of names to keep.
+
+Every crossing gets four zebra crossings painted on the asphalt and one traffic light on the far corner with its three lenses. The sidewalk and its neon curb are cut at each crossing, so the road runs clean through the intersection and the paint has somewhere to go. Puddles lie on the asphalt and cables hang over the street between the towers; both are scenery, and neither can be lifted.
 
 ### Code layout
 
@@ -48,7 +57,7 @@ The two largest files are split by responsibility:
 
 ### The shop
 
-`ShopService` plants one stall in the town, built from parts on the lot the layout keeps free in the plaza (`ForestLayout.SHOP_LOT`), turned to face the middle. It levels nothing and digs nothing: the town is flat on purpose. It hangs two warm lamps and a sign, and drops a `Sound` (`1839910323`, a 30 second music box) on a linear rolloff so the track is at full volume only at the counter and gone past 78 studs: you hear the shop before you see it, but not from across the map.
+`ShopService` plants one stall in the city, built from parts on the lot the layout keeps free in the plaza (`ForestLayout.SHOP_LOT`), turned to face the middle. It levels nothing and digs nothing: the city is flat on purpose. It hangs two warm lamps and a sign, and drops a `Sound` (`1839910323`, a 30 second music box) on a linear rolloff so the track is at full volume only at the counter and gone past 78 studs: you hear the shop before you see it, but not from across the map.
 
 The game is first person, and first person locks the cursor to the centre, so `ShopClient` steps the camera back and frees the mouse while you stand at the counter; walk away and the first-person camera comes back.
 
@@ -60,7 +69,7 @@ The fireball belongs to whoever ate the flame fruit: it is not a shop item and n
 
 Hold `Z` to charge it: the circle in front of the palm grows with the hold, and so does the ball, up to a ceiling of 1.6 seconds and 2.2 times its size. Let go to throw. A tap still throws the small ball.
 
-On impact it explodes: a flash, an expanding shockwave, fire, sparks, smoke, embers, a boom and a light tremor on the screens of players within 55 studs. A direct hit deals 120 damage — enough to kill a full-health ghost — and the blast splashes up to 100 damage within 16 studs. A fully charged ball is bigger and meaner: 240 direct damage, 190 splash at the centre, and a 26-stud radius, with the crater, the cracks and the blast particles scaled to match. The surface under the blast gets a scorched crater and eight to eleven radial cracks that follow the terrain and disappear after 30 seconds. Each cast is followed by `SOL CRUEL` above the character and in the chat, and the spell takes 6 seconds to recharge; the ability slot above the UV battery shows the countdown.
+On impact it explodes: a flash, an expanding shockwave, fire, sparks, smoke, embers, a boom and a light tremor on the screens of players within 55 studs. A direct hit deals 120 damage — enough to kill a full-health ghost — and the blast splashes up to 100 damage within 16 studs. A fully charged ball is bigger and meaner: 240 direct damage, 190 splash at the centre, and a 26-stud radius, with the crater, the cracks and the blast particles scaled to match. The surface under the blast gets a scorched crater and eight to eleven radial cracks that follow the surface and disappear after 30 seconds. Each cast is followed by `SOL CRUEL` above the character and in the chat, and the spell takes 6 seconds to recharge; the ability slot above the UV battery shows the countdown.
 
 The tuning lives in `src/shared/FireMagic.luau`, the damage, projectile and scorch marks in `src/server/FireMagicService.luau`, the input and first-person arm in `src/client/FireMagicController.client.luau`, and the badge in `src/client/SpellBadge.luau`, and the circle, ball, blast and screen shake in `src/client/FireMagicEffects.client.luau`.
 
@@ -68,7 +77,7 @@ The tuning lives in `src/shared/FireMagic.luau`, the damage, projectile and scor
 
 The second spell, which also comes from a fruit. Point the cursor at a prop or a ghost and press `X`: it leaves the ground and floats where you point. It chases the cursor at 60 studs per second, never further than 45 studs from you, with a white rune circle in the casting hand — the fireball's circle in white, but with an eight-pointed star of two squares instead of the double triangle — four rings of white wind blades around the floating thing, a swirl of wind particles and a looping gust. While it floats, the mouse wheel pushes it away or pulls it back in 3-stud steps between 7 and 45 studs, and `Q` and `E` turn it left and right on top of the slow drift. `X` again lowers it: a prop settles back on the ground, a ghost drifts down. Press right mouse while it floats to hurl it, and the throw starts with a short wind push at the hand before the object leaves the grip.
 
-Only props of a sane size answer the spell: the largest side of the bounding box up to 14 studs and at most 80 parts. Barrels, crates and bushes fly. The wrecked car, the shop stall, the spawn pad and the terrain stay where they are. A ghost is grabbed whole: its chase AI is suspended and the server drives its pivot while the spell holds it. One object can only be under one spell at a time.
+Only props of a sane size answer the spell: the largest side of the bounding box up to 14 studs and at most 80 parts. Barrels, crates, bins, cones, benches and the vending machines fly. The wrecked car, the shop stall, the spawn pad, the traffic lights and the buildings stay where they are. A ghost is grabbed whole: its chase AI is suspended and the server drives its pivot while the spell holds it. One object can only be under one spell at a time.
 
 A throw flies at 120 studs per second for up to 120 studs and stops on the first surface or ghost it meets. The hit deals 70 damage and splashes up to 45 more within 9 studs; a thrown ghost takes the same hit, hangs dazed for 2 seconds afterwards, and a heavy prop that lands on a ghost counts as a direct hit. The impact raises dust, wind sparks, a white shockwave, a thud and a small screen tremor, and the throw itself plays the ascending gust. The spell recharges in 2.5 seconds after the object leaves your hand, and the ability slot counts it down.
 
@@ -86,9 +95,9 @@ The tuning lives in `src/shared/Telekinesis.luau`, the grab, drag, throw and dam
 
 ### The fruits
 
-The three powers are not free any more: every one of them comes from a fruit, and the fruit is the only way in. `FruitService` drops one beside a tree in the belt around the town every minute — three on the map at most, and an untouched fruit sinks back into the world after five minutes so the belt cannot fill up. A fruit sits three to nine studs from a trunk in a random direction, so the trees are the landmark: you walk the belt looking at the trunks. When the trees have no free spot, the fruit falls back to open ground away from the streets and the houses.
+The three powers are not free any more: every one of them comes from a fruit, and the fruit is the only way in. `FruitService` drops one in the middle of a street every minute — three on the map at most, and an untouched fruit sinks back into the world after five minutes so the streets cannot fill up. A fruit lies on the asphalt of one of the twelve streets, at most eight studs off the centre line and never within 34 studs of the end of the road, so it is visible from down the block and always in the play space. When a roll lands under a tower it is drawn again.
 
-A fruit is a ball, a spiral of ribs and a stem, built from parts and hovering a little above the ground with a glow, so it reads through the bushes before you can see the shape. Walking up to it offers a prompt; taking it does not grant the power yet. The fruit goes to your hands unopened, and from there `E` eats it and `G` puts it back on the ground in front of you.
+A fruit is a ball, a spiral of ribs and a stem, built from parts and hovering a little above the asphalt with a glow, so it reads from the far end of the street before you can see the shape. Walking up to it offers a prompt; taking it does not grant the power yet. The fruit goes to your hands unopened, and from there `E` eats it and `G` puts it back on the ground in front of you.
 
 Eating is what grants the power, and there is one power per player: a second fruit replaces the first, the same way a second devil fruit would. Every spell reads the `Power` attribute on the player, so replacing it moves the ability slot to the new spell and the old one stops answering. The badge in the bottom-right corner is that slot: it only exists while a power does, and it shows the cooldown or the hint of the spell you carry. Nobody starts with a spell — the first fruit is the first power.
 
@@ -117,11 +126,11 @@ Fruit are data, the same way weapons are. To add one:
 
 ### The arena
 
-`ArenaService` builds a coliseum at `Arena.ORIGIN` — 1600, 180, 0 — far above and away from the town, so the procedural map never collides with it. The sand is 52 studs across, ringed by a wall with four iron gates, four tiers of stone seats, an outer wall with merlons, eight columns, red banners, eight burning torches and a gold `ARENA` plaque over the entrance. It is built from parts at server start, the same way the shop stall is.
+`ArenaService` builds a coliseum at `Arena.ORIGIN` — 1600, 180, 0 — far above and away from the city, so the generated map never collides with it. The sand is 52 studs across, ringed by a wall with four iron gates, four tiers of stone seats, an outer wall with merlons, eight columns, red banners, eight burning torches and a gold `ARENA` plaque over the entrance. It is built from parts at server start, the same way the shop stall is.
 
 Two chat commands move a player between the places. `/arena` (or `/coliseu`) teleports to the spawn facing the sand; `/floresta` (or `/sair`) returns to `ForestSpawn`. They are `TextChatCommand`s created under `TextChatService`, so the command is intercepted and never broadcast; a `Player.Chatted` fallback covers the old chat path, and a debounce makes sure a client that reports both paths only teleports once. The move itself is a server-side `PivotTo` of the character.
 
-The arena has no enemies of its own yet: the ghost spawner places ghosts around players inside the town and culls the ones too far from every player, so the town empties while everyone is away.
+The arena has no enemies of its own yet: the ghost spawner places ghosts around players inside the city and culls the ones too far from every player, so the city empties while everyone is away.
 
 ### Adding a weapon
 

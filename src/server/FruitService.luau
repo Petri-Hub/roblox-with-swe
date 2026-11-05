@@ -147,7 +147,10 @@ end
 local function groundBelow(x: number, z: number, fromY: number): number?
 	local params = RaycastParams.new()
 	params.FilterType = Enum.RaycastFilterType.Include
-	params.FilterDescendantsInstances = { Workspace.Terrain }
+	-- The city is parts: the floor, the streets and the plaza live under the
+	-- generated town, and the fruits themselves must never answer the ray.
+	local town = Workspace:FindFirstChild("GeneratedTown")
+	params.FilterDescendantsInstances = if town then { town } else {}
 	params.IgnoreWater = true
 
 	local result = Workspace:Raycast(Vector3.new(x, fromY, z), Vector3.new(0, -(fromY + 120), 0), params)
@@ -155,68 +158,49 @@ local function groundBelow(x: number, z: number, fromY: number): number?
 		return result.Position.Y
 	end
 
-	-- Terrain that did not answer still has a height the generator knows.
-	return ForestLayout.heightAt(x, z)
+	-- Nothing answered: fall back to the street height the layout knows.
+	return ForestLayout.STREET_TOP
 end
 
--- A random spot in the town, away from the landmarks and the houses, so a
--- fruit never grows inside a wall.
-local function freeSpot(offset: Vector2, margin: number): Vector3?
-	if not ForestLayout.isInsideWorld(offset, margin) then
+-- A fruit lies in the middle of a street, never inside a tower and never in the
+-- ring around the city.
+local function streetGround(random: Random): Vector3?
+	local lines = ForestLayout.streetLines()
+	if #lines == 0 then
 		return nil
 	end
 
-	if
-		ForestLayout.isInsideLandmarkClearing(offset)
-		or ForestLayout.isInsideHouseLot(offset)
-		or ForestLayout.isOnStreet(offset)
-	then
+	local line = lines[random:NextInteger(1, #lines)]
+	local spot = FruitSpec.streetSpot(
+		line,
+		ForestLayout.STREET_REACH,
+		random:NextNumber(),
+		random:NextNumber(),
+		random:NextNumber()
+	)
+
+	if ForestLayout.isInsideTowerLot(spot) then
 		return nil
 	end
 
-	local ground = groundBelow(offset.X, offset.Y, 300)
+	local ground = groundBelow(spot.X, spot.Y, 300)
 	if not ground then
 		return nil
 	end
 
-	return Vector3.new(offset.X, ground + FruitSpec.HOVER_HEIGHT, offset.Y)
-end
-
--- A fruit grows by a tree. The green belt is where a player walks to look for
--- one, so the trunk is the landmark and the fruit sits a few studs from it.
-local function treeGround(random: Random): Vector3?
-	local trees = ForestLayout.treePositions()
-	if #trees == 0 then
-		return nil
-	end
-
-	for _ = 1, FruitSpec.SPAWN_TRIES do
-		local tree = trees[random:NextInteger(1, #trees)]
-		local spot = freeSpot(FruitSpec.nearTree(tree, random:NextNumber(), random:NextNumber()), FruitSpec.TREE_MARGIN)
-		if spot then
-			return spot
-		end
-	end
-
-	return nil
-end
-
--- The fallback when no tree has a free spot: anywhere in the town that is not a
--- street, a house or a landmark, so a fruit still appears.
-local function openGround(random: Random): Vector3?
-	for _ = 1, FruitSpec.SPAWN_TRIES do
-		local spot = freeSpot(FruitSpec.scatter(random:NextNumber(), random:NextNumber()), FruitSpec.SPAWN_MARGIN)
-		if spot then
-			return spot
-		end
-	end
-
-	return nil
+	return Vector3.new(spot.X, ground + FruitSpec.HOVER_HEIGHT, spot.Y)
 end
 
 local function randomGround(): Vector3?
 	local random = Random.new()
-	return treeGround(random) or openGround(random)
+	for _ = 1, 8 do
+		local spot = streetGround(random)
+		if spot then
+			return spot
+		end
+	end
+
+	return nil
 end
 
 ---------------------------------------------------------------------------
