@@ -1,0 +1,18 @@
+UTC start: 2026-11-05T22:04:48Z
+Command: BLENDER_EXE=/workspace/blender-study/tools/blender-5.2.3-linux-x64/blender; "$BLENDER_EXE" --background --python generate.py
+UTC end: 2026-11-05T22:06:03Z
+Exit status: 0
+Failure: Blender 5.2 Action has no direct fcurves attribute. Correction: guarded legacy cycles-modifier access; the keyed 1–48 animation remains.
+Retry command: "$BLENDER_EXE" --background --python generate.py
+Retry UTC end: 2026-11-05T22:07:40Z
+Retry exit status: 143
+Visual review: front render showed visible gaps between the arm ellipsoids. Revision: added low-poly connecting limb rods and reduced Cycles samples from 24 to 8 to shorten CPU render time while retaining preview detail.
+Final run UTC end: 2026-11-05T22:10:12Z
+Final run exit status: 0
+Animation QA failure: all keyed frames had identical values because keyframe insertion ran after the pose loop. Correction: insert each bone rotation at its frame inside the loop, then regenerate renders and exports.
+Corrected animation run UTC end: 2026-11-05T22:12:59Z
+Corrected run exit status: 0
+QA visual: inspecionados front.png, back.png, presentation.png, pose-01.png, pose-24.png e pose-48.png; vistas centrais e iluminação legíveis, poses 01 e 24 visualmente diferentes após correção da animação. A criatura mantém braços facetados segmentados como escolha estilística.
+QA estrutural: asset.glb cabeçalho glTF 2, 51 canais de animação, nenhum node de câmera, chão ou luz; seis PNGs 768x768. Valores avaliados no asset.blend variam entre quadros 1/13/24/37/48 (logs/animation-check.log); pixels diferem entre pose-01 e pose-24 (logs/qa-check.log).
+Limitações registradas: Cycles usa 8 samples para caber no tempo de render; Blender emitiu aviso de material.use_nodes futuro e aviso de diretório Pulse somente leitura, sem interromper a criação. A primeira execução foi interrompida durante revisão; falhas e correções acima.
+UTC conclusão: 2026-11-05T22:13:14Z

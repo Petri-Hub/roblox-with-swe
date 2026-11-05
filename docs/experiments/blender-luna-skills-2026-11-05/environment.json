@@ -1,0 +1,16 @@
+{
+  "recorded_utc": "2026-11-05T22:12:09.247594+00:00",
+  "os": "Linux-6.18.57-x86_64-with-glibc2.41",
+  "python_report": "3.12.14",
+  "report_packages": {
+    "matplotlib": "3.10.8",
+    "reportlab": "4.4.9",
+    "Pillow": "13.0.0"
+  },
+  "blender": "5.2.3 LTS",
+  "blender_build_hash": "e13b728c6880",
+  "download_sha256": "78486c018b4443efe5e75ab54c290ed8c15abafd249b862c2c9ce2530a918eec",
+  "render_device": "CPU",
+  "threads_per_agent_max": 4,
+  "gpu_render_not_used": true
+}

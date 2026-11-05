@@ -1,0 +1,7 @@
+00:00.797  blend            | Read blend: "/workspace/roblox-with-swe-report/docs/experiments/blender-luna-skills-2026-11-05/cases/02-horror-creature/run-a/asset.blend"
+Extensions: writing cache failed ([Errno 30] Read-only file system: '/home/agent/.config/blender/5.2').
+AUDIT_OK asset.blend tris 1430 armatures 1 movement {'1': 0.0, '12': 0.055465270661249955, '16': 0.05171331333430291, '24': 0.02575211710286392, '32': 0.04379510590595172, '36': 0.055863443104632135, '48': 0.001111942331441355}
+Blender 5.2.3 LTS (hash e13b728c6880 built 2026-10-22 01:35:05)
+
+Blender quit
+Failed to create secure directory (/home/agent/.config/pulse): Read-only file system

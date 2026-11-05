@@ -1,0 +1,15 @@
+Failed to create secure directory (/home/agent/.config/pulse): Read-only file system
+00:00.353  blend            | Read blend: "/workspace/blender-study/cases/02-horror-creature/run-b/asset.blend"
+ACTION <bpy_struct, Action("Vigia_RigAction") at 0x7ff02bef7b20> slots 1 slot <bpy_struct, ActionSlot("OBVigia_Rig") at 0x7ff02bef1820>
+LAYER Layer
+STRIP KEYFRAME
+CHANNELS 51
+pose.bones["spine"].rotation_euler 0 [(1.0, -8.57252763722393e-18), (13.0, -8.57252763722393e-18), (25.0, -8.57252763722393e-18), (37.0, -8.57252763722393e-18), (48.0, -8.57252763722393e-18)]
+pose.bones["spine"].rotation_euler 1 [(1.0, -0.0), (13.0, -0.0), (25.0, -0.0), (37.0, -0.0), (48.0, -0.0)]
+pose.bones["spine"].rotation_euler 2 [(1.0, 0.0), (13.0, 0.0), (25.0, 0.0), (37.0, 0.0), (48.0, 0.0)]
+pose.bones["head"].rotation_euler 0 [(1.0, 0.0), (13.0, 0.0), (25.0, 0.0), (37.0, 0.0), (48.0, 0.0)]
+pose.bones["head"].rotation_euler 1 [(1.0, 0.013629642315208912), (13.0, 0.013629642315208912), (25.0, 0.013629642315208912), (37.0, 0.013629642315208912), (48.0, 0.013629642315208912)]
+pose.bones["head"].rotation_euler 2 [(1.0, 0.0), (13.0, 0.0), (25.0, 0.0), (37.0, 0.0), (48.0, 0.0)]
+Blender 5.2.3 LTS (hash e13b728c6880 built 2026-10-22 01:35:05)
+
+Blender quit

@@ -1,0 +1,588 @@
+{
+  "a": {
+    "source": "/workspace/roblox-with-swe-report/docs/experiments/blender-luna-skills-2026-11-05/cases/02-horror-creature/run-a/asset.glb",
+    "load_ok": true,
+    "blender": "5.2.3 LTS",
+    "mesh_objects": 60,
+    "triangles": 1508,
+    "materials": 6,
+    "bounds": [
+      [
+        -0.9510578513145447,
+        0.9510578513145447
+      ],
+      [
+        -0.9999999403953552,
+        0.9999999403953552
+      ],
+      [
+        -1.0,
+        2.5130748748779297
+      ]
+    ],
+    "dimensions": [
+      1.9021157026290894,
+      1.9999998807907104,
+      3.5130748748779297
+    ],
+    "armatures": 1,
+    "bones": 17,
+    "mesh_with_armature_modifier": 59,
+    "actions": 1,
+    "fps": 24,
+    "frame_start": 1,
+    "frame_end": 250,
+    "max_vertex_displacement_from_frame_1": {
+      "1": 0.0,
+      "12": 0.05546545756024137,
+      "16": 0.0517134126317918,
+      "24": 0.025751970747644307,
+      "32": 0.04379504287794096,
+      "36": 0.05586334235970886,
+      "48": 0.0011117529741345217
+    },
+    "external_images": [],
+    "elapsed_seconds_reported": 434.0,
+    "duration_basis": "Janelas registradas pelos agentes: A 22:04:41–22:11:55; B 22:04:48–22:13:14 UTC; incluem geração, correções, render e revisão. Marcação de lançamento da dupla preservada à parte.",
+    "skills_read_reported": 10,
+    "skills_names_reported": [
+      "blender-animation",
+      "blender-asset-qa",
+      "blender-character-rigging",
+      "blender-core",
+      "blender-export-pipelines",
+      "blender-lighting-lookdev",
+      "blender-pbr-materials",
+      "blender-rendering",
+      "blender-scene-setup",
+      "blender-sculpting"
+    ],
+    "tokens": null,
+    "files_bytes": {
+      "README.md": 1023,
+      "asset.blend": 148365,
+      "asset.glb": 263736,
+      "back.png": 616045,
+      "execution-log.txt": 2359,
+      "front.png": 623987,
+      "generate.py": 12752,
+      "logs/check_glb.py": 754,
+      "logs/contact.png": 317149,
+      "logs/generate.log": 7171,
+      "logs/generation.json": 165,
+      "logs/glb-check.json": 1409,
+      "logs/glb-check.log": 4359,
+      "logs/qa.json": 39568,
+      "logs/qa.log": 29113,
+      "logs/qa_run.py": 434,
+      "pose-01.png": 635697,
+      "pose-24.png": 635530,
+      "pose-48.png": 635877,
+      "presentation.png": 635697,
+      "skills-read.txt": 890
+    },
+    "images": {
+      "back.png": {
+        "size": [
+          768,
+          768
+        ],
+        "bytes": 616045
+      },
+      "pose-24.png": {
+        "size": [
+          768,
+          768
+        ],
+        "bytes": 635530
+      },
+      "pose-01.png": {
+        "size": [
+          768,
+          768
+        ],
+        "bytes": 635697
+      },
+      "presentation.png": {
+        "size": [
+          768,
+          768
+        ],
+        "bytes": 635697
+      },
+      "pose-48.png": {
+        "size": [
+          768,
+          768
+        ],
+        "bytes": 635877
+      },
+      "front.png": {
+        "size": [
+          768,
+          768
+        ],
+        "bytes": 623987
+      }
+    },
+    "glb_structure": {
+      "valid_header": true,
+      "animations": [
+        {
+          "name": "VigiaDoBrejo_Idle",
+          "channels": 51,
+          "paths": [
+            "rotation",
+            "scale",
+            "translation"
+          ],
+          "samplers": 51,
+          "time_bounds": [
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ]
+          ]
+        }
+      ],
+      "skins": 1,
+      "external_uris": [],
+      "nodes": 77
+    },
+    "module_exports": {}
+  },
+  "b": {
+    "source": "/workspace/roblox-with-swe-report/docs/experiments/blender-luna-skills-2026-11-05/cases/02-horror-creature/run-b/asset.glb",
+    "load_ok": true,
+    "blender": "5.2.3 LTS",
+    "mesh_objects": 51,
+    "triangles": 5636,
+    "materials": 4,
+    "bounds": [
+      [
+        -1.4822508096694946,
+        1.4894253015518188
+      ],
+      [
+        -0.9999999403953552,
+        0.9999999403953552
+      ],
+      [
+        -1.0,
+        3.306225299835205
+      ]
+    ],
+    "dimensions": [
+      2.9716761112213135,
+      1.9999998807907104,
+      4.306225299835205
+    ],
+    "armatures": 1,
+    "bones": 17,
+    "mesh_with_armature_modifier": 50,
+    "actions": 1,
+    "fps": 24,
+    "frame_start": 1,
+    "frame_end": 250,
+    "max_vertex_displacement_from_frame_1": {
+      "1": 0.0,
+      "12": 0.08010515725410382,
+      "16": 0.06985281844618552,
+      "24": 0.024564589205157326,
+      "32": 0.10112392919905273,
+      "36": 0.11702577371555138,
+      "48": 0.0
+    },
+    "external_images": [],
+    "elapsed_seconds_reported": 506.0,
+    "duration_basis": "Janelas registradas pelos agentes: A 22:04:41–22:11:55; B 22:04:48–22:13:14 UTC; incluem geração, correções, render e revisão. Marcação de lançamento da dupla preservada à parte.",
+    "skills_read_reported": 0,
+    "skills_names_reported": [],
+    "tokens": null,
+    "files_bytes": {
+      "README.md": 812,
+      "asset.blend": 173806,
+      "asset.glb": 731048,
+      "back.png": 665305,
+      "execution-log.txt": 1965,
+      "front.png": 678711,
+      "generate.py": 9055,
+      "logs/action-inspect.log": 1239,
+      "logs/animation-check.log": 511,
+      "logs/blender-run.log": 12838,
+      "logs/qa-check.log": 258,
+      "pose-01.png": 693402,
+      "pose-24.png": 692747,
+      "pose-48.png": 693402,
+      "presentation.png": 693402,
+      "skills-read.txt": 91
+    },
+    "images": {
+      "back.png": {
+        "size": [
+          768,
+          768
+        ],
+        "bytes": 665305
+      },
+      "pose-24.png": {
+        "size": [
+          768,
+          768
+        ],
+        "bytes": 692747
+      },
+      "pose-01.png": {
+        "size": [
+          768,
+          768
+        ],
+        "bytes": 693402
+      },
+      "presentation.png": {
+        "size": [
+          768,
+          768
+        ],
+        "bytes": 693402
+      },
+      "pose-48.png": {
+        "size": [
+          768,
+          768
+        ],
+        "bytes": 693402
+      },
+      "front.png": {
+        "size": [
+          768,
+          768
+        ],
+        "bytes": 678711
+      }
+    },
+    "glb_structure": {
+      "valid_header": true,
+      "animations": [
+        {
+          "name": "Vigia_RigAction",
+          "channels": 51,
+          "paths": [
+            "rotation",
+            "scale",
+            "translation"
+          ],
+          "samplers": 51,
+          "time_bounds": [
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ]
+          ]
+        }
+      ],
+      "skins": 1,
+      "external_uris": [],
+      "nodes": 68
+    },
+    "module_exports": {}
+  }
+}

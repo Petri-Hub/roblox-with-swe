@@ -1,0 +1,9 @@
+{
+  "id": "02-horror-creature",
+  "title": "Criatura orgânica / rig e animação",
+  "request": "Crie no Blender uma criatura de terror low poly chamada Vigia do Brejo, para um jogo: humanoide curvada, braços compridos, cabeça sem olhos com abertura luminosa, pés largos e silhueta perturbadora. Sem sangue ou violência explícita. Quero anatomia estilizada coerente, corpo articulável e materiais que diferenciem pele, placas ósseas e brilho. Faça um rig simples e uma animação idle de 48 quadros a 24 fps, com respiração e um movimento sutil da cabeça e dos braços. Inclua a animação no GLB e três imagens adicionais dos quadros 1, 24 e 48 (pose-01.png, pose-24.png, pose-48.png), para eu conferir a deformação.\n\nEntregue asset.blend, asset.glb, generate.py e README.md, além de três renders PNG de 768×768 (front.png, back.png e presentation.png), com vistas que permitam avaliar a construção. O GLB deve conter somente o asset e seus materiais; mantenha chão de estúdio, luzes e câmeras fora da exportação. Prefira materiais autossuficientes, sem dependências externas. Revise visualmente suas imagens e corrija os problemas que encontrar antes de concluir. Não basta descrever a cena: gere e verifique os arquivos.",
+  "model": "gpt-6-luna",
+  "reasoning_effort": "medium",
+  "blender": "5.2.3",
+  "skills_commit": "fb92cfb4cc5a238c22113a6a230b09f535bd0656"
+}

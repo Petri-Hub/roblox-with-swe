@@ -78,12 +78,14 @@ def case_report(config):
   rows.append([f'Arquivo .{ext} (bytes)']+[str(m[v]['files_bytes'].get(f'asset.{ext}',m[v]['files_bytes'].get(f'tower.{ext}',0))) for v in 'ab'])
  rows.append(['Tokens reais','não disponíveis','não disponíveis'])
  story += [table(rows,[220,145,145]),Spacer(1,12),para(config.get('timing_note','Tempos conforme registros dos agentes.')),para('Tempo decorrido inclui raciocínio, ferramentas, renderização, revisão e espera em uma máquina compartilhada. Mais tempo não prova maior consumo de tokens. Quantidade de skills lidas também não é medição de tokens. Tamanho de arquivo não mede qualidade, e número de objetos não equivale a draw calls.'),PageBreak()]
+ for extra_chart in config.get('extra_charts',[]):
+  story += [para(extra_chart['title'],'Heading1'),image(folder/extra_chart['file'],510,340),para(extra_chart['note']),PageBreak()]
  for idx,label in enumerate(['Frente','Trás','Apresentação']):
   story += [para(f'3.{idx+1}. Galeria comparativa — {label}','Heading1')]
   pair=[image(folder/f'run-{v}'/config['images'][v][idx],250,250) for v in 'ab']
   story += [Table([pair,[para('A — com skills','Caption'),para('B — sem skills','Caption')]],colWidths=[255,255]),Spacer(1,15),para(config['gallery_notes'][idx]),para('As imagens são as produzidas pelos agentes, sem reconstruir a cena ou equalizar iluminação, lente e enquadramento. Essas diferenças influenciam o julgamento visual.','Small'),PageBreak()]
  for extra in config.get('extra_images',[]):
-  story += [para(extra['title'],'Heading1')]
+  story += [para(extra['title'],'Heading1'),para('Coluna esquerda: A, com skills. Coluna direita: B, sem skills.','Caption')]
   for i,frame in enumerate(extra['files']):
    imgs=[]
    for v in 'ab':
@@ -109,7 +111,7 @@ def case_report(config):
  for i,label in enumerate(['Frente','Trás','Apresentação']):
   md += [f'### {label}',f'![A — com skills](run-a/{config["images"]["a"][i]})',f'![B — sem skills](run-b/{config["images"]["b"][i]})',config['gallery_notes'][i]]
  for key,label in [('analysis_a','Resultado A'),('analysis_b','Resultado B'),('critique','Desconstrução da conclusão'),('verification','Verificação e limites'),('next_steps','Próximos passos')]:md += ['## '+label]+config[key]
- md += ['## Skills consultadas']+[f'- **{n}**: {d}' for n,d in config['skills']]
+ md += ['## Skills consultadas']+[f'- **[{n}](https://github.com/EL4CTEO/blender-skills/blob/fb92cfb4cc5a238c22113a6a230b09f535bd0656/skills/{n}/SKILL.md)**: {d}' for n,d in config['skills']]
  md += ['Nenhuma skill foi modificada. Tokens reais indisponíveis. Modelo gpt-6-luna medium, Blender 5.2.3, uma execução por condição; avaliação não cega. Veja o PDF e o manifesto para detalhes.']
  (folder/'REPORT.md').write_text('\n\n'.join(md))
  print(pdf)
