@@ -70,7 +70,7 @@ def case_report(config):
  story += [para('1. Pedido e condições de execução','Heading1'),para((folder/'request.txt').read_text()),para('Condições comuns','Heading2')]
  story+=p_list(['Modelo declarado na chamada: gpt-6-luna; reasoning_effort: medium; fork_turns: none. Os agentes não herdaram a conversa nem souberam que se tratava de uma comparação.','Blender 5.2.3 LTS, modo headless, CPU, até quatro threads. Mesma máquina e mesma disponibilidade de ferramentas de imagem. Não foram utilizados Roblox Studio ou motor de jogo.','Pastas independentes por instrução, sem isolamento por containers. Sem internet, consulta cruzada ou novos subagentes autorizados. Não há auditoria completa dos acessos a arquivos.','A recebeu acesso ao pacote EL4CTEO/blender-skills e escolheu o que consultar; B foi instruído a usar seu conhecimento e a API instalada, sem consultar qualquer skill. Ambos puderam revisar e corrigir o resultado.','Não houve orçamento fixo de tokens, número fixo de revisões ou tempo máximo. Portanto, esforço de revisão e leitura de instruções fazem parte da diferença entre as condições.'])
  story += [para('Versão das skills','Heading2'),para('Commit fixo: fb92cfb4cc5a238c22113a6a230b09f535bd0656. Pacote consultado, sem instalação global e sem alterações nos arquivos rastreados do pacote. Skills lidas não significam scripts executados nem conformidade completa com cada recomendação.'),PageBreak()]
- story += [para('2. Medidas e custo observável','Heading1'),image(chart,510,365)]
+ story += [para('2. Medidas e custo observável','Heading1'),image(chart,510,330)]
  rows=[['Medida','A · com skills','B · sem skills']]
  def fmt(x):return str(x).replace('.',',')
  for label,key in [('Tempo registrado (s)','elapsed_seconds_reported'),('Skills lidas','skills_read_reported'),('Triângulos exportados','triangles'),('Objetos de malha exportados','mesh_objects'),('Materiais exportados','materials')]:rows.append([label,fmt(m['a'].get(key,'indisponível')),fmt(m['b'].get(key,'indisponível'))])
@@ -90,7 +90,7 @@ def case_report(config):
    imgs=[]
    for v in 'ab':
     p=folder/f'run-{v}'/frame
-    imgs.append(image(p,200,200) if p.exists() else para('Não entregue'))
+    imgs.append(image(p,180,180) if p.exists() else para('Não entregue'))
    story += [para(frame,'Heading2'),Table([imgs],colWidths=[255,255])]
   story.append(PageBreak())
  story += [para('4. Análise do resultado A — com skills','Heading1')]+[para(s) for s in config['analysis_a']]

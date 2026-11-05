@@ -115,18 +115,18 @@ Para medir custo, executar pelo runtime/API com telemetria real de tokens por ch
 
 ## Skills consultadas
 
-- **blender-core**: Execução headless, bpy 5.x e encaminhamento a outras skills; consultada.
+- **[blender-core](https://github.com/EL4CTEO/blender-skills/blob/fb92cfb4cc5a238c22113a6a230b09f535bd0656/skills/blender-core/SKILL.md)**: Execução headless, bpy 5.x e encaminhamento a outras skills; consultada.
 
-- **blender-scene-setup**: Unidades, organização e nomes; coleções e nomes úteis são observáveis na entrega.
+- **[blender-scene-setup](https://github.com/EL4CTEO/blender-skills/blob/fb92cfb4cc5a238c22113a6a230b09f535bd0656/skills/blender-scene-setup/SKILL.md)**: Unidades, organização e nomes; coleções e nomes úteis são observáveis na entrega.
 
-- **blender-pbr-materials**: Configuração de materiais; há materiais distintos, mas isso não comprova causalidade.
+- **[blender-pbr-materials](https://github.com/EL4CTEO/blender-skills/blob/fb92cfb4cc5a238c22113a6a230b09f535bd0656/skills/blender-pbr-materials/SKILL.md)**: Configuração de materiais; há materiais distintos, mas isso não comprova causalidade.
 
-- **blender-export-pipelines**: Exportação e verificação; o GLB foi entregue e reimportado independentemente.
+- **[blender-export-pipelines](https://github.com/EL4CTEO/blender-skills/blob/fb92cfb4cc5a238c22113a6a230b09f535bd0656/skills/blender-export-pipelines/SKILL.md)**: Exportação e verificação; o GLB foi entregue e reimportado independentemente.
 
-- **blender-rendering**: Renderização e saída multi-câmera; três PNGs foram entregues.
+- **[blender-rendering](https://github.com/EL4CTEO/blender-skills/blob/fb92cfb4cc5a238c22113a6a230b09f535bd0656/skills/blender-rendering/SKILL.md)**: Renderização e saída multi-câmera; três PNGs foram entregues.
 
-- **blender-lighting-lookdev**: Câmeras, luzes e apresentação; escolhas do agente foram preservadas.
+- **[blender-lighting-lookdev](https://github.com/EL4CTEO/blender-skills/blob/fb92cfb4cc5a238c22113a6a230b09f535bd0656/skills/blender-lighting-lookdev/SKILL.md)**: Câmeras, luzes e apresentação; escolhas do agente foram preservadas.
 
-- **blender-asset-qa**: Checagem de malha e revisão visual; o log registra execução e correções. A passagem bloqueada permaneceu.
+- **[blender-asset-qa](https://github.com/EL4CTEO/blender-skills/blob/fb92cfb4cc5a238c22113a6a230b09f535bd0656/skills/blender-asset-qa/SKILL.md)**: Checagem de malha e revisão visual; o log registra execução e correções. A passagem bloqueada permaneceu.
 
 Nenhuma skill foi modificada. Tokens reais indisponíveis. Modelo gpt-6-luna medium, Blender 5.2.3, uma execução por condição; avaliação não cega. Veja o PDF e o manifesto para detalhes.

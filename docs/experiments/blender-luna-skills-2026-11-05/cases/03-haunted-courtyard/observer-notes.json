@@ -1,0 +1,10 @@
+{
+  "recorded_utc": "2026-11-05T22:21:46.159190+00:00",
+  "events": [
+    "B asked about other Blender PIDs and possible output conflict.",
+    "Root had not launched any Blender run or audit in this case before completion.",
+    "Root clarified that shared machine can have Blender processes for other isolated folders; instructed B not to read others outputs or stop external processes, and to continue using its own absolute paths.",
+    "Root could not inspect process cwd due sandbox permissions. No actual overwrite of outputs has been established.",
+    "No modeling advice or output from A was shared with B."
+  ]
+}

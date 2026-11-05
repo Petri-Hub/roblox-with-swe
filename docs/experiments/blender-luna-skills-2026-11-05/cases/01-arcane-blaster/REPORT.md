@@ -112,20 +112,20 @@ Capturar tokens por chamada no runtime/API; não converter janelas de tempo em e
 
 ## Skills consultadas
 
-- **blender-asset-qa**: Checagem executada, mas o JSON registra somente Studio_Floor; não validou o blaster.
+- **[blender-asset-qa](https://github.com/EL4CTEO/blender-skills/blob/fb92cfb4cc5a238c22113a6a230b09f535bd0656/skills/blender-asset-qa/SKILL.md)**: Checagem executada, mas o JSON registra somente Studio_Floor; não validou o blaster.
 
-- **blender-core**: Execução e API bpy.
+- **[blender-core](https://github.com/EL4CTEO/blender-skills/blob/fb92cfb4cc5a238c22113a6a230b09f535bd0656/skills/blender-core/SKILL.md)**: Execução e API bpy.
 
-- **blender-export-pipelines**: Exportação GLB e seleção do asset.
+- **[blender-export-pipelines](https://github.com/EL4CTEO/blender-skills/blob/fb92cfb4cc5a238c22113a6a230b09f535bd0656/skills/blender-export-pipelines/SKILL.md)**: Exportação GLB e seleção do asset.
 
-- **blender-hardsurface-modeling**: Primitivas, bevels e montagem de prop.
+- **[blender-hardsurface-modeling](https://github.com/EL4CTEO/blender-skills/blob/fb92cfb4cc5a238c22113a6a230b09f535bd0656/skills/blender-hardsurface-modeling/SKILL.md)**: Primitivas, bevels e montagem de prop.
 
-- **blender-lighting-lookdev**: Apresentação de produto e enquadramento.
+- **[blender-lighting-lookdev](https://github.com/EL4CTEO/blender-skills/blob/fb92cfb4cc5a238c22113a6a230b09f535bd0656/skills/blender-lighting-lookdev/SKILL.md)**: Apresentação de produto e enquadramento.
 
-- **blender-pbr-materials**: Materiais metal/roughness e emissão.
+- **[blender-pbr-materials](https://github.com/EL4CTEO/blender-skills/blob/fb92cfb4cc5a238c22113a6a230b09f535bd0656/skills/blender-pbr-materials/SKILL.md)**: Materiais metal/roughness e emissão.
 
-- **blender-pipeline-automation**: Rotina headless e geração por script.
+- **[blender-pipeline-automation](https://github.com/EL4CTEO/blender-skills/blob/fb92cfb4cc5a238c22113a6a230b09f535bd0656/skills/blender-pipeline-automation/SKILL.md)**: Rotina headless e geração por script.
 
-- **blender-rendering**: Saída Cycles e múltiplas câmeras.
+- **[blender-rendering](https://github.com/EL4CTEO/blender-skills/blob/fb92cfb4cc5a238c22113a6a230b09f535bd0656/skills/blender-rendering/SKILL.md)**: Saída Cycles e múltiplas câmeras.
 
 Nenhuma skill foi modificada. Tokens reais indisponíveis. Modelo gpt-6-luna medium, Blender 5.2.3, uma execução por condição; avaliação não cega. Veja o PDF e o manifesto para detalhes.

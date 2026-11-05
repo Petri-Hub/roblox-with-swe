@@ -27,7 +27,7 @@ def glb_json(path):
  data=path.read_bytes();magic,ver,length=struct.unpack_from('<III',data)
  assert magic==0x46546c67 and ver==2 and length==len(data)
  n,typ=struct.unpack_from('<II',data,12);assert typ==0x4e4f534a
- d=json.loads(data[20:20+n]);return {'valid_header':True,'animations':[{'name':a.get('name'),'channels':len(a['channels']),'paths':sorted(set(c['target']['path'] for c in a['channels'])),'samplers':len(a['samplers']),'time_bounds':[d['accessors'][s['input']].get('max') for s in a['samplers']]} for a in d.get('animations',[])],'skins':len(d.get('skins',[])),'external_uris':[x['uri'] for key in ['images','buffers'] for x in d.get(key,[]) if 'uri'in x and not x['uri'].startswith('data:')],'nodes':len(d.get('nodes',[]))}
+ d=json.loads(data[20:20+n]);return {'valid_header':True,'animations':[{'name':a.get('name'),'channels':len(a['channels']),'paths':sorted(set(c['target']['path'] for c in a['channels'])),'target_nodes':sorted(set(d['nodes'][c['target']['node']].get('name',str(c['target']['node'])) for c in a['channels'])),'samplers':len(a['samplers']),'time_bounds':[d['accessors'][s['input']].get('max') for s in a['samplers']]} for a in d.get('animations',[])],'skins':len(d.get('skins',[])),'external_uris':[x['uri'] for key in ['images','buffers'] for x in d.get(key,[]) if 'uri'in x and not x['uri'].startswith('data:')],'nodes':len(d.get('nodes',[])),'camera_nodes':[o.get('name') for o in d.get('nodes',[]) if 'camera' in o],'light_nodes':[o.get('name') for o in d.get('nodes',[]) if 'KHR_lights_punctual' in o.get('extensions',{})]}
 metrics={}
 for v in 'ab':
  p=dst/f'run-{v}';record=json.loads((review/f'glb-{v}.json').read_text());reads=(p/'skills-read.txt').read_text()

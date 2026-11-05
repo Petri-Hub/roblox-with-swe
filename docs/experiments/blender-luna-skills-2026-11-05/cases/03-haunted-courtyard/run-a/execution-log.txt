@@ -1,0 +1,22 @@
+START_UTC 2026-11-05T22:16:29Z
+COMMAND env_report rc=127
+FAIL env_report: command used empty BLENDER_EXE due same-command expansion; corrected next.
+COMMAND env_report corrected rc=0
+COMMAND generate.py rc=1
+FAIL generate.py: localized enum literal rejected; corrected to documented enum FIXED and reran.
+COMMAND generate.py corrected rc=0
+COMMAND generate.py with local HOME/cache rc=0
+COMMAND qa_check rc=0
+QA findings reviewed: fixed ground contact, degenerate thin bevels, rubble scale, gable UVs and lantern physical contact.
+COMMAND generate.py final rc=0
+COMMAND qa_check final rc=0
+FAIL qa-final: 3 lantern inset/frame contact gaps; moved components 0.014 m inward.
+COMMAND generate.py delivery rc=0
+COMMAND qa_check delivery rc=0
+QA delivery: lantern frame rods remained detached by checker; removed as visual detail.
+COMMAND generate.py release rc=0
+COMMAND qa_check release rc=0
+COMMAND GLB round-trip verify rc=0
+COMMAND GLB round-trip verify empty scene rc=0
+
+END_UTC 2026-11-05T22:29:24Z

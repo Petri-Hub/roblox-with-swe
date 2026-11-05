@@ -1,0 +1,29 @@
+{
+  "checks": "PDF text/pages, PNG size, final GLB file sizes, required files, unavailable tokens kept null; not engine or gameplay tests",
+  "reports": [
+    {
+      "report": "report.pdf",
+      "pages": 10,
+      "bytes": 3687629,
+      "pngs_expected": 6
+    },
+    {
+      "report": "cases/01-arcane-blaster/report.pdf",
+      "pages": 10,
+      "bytes": 3458040,
+      "pngs_expected": 6
+    },
+    {
+      "report": "cases/02-horror-creature/report.pdf",
+      "pages": 12,
+      "bytes": 5669345,
+      "pngs_expected": 12
+    },
+    {
+      "report": "cases/03-haunted-courtyard/report.pdf",
+      "pages": 10,
+      "bytes": 4049451,
+      "pngs_expected": 6
+    }
+  ]
+}

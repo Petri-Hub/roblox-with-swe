@@ -1,0 +1,7 @@
+Failed to create secure directory (/home/agent/.config/pulse): Read-only file system
+00:01.195  blend            | Read blend: "/workspace/blender-study/cases/03-haunted-courtyard/run-b/asset.blend"
+COLLECTIONS [('HAUNTED COURTYARD | export asset', 175), ('STUDIO | cameras lighting floor', 8)]
+RENDER 768 768 CPU 4
+Blender 5.2.3 LTS (hash e13b728c6880 built 2026-10-22 01:35:05)
+
+Blender quit
