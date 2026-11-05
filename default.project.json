@@ -22,14 +22,14 @@
     },
     "Lighting": {
       "$properties": {
-        "Ambient": [0.05, 0.04, 0.035],
-        "Brightness": 0.6,
+        "Ambient": [0.15, 0.13, 0.11],
+        "Brightness": 1,
         "ClockTime": 0,
-        "EnvironmentDiffuseScale": 0.15,
-        "EnvironmentSpecularScale": 0.15,
+        "EnvironmentDiffuseScale": 0.5,
+        "EnvironmentSpecularScale": 0.3,
         "ExposureCompensation": 0,
         "GlobalShadows": true,
-        "OutdoorAmbient": [0.03, 0.025, 0.02],
+        "OutdoorAmbient": [0.1, 0.09, 0.08],
         "Outlines": false,
         "ShadowSoftness": 0.4,
         "Technology": "Future"
@@ -57,10 +57,10 @@
       "Warmth": {
         "$className": "ColorCorrectionEffect",
         "$properties": {
-          "Brightness": -0.02,
-          "Contrast": 0.08,
+          "Brightness": 0.02,
+          "Contrast": 0,
           "Enabled": true,
-          "Saturation": -0.12,
+          "Saturation": -0.06,
           "TintColor": [1, 0.94, 0.86]
         }
       }

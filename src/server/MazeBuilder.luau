@@ -217,12 +217,32 @@ local function candleLantern(parent: Instance, position: Vector3, normal: Vector
 
 	local light = Instance.new("PointLight")
 	light.Color = PALETTE.CandleLight
-	light.Brightness = 2.2
-	light.Range = 30
+	light.Brightness = 3.8
+	light.Range = 36
 	light.Shadows = true
 	light.Parent = candle
 
 	return candle
+end
+
+-- A light with no model, for rooms that must never be left in the dark.
+local function fillLight(parent: Instance, position: Vector3, range: number, brightness: number)
+	local holder = newPart({
+		Size = Vector3.new(1, 1, 1),
+		CFrame = CFrame.new(position),
+		Transparency = 1,
+		CanCollide = false,
+		CastShadow = false,
+		Parent = parent,
+	})
+	holder.Name = "Fill"
+
+	local light = Instance.new("PointLight")
+	light.Color = PALETTE.CandleLight
+	light.Brightness = brightness
+	light.Range = range
+	light.Shadows = true
+	light.Parent = holder
 end
 
 -- Puts one of the downloaded light models in place.
@@ -286,6 +306,8 @@ local function buildSafeRoom(parent: Instance)
 
 	local centerZ = (northZ + southZ) / 2
 	placeLightModel(parent, MazeConfig.Assets.Chandelier, CFrame.new(0, 12, centerZ), 0.8)
+	fillLight(parent, Vector3.new(0, 12, centerZ), 55, 3.2)
+	fillLight(parent, Vector3.new(0, 8, southZ - 8), 34, 1.6)
 	placeLightModel(
 		parent,
 		MazeConfig.Assets.WallCandle,

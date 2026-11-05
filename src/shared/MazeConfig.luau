@@ -37,8 +37,8 @@ MazeConfig.StairWidth = 8
 
 -- Lights.
 MazeConfig.SconceChance = 0.13
-MazeConfig.MaxSconces = 40
-MazeConfig.SconceSpacing = 34
+MazeConfig.MaxSconces = 60
+MazeConfig.SconceSpacing = 24
 MazeConfig.SconceHeight = 9
 
 MazeConfig.Assets = {
