@@ -93,30 +93,28 @@ describe("fruit spec", function()
 		expect(FruitSpec.pickWeighted({}, 0.5)).toBeNil()
 	end)
 
-	it("scatters inside the spawn ring", function()
-		local minRadius = FruitSpec.SPAWN_RADIUS_MIN
-		local maxRadius = FruitSpec.SPAWN_RADIUS_MAX
+	it("puts a fruit in the middle of a street, not at the end of it", function()
+		local line = -300
+		local halfSpan = 313
 
 		for _, roll in { 0, 0.25, 0.5, 0.75, 0.999 } do
-			local point = FruitSpec.scatter(roll, roll)
-			local radius = point.Magnitude
-			expect(radius).toBeGreaterThanOrEqual(minRadius - 0.01)
-			expect(radius).toBeLessThanOrEqual(maxRadius + 0.01)
-		end
-	end)
+			local spot = FruitSpec.streetSpot(line, halfSpan, roll, roll, roll)
 
-	it("puts a fruit beside a tree, not inside it", function()
-		local tree = Vector2.new(120, -80)
+			-- It lies on one of the two roads that cross at the line: across the
+			-- lane at most, and never past the sidewalk.
+			local onNorthSouth = math.abs(spot.X - line) <= FruitSpec.STREET_SHOULDER + 0.01
+			local onEastWest = math.abs(spot.Y - line) <= FruitSpec.STREET_SHOULDER + 0.01
+			expect(onNorthSouth or onEastWest).toBe(true)
 
-		for _, roll in { 0, 0.25, 0.5, 0.75, 0.999 } do
-			local spot = FruitSpec.nearTree(tree, roll, roll)
-			local distance = (spot - tree).Magnitude
-			expect(distance).toBeGreaterThanOrEqual(FruitSpec.TREE_MIN_DISTANCE - 0.01)
-			expect(distance).toBeLessThanOrEqual(FruitSpec.TREE_MAX_DISTANCE + 0.01)
+			local across = if onNorthSouth then spot.X else spot.Y
+			local along = if onNorthSouth then spot.Y else spot.X
+			expect(math.abs(across - line)).toBeLessThanOrEqual(FruitSpec.STREET_SHOULDER + 0.01)
+			expect(math.abs(along)).toBeLessThanOrEqual(halfSpan - FruitSpec.STREET_END_MARGIN + 0.01)
 		end
 
-		local first = FruitSpec.nearTree(tree, 0.25, 0.5)
-		local second = FruitSpec.nearTree(tree, 0.25, 0.5)
+		-- Same rolls, same spot: the layout is drawn once and stays put.
+		local first = FruitSpec.streetSpot(line, halfSpan, 0.25, 0.5, 0.9)
+		local second = FruitSpec.streetSpot(line, halfSpan, 0.25, 0.5, 0.9)
 		expect(first.X).toBeCloseTo(second.X, 3)
 		expect(first.Y).toBeCloseTo(second.Y, 3)
 	end)

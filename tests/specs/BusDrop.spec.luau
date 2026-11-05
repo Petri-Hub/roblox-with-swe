@@ -38,8 +38,8 @@ describe("battle bus drop", function()
 		expect(toBus.Unit:Dot(lane)).toBeCloseTo(1, PRECISION)
 	end)
 
-	it("clears the rock rim that closes the map", function()
-		expect(BusDrop.ALTITUDE).toBeGreaterThan(ForestLayout.TERRAIN_TOP + ForestLayout.RIM_HEIGHT)
+	it("clears the tallest tower that closes the map", function()
+		expect(BusDrop.ALTITUDE).toBeGreaterThan(ForestLayout.TOWER_MAX_HEIGHT)
 	end)
 
 	it("turns the bus model onto the lane", function()
