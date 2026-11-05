@@ -37,9 +37,11 @@ local function box(parent: Instance, size: Vector3, cframe: CFrame, material: En
 	})
 end
 
--- One wall run, dressed the way the reference rooms are: mahogany from floor to
--- ceiling, a darker wainscot field, board-and-batten stiles, baseboard, chair
--- rail and a three-step cornice.
+-- One wall run, dressed like the reference rooms: mahogany from floor to
+-- ceiling, a darker wainscot field behind a raised frame, board-and-batten
+-- stiles, baseboard, chair rail, pilasters at both ends and a cornice that
+-- flares to the ceiling. The relief is deliberately deep, 0.3 to 0.75 studs,
+-- so the warm light catches an edge instead of washing the wall flat.
 local function dressedWall(
 	parent: Instance,
 	center: Vector3,
@@ -52,8 +54,9 @@ local function dressedWall(
 	local long = length + THICKNESS
 	local across = THICKNESS
 	local wallHeight = height or WALL_HEIGHT
-	local panelHeight = math.min(PANEL_HEIGHT, wallHeight * 0.45)
+	local panelHeight = math.min(PANEL_HEIGHT, wallHeight * 0.42)
 	local rhythm = spacing or CELL
+	local fieldTop = panelHeight - 0.5
 
 	-- thick runs through the wall; wide runs along it.
 	local function strip(thick: number, tall: number, wide: number): Vector3
@@ -63,6 +66,14 @@ local function dressedWall(
 		return Vector3.new(wide, tall, thick)
 	end
 
+	local function along(offset: number): Vector3
+		if alongZ then
+			return Vector3.new(center.X, 0, center.Z + offset)
+		end
+		return Vector3.new(center.X + offset, 0, center.Z)
+	end
+
+	-- Core: the plain mahogany face the moldings sit on.
 	local core = box(
 		parent,
 		strip(across, wallHeight, long),
@@ -70,65 +81,95 @@ local function dressedWall(
 		Enum.Material.Wood,
 		PALETTE.Wood
 	)
-	core.Reflectance = 0.05
+	core.Reflectance = 0.06
 
-	local field = box(
-		parent,
-		strip(across + 0.12, panelHeight - 0.9, long),
-		CFrame.new(center.X, baseY + 0.9 + (panelHeight - 0.9) / 2, center.Z),
-		Enum.Material.Wood,
-		PALETTE.WoodDeep
-	)
-	field.Reflectance = 0.03
-
-	-- Board and batten under the rail.
-	local stileHeight = panelHeight - 1.05
-	for index = 1, math.floor(length / rhythm) - 1 do
-		local offset = index * rhythm - length / 2
-		local position
-		if alongZ then
-			position = Vector3.new(center.X, baseY + 0.9 + stileHeight / 2, center.Z + offset)
-		else
-			position = Vector3.new(center.X + offset, baseY + 0.9 + stileHeight / 2, center.Z)
-		end
-		box(parent, strip(across + 0.26, stileHeight, 0.5), CFrame.new(position), Enum.Material.Wood, PALETTE.WoodTrim)
-	end
-
-	-- Baseboard and chair rail.
+	-- Wainscot field: darker, sunk behind the frame.
 	box(
 		parent,
-		strip(across + 0.5, 0.9, long),
-		CFrame.new(center.X, baseY + 0.45, center.Z),
+		strip(across + 0.3, fieldTop - 1.1, long),
+		CFrame.new(center.X, baseY + 1.1 + (fieldTop - 1.1) / 2, center.Z),
+		Enum.Material.Wood,
+		PALETTE.WoodField
+	)
+
+	local trimTall = fieldTop - 1.3
+	local trimY = baseY + 1.1 + trimTall / 2
+
+	-- Board and batten: a stile every rhythm, and a pilaster on each end.
+	if length >= rhythm * 2 then
+		for index = 1, math.floor(length / rhythm) - 1 do
+			local position = along(index * rhythm - length / 2)
+			box(
+				parent,
+				strip(across + 0.7, trimTall, 0.65),
+				CFrame.new(position.X, trimY, position.Z),
+				Enum.Material.Wood,
+				PALETTE.WoodTrim
+			)
+		end
+	end
+
+	for _, side in { -1, 1 } do
+		local position = along(side * (length / 2))
+		box(
+			parent,
+			strip(across + 0.8, wallHeight, 1.1),
+			CFrame.new(position.X, baseY + wallHeight / 2, position.Z),
+			Enum.Material.Wood,
+			PALETTE.WoodTrim
+		)
+		-- Base and capital blocks give the pilaster a profile.
+		box(
+			parent,
+			strip(across + 1.15, 0.9, 1.5),
+			CFrame.new(position.X, baseY + 0.45, position.Z),
+			Enum.Material.Wood,
+			PALETTE.WoodTrim
+		)
+		box(
+			parent,
+			strip(across + 1.15, 0.55, 1.5),
+			CFrame.new(position.X, baseY + wallHeight - 0.28, position.Z),
+			Enum.Material.Wood,
+			PALETTE.WoodTrim
+		)
+	end
+
+	-- Baseboard, then the chair rail on top of the wainscot.
+	box(
+		parent,
+		strip(across + 0.8, 1.1, long),
+		CFrame.new(center.X, baseY + 0.55, center.Z),
 		Enum.Material.Wood,
 		PALETTE.WoodTrim
 	)
 	box(
 		parent,
-		strip(across + 0.6, 0.32, long),
+		strip(across + 0.95, 0.45, long),
 		CFrame.new(center.X, baseY + panelHeight, center.Z),
 		Enum.Material.Wood,
 		PALETTE.WoodTrim
 	)
 
-	-- Cornice in three steps: fillet, bed, crown.
+	-- Cornice: bed, crown, and the fillet that meets the ceiling.
 	box(
 		parent,
-		strip(across + 0.3, 0.3, long),
-		CFrame.new(center.X, baseY + wallHeight - 1.2, center.Z),
+		strip(across + 0.55, 0.35, long),
+		CFrame.new(center.X, baseY + wallHeight - 1.15, center.Z),
 		Enum.Material.Wood,
 		PALETTE.WoodTrim
 	)
 	box(
 		parent,
-		strip(across + 0.75, 0.45, long),
-		CFrame.new(center.X, baseY + wallHeight - 0.78, center.Z),
+		strip(across + 1.1, 0.45, long),
+		CFrame.new(center.X, baseY + wallHeight - 0.73, center.Z),
 		Enum.Material.Wood,
 		PALETTE.WoodTrim
 	)
 	box(
 		parent,
-		strip(across + 1.15, 0.3, long),
-		CFrame.new(center.X, baseY + wallHeight - 0.32, center.Z),
+		strip(across + 1.6, 0.35, long),
+		CFrame.new(center.X, baseY + wallHeight - 0.3, center.Z),
 		Enum.Material.Wood,
 		PALETTE.Wood
 	)
@@ -480,7 +521,7 @@ function MazeBuilder.build(random: Random?)
 	local halfD = MazeConfig.GridDepth * CELL / 2
 
 	slab(root, -halfW, halfW, -halfD, halfD, FLOOR_Y, Enum.Material.WoodPlanks, PALETTE.Floor, { well })
-	slab(root, -halfW, halfW, -halfD, halfD, FLOOR_Y + WALL_HEIGHT, Enum.Material.Wood, PALETTE.Ceiling, {})
+	slab(root, -halfW, halfW, -halfD, halfD, FLOOR_Y + WALL_HEIGHT, Enum.Material.WoodPlanks, PALETTE.Ceiling, {})
 
 	local lightSpots = buildWalls(root, grid, rng)
 

@@ -34,9 +34,9 @@ function LightingService:_base()
 	-- Lighting.Technology is RobloxScriptSecurity: a server script cannot read
 	-- or write it. It stays in default.project.json with the place settings.
 	Lighting.ClockTime = 0
-	Lighting.Brightness = 0.8
-	Lighting.Ambient = Color3.fromRGB(28, 25, 22)
-	Lighting.OutdoorAmbient = Color3.fromRGB(18, 16, 15)
+	Lighting.Brightness = 0.6
+	Lighting.Ambient = Color3.fromRGB(18, 16, 15)
+	Lighting.OutdoorAmbient = Color3.fromRGB(12, 11, 10)
 	Lighting.ExposureCompensation = 0
 	Lighting.GlobalShadows = true
 	Lighting.ShadowSoftness = 0.4
@@ -61,8 +61,8 @@ function LightingService:_effects()
 	local warmth = ensure("ColorCorrectionEffect", "Warmth") :: ColorCorrectionEffect
 	warmth.Brightness = 0
 	warmth.Contrast = 0.06
-	warmth.Saturation = -0.12
-	warmth.TintColor = Color3.fromRGB(255, 246, 235)
+	warmth.Saturation = -0.28
+	warmth.TintColor = Color3.fromRGB(252, 248, 244)
 
 	self._atmosphere = atmosphere
 end

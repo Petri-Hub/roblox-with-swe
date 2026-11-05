@@ -49,15 +49,17 @@ MazeConfig.Assets = {
 -- No image texture here on purpose. The Creator Store wood image we liked is a
 -- Decal, and a Decal cannot be used as a Texture: the engine rejects it. The
 -- wood is built from material, colour and geometry instead.
+-- Brown, not orange. Saturated wood reads as a toy game; real mahogany is a
+-- desaturated dark brown that only picks up warmth where the light hits it.
 MazeConfig.Palette = {
-	Wood = Color3.fromRGB(48, 24, 15),
-	WoodDeep = Color3.fromRGB(34, 17, 11),
-	WoodTrim = Color3.fromRGB(30, 15, 10),
-	Wall = Color3.fromRGB(26, 22, 20),
-	Ceiling = Color3.fromRGB(30, 19, 14),
-	Floor = Color3.fromRGB(42, 24, 15),
+	Wood = Color3.fromRGB(54, 36, 27),
+	WoodField = Color3.fromRGB(39, 26, 20),
+	WoodTrim = Color3.fromRGB(20, 14, 11),
+	Wall = Color3.fromRGB(28, 24, 21),
+	Ceiling = Color3.fromRGB(27, 21, 18),
+	Floor = Color3.fromRGB(45, 31, 23),
 	Candle = Color3.fromRGB(148, 132, 112),
-	CandleLight = Color3.fromRGB(255, 182, 108),
+	CandleLight = Color3.fromRGB(255, 198, 152),
 }
 
 return MazeConfig
