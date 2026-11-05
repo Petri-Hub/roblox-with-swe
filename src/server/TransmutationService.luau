@@ -318,6 +318,25 @@ local function riseSpikes(position: Vector3, normal: Vector3, style: any, attack
 		material = style.name,
 	})
 
+	-- The field keeps cutting while it stands, not only on the frame it rose.
+	task.spawn(function()
+		local activeUntil = os.clock() + Transmutation.LIFETIME - 0.9
+		while os.clock() < activeUntil and folder.Parent do
+			task.wait(Transmutation.FIELD_TICK)
+			local overlap = OverlapParams.new()
+			overlap.FilterType = Enum.RaycastFilterType.Exclude
+			overlap.FilterDescendantsInstances = if attacker.Character then { attacker.Character } else {}
+			local cut: { [Model]: boolean } = {}
+			for _, part in Workspace:GetPartBoundsInRadius(position, Transmutation.CLUSTER_RADIUS, overlap) do
+				local ghost = GhostService.resolve(part)
+				if ghost and not cut[ghost] then
+					cut[ghost] = true
+					GhostService.damage(ghost, Transmutation.FIELD_DAMAGE, attacker)
+				end
+			end
+		end
+	end)
+
 	-- They crumble back into the ground instead of blinking out.
 	task.delay(Transmutation.LIFETIME - 0.9, function()
 		if not folder.Parent then

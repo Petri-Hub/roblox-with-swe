@@ -294,6 +294,72 @@ local function damageGhosts(position: Vector3, directInstance: Instance?, attack
 	end
 end
 
+-- The ground keeps burning where the ball landed. Short lived, but it makes the
+-- spell something a crowd has to walk around instead of a one frame hit.
+local function startBurn(position: Vector3, attacker: Player, charge: number)
+	local radius = FireMagic.BURN_RADIUS * (1 + charge * 0.5)
+	local folder = Workspace:FindFirstChild("FireMagicBurn")
+	if not folder then
+		folder = Instance.new("Folder")
+		folder.Name = "FireMagicBurn"
+		folder.Parent = Workspace
+	end
+
+	local model = Instance.new("Model")
+	model.Name = "Burn"
+	model.Parent = folder
+
+	local firstFlame = nil
+	for index = 1, 7 do
+		local angle = (index / 7) * math.pi * 2
+		local flame = Instance.new("Part")
+		flame.Name = "Flame"
+		flame.Size = Vector3.new(1.8, 2.6, 1.8)
+		flame.CFrame = CFrame.new(
+			position.X + math.cos(angle) * radius * 0.5,
+			position.Y + 1.1,
+			position.Z + math.sin(angle) * radius * 0.5
+		)
+		flame.Anchored = true
+		flame.CanCollide = false
+		flame.CanTouch = false
+		flame.CanQuery = false
+		flame.CastShadow = false
+		flame.Material = Enum.Material.Neon
+		flame.Color = Color3.fromRGB(255, 118, 40)
+		flame.Transparency = 0.3
+		flame.Parent = model
+		firstFlame = firstFlame or flame
+	end
+
+	local light = Instance.new("PointLight")
+	light.Color = Color3.fromRGB(255, 140, 60)
+	light.Brightness = 3
+	light.Range = radius * 1.6
+	light.Shadows = false
+	light.Parent = firstFlame
+
+	local expiresAt = os.clock() + FireMagic.BURN_SECONDS
+	task.spawn(function()
+		while os.clock() < expiresAt and model.Parent do
+			local overlap = OverlapParams.new()
+			overlap.FilterType = Enum.RaycastFilterType.Exclude
+			overlap.FilterDescendantsInstances = if attacker.Character then { attacker.Character } else {}
+			local burned: { [Model]: boolean } = {}
+			for _, part in Workspace:GetPartBoundsInRadius(position, radius, overlap) do
+				local ghost = GhostService.resolve(part)
+				if ghost and not burned[ghost] then
+					burned[ghost] = true
+					GhostService.damage(ghost, FireMagic.BURN_DAMAGE, attacker)
+				end
+			end
+			task.wait(FireMagic.BURN_TICK)
+		end
+	end)
+
+	Debris:AddItem(model, FireMagic.BURN_SECONDS)
+end
+
 local function explode(projectile: Projectile, position: Vector3, normal: Vector3, hitInstance: Instance?)
 	projectiles[projectile.id] = nil
 
@@ -313,6 +379,7 @@ local function explode(projectile: Projectile, position: Vector3, normal: Vector
 		local isCharacter = model ~= nil and Players:GetPlayerFromCharacter(model) ~= nil
 		if not isCharacter then
 			createScorch(position, normal, projectile.character, projectile.charge)
+			startBurn(position, projectile.player, projectile.charge)
 		end
 	end
 end

@@ -96,6 +96,16 @@ The server owns the whole flow: the prompt checks the distance, the pickup is a 
 
 The rules live in `src/shared/FruitSpec.luau` (the powers, the spawn ring, the lifetime, the draw and the reach), the definitions in `src/shared/fruits/` and `src/shared/FruitRegistry.luau`, the engine in `src/server/FruitService.luau`, and the held fruit, the spin and the two keys in `src/client/FruitController.client.luau`. The `Power` attribute itself is `src/shared/Powers.luau`.
 
+### The extra abilities
+
+Every fruit used to carry one spell on one key. Each one carries four now: the main spell stays where it was — `Z` fire, `X` telekinesis, `C` earth — and three more sit on `T`, `V` and `B`, the same three keys for every fruit, so the wheel is learned once and only the effects change. `AbilityService` owns the nine new ones: it checks the power, runs the cooldown, does the damage on the server and tells every client what to draw. The keys, the hints and every number live in `src/shared/Abilities.luau`; the look lives in `src/client/AbilityEffects.luau` and the row of key caps in `src/client/AbilityHud.luau`.
+
+**Fire** — `T` Explosão Solar: a ring of fire around the caster, 22 studs out, damage falling from 120 in the middle to 55 at the rim, and everything thrown back. `V` Meteoro: a ball pulled out of the sky onto the point under the cursor, up to 170 studs away, one second of fall and a 16-stud blast for up to 240. `B` Muralha de Fogo: a 26-stud wall of flame 14 studs ahead that burns anything crossing it, 26 damage every half second for six seconds. The main fireball also leaves the ground burning for six seconds now, 16 damage a tick.
+
+**Push** — `T` Onda de Choque: a cone 34 studs long and 84 wide, damage from 75 down with distance and a knockback that clears a street. `V` Impulso: throws the caster along the aim at 82 studs per second and 62 up, the way out of a crowd. `B` Vórtice: everything within 38 studs of a point 16 studs ahead is dragged in over half a second, held, then hit for 140. Props thrown by the main spell now daze the ghosts they land on, not only the one they hit.
+
+**Earth** — `T` Terremoto: 26 studs of ground slam, 100 damage and a 1.2 second stumble. `V` Muralha de Pedra: a 22-stud wall of rock 12 studs ahead that stands for 12 seconds — a ghost only walks, so it has to go around. `B` Punho de Pedra: a fist of rock out of the ground on the aimed point, up to 70 studs away, 260 damage in 9 studs. The spike field of the main spell keeps cutting while it stands: 14 damage every 0.6 seconds.
+
 ### Adding a fruit
 
 Fruit are data, the same way weapons are. To add one:
@@ -103,7 +113,7 @@ Fruit are data, the same way weapons are. To add one:
 1. Copy `src/shared/fruits/Fogo.luau` to `src/shared/fruits/<Fruta>.luau` and change `id`, `name`, `power`, `weight`, `body`, `swirl`, `glow` and `flavor`.
 2. Register it once in `src/shared/FruitRegistry.luau`.
 
-`FruitSpec.derive` validates the definition and fails the build on an empty id or name, a power that is not in the powers table, a weight that is not positive, a colour that is not a `Color3` or an empty flavour line. A fruit only grants a power that already exists, so a new fruit either feeds one of the three spells or comes with a new spell service.
+`FruitSpec.derive` validates the definition and fails the build on an empty id or name, a power that is not in the powers table, a weight that is not positive, a colour that is not a `Color3` or an empty flavour line. A fruit only grants a power that already exists, so a new fruit either feeds one of the three powers — main spell plus the three in `src/shared/Abilities.luau` — or comes with a new spell service.
 
 ### The arena
 

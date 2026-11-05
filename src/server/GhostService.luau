@@ -319,6 +319,21 @@ function GhostService.isSuspended(model: Model): boolean
 	return record ~= nil and record.suspended == true
 end
 
+-- Shoves a ghost a fixed offset away from a spell and leaves it dazed. The
+-- chase AI is held for the move, so it cannot fight the new CFrame.
+function GhostService.repel(model: Model, offset: Vector3, stunSeconds: number)
+	local record = ghosts[model]
+	if not record then
+		return
+	end
+
+	local wasSuspended = record.suspended
+	record.suspended = true
+	model:PivotTo(model:GetPivot() + offset)
+	record.suspended = wasSuspended
+	record.stunUntil = math.max(record.stunUntil or 0, now() + math.max(0, stunSeconds))
+end
+
 -- A slammed ghost hangs in place and cannot chase or attack for a moment.
 function GhostService.stun(model: Model, seconds: number)
 	local record = ghosts[model]

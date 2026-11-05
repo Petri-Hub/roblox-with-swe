@@ -13,6 +13,13 @@ FireMagic.DIRECT_DAMAGE = 120
 FireMagic.SPLASH_DAMAGE = 100
 FireMagic.SPLASH_RADIUS = 16
 FireMagic.CRACK_SECONDS = 30
+
+-- The ground keeps burning after the blast, so a shot into a crowd leaves a
+-- patch nobody wants to walk through.
+FireMagic.BURN_RADIUS = 7
+FireMagic.BURN_SECONDS = 6
+FireMagic.BURN_TICK = 0.6
+FireMagic.BURN_DAMAGE = 16
 FireMagic.CRACK_FADE_SECONDS = 3
 FireMagic.SHAKE_RADIUS = 55
 FireMagic.SHAKE_DEGREES = 1.1

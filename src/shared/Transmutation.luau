@@ -25,6 +25,10 @@ Transmutation.DAMAGE = 58
 Transmutation.SPLASH_RADIUS = 7
 Transmutation.STUN_SECONDS = 1.1
 Transmutation.LIFETIME = 4.2
+-- While the field stands it keeps cutting: a ghost that walks into the spikes
+-- after they rose still pays.
+Transmutation.FIELD_TICK = 0.6
+Transmutation.FIELD_DAMAGE = 14
 
 -- Pro Sound Effects, the same library the other spells use.
 Transmutation.SHOCK_SOUND = 9116278351
