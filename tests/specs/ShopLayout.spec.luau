@@ -59,14 +59,14 @@ describe("shop layout", function()
 	end)
 
 	it("drops the real stall on walkable ground", function()
-		local point = ShopLayout.pointFor(ForestLayout.SEED + 91)
-		local flat = Vector2.new(point.x, point.z)
+		local flat = Vector2.new(ForestLayout.SHOP_LOT.x, ForestLayout.SHOP_LOT.z)
 		expect(ForestLayout.isInsideWorld(flat, 10)).toBe(true)
 		expect(ForestLayout.isInsideLandmarkClearing(flat)).toBe(false)
+		expect(ForestLayout.isInsideTowerLot(flat)).toBe(false)
 
-		local height = ForestLayout.heightAt(point.x, point.z)
-		expect(height).toBeGreaterThan(ForestLayout.TERRAIN_BOTTOM)
-		expect(height).toBeLessThan(ForestLayout.TERRAIN_TOP)
+		-- The city is flat: the stall stands on the floor, inside the plaza.
+		local height = ForestLayout.heightAt(flat.X, flat.Y)
+		expect(height).toBe(ForestLayout.FLOOR_TOP)
 	end)
 
 	it("gets louder the closer you walk", function()
