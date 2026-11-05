@@ -1,0 +1,22 @@
+START 2026-11-05T22:31:35Z
+Command: HOME="$PWD/cache/home" TMPDIR="$PWD/cache/tmp" BLENDER_USER_CONFIG="$PWD/cache/config" BLENDER_USER_SCRIPTS="$PWD/cache/scripts" BLENDER_USER_DATAFILES="$PWD/cache/data" /workspace/blender-study/tools/blender-5.2.3-linux-x64/blender -b --factory-startup --python-exit-code 1 --python generate.py (initial generation; failed because empty scene had no world).
+Failure: factory empty scene had no world; fixed by creating World_Studio before setting color. Retry command: same Blender invocation.
+Visual review of first render set: door was occluded by tower face; moved door and window details forward in Y before rerendering.
+Visual QA follow-up: front camera had a dark strip at lower image edge; replaced finite cylindrical presentation floor with a large plane and re-rendered front.png. Updated generate.py to preserve correction.
+QA check found two window frames floating and coplanar door plank faces; moved frames to meet the tower and shifted planks forward. Updated generation source and re-exported from repaired .blend.
+Second QA pass still treated window frames as detached by vertex-distance tolerance; embedded frame backs further into wall while leaving front rims exposed, then re-exported.
+QA then identified pane meshes as detached from the now wall-mounted frames; moved panes back to sit against the frame front. Re-exported asset.
+Final regeneration command: Blender 5.2.3 headless, Cycles CPU fixed 4 threads, HOME/TMP/config/cache redirected to run-a.
+README.md authored: file inventory, animation seam, rebuild command, and intentional QA warnings documented.
+Final verification commands: (1) Blender 5.2.3 import asset.glb into empty file + logs/inspect_glb.py; (2) Blender QA scripts qa_check.py --profile render --eps 0.005 --tol 0.04 --no-uv and review_shots.py --views front back three_quarter --mode random --res 512; (3) Pillow image dimensions/byte sizes for six requested PNGs; (4) visual inspection via image viewer.
+
+Commands executed (all Blender invocations used the run-a cache/config dirs and Blender 5.2.3):
+- Environment check: blender -b --factory-startup --python-expr "import bpy; print('VERSION',bpy.app.version_string,'ENGINE',bpy.context.scene.render.engine)".
+- Final generation: blender -b --factory-startup --python-exit-code 1 --python generate.py.
+- Presentation correction: blender -b --python-exit-code 1 --python logs/repair_front.py.
+- Geometry repairs and GLB re-export: blender -b --python-exit-code 1 --python logs/repair_geometry.py (repeated as QA found the pane/frame gaps).
+- Final mesh QA: blender -b asset.blend --python logs/select_export.py --python-exit-code 1 --python <skill-source>/skills/blender-asset-qa/scripts/qa_check.py -- --profile render --eps 0.005 --tol 0.04 --no-uv.
+- Visual contact sheet: blender -b asset.blend --python logs/select_export.py --python-exit-code 1 --python <skill-source>/skills/blender-asset-qa/scripts/review_shots.py -- --out logs/review-shots.png --views front back three_quarter --mode random --res 512.
+- GLB round-trip: blender -b --python-exit-code 1 --python logs/inspect_glb.py.
+- Failure/correction: first factory-startup generation raised AttributeError because sc.world was None; created World_Studio, then reran successfully. Visual and QA findings/corrections are recorded above; final QA has zero errors.
+END 2026-11-05T22:52:04Z

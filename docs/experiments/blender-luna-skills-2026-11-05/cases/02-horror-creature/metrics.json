@@ -1,0 +1,650 @@
+{
+  "a": {
+    "source": "cases/02-horror-creature/run-a/asset.glb",
+    "load_ok": true,
+    "blender": "5.2.3 LTS",
+    "mesh_objects": 59,
+    "triangles": 1428,
+    "materials": 6,
+    "bounds": [
+      [
+        -0.9333743453025818,
+        0.9258769154548645
+      ],
+      [
+        -0.6153097152709961,
+        0.4908945858478546
+      ],
+      [
+        -0.009896360337734222,
+        2.5130748748779297
+      ]
+    ],
+    "dimensions": [
+      1.8592512607574463,
+      1.1062043011188507,
+      2.522971235215664
+    ],
+    "armatures": 1,
+    "bones": 17,
+    "mesh_with_armature_modifier": 59,
+    "actions": 1,
+    "fps": 24,
+    "frame_start": 1,
+    "frame_end": 250,
+    "max_vertex_displacement_from_frame_1": {
+      "1": 0.0,
+      "12": 0.05546545756024137,
+      "16": 0.0517134126317918,
+      "24": 0.025751970747644307,
+      "32": 0.04379504287794096,
+      "36": 0.05586334235970886,
+      "48": 0.0011117529741345217
+    },
+    "external_images": [],
+    "elapsed_seconds_reported": 434.0,
+    "duration_basis": "Janelas registradas pelos agentes: A 22:04:41–22:11:55; B 22:04:48–22:13:14 UTC; incluem geração, correções, render e revisão. Marcação de lançamento da dupla preservada à parte.",
+    "skills_read_reported": 10,
+    "skills_names_reported": [
+      "blender-animation",
+      "blender-asset-qa",
+      "blender-character-rigging",
+      "blender-core",
+      "blender-export-pipelines",
+      "blender-lighting-lookdev",
+      "blender-pbr-materials",
+      "blender-rendering",
+      "blender-scene-setup",
+      "blender-sculpting"
+    ],
+    "tokens": null,
+    "files_bytes": {
+      "README.md": 1023,
+      "asset.blend": 148365,
+      "asset.glb": 263736,
+      "back.png": 616045,
+      "execution-log.txt": 2359,
+      "front.png": 623987,
+      "generate.py": 12752,
+      "logs/check_glb.py": 754,
+      "logs/contact.png": 317149,
+      "logs/generate.log": 7171,
+      "logs/generation.json": 165,
+      "logs/glb-check.json": 1409,
+      "logs/glb-check.log": 4359,
+      "logs/qa.json": 39568,
+      "logs/qa.log": 29113,
+      "logs/qa_run.py": 434,
+      "pose-01.png": 635697,
+      "pose-24.png": 635530,
+      "pose-48.png": 635877,
+      "presentation.png": 635697,
+      "skills-read.txt": 890
+    },
+    "images": {
+      "back.png": {
+        "size": [
+          768,
+          768
+        ],
+        "bytes": 616045
+      },
+      "pose-24.png": {
+        "size": [
+          768,
+          768
+        ],
+        "bytes": 635530
+      },
+      "pose-01.png": {
+        "size": [
+          768,
+          768
+        ],
+        "bytes": 635697
+      },
+      "presentation.png": {
+        "size": [
+          768,
+          768
+        ],
+        "bytes": 635697
+      },
+      "pose-48.png": {
+        "size": [
+          768,
+          768
+        ],
+        "bytes": 635877
+      },
+      "front.png": {
+        "size": [
+          768,
+          768
+        ],
+        "bytes": 623987
+      }
+    },
+    "glb_structure": {
+      "valid_header": true,
+      "animations": [
+        {
+          "name": "VigiaDoBrejo_Idle",
+          "channels": 51,
+          "paths": [
+            "rotation",
+            "scale",
+            "translation"
+          ],
+          "samplers": 51,
+          "time_bounds": [
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ]
+          ]
+        }
+      ],
+      "skins": 1,
+      "external_uris": [],
+      "nodes": 77
+    },
+    "module_exports": {},
+    "excluded_importer_custom_shapes": [
+      "Icosphere"
+    ],
+    "initial_importer_count_correction": {
+      "previous": {
+        "triangles": 1508,
+        "mesh_objects": 60
+      },
+      "reason": "Initial auditor included importer-created custom bone shape Icosphere (80 tris, one mesh); excluded via PoseBone.custom_shape references. Original GLBs were unchanged."
+    },
+    "geometry_export": {
+      "mesh_definitions": 59,
+      "mesh_instances": 59,
+      "triangles_in_mesh_definitions": 1428,
+      "triangles_instantiated": 1428,
+      "position_vertices_in_mesh_definitions": 3336,
+      "position_vertices_instantiated": 3336,
+      "animation_clips": 1,
+      "skins": 1,
+      "vertex_count_definition": "Sum of unique POSITION accessors within each mesh definition, then multiplied by scene nodes using that mesh; UV/normal seams can duplicate vertices. Not welded original Blender vertex counts."
+    },
+    "source_geometry": {
+      "matched_export_objects": 59,
+      "base_polygons": 954,
+      "base_triangles": 1428,
+      "base_vertices": 832,
+      "base_quad_faces": 236,
+      "base_ngons": 78,
+      "evaluated_triangles_in_blend": 1428,
+      "method": "Only original Blender mesh objects named by mesh nodes in the final GLB; excludes studio/catalog items not exported. Base counts before modifiers; evaluated counts after modifiers."
+    }
+  },
+  "b": {
+    "source": "cases/02-horror-creature/run-b/asset.glb",
+    "load_ok": true,
+    "blender": "5.2.3 LTS",
+    "mesh_objects": 50,
+    "triangles": 5556,
+    "materials": 4,
+    "bounds": [
+      [
+        -1.4822508096694946,
+        1.4894253015518188
+      ],
+      [
+        -0.6700001358985901,
+        0.47075214982032776
+      ],
+      [
+        -0.02500009909272194,
+        3.306225299835205
+      ]
+    ],
+    "dimensions": [
+      2.9716761112213135,
+      1.1407522857189178,
+      3.331225398927927
+    ],
+    "armatures": 1,
+    "bones": 17,
+    "mesh_with_armature_modifier": 50,
+    "actions": 1,
+    "fps": 24,
+    "frame_start": 1,
+    "frame_end": 250,
+    "max_vertex_displacement_from_frame_1": {
+      "1": 0.0,
+      "12": 0.08010515725410382,
+      "16": 0.06985281844618552,
+      "24": 0.024564589205157326,
+      "32": 0.10112392919905273,
+      "36": 0.11702577371555138,
+      "48": 0.0
+    },
+    "external_images": [],
+    "elapsed_seconds_reported": 506.0,
+    "duration_basis": "Janelas registradas pelos agentes: A 22:04:41–22:11:55; B 22:04:48–22:13:14 UTC; incluem geração, correções, render e revisão. Marcação de lançamento da dupla preservada à parte.",
+    "skills_read_reported": 0,
+    "skills_names_reported": [],
+    "tokens": null,
+    "files_bytes": {
+      "README.md": 812,
+      "asset.blend": 173806,
+      "asset.glb": 731048,
+      "back.png": 665305,
+      "execution-log.txt": 1965,
+      "front.png": 678711,
+      "generate.py": 9055,
+      "logs/action-inspect.log": 1239,
+      "logs/animation-check.log": 511,
+      "logs/blender-run.log": 12838,
+      "logs/qa-check.log": 258,
+      "pose-01.png": 693402,
+      "pose-24.png": 692747,
+      "pose-48.png": 693402,
+      "presentation.png": 693402,
+      "skills-read.txt": 91
+    },
+    "images": {
+      "back.png": {
+        "size": [
+          768,
+          768
+        ],
+        "bytes": 665305
+      },
+      "pose-24.png": {
+        "size": [
+          768,
+          768
+        ],
+        "bytes": 692747
+      },
+      "pose-01.png": {
+        "size": [
+          768,
+          768
+        ],
+        "bytes": 693402
+      },
+      "presentation.png": {
+        "size": [
+          768,
+          768
+        ],
+        "bytes": 693402
+      },
+      "pose-48.png": {
+        "size": [
+          768,
+          768
+        ],
+        "bytes": 693402
+      },
+      "front.png": {
+        "size": [
+          768,
+          768
+        ],
+        "bytes": 678711
+      }
+    },
+    "glb_structure": {
+      "valid_header": true,
+      "animations": [
+        {
+          "name": "Vigia_RigAction",
+          "channels": 51,
+          "paths": [
+            "rotation",
+            "scale",
+            "translation"
+          ],
+          "samplers": 51,
+          "time_bounds": [
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ],
+            [
+              2
+            ]
+          ]
+        }
+      ],
+      "skins": 1,
+      "external_uris": [],
+      "nodes": 68
+    },
+    "module_exports": {},
+    "excluded_importer_custom_shapes": [
+      "Icosphere"
+    ],
+    "initial_importer_count_correction": {
+      "previous": {
+        "triangles": 5636,
+        "mesh_objects": 51
+      },
+      "reason": "Initial auditor included importer-created custom bone shape Icosphere (80 tris, one mesh); excluded via PoseBone.custom_shape references. Original GLBs were unchanged."
+    },
+    "geometry_export": {
+      "mesh_definitions": 50,
+      "mesh_instances": 50,
+      "triangles_in_mesh_definitions": 5556,
+      "triangles_instantiated": 5556,
+      "position_vertices_in_mesh_definitions": 12012,
+      "position_vertices_instantiated": 12012,
+      "animation_clips": 1,
+      "skins": 1,
+      "vertex_count_definition": "Sum of unique POSITION accessors within each mesh definition, then multiplied by scene nodes using that mesh; UV/normal seams can duplicate vertices. Not welded original Blender vertex counts."
+    },
+    "source_geometry": {
+      "matched_export_objects": 50,
+      "base_polygons": 3228,
+      "base_triangles": 5556,
+      "base_vertices": 2878,
+      "base_quad_faces": 2288,
+      "base_ngons": 8,
+      "evaluated_triangles_in_blend": 5556,
+      "method": "Only original Blender mesh objects named by mesh nodes in the final GLB; excludes studio/catalog items not exported. Base counts before modifiers; evaluated counts after modifiers."
+    }
+  }
+}

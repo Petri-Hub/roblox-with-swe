@@ -1,0 +1,56 @@
+{
+  "segments": [
+    {
+      "label": "entrada",
+      "from": [
+        -0.5,
+        2,
+        1.5
+      ],
+      "to": [
+        2,
+        2,
+        1.5
+      ]
+    },
+    {
+      "label": "primeiro trecho",
+      "from": [
+        2,
+        2,
+        1.5
+      ],
+      "to": [
+        2,
+        6,
+        1.5
+      ]
+    },
+    {
+      "label": "curva e trecho final",
+      "from": [
+        2,
+        6,
+        1.5
+      ],
+      "to": [
+        6,
+        6,
+        1.5
+      ]
+    },
+    {
+      "label": "saída",
+      "from": [
+        6,
+        6,
+        1.5
+      ],
+      "to": [
+        8.5,
+        6,
+        1.5
+      ]
+    }
+  ]
+}

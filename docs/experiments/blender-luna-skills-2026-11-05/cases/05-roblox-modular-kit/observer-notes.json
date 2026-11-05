@@ -1,0 +1,9 @@
+{
+  "recorded_utc": "2026-11-05T23:04:57.353186+00:00",
+  "events": [
+    "Managed environment signaled starting then ready during the module case. Files were preserved.",
+    "Root sent identical resume instructions to both existing agents: continue original task from current artifacts, do not restart modeling, preserve scope and logs.",
+    "Environment status reported connectivity offline while local command/file tools remained usable. No asset/modeling advice or other agent results were shared.",
+    "Any timing comparison of this case must disclose the interruption and resumption."
+  ]
+}

@@ -1,0 +1,37 @@
+Failed to create secure directory (/home/agent/.config/pulse): Read-only file system
+Extensions: writing cache failed ([Errno 30] Read-only file system: '/home/agent/.config/blender/5.2').
+23:22:29 | INFO: Data are loaded, start creating Blender stuff
+23:22:29 | INFO: Blender create Mesh node SM_Column_4mMesh
+23:22:29 | INFO: glTF import finished in 0.01s
+/workspace/blender-study/cases/05-roblox-modular-kit/review/render_modules.py:15: DeprecationWarning: 'World.use_nodes' is expected to be removed in Blender 6.0
+  scene=bpy.context.scene;scene.world=bpy.data.worlds.new('Inspection world');scene.world.use_nodes=True;scene.world.node_tree.nodes['Background'].inputs[0].default_value=(.18,.20,.24,1);scene.world.node_tree.nodes['Background'].inputs[1].default_value=.6
+00:04.085  render           | Saved: '/workspace/blender-study/cases/05-roblox-modular-kit/inspection-a/SM_Column_4m.png'
+Extensions: writing cache failed ([Errno 30] Read-only file system: '/home/agent/.config/blender/5.2').
+23:22:33 | INFO: Data are loaded, start creating Blender stuff
+23:22:33 | INFO: Blender create Mesh node SM_Corner_4mMesh
+23:22:33 | INFO: glTF import finished in 0.01s
+00:06.872  render           | Saved: '/workspace/blender-study/cases/05-roblox-modular-kit/inspection-a/SM_Corner_4m.png'
+Extensions: writing cache failed ([Errno 30] Read-only file system: '/home/agent/.config/blender/5.2').
+23:22:36 | INFO: Data are loaded, start creating Blender stuff
+23:22:36 | INFO: Blender create Mesh node SM_DoorArch_4mMesh
+23:22:36 | INFO: glTF import finished in 0.01s
+00:09.611  render           | Saved: '/workspace/blender-study/cases/05-roblox-modular-kit/inspection-a/SM_DoorArch_4m.png'
+Extensions: writing cache failed ([Errno 30] Read-only file system: '/home/agent/.config/blender/5.2').
+23:22:38 | INFO: Data are loaded, start creating Blender stuff
+23:22:38 | INFO: Blender create Mesh node SM_Floor_4mMesh
+23:22:38 | INFO: glTF import finished in 0.00s
+00:12.364  render           | Saved: '/workspace/blender-study/cases/05-roblox-modular-kit/inspection-a/SM_Floor_4m.png'
+Extensions: writing cache failed ([Errno 30] Read-only file system: '/home/agent/.config/blender/5.2').
+23:22:41 | INFO: Data are loaded, start creating Blender stuff
+23:22:41 | INFO: Blender create Mesh node SM_TorchMesh
+23:22:41 | INFO: glTF import finished in 0.00s
+00:15.032  render           | Saved: '/workspace/blender-study/cases/05-roblox-modular-kit/inspection-a/SM_Torch.png'
+Extensions: writing cache failed ([Errno 30] Read-only file system: '/home/agent/.config/blender/5.2').
+23:22:44 | INFO: Data are loaded, start creating Blender stuff
+23:22:44 | INFO: Blender create Mesh node SM_Wall_4mMesh
+23:22:44 | INFO: glTF import finished in 0.01s
+00:18.116  render           | Saved: '/workspace/blender-study/cases/05-roblox-modular-kit/inspection-a/SM_Wall_4m.png'
+INSPECTION_MODULE_RENDERS 6
+Blender 5.2.3 LTS (hash e13b728c6880 built 2026-10-22 01:35:05)
+
+Blender quit

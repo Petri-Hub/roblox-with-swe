@@ -1,0 +1,240 @@
+/workspace/blender-study/cases/04-windmill-motion/run-b/generate.py:17: DeprecationWarning: 'Material.use_nodes' is expected to be removed in Blender 6.0
+  m=bpy.data.materials.new(name); m.diffuse_color=(*color,1); m.use_nodes=True
+00:27.711  render           | Saved: '/workspace/blender-study/cases/04-windmill-motion/run-b/front.png'
+00:52.700  render           | Saved: '/workspace/blender-study/cases/04-windmill-motion/run-b/back.png'
+01:29.996  render           | Saved: '/workspace/blender-study/cases/04-windmill-motion/run-b/presentation.png'
+02:35.418  render           | Saved: '/workspace/blender-study/cases/04-windmill-motion/run-b/motion-01.png'
+03:49.508  render           | Saved: '/workspace/blender-study/cases/04-windmill-motion/run-b/motion-16.png'
+05:04.592  render           | Saved: '/workspace/blender-study/cases/04-windmill-motion/run-b/motion-32.png'
+Info: Saved as "asset.blend"
+INFO Draco is available, use library at /workspace/blender-study/tools/blender-5.2.3-linux-x64/lib/libbf_intern_draco_bridge.so
+INFO MeshOptimizer is available, use library at /workspace/blender-study/tools/blender-5.2.3-linux-x64/lib/libbf_intern_meshopt_bridge.so
+22:38:28 | INFO: Starting glTF 2.0 export
+22:38:28 | INFO: Extracting primitive: Cylinder.004
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.002
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.036
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.038
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.040
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.042
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.044
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.046
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.048
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.050
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.052
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.054
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.056
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.058
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.060
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.062
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.064
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.066
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.068
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.070
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.072
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.074
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.076
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.078
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.080
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.082
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.007
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.008
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.009
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.010
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.011
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.012
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.013
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.014
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.015
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.016
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.017
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.018
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.019
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.020
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.021
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.022
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.023
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.024
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.025
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.026
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.027
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.028
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.029
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.030
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.031
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.032
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.033
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.034
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.035
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.037
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.039
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.041
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.043
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.045
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.047
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.049
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.051
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.053
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.055
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.057
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.059
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.061
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.063
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.065
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.067
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.069
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.071
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.073
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.075
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.077
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.079
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.081
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cylinder
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cylinder.002
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cylinder.001
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.001
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cylinder.003
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cylinder.007
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: sail blade mesh
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: sail blade mesh.001
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: sail blade mesh.002
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: sail blade mesh.003
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cylinder.006
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cylinder.005
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: leaf blade
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: leaf blade.001
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: leaf blade.002
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: leaf blade.003
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: leaf blade.004
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: leaf blade.005
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: leaf blade.006
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: leaf blade.007
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: leaf blade.008
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: leaf blade.009
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: leaf blade.010
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: leaf blade.011
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: leaf blade.012
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: leaf blade.013
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: leaf blade.014
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: faceted tower mesh
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cone
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.004
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.003
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.006
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Extracting primitive: Cube.005
+22:38:28 | INFO: Primitives created: 1
+22:38:28 | INFO: Finished glTF 2.0 export in 0.5045039653778076 s
+
+OUTPUT_ROOT /workspace/blender-study/cases/04-windmill-motion/run-b
+Blender 5.2.3 LTS (hash e13b728c6880 built 2026-10-22 01:35:05)
+
+Blender quit

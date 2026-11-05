@@ -1,0 +1,238 @@
+{
+  "a": {
+    "source": "/workspace/roblox-with-swe-report/docs/experiments/blender-luna-skills-2026-11-05/cases/01-arcane-blaster/run-a/asset.glb",
+    "load_ok": true,
+    "blender": "5.2.3 LTS",
+    "mesh_objects": 36,
+    "triangles": 868,
+    "materials": 6,
+    "bounds": [
+      [
+        -0.6899999976158142,
+        1.6399999856948853
+      ],
+      [
+        -0.35750001668930054,
+        0.23499999940395355
+      ],
+      [
+        -0.8899999856948853,
+        0.7750000357627869
+      ]
+    ],
+    "dimensions": [
+      2.3299999833106995,
+      0.5925000160932541,
+      1.6650000214576721
+    ],
+    "armatures": 0,
+    "bones": 0,
+    "mesh_with_armature_modifier": 0,
+    "actions": 0,
+    "fps": 24,
+    "frame_start": 1,
+    "frame_end": 250,
+    "max_vertex_displacement_from_frame_1": {
+      "1": 0.0,
+      "12": 0.0,
+      "16": 0.0,
+      "24": 0.0,
+      "32": 0.0,
+      "36": 0.0,
+      "48": 0.0
+    },
+    "external_images": [],
+    "elapsed_seconds_reported": 287.0,
+    "duration_basis": "Janela dos logs de execução: A 21:58:08–22:02:55; B 21:58:14–22:01:57 UTC. Inclui pausa/retomada do ambiente e não mede duração integral dos subagentes.",
+    "skills_read_reported": 8,
+    "skills_names_reported": [
+      "blender-asset-qa",
+      "blender-core",
+      "blender-export-pipelines",
+      "blender-hardsurface-modeling",
+      "blender-lighting-lookdev",
+      "blender-pbr-materials",
+      "blender-pipeline-automation",
+      "blender-rendering"
+    ],
+    "tokens": null,
+    "files_bytes": {
+      "README.md": 797,
+      "asset.blend": 127386,
+      "asset.glb": 80956,
+      "back.png": 568980,
+      "execution-log.txt": 797,
+      "front.png": 583875,
+      "generate.py": 7525,
+      "logs/generate.log": 4654,
+      "logs/qa.log": 874,
+      "presentation.png": 656423,
+      "skills-read.txt": 657
+    },
+    "images": {
+      "back.png": {
+        "size": [
+          768,
+          768
+        ],
+        "bytes": 568980
+      },
+      "presentation.png": {
+        "size": [
+          768,
+          768
+        ],
+        "bytes": 656423
+      },
+      "front.png": {
+        "size": [
+          768,
+          768
+        ],
+        "bytes": 583875
+      }
+    },
+    "glb_structure": {
+      "valid_header": true,
+      "animations": [],
+      "skins": 0,
+      "external_uris": [],
+      "nodes": 36
+    },
+    "module_exports": {},
+    "geometry_export": {
+      "mesh_definitions": 36,
+      "mesh_instances": 36,
+      "triangles_in_mesh_definitions": 868,
+      "triangles_instantiated": 868,
+      "position_vertices_in_mesh_definitions": 1540,
+      "position_vertices_instantiated": 1540,
+      "animation_clips": 0,
+      "skins": 0,
+      "vertex_count_definition": "Sum of unique POSITION accessors within each mesh definition, then multiplied by scene nodes using that mesh; UV/normal seams can duplicate vertices. Not welded original Blender vertex counts."
+    },
+    "source_geometry": {
+      "matched_export_objects": 36,
+      "base_polygons": 358,
+      "base_triangles": 868,
+      "base_vertices": 504,
+      "base_quad_faces": 328,
+      "base_ngons": 30,
+      "evaluated_triangles_in_blend": 2452,
+      "method": "Only original Blender mesh objects named by mesh nodes in the final GLB; excludes studio/catalog items not exported. Base counts before modifiers; evaluated counts after modifiers."
+    }
+  },
+  "b": {
+    "source": "/workspace/roblox-with-swe-report/docs/experiments/blender-luna-skills-2026-11-05/cases/01-arcane-blaster/run-b/asset.glb",
+    "load_ok": true,
+    "blender": "5.2.3 LTS",
+    "mesh_objects": 53,
+    "triangles": 5216,
+    "materials": 6,
+    "bounds": [
+      [
+        -1.3549998998641968,
+        2.180000066757202
+      ],
+      [
+        -0.5149999856948853,
+        0.5149999856948853
+      ],
+      [
+        -1.2000000476837158,
+        1.7599999904632568
+      ]
+    ],
+    "dimensions": [
+      3.534999966621399,
+      1.0299999713897705,
+      2.9600000381469727
+    ],
+    "armatures": 0,
+    "bones": 0,
+    "mesh_with_armature_modifier": 0,
+    "actions": 0,
+    "fps": 24,
+    "frame_start": 1,
+    "frame_end": 250,
+    "max_vertex_displacement_from_frame_1": {
+      "1": 0.0,
+      "12": 0.0,
+      "16": 0.0,
+      "24": 0.0,
+      "32": 0.0,
+      "36": 0.0,
+      "48": 0.0
+    },
+    "external_images": [],
+    "elapsed_seconds_reported": 223.0,
+    "duration_basis": "Janela dos logs de execução: A 21:58:08–22:02:55; B 21:58:14–22:01:57 UTC. Inclui pausa/retomada do ambiente e não mede duração integral dos subagentes.",
+    "skills_read_reported": 0,
+    "skills_names_reported": [],
+    "tokens": null,
+    "files_bytes": {
+      "README.md": 811,
+      "asset.blend": 130924,
+      "asset.glb": 287680,
+      "back.png": 624065,
+      "execution-log.txt": 1115,
+      "front.png": 626240,
+      "generate.py": 7664,
+      "logs/blender-run.log": 5869,
+      "presentation.png": 664105,
+      "skills-read.txt": 98
+    },
+    "images": {
+      "back.png": {
+        "size": [
+          768,
+          768
+        ],
+        "bytes": 624065
+      },
+      "presentation.png": {
+        "size": [
+          768,
+          768
+        ],
+        "bytes": 664105
+      },
+      "front.png": {
+        "size": [
+          768,
+          768
+        ],
+        "bytes": 626240
+      }
+    },
+    "glb_structure": {
+      "valid_header": true,
+      "animations": [],
+      "skins": 0,
+      "external_uris": [],
+      "nodes": 53
+    },
+    "module_exports": {},
+    "geometry_export": {
+      "mesh_definitions": 53,
+      "mesh_instances": 53,
+      "triangles_in_mesh_definitions": 5216,
+      "triangles_instantiated": 5216,
+      "position_vertices_in_mesh_definitions": 6979,
+      "position_vertices_instantiated": 6979,
+      "animation_clips": 0,
+      "skins": 0,
+      "vertex_count_definition": "Sum of unique POSITION accessors within each mesh definition, then multiplied by scene nodes using that mesh; UV/normal seams can duplicate vertices. Not welded original Blender vertex counts."
+    },
+    "source_geometry": {
+      "matched_export_objects": 53,
+      "base_polygons": 592,
+      "base_triangles": 1072,
+      "base_vertices": 640,
+      "base_quad_faces": 358,
+      "base_ngons": 14,
+      "evaluated_triangles_in_blend": 5216,
+      "method": "Only original Blender mesh objects named by mesh nodes in the final GLB; excludes studio/catalog items not exported. Base counts before modifiers; evaluated counts after modifiers."
+    }
+  }
+}

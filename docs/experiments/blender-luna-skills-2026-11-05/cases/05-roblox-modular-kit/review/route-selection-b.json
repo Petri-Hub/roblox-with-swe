@@ -1,0 +1,56 @@
+{
+  "segments": [
+    {
+      "label": "entrada",
+      "from": [
+        -6.5,
+        0,
+        1.5
+      ],
+      "to": [
+        -4,
+        0,
+        1.5
+      ]
+    },
+    {
+      "label": "corredor principal",
+      "from": [
+        -4,
+        0,
+        1.5
+      ],
+      "to": [
+        4,
+        0,
+        1.5
+      ]
+    },
+    {
+      "label": "transição da curva",
+      "from": [
+        4,
+        0,
+        1.5
+      ],
+      "to": [
+        4,
+        4,
+        1.5
+      ]
+    },
+    {
+      "label": "trecho norte",
+      "from": [
+        4,
+        4,
+        1.5
+      ],
+      "to": [
+        4,
+        8,
+        1.5
+      ]
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "source": "/workspace/roblox-with-swe-report/docs/experiments/blender-luna-skills-2026-11-05/cases/02-horror-creature/run-b/asset.blend",
+  "load_ok": true,
+  "blender": "5.2.3 LTS",
+  "mesh_objects": 51,
+  "triangles": 5558,
+  "materials": 6,
+  "bounds": [
+    [
+      -100.0,
+      100.0
+    ],
+    [
+      -100.0,
+      100.0
+    ],
+    [
+      -0.03500000014901161,
+      3.306225299835205
+    ]
+  ],
+  "dimensions": [
+    200.0,
+    200.0,
+    3.3412252999842167
+  ],
+  "armatures": 1,
+  "bones": 17,
+  "mesh_with_armature_modifier": 50,
+  "actions": 1,
+  "fps": 24,
+  "frame_start": 1,
+  "frame_end": 48,
+  "max_vertex_displacement_from_frame_1": {
+    "1": 0.0,
+    "12": 0.08010481064577951,
+    "16": 0.06985281740457291,
+    "24": 0.024564474280452723,
+    "32": 0.10112383839697744,
+    "36": 0.11702577071565702,
+    "48": 0.0
+  },
+  "external_images": []
+}

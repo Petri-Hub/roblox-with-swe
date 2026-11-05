@@ -1,0 +1,111 @@
+{
+  "ok": true,
+  "asset_blend_bytes": 148141,
+  "glbs": [
+    {
+      "file": "asset.glb",
+      "bytes": 828860,
+      "nodes": 13,
+      "mesh_nodes": 13,
+      "materials": 6,
+      "images": 0,
+      "camera_nodes": 0,
+      "light_nodes": 0,
+      "nonzero_node_transforms": [
+        "Demo_Entry_Arch",
+        "Demo_Exit_Arch",
+        "Demo_Floor_2",
+        "Demo_Floor_3",
+        "Demo_Torch_1",
+        "Demo_Torch_2",
+        "Demo_Wall_East_Lower",
+        "Demo_Wall_North_Turn",
+        "Demo_Wall_North_Upper",
+        "Demo_Wall_South_Turn",
+        "Demo_Wall_West_Upper"
+      ]
+    },
+    {
+      "file": "modules/SM_Column_4m.glb",
+      "bytes": 42288,
+      "nodes": 1,
+      "mesh_nodes": 1,
+      "materials": 3,
+      "images": 0,
+      "camera_nodes": 0,
+      "light_nodes": 0,
+      "nonzero_node_transforms": []
+    },
+    {
+      "file": "modules/SM_Corner_4m.glb",
+      "bytes": 141148,
+      "nodes": 1,
+      "mesh_nodes": 1,
+      "materials": 4,
+      "images": 0,
+      "camera_nodes": 0,
+      "light_nodes": 0,
+      "nonzero_node_transforms": []
+    },
+    {
+      "file": "modules/SM_DoorArch_4m.glb",
+      "bytes": 28300,
+      "nodes": 1,
+      "mesh_nodes": 1,
+      "materials": 3,
+      "images": 0,
+      "camera_nodes": 0,
+      "light_nodes": 0,
+      "nonzero_node_transforms": []
+    },
+    {
+      "file": "modules/SM_Floor_4m.glb",
+      "bytes": 11868,
+      "nodes": 1,
+      "mesh_nodes": 1,
+      "materials": 3,
+      "images": 0,
+      "camera_nodes": 0,
+      "light_nodes": 0,
+      "nonzero_node_transforms": []
+    },
+    {
+      "file": "modules/SM_Torch.glb",
+      "bytes": 8724,
+      "nodes": 1,
+      "mesh_nodes": 1,
+      "materials": 2,
+      "images": 0,
+      "camera_nodes": 0,
+      "light_nodes": 0,
+      "nonzero_node_transforms": []
+    },
+    {
+      "file": "modules/SM_Wall_4m.glb",
+      "bytes": 137888,
+      "nodes": 1,
+      "mesh_nodes": 1,
+      "materials": 4,
+      "images": 0,
+      "camera_nodes": 0,
+      "light_nodes": 0,
+      "nonzero_node_transforms": []
+    }
+  ],
+  "pngs": {
+    "front.png": [
+      768,
+      768
+    ],
+    "back.png": [
+      768,
+      768
+    ],
+    "presentation.png": [
+      768,
+      768
+    ]
+  },
+  "demo_triangles": 5548,
+  "demo_mesh_objects": 13
+}

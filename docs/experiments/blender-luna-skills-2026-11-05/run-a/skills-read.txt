@@ -1,0 +1,9 @@
+SKILL.md consulted:
+skill-source/AGENTS.md
+skill-source/skills/blender-core/SKILL.md
+skill-source/skills/blender-scene-setup/SKILL.md
+skill-source/skills/blender-pbr-materials/SKILL.md
+skill-source/skills/blender-export-pipelines/SKILL.md
+skill-source/skills/blender-rendering/SKILL.md
+skill-source/skills/blender-lighting-lookdev/SKILL.md
+skill-source/skills/blender-asset-qa/SKILL.md

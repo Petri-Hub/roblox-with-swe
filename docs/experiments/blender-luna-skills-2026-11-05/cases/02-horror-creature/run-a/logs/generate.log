@@ -1,0 +1,139 @@
+/workspace/blender-study/cases/02-horror-creature/run-a/generate.py:30: DeprecationWarning: 'Material.use_nodes' is expected to be removed in Blender 6.0
+  m=bpy.data.materials.new(name); m.diffuse_color=(*color,1); m.use_nodes=True
+/workspace/blender-study/cases/02-horror-creature/run-a/generate.py:176: DeprecationWarning: 'World.use_nodes' is expected to be removed in Blender 6.0
+  world=scene.world or bpy.data.worlds.new('World'); scene.world=world; world.use_nodes=True
+00:18.939  render           | Saved: '/workspace/blender-study/cases/02-horror-creature/run-a/front.png'
+00:41.276  render           | Saved: '/workspace/blender-study/cases/02-horror-creature/run-a/back.png'
+01:02.007  render           | Saved: '/workspace/blender-study/cases/02-horror-creature/run-a/presentation.png'
+01:21.802  render           | Saved: '/workspace/blender-study/cases/02-horror-creature/run-a/pose-01.png'
+01:40.112  render           | Saved: '/workspace/blender-study/cases/02-horror-creature/run-a/pose-24.png'
+01:59.780  render           | Saved: '/workspace/blender-study/cases/02-horror-creature/run-a/pose-48.png'
+Info: Saved as "asset.blend"
+INFO Draco is available, use library at /workspace/blender-study/tools/blender-5.2.3-linux-x64/lib/libbf_intern_draco_bridge.so
+INFO MeshOptimizer is available, use library at /workspace/blender-study/tools/blender-5.2.3-linux-x64/lib/libbf_intern_meshopt_bridge.so
+22:10:10 | INFO: Starting glTF 2.0 export
+22:10:10 | INFO: Extracting primitive: Icosphere
+22:10:10 | INFO: Primitives created: 1
+22:10:10 | INFO: Extracting primitive: Icosphere.006
+22:10:10 | INFO: Primitives created: 1
+22:10:10 | INFO: Extracting primitive: Icosphere.013
+22:10:10 | INFO: Primitives created: 1
+22:10:10 | INFO: Extracting primitive: Cone.005
+22:10:10 | INFO: Primitives created: 1
+22:10:10 | INFO: Extracting primitive: Cone.020
+22:10:10 | INFO: Primitives created: 1
+22:10:10 | INFO: Extracting primitive: Cone.007
+22:10:10 | INFO: Primitives created: 1
+22:10:10 | INFO: Extracting primitive: Cone.022
+22:10:10 | INFO: Primitives created: 1
+22:10:10 | INFO: Extracting primitive: Cone.009
+22:10:10 | INFO: Primitives created: 1
+22:10:10 | INFO: Extracting primitive: Cone.024
+22:10:10 | INFO: Primitives created: 1
+22:10:10 | INFO: Extracting primitive: Cone.001
+22:10:10 | INFO: Primitives created: 1
+22:10:10 | INFO: Extracting primitive: Cone.016
+22:10:10 | INFO: Primitives created: 1
+22:10:10 | INFO: Extracting primitive: Cone
+22:10:10 | INFO: Primitives created: 1
+22:10:10 | INFO: Extracting primitive: Cone.015
+22:10:10 | INFO: Primitives created: 1
+22:10:10 | INFO: Extracting primitive: Cone.036
+22:10:10 | INFO: Primitives created: 1
+22:10:10 | INFO: Extracting primitive: Cone.037
+22:10:10 | INFO: Primitives created: 1
+22:10:10 | INFO: Extracting primitive: Cone.038
+22:10:10 | INFO: Primitives created: 1
+22:10:10 | INFO: Extracting primitive: Icosphere.008
+22:10:10 | INFO: Primitives created: 1
+22:10:10 | INFO: Extracting primitive: Icosphere.015
+22:10:10 | INFO: Primitives created: 1
+22:10:10 | INFO: Extracting primitive: Cone.004
+22:10:10 | INFO: Primitives created: 1
+22:10:10 | INFO: Extracting primitive: Cone.019
+22:10:10 | INFO: Primitives created: 1
+22:10:10 | INFO: Extracting primitive: Cone.006
+22:10:10 | INFO: Primitives created: 1
+22:10:10 | INFO: Extracting primitive: Cone.021
+22:10:10 | INFO: Primitives created: 1
+22:10:10 | INFO: Extracting primitive: Cone.008
+22:10:10 | INFO: Primitives created: 1
+22:10:10 | INFO: Extracting primitive: Cone.023
+22:10:10 | INFO: Primitives created: 1
+22:10:10 | INFO: Extracting primitive: Icosphere.012
+22:10:10 | INFO: Primitives created: 1
+22:10:10 | INFO: Extracting primitive: Icosphere.019
+22:10:10 | INFO: Primitives created: 1
+22:10:10 | INFO: Extracting primitive: Cone.003
+22:10:10 | INFO: Primitives created: 1
+22:10:10 | INFO: Extracting primitive: Cone.018
+22:10:10 | INFO: Primitives created: 1
+22:10:10 | INFO: Extracting primitive: Icosphere.002
+22:10:10 | INFO: Primitives created: 1
+22:10:10 | INFO: Extracting primitive: Icosphere.005
+22:10:10 | INFO: Primitives created: 1
+22:10:10 | INFO: Extracting primitive: Icosphere.011
+22:10:10 | INFO: Primitives created: 1
+22:10:10 | INFO: Extracting primitive: Icosphere.018
+22:10:10 | INFO: Primitives created: 1
+22:10:10 | INFO: Extracting primitive: Icosphere.004
+22:10:10 | INFO: Primitives created: 1
+22:10:10 | INFO: Extracting primitive: Icosphere.010
+22:10:10 | INFO: Primitives created: 1
+22:10:10 | INFO: Extracting primitive: Icosphere.017
+22:10:10 | INFO: Primitives created: 1
+22:10:10 | INFO: Extracting primitive: Icosphere.001
+22:10:10 | INFO: Primitives created: 1
+22:10:10 | INFO: Extracting primitive: Cone.030
+22:10:10 | INFO: Primitives created: 1
+22:10:10 | INFO: Extracting primitive: Cone.031
+22:10:10 | INFO: Primitives created: 1
+22:10:10 | INFO: Extracting primitive: Cone.032
+22:10:10 | INFO: Primitives created: 1
+22:10:10 | INFO: Extracting primitive: Cone.033
+22:10:10 | INFO: Primitives created: 1
+22:10:10 | INFO: Extracting primitive: Cone.034
+22:10:10 | INFO: Primitives created: 1
+22:10:10 | INFO: Extracting primitive: Cone.035
+22:10:10 | INFO: Primitives created: 1
+22:10:10 | INFO: Extracting primitive: Cone.011
+22:10:10 | INFO: Primitives created: 1
+22:10:10 | INFO: Extracting primitive: Cone.026
+22:10:10 | INFO: Primitives created: 1
+22:10:10 | INFO: Extracting primitive: Icosphere.007
+22:10:10 | INFO: Primitives created: 1
+22:10:10 | INFO: Extracting primitive: Icosphere.014
+22:10:10 | INFO: Primitives created: 1
+22:10:10 | INFO: Extracting primitive: Icosphere.003
+22:10:10 | INFO: Primitives created: 1
+22:10:10 | INFO: Extracting primitive: Cone.010
+22:10:10 | INFO: Primitives created: 1
+22:10:10 | INFO: Extracting primitive: Cone.025
+22:10:10 | INFO: Primitives created: 1
+22:10:10 | INFO: Extracting primitive: Cone.012
+22:10:10 | INFO: Primitives created: 1
+22:10:10 | INFO: Extracting primitive: Cone.027
+22:10:10 | INFO: Primitives created: 1
+22:10:10 | INFO: Extracting primitive: Cone.013
+22:10:10 | INFO: Primitives created: 1
+22:10:10 | INFO: Extracting primitive: Cone.028
+22:10:10 | INFO: Primitives created: 1
+22:10:10 | INFO: Extracting primitive: Cone.014
+22:10:10 | INFO: Primitives created: 1
+22:10:10 | INFO: Extracting primitive: Cone.029
+22:10:10 | INFO: Primitives created: 1
+22:10:10 | INFO: Extracting primitive: Cone.002
+22:10:10 | INFO: Primitives created: 1
+22:10:10 | INFO: Extracting primitive: Cone.017
+22:10:10 | INFO: Primitives created: 1
+22:10:10 | INFO: Extracting primitive: Icosphere.009
+22:10:10 | INFO: Primitives created: 1
+22:10:10 | INFO: Extracting primitive: Icosphere.016
+22:10:10 | INFO: Primitives created: 1
+22:10:10 | INFO: Finished glTF 2.0 export in 0.24697279930114746 s
+
+Info: Saved as "asset.blend"
+BUILD_DONE {"objects": 60, "tris": 1428, "action": "VigiaDoBrejo_Idle", "outputs": ["asset.blend", "generate.py", "back.png", "pose-24.png", "logs", "pose-01.png", "execution-log.txt", "presentation.png", "pose-48.png", "asset.glb", "config", "front.png", "asset.blend1", "skills-read.txt", "cache", "README.md"]}
+Blender 5.2.3 LTS (hash e13b728c6880 built 2026-10-22 01:35:05)
+
+Blender quit

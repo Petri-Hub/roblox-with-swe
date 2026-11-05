@@ -1,0 +1,13 @@
+Início: 2026-11-05 (UTC; timestamp detalhado registrado no log do comando).
+Pedido: criar kit modular low poly de corredor de masmorra para Roblox, exportar e revisar renders.
+22:59 UTC: primeira execução produziu arquivos, mas revisão visual mostrou duas questões: a transformação de rotação da montagem não girava os deslocamentos dos subobjetos; as vistas frontal/apresentação enfatizavam o exterior e escondiam a entrada. Corrigi rotação dos offsets em torno da origem modular, reposicionei câmeras e reduzi amostras para otimizar o render. Um aviso de cache de thumbnails do Blender é ambiente-only; saída principal foi salva.
+Início efetivo: 2026-11-05 22:57:27 UTC.
+Comandos e revisões:
+- Criei diretórios `modules/` e `logs/`; registrei em `skills-read.txt` que skills não foram consultadas.
+- Executei `/workspace/blender-study/tools/blender-5.2.3-linux-x64/blender -b --factory-startup --python generate.py`, usando Cycles CPU e 4 threads. Saídas: `logs/generate.log`. Primeira visualização detectou offsets não girados na composição e enquadramento que escondia a entrada.
+- Corrigi a rotação dos deslocamentos em `generate.py` e reposicionei as câmeras; segunda execução: `logs/generate-revision.log`. A inspeção visual apontou colunas muito encostadas à parede e linhas visíveis nos encontros das tampas; afastei as colunas e aumentei a sobreposição das tampas/rodapés.
+- Execução final: mesmo comando Blender, saída `logs/generate-final2.log`, código 0. Os três renders foram revisados visualmente após a geração final.
+- QA via Python: PNGs medem 768×768; GLBs têm cabeçalho glTF 2 válido e tamanho interno consistente. `asset.glb`: 217 nós, 33 malhas, 5 materiais, 0 câmeras e 0 luzes. Os seis GLBs modulares foram confirmados com materiais e sem câmera/luz. Verificados arquivos obrigatórios, `asset.blend`, `generate.py`, `README.md` e os módulos em `modules/`.
+
+Limitações/avisos: Blender registrou falha ao tentar gravar thumbnail em `/home/agent/.cache/thumbnails` (diretório de configuração/cache fora da área gravável); isso não impediu salvar cena, renders ou exports. Ainda se percebem linhas estreitas de sombra/contato em alguns encaixes nas vistas oblíquas por causa do chanfro low poly; as dimensões modulares se sobrepõem no topo, e os PNGs não mostram abertura de passagem bloqueada. O Roblox Studio não foi aberto, conforme o pedido.
+Fim: 2026-11-05 23:06:39 UTC.

@@ -1,0 +1,140 @@
+{
+  "activated_single_clip_objects": [
+    {
+      "object": "ANIM_Grass_Sway_0",
+      "action": "Grass_Sway_Loop_0",
+      "frame_range": [
+        1.0,
+        49.0
+      ]
+    },
+    {
+      "object": "ANIM_Grass_Sway_1",
+      "action": "Grass_Sway_Loop_1",
+      "frame_range": [
+        1.0,
+        49.0
+      ]
+    },
+    {
+      "object": "ANIM_Grass_Sway_2",
+      "action": "Grass_Sway_Loop_2",
+      "frame_range": [
+        1.0,
+        49.0
+      ]
+    },
+    {
+      "object": "ANIM_Rotor_Hub",
+      "action": "Windmill_Rotor_Loop",
+      "frame_range": [
+        1.0,
+        49.0
+      ]
+    }
+  ],
+  "method": "world-space evaluated mesh BVH surface overlap, frames 1..48, epsilon 0; touching/coplanarity can be flagged; containment and motion between frames not certified",
+  "selection": {
+    "moving": [
+      "SM_Blade_Spar_0",
+      "SM_Blade_Spar_1",
+      "SM_Blade_Spar_2",
+      "SM_Blade_Spar_3",
+      "SM_Blade_Tip_0",
+      "SM_Blade_Tip_1",
+      "SM_Blade_Tip_2",
+      "SM_Blade_Tip_3",
+      "SM_Rotor_Blade_0",
+      "SM_Rotor_Blade_1",
+      "SM_Rotor_Blade_2",
+      "SM_Rotor_Blade_3"
+    ],
+    "obstacles": [
+      "SM_Door_Knob",
+      "SM_Door_Leaf",
+      "SM_Door_Lintel",
+      "SM_Door_Plank",
+      "SM_Door_Plank.001",
+      "SM_Door_Plank.002",
+      "SM_Door_Plank.003",
+      "SM_Door_Recess",
+      "SM_Eave_Beam",
+      "SM_Fence_Back_Post",
+      "SM_Fence_Back_Post.001",
+      "SM_Fence_Back_Post.002",
+      "SM_Fence_Back_Rail",
+      "SM_Fence_Back_Rail.001",
+      "SM_Fence_Back_Rail.002",
+      "SM_Fence_Picket",
+      "SM_Fence_Picket.001",
+      "SM_Fence_Picket.002",
+      "SM_Fence_Picket.003",
+      "SM_Fence_Picket.004",
+      "SM_Fence_Picket.005",
+      "SM_Fence_Picket.006",
+      "SM_Fence_Picket.007",
+      "SM_Fence_Picket.008",
+      "SM_Fence_Picket.009",
+      "SM_Fence_Picket.010",
+      "SM_Fence_Picket.011",
+      "SM_Fence_Post",
+      "SM_Fence_Post.001",
+      "SM_Fence_Post.002",
+      "SM_Fence_Post.003",
+      "SM_Fence_Post.004",
+      "SM_Fence_Post.005",
+      "SM_Fence_Post.006",
+      "SM_Fence_Post.007",
+      "SM_Fence_Post.008",
+      "SM_Fence_Post.009",
+      "SM_Fence_Rail",
+      "SM_Fence_Rail.001",
+      "SM_Fence_Rail.002",
+      "SM_Fence_Rail.003",
+      "SM_Foundation",
+      "SM_Island_Earth",
+      "SM_Island_Top",
+      "SM_Rim_Stone_00",
+      "SM_Rim_Stone_01",
+      "SM_Rim_Stone_02",
+      "SM_Rim_Stone_03",
+      "SM_Rim_Stone_04",
+      "SM_Rim_Stone_05",
+      "SM_Rim_Stone_06",
+      "SM_Rim_Stone_07",
+      "SM_Rim_Stone_08",
+      "SM_Rim_Stone_09",
+      "SM_Rim_Stone_10",
+      "SM_Rim_Stone_11",
+      "SM_Roof",
+      "SM_Roof_Cap",
+      "SM_Tower",
+      "SM_Window_Frame",
+      "SM_Window_Frame.001",
+      "SM_Window_Glass",
+      "SM_Window_Glass.001"
+    ],
+    "excluded_intentional_or_vegetation": [
+      "SM_Grass_Blade_0_0",
+      "SM_Grass_Blade_0_1",
+      "SM_Grass_Blade_0_2",
+      "SM_Grass_Blade_0_3",
+      "SM_Grass_Blade_0_4",
+      "SM_Grass_Blade_1_0",
+      "SM_Grass_Blade_1_1",
+      "SM_Grass_Blade_1_2",
+      "SM_Grass_Blade_1_3",
+      "SM_Grass_Blade_1_4",
+      "SM_Grass_Blade_2_0",
+      "SM_Grass_Blade_2_1",
+      "SM_Grass_Blade_2_2",
+      "SM_Grass_Blade_2_3",
+      "SM_Grass_Blade_2_4",
+      "SM_Rotor_Hub",
+      "SM_Hub_Axle"
+    ]
+  },
+  "frames_sampled": 48,
+  "overlaps": [],
+  "overlap_records": 0
+}

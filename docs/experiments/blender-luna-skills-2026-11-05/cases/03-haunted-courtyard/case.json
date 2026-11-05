@@ -1,0 +1,9 @@
+{
+  "id": "03-haunted-courtyard",
+  "title": "Cenário estático / composição e materiais",
+  "request": "Crie no Blender um pequeno pátio de capela abandonada para um jogo de terror estilizado low poly. Inclua a fachada e entrada da capela, um caminho de pedra que se possa percorrer, portão quebrado, poço e vegetação esparsa. Quero uma composição que conduza o olhar até a entrada, escala coerente e iluminação de luar com uma fonte quente perto da porta. Capriche na sensação de abandono sem usar sangue. A cena deve funcionar como um pequeno diorama completo, com os elementos apoiados de forma convincente. Não precisa de animação.\n\nEntregue asset.blend, asset.glb, generate.py e README.md, além de três renders PNG de 768×768 (front.png, back.png e presentation.png), com vistas que permitam avaliar a construção. O GLB deve conter somente o asset e seus materiais; mantenha chão de estúdio, luzes e câmeras fora da exportação. Prefira materiais autossuficientes, sem dependências externas. Revise visualmente suas imagens e corrija os problemas que encontrar antes de concluir. Não basta descrever a cena: gere e verifique os arquivos.",
+  "model": "gpt-6-luna",
+  "reasoning_effort": "medium",
+  "blender": "5.2.3",
+  "skills_commit": "fb92cfb4cc5a238c22113a6a230b09f535bd0656"
+}

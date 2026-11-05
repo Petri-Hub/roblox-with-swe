@@ -1,0 +1,12 @@
+/workspace/blender-study/skill-source/AGENTS.md
+/workspace/blender-study/skill-source/skills/blender-core/SKILL.md
+/workspace/blender-study/skill-source/skills/blender-scene-setup/SKILL.md
+/workspace/blender-study/skill-source/skills/blender-hardsurface-modeling/SKILL.md
+/workspace/blender-study/skill-source/skills/blender-pbr-materials/SKILL.md
+/workspace/blender-study/skill-source/skills/blender-export-pipelines/SKILL.md
+/workspace/blender-study/skill-source/skills/blender-export-pipelines/references/roblox.md
+/workspace/blender-study/skill-source/skills/blender-rendering/SKILL.md
+/workspace/blender-study/skill-source/skills/blender-lighting-lookdev/SKILL.md
+/workspace/blender-study/skill-source/skills/blender-environment-kits/SKILL.md
+/workspace/blender-study/skill-source/skills/blender-asset-qa/SKILL.md
+/workspace/blender-study/skill-source/skills/blender-retopology-uv/SKILL.md

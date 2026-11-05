@@ -1,0 +1,115 @@
+{
+  "folder": "cases/02-horror-creature",
+  "title": "Vigia do Brejo: criatura com rig e idle",
+  "summary": "Neste par, a versão com skills (A) foi minha preferência: tem silhueta mais coerente, membros alongados e placas ósseas legíveis com 1.428 triângulos exportados. B também entregou rig e animação funcionais, mas ficou mais volumosa e segmentada, com 5.556 triângulos. Nenhuma transmite plenamente uma criatura curvada e organicamente aterrorizante.",
+  "interpretation": "As duas animações finais mudam de pose depois de reimportadas. A vantagem de A neste caso está na coerência e economia, não em ser a única versão que anima. B detectou e corrigiu um erro de keyframes constantes antes de entregar. O resultado contradiz qualquer regra simples de que dispensar skills seria sempre melhor.",
+  "global_takeaway": "Preferência A: silhueta mais coerente e menor geometria; ambas exportam rig e movimento.",
+  "images": {
+    "a": [
+      "front.png",
+      "back.png",
+      "presentation.png"
+    ],
+    "b": [
+      "front.png",
+      "back.png",
+      "presentation.png"
+    ]
+  },
+  "timing_note": "Janelas dos logs: A 22:04:41–22:11:55 UTC (434 s); B 22:04:48–22:13:14 UTC (506 s). Incluem geração, falhas, render e revisão. O lançamento da dupla foi registrado separadamente. Não são tempos isolados de raciocínio nem custo em tokens.",
+  "gallery_notes": [
+    "A tem braços longos, garras finas e formas ósseas mais pontudas. B tem membros volumosos, mãos grandes e articulações esféricas aparentes, aproximando-se de um boneco articulado. Ambas respeitam a ausência de olhos e a abertura luminosa.",
+    "O verso mostra a carapaça/placas e a segmentação dos membros. Em B, as junções e hastes de ligação são mais evidentes; em A, os contornos se aproximam de um humanoide esguio, embora a pele continue formada por peças separadas.",
+    "As duas têm iluminação esverdeada e fundo escuro. A me parece mais próxima do terror estilizado; B tem leitura mais robusta e cartunesca. Ambas estão relativamente eretas e perdem parte da postura curvada solicitada. Não medi percepção de medo com outros avaliadores."
+  ],
+  "extra_images": [
+    {
+      "title": "Quadros da animação idle — comparação de poses",
+      "files": [
+        "pose-01.png",
+        "pose-24.png",
+        "pose-48.png"
+      ]
+    }
+  ],
+  "extra_charts": [
+    {
+      "title": "Movimento verificado após reimportação",
+      "file": "charts/motion.png",
+      "note": "Cada ponto é a maior distância de um vértice em relação ao mesmo vértice no quadro 1. Não é velocidade, qualidade de animação ou nota de deformação. Foram amostrados apenas sete quadros, com unidades da cena. Deslocamento maior não significa animação melhor. O .blend e o GLB de ambas apresentam variação real. A diferença residual entre quadros 1 e 48 em A é cerca de 0,0011 unidade; B retorna aos mesmos valores amostrados."
+    }
+  ],
+  "analysis_a": [
+    "A exportou 59 objetos de malha, seis materiais efetivamente importados, uma armature com 17 ossos e 1.428 triângulos. O GLB ocupa 263.736 bytes e contém um skin e uma animação com 51 canais. As medidas são da auditoria independente da exportação, distintas das contagens de malha base e materiais totais citadas pelo agente.",
+    "A silhueta esguia, os dedos compridos e os elementos pontudos funcionam melhor para meu entendimento do pedido. A região luminosa sem olhos é clara. As placas ósseas se distinguem da pele, mas o resultado ainda parece um personagem montado a partir de primitivas. A postura curvada não é suficientemente marcada.",
+    "A auditoria do GLB detectou deslocamento máximo de aproximadamente 0,056 unidade em relação ao quadro 1 nos quadros amostrados. A animação é sutil, conforme o pedido. A reprodução entre primeiro e último quadro tem pequena diferença residual; não analisei continuidade de velocidades em todos os ossos.",
+    "O agente corrigiu seu teste de reimportação para limpar o cubo, a câmera e a luz default antes de importar. Esse detalhe evita falsos positivos sobre objetos de estúdio no GLB. Reduziu amostras de 24 para 6 após uma execução interrompida e registrou uma ressalva de contato com o piso de cerca de 1 cm."
+  ],
+  "analysis_b": [
+    "B exportou 50 objetos de malha, quatro materiais importados, rig com 17 ossos e 5.556 triângulos. O GLB tem 731.048 bytes e inclui um skin e 51 canais de animação. A maior densidade de geometria não produziu, na minha avaliação, uma anatomia mais convincente.",
+    "A massa nos ombros e nas articulações, o formato arredondado das placas e a distribuição dos braços fazem a criatura parecer mais um boneco ou robô. O agente adicionou hastes para conectar segmentos após perceber espaços entre as formas. Isso ajuda na ligação, mas a segmentação segue muito visível.",
+    "B encontrou primeiro uma incompatibilidade de Action.fcurves no Blender 5.2. Depois detectou que suas chaves guardavam valores idênticos porque a inserção estava fora do laço de poses. Corrigiu a inserção, regenerou cenas e imagens e comprovou diferenças. O arquivo final tem movimento real no GLB; a falha intermediária não foi tratada como resultado final.",
+    "Nos quadros amostrados, o deslocamento máximo atingiu cerca de 0,117 unidade, e o quadro 48 coincide com o quadro 1. Maior amplitude não é, por si, um mérito. O agente usou oito samples no render final e reconheceu a aparência facetada/segmentada como limitação."
+  ],
+  "skills": [
+    [
+      "blender-animation",
+      "Idle de aproximadamente dois segundos; movimento confirmado após importação."
+    ],
+    [
+      "blender-asset-qa",
+      "Log de checagem e ressalva de contato com o piso."
+    ],
+    [
+      "blender-character-rigging",
+      "Rig e skinning; rig de 17 ossos presente no GLB."
+    ],
+    [
+      "blender-core",
+      "Execução, API e encaminhamento."
+    ],
+    [
+      "blender-export-pipelines",
+      "GLB com rig, skin e animação."
+    ],
+    [
+      "blender-lighting-lookdev",
+      "Apresentação com luzes e câmeras."
+    ],
+    [
+      "blender-pbr-materials",
+      "Pele, placas e emissão separadas."
+    ],
+    [
+      "blender-rendering",
+      "Renders e poses; amostragem reduzida para completar a execução."
+    ],
+    [
+      "blender-scene-setup",
+      "Unidades, coleções e organização."
+    ],
+    [
+      "blender-sculpting",
+      "Construção de formas orgânicas; também leu forms-and-bake-sources.md. A entrega usa formas segmentadas, não escultura contínua."
+    ]
+  ],
+  "critique": [
+    "A venceu minha avaliação equilibrada neste pedido, mas não entregou uma criatura plenamente orgânica, curvada e assustadora. Proporção, postura e intenção artística continuam limitadas. A boa economia de triângulos não corrige requisitos visuais parcialmente atendidos.",
+    "O agente sem skills também conseguiu rig, skin e exportação animada depois de revisar. Portanto, não se pode concluir que as skills sejam necessárias para esse pipeline. Elas coincidiram com melhor resultado neste caso e com um fluxo diferente de correção.",
+    "Dez skills consultadas não equivalem a dez técnicas aplicadas com sucesso. A referência de escultura foi lida, mas o asset segue construído por partes. O teste não separa ajuda de API, orientação de proporções, QA e escolhas do modelo.",
+    "Os renders de 6 e 8 samples e as escolhas de iluminação não foram igualados. Ruído, suavidade e apresentação podem afetar preferências. Os tempos incluem correções, renderizações interrompidas e execução em máquina compartilhada.",
+    "Movimento confirmado por vértices e canais não prova qualidade de skinning em poses extremas, ausência de interpenetração entre todos os frames ou continuidade perfeita do loop. Não houve walk cycle, retargeting ou teste em engine. Uma amostra por condição e julgamento não cego continuam limitando a conclusão.",
+    "Também foi necessário desconstruir minha própria contagem: objetos auxiliares criados pelo importador não pertencem à geometria exportada. Por isso, além de reimportar, conferi as definições e instâncias diretamente no glTF e preservei o erro inicial no histórico. Isso altera números da primeira versão do PDF, sem mudar minha preferência visual por A."
+  ],
+  "verification": [
+    "Apliquei o mesmo audit_asset.py aos dois .blend e aos dois GLBs finais. Ambos abriram, reimportaram e apresentaram movimento em quadros amostrados. A análise registra bones, armatures, modificadores de deformação, skins e canais de animação. Não há URIs externas nos GLBs.",
+    "Conferi as dimensões dos doze PNGs de entrega e abri as vistas e amostras de poses para inspeção. Apresentação e pose-01 usam o mesmo enquadramento e estado inicial; não são vistas independentes para avaliar amplitude. A confirmação de movimento vem dos vértices avaliados no .blend e no GLB, não da existência de nomes de arquivos diferentes.",
+    "A primeira auditoria somava uma Icosphere auxiliar criada pelo importador para exibir ossos: eram 80 triângulos e uma malha a mais em cada variante. Excluí esse objeto por sua referência como custom_shape, repeti a inspeção e confirmei as contagens no próprio glTF: A 1.428 triângulos/59 malhas, B 5.556/50. Os JSONs iniciais foram preservados como *.initial-with-helper.json e o diagnóstico em importer-helper-diagnosis.log. O agente A já havia informado 1.428; a divergência anterior vinha do meu contador. Não alterei os assets."
+  ],
+  "next_steps": [
+    "Reforçar a postura curvada e a silhueta de terror em ambas; melhorar a ligação anatômica de ombros, cotovelos e quadris.",
+    "Testar poses extremas e contatos do pé, não apenas um idle sutil. Medir também continuidade de velocidade no loop.",
+    "Usar câmeras e iluminação neutras padronizadas numa avaliação adicional; preservar a apresentação artística como critério separado.",
+    "Repetir execuções e usar telemetria de tokens se o objetivo for estimar custo de correções e leitura de skills."
+  ]
+}

@@ -1,0 +1,156 @@
+{
+  "folder": "cases/05-roblox-modular-kit",
+  "title": "Kit modular: peças, encaixes e circulação",
+  "summary": "Prefiro A como base para continuar: arco, paginação de pedra, origens e separação da montagem ficaram mais coerentes. Isso veio com GLB muito maior e 19.516 triângulos efetivamente exportados, contra 9.212 em B. Ambas têm falhas: A mantém juntas coplanares e uma tocha num trecho examinado; B exporta protótipos sobrepostos à montagem e uma parede atravessa a transição da curva.",
+  "interpretation": "Módulos individuais válidos não garantem uma montagem utilizável. A qualidade aqui deve separar forma, encaixe, circulação e custo da exportação. O teste de raios encontra contatos em segmentos selecionados, não certifica navegação de um avatar. Nenhuma versão está pronta para uso no Roblox sem correções e validação no Studio.",
+  "global_takeaway": "Preferência A como base, mas com mais geometria e juntas pendentes. B inclui protótipos e parede no trajeto da curva.",
+  "images": {
+    "a": [
+      "front.png",
+      "back.png",
+      "presentation.png"
+    ],
+    "b": [
+      "front.png",
+      "back.png",
+      "presentation.png"
+    ]
+  },
+  "time_label": "Janela registrada nos logs (min)",
+  "timing_note": "A: 22:57:22–23:21:43 UTC, 1.461 s. B: 22:57:27–23:06:39 UTC, 552 s. O ambiente foi retomado durante o caso e ambos receberam a mesma orientação de continuação, sem reiniciar a modelagem. Não interprete as janelas como custo de tokens ou velocidade controlada.",
+  "gallery_notes": [
+    "A usa um arco curvo e alvenaria com paginação mais clara. B usa uma moldura reta e painéis maiores. A entrada de ambas foi examinada geometricamente e os raios de entrada passaram, mas isso não valida a circulação interna.",
+    "O verso de A permite ver a outra entrada e uma tocha no interior. B evidencia encontros escuros entre tampas e paredes. Não trato automaticamente toda região escura como buraco: parte pode ser sombra, sobreposição ou faces coincidentes. Os dados de geometria e percursos foram verificados separadamente.",
+    "A mostra uma montagem em L mais compacta. B contém componentes-fonte e a demonstração ao mesmo tempo, incluindo peças sobrepostas na origem. A preferência por A não elimina suas pendências: juntas coplanares, contato de uma tocha com um segmento do trajeto e necessidade de conferir colisão/escala no Roblox."
+  ],
+  "extra_charts": [
+    {
+      "title": "Geometria no percurso — inspeção independente",
+      "file": "charts/routes.png",
+      "note": "O desenho usa uma seção real dos GLBs em Z=1,5; os quadrados claros mostram as células de piso esperadas pela montagem. Em A, um raio atingiu Demo_Torch_2 em (4,06; 6; 1,5); isso é um obstáculo localizado e não prova bloqueio de toda a largura. Em B, o corredor central atingiu um protótipo de arco em (-2; 0; 1,5), e a transição da curva atingiu uma parede em (4; 1,8; 1,5). Os outros segmentos selecionados passaram. Não há avatar, volume de colisão ou busca completa de caminho neste teste."
+    }
+  ],
+  "inspection_pages": [
+    {
+      "title": "Inspeção neutra dos módulos — 1/3",
+      "note": "Esquerda: A, com skills. Direita: B, sem skills. Imagens geradas pelo avaliador a partir dos GLBs finais, preservando materiais e geometria. Câmera relativa ao tamanho de cada peça e iluminação comum; dimensões em unidades Blender, não na mesma convenção física de Roblox. Estes renders não foram produzidos pelos agentes.",
+      "rows": [
+        {
+          "label": "Piso — dimensões A 4.00 × 4.00 × 0.36 / B 4.00 × 4.00 × 0.24",
+          "a": "inspection-a/SM_Floor_4m.png",
+          "b": "inspection-b/floor.png"
+        },
+        {
+          "label": "Parede — dimensões A 4.00 × 0.46 × 4.02 / B 4.08 × 0.55 × 4.00",
+          "a": "inspection-a/SM_Wall_4m.png",
+          "b": "inspection-b/wall.png"
+        }
+      ]
+    },
+    {
+      "title": "Inspeção neutra dos módulos — 2/3",
+      "note": "Esquerda: A, com skills. Direita: B, sem skills. Imagens geradas pelo avaliador a partir dos GLBs finais, preservando materiais e geometria. Câmera relativa ao tamanho de cada peça e iluminação comum; dimensões em unidades Blender, não na mesma convenção física de Roblox. Estes renders não foram produzidos pelos agentes.",
+      "rows": [
+        {
+          "label": "Canto — dimensões A 4.23 × 4.23 × 4.02 / B 4.20 × 4.20 × 4.00",
+          "a": "inspection-a/SM_Corner_4m.png",
+          "b": "inspection-b/corner.png"
+        },
+        {
+          "label": "Arco — dimensões A 4.10 × 0.50 × 4.00 / B 4.00 × 0.73 × 4.06",
+          "a": "inspection-a/SM_DoorArch_4m.png",
+          "b": "inspection-b/doorarch.png"
+        }
+      ]
+    },
+    {
+      "title": "Inspeção neutra dos módulos — 3/3",
+      "note": "Esquerda: A, com skills. Direita: B, sem skills. Imagens geradas pelo avaliador a partir dos GLBs finais, preservando materiais e geometria. Câmera relativa ao tamanho de cada peça e iluminação comum; dimensões em unidades Blender, não na mesma convenção física de Roblox. Estes renders não foram produzidos pelos agentes.",
+      "rows": [
+        {
+          "label": "Coluna — dimensões A 0.84 × 0.84 × 4.00 / B 1.08 × 1.00 × 4.00",
+          "a": "inspection-a/SM_Column_4m.png",
+          "b": "inspection-b/column.png"
+        },
+        {
+          "label": "Tocha — dimensões A 0.56 × 0.38 × 1.78 / B 0.38 × 0.59 × 1.27",
+          "a": "inspection-a/SM_Torch.png",
+          "b": "inspection-b/torch.png"
+        }
+      ]
+    }
+  ],
+  "analysis_a": [
+    "A entregou seis GLBs de módulo, cada um com um nó/malha na origem. O GLB principal contém somente a montagem e tem 13 malhas, seis materiais e 19.516 triângulos instanciados, medidos após exportação. O arquivo ocupa 828.860 bytes. A paginação da parede, o arco curvo e a coluna têm mais detalhe e consistência que B na minha avaliação.",
+    "O agente declarou 5.548 triângulos da montagem. A auditoria encontrou 19.516 no GLB e confirmei o mesmo número diretamente nas primitivas glTF. A contagem menor corresponde à malha-base, antes de todos os efeitos da exportação/modificadores. Não usei esse valor declarado como se fosse o resultado final. Parede e canto isolados chegam a 2.948 e 2.928 triângulos, respectivamente, ainda abaixo dos 3 mil declarados por módulo.",
+    "O fluxo de QA identificou UVs ausentes, contatos no arco/tocha e uma parede que bloqueava um vão. O agente adicionou UVs e removeu a parede. Os módulos passaram no perfil Roblox, mas o QA da montagem ainda registra seis pares coplanares em juntas; o README aceita e explica essa limitação. Logo, não há um pass global sem ressalvas.",
+    "A documentação usa 1 unidade Blender = 1 metro e explicita a conversão aproximada para studs. A abertura declarada é de 2,24 × 3,57 m. Isso não foi testado no Studio. O teste independente de trajetos também atingiu uma tocha em um dos trechos; a montagem exige revisar seu posicionamento/suporte e não deve ser chamada de circulação integralmente validada."
+  ],
+  "analysis_b": [
+    "B entregou os seis tipos de módulo e GLB principal de 112.708 bytes. O arquivo tem 33 definições de malha reutilizadas em 217 nós de malha, totalizando 9.212 triângulos quando as instâncias são contadas. A geometria única armazenada soma 1.368 triângulos, explicando parte da economia do arquivo. Isso é distinto do total desenhado na cena.",
+    "O acabamento é mais simples: moldura reta, parede com painéis largos e coluna quadrangular. A inspeção neutra também mostra um artefato escuro no encontro do canto. As peças carregam e têm materiais, mas a montagem tem problemas mais importantes que apresentação.",
+    "O gerador exporta assets.all_objects, incluindo as coleções MODULE e DEMO. Os protótipos ficam sobrepostos em torno da origem; um jamb do arco-fonte atingiu o raio do corredor principal. Na curva, o gerador mantém uma parede ao norte do último segmento reto, na linha y=2, que atravessa o acesso à continuação do piso. O raio (4,0)→(4,4) atingiu essa parede em y=1,8.",
+    "A revisão do próprio agente corrigiu offsets que não giravam, câmeras e colunas, mas não identificou esses problemas finais. O README usa 1 unidade Blender = 1 stud e declara passagem de cerca de 1,4 × 3,1 unidades. Essa escala difere da escolhida por A e precisa ser conferida com o avatar-alvo; não afirmo compatibilidade pronta no Roblox."
+  ],
+  "skills": [
+    [
+      "blender-asset-qa",
+      "QA separada dos módulos e da montagem; seis pares coplanares ainda registrados na montagem."
+    ],
+    [
+      "blender-core",
+      "Execução dentro do Blender; corrigiu chamada inicial via Python externo."
+    ],
+    [
+      "blender-environment-kits",
+      "Encaixes e organização modular."
+    ],
+    [
+      "blender-export-pipelines",
+      "Exportação de módulos e referência roblox.md; um nó por módulo em A."
+    ],
+    [
+      "blender-hardsurface-modeling",
+      "Construção dos módulos e detalhes de pedra."
+    ],
+    [
+      "blender-lighting-lookdev",
+      "Câmeras e apresentação."
+    ],
+    [
+      "blender-pbr-materials",
+      "Materiais de pedra, metal e chama."
+    ],
+    [
+      "blender-rendering",
+      "Três vistas da montagem."
+    ],
+    [
+      "blender-retopology-uv",
+      "Adição de UVs e validação 0–1 após falhas iniciais."
+    ],
+    [
+      "blender-scene-setup",
+      "Unidades, origens e coleções."
+    ]
+  ],
+  "critique": [
+    "A é minha preferência para continuação, principalmente por clareza construtiva e organização, mas usa cerca de 2,12 vezes os triângulos e 7,35 vezes os bytes de B no GLB principal. A maior riqueza geométrica e menor número de objetos não são vantagens gratuitas; desempenho real não foi medido.",
+    "B tem um arquivo pequeno graças à reutilização de definições, mas inclui protótipos e uma montagem com problemas de percurso. Economizar bytes não compensa automaticamente deixar de cumprir a organização e a circulação solicitadas. A comparação mistura também interpretações diferentes da extensão da montagem.",
+    "As convenções físicas diferem: A trabalha em metros e documenta conversão para studs; B associa diretamente unidades a studs. Ambos usam passo numérico quatro no Blender, mas não resultam na mesma escala física no Roblox. Não comparei seus vãos como se fossem o mesmo tamanho para um avatar.",
+    "Também precisei corrigir minha própria interpretação: antecipei que todos os raios de A ficariam livres, mas a leitura completa encontrou a tocha. Um contato pontual de raio não demonstra bloqueio de toda a passagem; a conclusão final preserva esse resultado e não o transforma em teste de navegação.",
+    "Nem o QA dos módulos nem as imagens bastam para atestar o conjunto. Os seis pares coplanares em A e os obstáculos de B mostram falhas distintas. A avaliação ainda é não cega, sem repetição, e sofreu retomada do ambiente. Os tempos não medem tokens."
+  ],
+  "verification": [
+    "Reabri ambos os .blend e reimportei os dois GLBs principais com o mesmo script. Os totais de triângulos, instâncias, definições e materiais foram confrontados com os dados glTF. Os seis PNGs dos agentes medem 768 × 768.",
+    "Reimportei separadamente os doze módulos durante a geração de doze renders neutros de 384 × 384. Os manifests registram dimensões, limites, origens das malhas e contagem por módulo. Os pisos de ambas medem exatamente 4 × 4 unidades; frisos e espessuras fazem alguns outros limites externos exceder quatro, o que não é, sozinho, falha de passo da grade.",
+    "O check_routes.py preserva os segmentos exatos e os primeiros contatos com superfícies. A seção de malha em Z=1,5 ajuda a localizar os obstáculos. Não houve busca completa de caminho, teste de suporte do piso, avatar, configuração de colisores ou Studio. Não afirmo que todo raio atingido representa passagem completamente bloqueada.",
+    "As imagens neutras e o diagrama são inspeções do avaliador; não são entregas dos agentes nem alterações dos assets. A primeira contagem de 5.548 citada pelo agente A e os logs originais foram preservados, ao lado da contagem final de 19.516 confirmada por dois métodos."
+  ],
+  "next_steps": [
+    "Em A, corrigir as seis juntas coplanares, recolocar a tocha num suporte coerente e avaliar se é possível preservar o visual com menos bevel/geometria e mais reutilização de dados.",
+    "Em B, exportar somente a montagem em asset.glb, manter os protótipos fora dela e remover/reorganizar a parede na transição da curva. Rever também o encontro escuro do canto.",
+    "Fixar a mesma convenção de unidades para o projeto e testar altura/largura de passagem com o avatar-alvo no Roblox Studio.",
+    "Aplicar orçamento de polígonos sobre o GLB final, contando as instâncias, e não apenas sobre a malha-base. Validar também montagem e circulação, não só peças isoladas."
+  ]
+}

@@ -1,0 +1,170 @@
+Failed to create secure directory (/home/agent/.config/pulse): Read-only file system
+/workspace/blender-study/cases/02-horror-creature/run-b/generate.py:15: DeprecationWarning: 'Material.use_nodes' is expected to be removed in Blender 6.0
+  m=bpy.data.materials.new(name); m.diffuse_color=(*color,1); m.use_nodes=True
+00:11.526  render           | Saved: '/workspace/blender-study/cases/02-horror-creature/run-b/front.png'
+00:23.891  render           | Saved: '/workspace/blender-study/cases/02-horror-creature/run-b/back.png'
+00:35.723  render           | Saved: '/workspace/blender-study/cases/02-horror-creature/run-b/presentation.png'
+00:47.618  render           | Saved: '/workspace/blender-study/cases/02-horror-creature/run-b/pose-01.png'
+00:58.796  render           | Saved: '/workspace/blender-study/cases/02-horror-creature/run-b/pose-24.png'
+01:09.857  render           | Saved: '/workspace/blender-study/cases/02-horror-creature/run-b/pose-48.png'
+01:09.869  image.write      | ERROR OpenImageIO write failed: Could not open file "/home/agent/.cache/thumbnails/large/blender_4964_7b1db65e9ed3464f41cb6e3615529088.png.png"
+Info: Saved as "asset.blend"
+INFO Draco is available, use library at /workspace/blender-study/tools/blender-5.2.3-linux-x64/lib/libbf_intern_draco_bridge.so
+INFO MeshOptimizer is available, use library at /workspace/blender-study/tools/blender-5.2.3-linux-x64/lib/libbf_intern_meshopt_bridge.so
+22:12:58 | INFO: Starting glTF 2.0 export
+22:12:58 | WARNING: Armature must be the parent of skinned meshArmature is selected by its name, but may be false in case of instances
+22:12:58 | WARNING: Armature must be the parent of skinned meshArmature is selected by its name, but may be false in case of instances
+22:12:58 | WARNING: Armature must be the parent of skinned meshArmature is selected by its name, but may be false in case of instances
+22:12:58 | WARNING: Armature must be the parent of skinned meshArmature is selected by its name, but may be false in case of instances
+22:12:58 | WARNING: Armature must be the parent of skinned meshArmature is selected by its name, but may be false in case of instances
+22:12:58 | WARNING: Armature must be the parent of skinned meshArmature is selected by its name, but may be false in case of instances
+22:12:58 | WARNING: Armature must be the parent of skinned meshArmature is selected by its name, but may be false in case of instances
+22:12:58 | WARNING: Armature must be the parent of skinned meshArmature is selected by its name, but may be false in case of instances
+22:12:58 | WARNING: Armature must be the parent of skinned meshArmature is selected by its name, but may be false in case of instances
+22:12:58 | WARNING: Armature must be the parent of skinned meshArmature is selected by its name, but may be false in case of instances
+22:12:58 | WARNING: Armature must be the parent of skinned meshArmature is selected by its name, but may be false in case of instances
+22:12:58 | WARNING: Armature must be the parent of skinned meshArmature is selected by its name, but may be false in case of instances
+22:12:58 | WARNING: Armature must be the parent of skinned meshArmature is selected by its name, but may be false in case of instances
+22:12:58 | WARNING: Armature must be the parent of skinned meshArmature is selected by its name, but may be false in case of instances
+22:12:58 | WARNING: Armature must be the parent of skinned meshArmature is selected by its name, but may be false in case of instances
+22:12:58 | WARNING: Armature must be the parent of skinned meshArmature is selected by its name, but may be false in case of instances
+22:12:58 | WARNING: Armature must be the parent of skinned meshArmature is selected by its name, but may be false in case of instances
+22:12:58 | WARNING: Armature must be the parent of skinned meshArmature is selected by its name, but may be false in case of instances
+22:12:58 | WARNING: Armature must be the parent of skinned meshArmature is selected by its name, but may be false in case of instances
+22:12:58 | WARNING: Armature must be the parent of skinned meshArmature is selected by its name, but may be false in case of instances
+22:12:58 | WARNING: Armature must be the parent of skinned meshArmature is selected by its name, but may be false in case of instances
+22:12:58 | WARNING: Armature must be the parent of skinned meshArmature is selected by its name, but may be false in case of instances
+22:12:58 | WARNING: Armature must be the parent of skinned meshArmature is selected by its name, but may be false in case of instances
+22:12:58 | WARNING: Armature must be the parent of skinned meshArmature is selected by its name, but may be false in case of instances
+22:12:58 | WARNING: Armature must be the parent of skinned meshArmature is selected by its name, but may be false in case of instances
+22:12:58 | WARNING: Armature must be the parent of skinned meshArmature is selected by its name, but may be false in case of instances
+22:12:58 | WARNING: Armature must be the parent of skinned meshArmature is selected by its name, but may be false in case of instances
+22:12:58 | WARNING: Armature must be the parent of skinned meshArmature is selected by its name, but may be false in case of instances
+22:12:58 | WARNING: Armature must be the parent of skinned meshArmature is selected by its name, but may be false in case of instances
+22:12:58 | WARNING: Armature must be the parent of skinned meshArmature is selected by its name, but may be false in case of instances
+22:12:58 | WARNING: Armature must be the parent of skinned meshArmature is selected by its name, but may be false in case of instances
+22:12:58 | WARNING: Armature must be the parent of skinned meshArmature is selected by its name, but may be false in case of instances
+22:12:58 | WARNING: Armature must be the parent of skinned meshArmature is selected by its name, but may be false in case of instances
+22:12:58 | WARNING: Armature must be the parent of skinned meshArmature is selected by its name, but may be false in case of instances
+22:12:58 | WARNING: Armature must be the parent of skinned meshArmature is selected by its name, but may be false in case of instances
+22:12:58 | WARNING: Armature must be the parent of skinned meshArmature is selected by its name, but may be false in case of instances
+22:12:58 | WARNING: Armature must be the parent of skinned meshArmature is selected by its name, but may be false in case of instances
+22:12:58 | WARNING: Armature must be the parent of skinned meshArmature is selected by its name, but may be false in case of instances
+22:12:58 | WARNING: Armature must be the parent of skinned meshArmature is selected by its name, but may be false in case of instances
+22:12:58 | WARNING: Armature must be the parent of skinned meshArmature is selected by its name, but may be false in case of instances
+22:12:58 | WARNING: Armature must be the parent of skinned meshArmature is selected by its name, but may be false in case of instances
+22:12:58 | WARNING: Armature must be the parent of skinned meshArmature is selected by its name, but may be false in case of instances
+22:12:58 | WARNING: Armature must be the parent of skinned meshArmature is selected by its name, but may be false in case of instances
+22:12:58 | WARNING: Armature must be the parent of skinned meshArmature is selected by its name, but may be false in case of instances
+22:12:58 | WARNING: Armature must be the parent of skinned meshArmature is selected by its name, but may be false in case of instances
+22:12:58 | WARNING: Armature must be the parent of skinned meshArmature is selected by its name, but may be false in case of instances
+22:12:58 | WARNING: Armature must be the parent of skinned meshArmature is selected by its name, but may be false in case of instances
+22:12:58 | WARNING: Armature must be the parent of skinned meshArmature is selected by its name, but may be false in case of instances
+22:12:58 | WARNING: Armature must be the parent of skinned meshArmature is selected by its name, but may be false in case of instances
+22:12:58 | WARNING: Armature must be the parent of skinned meshArmature is selected by its name, but may be false in case of instances
+22:12:58 | INFO: Extracting primitive: Sphere.006
+22:12:58 | INFO: Primitives created: 1
+22:12:58 | INFO: Extracting primitive: Sphere.021
+22:12:58 | INFO: Primitives created: 1
+22:12:58 | INFO: Extracting primitive: Sphere.036
+22:12:58 | INFO: Primitives created: 1
+22:12:58 | INFO: Extracting primitive: Cone.001
+22:12:58 | INFO: Primitives created: 1
+22:12:58 | INFO: Extracting primitive: Cone.003
+22:12:58 | INFO: Primitives created: 1
+22:12:58 | INFO: Extracting primitive: Cone
+22:12:58 | INFO: Primitives created: 1
+22:12:58 | INFO: Extracting primitive: Cone.002
+22:12:58 | INFO: Primitives created: 1
+22:12:58 | INFO: Extracting primitive: Sphere.008
+22:12:58 | INFO: Primitives created: 1
+22:12:58 | INFO: Extracting primitive: Sphere.011
+22:12:58 | INFO: Primitives created: 1
+22:12:58 | INFO: Extracting primitive: Sphere.026
+22:12:58 | INFO: Primitives created: 1
+22:12:58 | INFO: Extracting primitive: Sphere.015
+22:12:58 | INFO: Primitives created: 1
+22:12:58 | INFO: Extracting primitive: Sphere.030
+22:12:58 | INFO: Primitives created: 1
+22:12:58 | INFO: Extracting primitive: Sphere.016
+22:12:58 | INFO: Primitives created: 1
+22:12:58 | INFO: Extracting primitive: Sphere.031
+22:12:58 | INFO: Primitives created: 1
+22:12:58 | INFO: Extracting primitive: Sphere.017
+22:12:58 | INFO: Primitives created: 1
+22:12:58 | INFO: Extracting primitive: Sphere.032
+22:12:58 | INFO: Primitives created: 1
+22:12:58 | INFO: Extracting primitive: Sphere.013
+22:12:58 | INFO: Primitives created: 1
+22:12:58 | INFO: Extracting primitive: Sphere.028
+22:12:58 | INFO: Primitives created: 1
+22:12:58 | INFO: Extracting primitive: Sphere.002
+22:12:58 | INFO: Primitives created: 1
+22:12:58 | INFO: Extracting primitive: Sphere.007
+22:12:58 | INFO: Primitives created: 1
+22:12:58 | INFO: Extracting primitive: Sphere.009
+22:12:58 | INFO: Primitives created: 1
+22:12:58 | INFO: Extracting primitive: Sphere.019
+22:12:58 | INFO: Primitives created: 1
+22:12:58 | INFO: Extracting primitive: Sphere.034
+22:12:58 | INFO: Primitives created: 1
+22:12:58 | INFO: Extracting primitive: Sphere.012
+22:12:58 | INFO: Primitives created: 1
+22:12:58 | INFO: Extracting primitive: Sphere.027
+22:12:58 | INFO: Primitives created: 1
+22:12:58 | INFO: Extracting primitive: Sphere.004
+22:12:58 | INFO: Primitives created: 1
+22:12:58 | INFO: Extracting primitive: Sphere.014
+22:12:58 | INFO: Primitives created: 1
+22:12:58 | INFO: Extracting primitive: Sphere.029
+22:12:58 | INFO: Primitives created: 1
+22:12:58 | INFO: Extracting primitive: Sphere.003
+22:12:58 | INFO: Primitives created: 1
+22:12:58 | INFO: Extracting primitive: Sphere.040
+22:12:58 | INFO: Primitives created: 1
+22:12:58 | INFO: Extracting primitive: Sphere.041
+22:12:58 | INFO: Primitives created: 1
+22:12:58 | INFO: Extracting primitive: Sphere.042
+22:12:58 | INFO: Primitives created: 1
+22:12:58 | INFO: Extracting primitive: Sphere.043
+22:12:58 | INFO: Primitives created: 1
+22:12:58 | INFO: Extracting primitive: Sphere.044
+22:12:58 | INFO: Primitives created: 1
+22:12:58 | INFO: Extracting primitive: Sphere.045
+22:12:58 | INFO: Primitives created: 1
+22:12:58 | INFO: Extracting primitive: Sphere.020
+22:12:59 | INFO: Primitives created: 1
+22:12:59 | INFO: Extracting primitive: Sphere.035
+22:12:59 | INFO: Primitives created: 1
+22:12:59 | INFO: Extracting primitive: Sphere.001
+22:12:59 | INFO: Primitives created: 1
+22:12:59 | INFO: Extracting primitive: Sphere.005
+22:12:59 | INFO: Primitives created: 1
+22:12:59 | INFO: Extracting primitive: Sphere.018
+22:12:59 | INFO: Primitives created: 1
+22:12:59 | INFO: Extracting primitive: Sphere.033
+22:12:59 | INFO: Primitives created: 1
+22:12:59 | INFO: Extracting primitive: Sphere
+22:12:59 | INFO: Primitives created: 1
+22:12:59 | INFO: Extracting primitive: Sphere.022
+22:12:59 | INFO: Primitives created: 1
+22:12:59 | INFO: Extracting primitive: Sphere.037
+22:12:59 | INFO: Primitives created: 1
+22:12:59 | INFO: Extracting primitive: Sphere.023
+22:12:59 | INFO: Primitives created: 1
+22:12:59 | INFO: Extracting primitive: Sphere.038
+22:12:59 | INFO: Primitives created: 1
+22:12:59 | INFO: Extracting primitive: Sphere.024
+22:12:59 | INFO: Primitives created: 1
+22:12:59 | INFO: Extracting primitive: Sphere.039
+22:12:59 | INFO: Primitives created: 1
+22:12:59 | INFO: Extracting primitive: Sphere.010
+22:12:59 | INFO: Primitives created: 1
+22:12:59 | INFO: Extracting primitive: Sphere.025
+22:12:59 | INFO: Primitives created: 1
+22:12:59 | INFO: Finished glTF 2.0 export in 0.1862192153930664 s
+
+DONE: generated blend, glb, 6 renders
+Blender 5.2.3 LTS (hash e13b728c6880 built 2026-10-22 01:35:05)
+
+Blender quit

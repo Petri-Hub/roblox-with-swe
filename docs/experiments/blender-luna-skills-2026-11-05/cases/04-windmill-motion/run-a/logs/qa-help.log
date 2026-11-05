@@ -1,0 +1,19 @@
+00:00.544  blend            | Read blend: "/workspace/blender-study/cases/04-windmill-motion/run-a/asset.blend"
+Blender 5.2.3 LTS (hash e13b728c6880 built 2026-10-22 01:35:05)
+usage: blender [-h] [--objects [OBJECTS ...]]
+               [--profile {game,render,print,roblox}] [--eps EPS] [--tol TOL]
+               [--no-modifiers] [--max-tris MAX_TRIS] [--no-uv]
+
+Mesh/asset QA: z-fighting, detached parts, normals, topology, transforms, UVs,
+weights, materials
+
+options:
+  -h, --help            show this help message and exit
+  --objects [OBJECTS ...]
+                        object names (default: selected, else all meshes)
+  --profile {game,render,print,roblox}
+  --eps EPS             z-fight plane distance (m)
+  --tol TOL             contact tolerance for detached parts (m)
+  --no-modifiers
+  --max-tris MAX_TRIS
+  --no-uv

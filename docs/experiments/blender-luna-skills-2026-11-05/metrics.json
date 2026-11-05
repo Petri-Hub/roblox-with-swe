@@ -1,0 +1,96 @@
+{
+  "a": {
+    "glb_import_ok": true,
+    "mesh_objects": 113,
+    "triangles": 4929,
+    "dimensions_m": [
+      3.380000114440918,
+      3.121828556060791,
+      8.80000114440918
+    ],
+    "materials": 8,
+    "elapsed_seconds_reported": 550,
+    "skills_read_reported": 7,
+    "tokens": null,
+    "files_bytes": {
+      "README.md": 1051,
+      "back.png": 635889,
+      "create_tower.py": 8425,
+      "execution-log.txt": 1113,
+      "front.png": 640519,
+      "presentation.png": 673666,
+      "refine_render.py": 1185,
+      "run_qa.py": 724,
+      "skills-read.txt": 386,
+      "tower.blend": 156927,
+      "tower.glb": 320452
+    },
+    "geometry_export": {
+      "mesh_definitions": 113,
+      "mesh_instances": 113,
+      "triangles_in_mesh_definitions": 4929,
+      "triangles_instantiated": 4929,
+      "position_vertices_in_mesh_definitions": 6876,
+      "position_vertices_instantiated": 6876,
+      "animation_clips": 0,
+      "skins": 0,
+      "vertex_count_definition": "Sum of unique POSITION accessors within each mesh definition, then multiplied by scene nodes using that mesh; UV/normal seams can duplicate vertices. Not welded original Blender vertex counts."
+    },
+    "source_geometry": {
+      "matched_export_objects": 113,
+      "base_polygons": 673,
+      "base_triangles": 1345,
+      "base_vertices": 899,
+      "base_quad_faces": 672,
+      "base_ngons": 0,
+      "evaluated_triangles_in_blend": 4929,
+      "method": "Only original Blender mesh objects named by mesh nodes in the final GLB; excludes studio/catalog items not exported. Base counts before modifiers; evaluated counts after modifiers."
+    }
+  },
+  "b": {
+    "glb_import_ok": true,
+    "mesh_objects": 146,
+    "triangles": 7708,
+    "dimensions_m": [
+      3.9200000762939453,
+      4.38597846031189,
+      9.015000194311142
+    ],
+    "materials": 7,
+    "elapsed_seconds_reported": 344,
+    "skills_read_reported": 0,
+    "tokens": null,
+    "files_bytes": {
+      "README.md": 694,
+      "execution-log.txt": 608,
+      "generate_tower.py": 10580,
+      "skills-read.txt": 89,
+      "tower-back.png": 675415,
+      "tower-front.png": 644536,
+      "tower-perspective.png": 708046,
+      "tower.blend": 177713,
+      "tower.glb": 476400
+    },
+    "geometry_export": {
+      "mesh_definitions": 146,
+      "mesh_instances": 146,
+      "triangles_in_mesh_definitions": 7708,
+      "triangles_instantiated": 7708,
+      "position_vertices_in_mesh_definitions": 10770,
+      "position_vertices_instantiated": 10770,
+      "animation_clips": 0,
+      "skins": 0,
+      "vertex_count_definition": "Sum of unique POSITION accessors within each mesh definition, then multiplied by scene nodes using that mesh; UV/normal seams can duplicate vertices. Not welded original Blender vertex counts."
+    },
+    "source_geometry": {
+      "matched_export_objects": 146,
+      "base_polygons": 974,
+      "base_triangles": 2148,
+      "base_vertices": 1368,
+      "base_quad_faces": 922,
+      "base_ngons": 52,
+      "evaluated_triangles_in_blend": 7708,
+      "method": "Only original Blender mesh objects named by mesh nodes in the final GLB; excludes studio/catalog items not exported. Base counts before modifiers; evaluated counts after modifiers."
+    }
+  }
+}

@@ -1,0 +1,12 @@
+Arquivo de instruções: /workspace/blender-study/skill-source/AGENTS.md
+SKILL.md consultados:
+- /workspace/blender-study/skill-source/skills/blender-core/SKILL.md
+- /workspace/blender-study/skill-source/skills/blender-scene-setup/SKILL.md
+- /workspace/blender-study/skill-source/skills/blender-environment-kits/SKILL.md
+- /workspace/blender-study/skill-source/skills/blender-lighting-lookdev/SKILL.md
+- /workspace/blender-study/skill-source/skills/blender-time-of-day/SKILL.md
+- /workspace/blender-study/skill-source/skills/blender-rendering/SKILL.md
+- /workspace/blender-study/skill-source/skills/blender-export-pipelines/SKILL.md
+- /workspace/blender-study/skill-source/skills/blender-pipeline-automation/SKILL.md
+- /workspace/blender-study/skill-source/skills/blender-asset-qa/SKILL.md
+Referências adicionais apontadas por essas skills: nenhuma consultada.

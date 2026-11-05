@@ -1,0 +1,41 @@
+Extensions: writing cache failed ([Errno 30] Read-only file system: '/home/agent/.config/blender/5.2').
+23:23:55 | INFO: Data are loaded, start creating Blender stuff
+23:23:55 | INFO: Blender create Mesh node Cube.028
+23:23:55 | INFO: Blender create Mesh node Cube.029
+23:23:55 | INFO: Blender create Mesh node Cube.027
+23:23:55 | INFO: Blender create Mesh node Cube.015
+23:23:55 | INFO: Blender create Mesh node Cube.016
+23:23:55 | INFO: Blender create Mesh node Cube.017
+23:23:55 | INFO: Blender create Mesh node Cube.018
+23:23:55 | INFO: Blender create Mesh node Cube.019
+23:23:55 | INFO: Blender create Mesh node Cube.020
+23:23:55 | INFO: Blender create Mesh node Cube.026
+23:23:55 | INFO: Blender create Mesh node Cube.021
+23:23:55 | INFO: Blender create Mesh node Cube.022
+23:23:55 | INFO: Blender create Mesh node Cube.023
+23:23:55 | INFO: Blender create Mesh node Cube.024
+23:23:55 | INFO: Blender create Mesh node Cube.025
+23:23:55 | INFO: Blender create Mesh node Cube.001
+23:23:55 | INFO: Blender create Mesh node Cube.002
+23:23:55 | INFO: Blender create Mesh node Cube.008
+23:23:55 | INFO: Blender create Mesh node Cube.014
+23:23:55 | INFO: Blender create Mesh node Cube.003
+23:23:55 | INFO: Blender create Mesh node Cube.005
+23:23:55 | INFO: Blender create Mesh node Cube.009
+23:23:55 | INFO: Blender create Mesh node Cube.011
+23:23:55 | INFO: Blender create Mesh node Cube.007
+23:23:55 | INFO: Blender create Mesh node Cube.013
+23:23:55 | INFO: Blender create Mesh node Cube.004
+23:23:55 | INFO: Blender create Mesh node Cube.006
+23:23:55 | INFO: Blender create Mesh node Cube.010
+23:23:55 | INFO: Blender create Mesh node Cube.012
+23:23:55 | INFO: Blender create Mesh node Cone
+23:23:55 | INFO: Blender create Mesh node Cone.001
+23:23:55 | INFO: Blender create Mesh node Cone.002
+23:23:55 | INFO: Blender create Mesh node Cube.030
+23:23:55 | INFO: glTF import finished in 0.08s
+AUDIT_OK asset.glb tris 9212 armatures 0 movement {'1': 0.0, '12': 0.0, '16': 0.0, '24': 0.0, '32': 0.0, '36': 0.0, '48': 0.0, '49': 0.0}
+Blender 5.2.3 LTS (hash e13b728c6880 built 2026-10-22 01:35:05)
+
+Blender quit
+Failed to create secure directory (/home/agent/.config/pulse): Read-only file system

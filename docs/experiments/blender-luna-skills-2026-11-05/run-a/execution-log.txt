@@ -1,0 +1,19 @@
+2026-11-05 21:40:06 UTC
+start: recorded at execution-log.txt creation
+command: cat skill-source/AGENTS.md and blender-core/SKILL.md
+command: env_report.py with BLENDER_EXE and local config/cache
+command: blender -b --threads 4 --python env_report.py
+command: blender -b --threads 4 --python create_tower.py
+command: blender -b tower.blend --threads 4 --python refine_render.py (local HOME and cache)
+command: write README.md
+command: blender -b tower.blend --python qa_check.py -- --help
+command: blender -b tower.blend --threads 4 --python run_qa.py
+command: patch source fixes (roof overlaps, rivet bevel, flag UV, unique names, backdrop), reduce samples to 16
+command: blender --factory-startup --threads 4 --python create_tower.py
+command: blender -b tower.blend --threads 4 --python run_qa.py (compact report)
+command: patch source to use large backdrop and explicit mesh datablock names
+command: final Blender regeneration --factory-startup --threads 4
+command: final Blender QA run
+command: inspect PNG headers and GLB JSON; verify nonzero output sizes
+2026-11-05 21:49:16 UTC
+end: final delivery verified

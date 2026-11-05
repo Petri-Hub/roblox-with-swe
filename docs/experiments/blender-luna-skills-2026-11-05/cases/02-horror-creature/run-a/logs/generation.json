@@ -1,0 +1,11 @@
+{
+  "export_operator": "{'FINISHED'}",
+  "asset_objects": 60,
+  "meshes": 59,
+  "tris": 1428,
+  "action": "VigiaDoBrejo_Idle",
+  "frame_range": [
+    1,
+    48
+  ]
+}

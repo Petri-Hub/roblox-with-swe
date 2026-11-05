@@ -1,0 +1,18 @@
+Início UTC: 2026-11-05T22:16:38Z
+Comando: /workspace/blender-study/tools/blender-5.2.3-linux-x64/blender --background --python generate.py
+Configuração: Cycles CPU, 4 threads; configuração/caches do Blender redirecionados para ./cache.
+
+Correção visual: reposicionei as placas para repousarem na inclinação da cobertura. Segunda geração iniciada UTC: 2026-11-05T22:21:46Z
+
+Comandos executados:
+- date -u '+%Y-%m-%dT%H:%M:%SZ'
+- /workspace/blender-study/tools/blender-5.2.3-linux-x64/blender --version
+- Primeira execução: BLENDER_USER_CONFIG="$PWD/cache/config" BLENDER_USER_SCRIPTS="$PWD/cache/scripts" BLENDER_USER_DATAFILES="$PWD/cache/data" /workspace/blender-study/tools/blender-5.2.3-linux-x64/blender --background --python generate.py > logs/generate.log 2>&1
+- Segunda execução após correção visual: BLENDER_USER_CONFIG="$PWD/cache/config" BLENDER_USER_SCRIPTS="$PWD/cache/scripts" BLENDER_USER_DATAFILES="$PWD/cache/data" /workspace/blender-study/tools/blender-5.2.3-linux-x64/blender --background --python "$PWD/generate.py" > "$PWD/logs/generate-final.log" 2>&1
+- QA do blend: Blender background abriu asset.blend e verificou coleções, resolução e dispositivo/thread count; saída em logs/qa-blend.log.
+- QA do GLB: Blender background importou asset.glb e contou objetos/tipos/materiais; saída em logs/qa-glb.log.
+- Python/Pillow conferiu dimensões e modo dos três PNGs.
+
+Falha e correção: a primeira chamada de execução não criou logs/ antes do redirecionamento e falhou com “No such file or directory”. Criei logs/ e cache/config, cache/scripts e cache/data e repeti. O primeiro render mostrou placas do telhado fora do plano inclinado; corrigi suas posições em generate.py e regenerei blend, GLB e renders. Blender também emitiu aviso de PulseAudio por diretório padrão somente leitura e aviso de depreciação de Material.use_nodes; não afetaram as entregas. Inspecionei visualmente front.png, back.png e presentation.png; caminho, fachada, lanterna, poço e portão estão visíveis; a parede traseira é lisa por escolha. Verificação final UTC: 2026-11-05T22:23:48Z.
+
+QA GLB: a primeira inspeção visual via reimportação no Blender mostrou 1 câmera e 1 luz no contexto importado. Conferi a estrutura binária glTF diretamente e confirmei 175 nós do asset, zero câmeras e nenhuma extensão de luz; câmera/luz são defaults criados pelo importador no novo .blend vazio. Atualizei generate.py para export_cameras=False e export_lights=False e reexportei; a verificação estrutural está em logs/qa-glb-structure.log. Fim UTC: 2026-11-05T22:24:55Z.

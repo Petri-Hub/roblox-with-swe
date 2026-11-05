@@ -1,0 +1,9 @@
+{
+  "environment_resume_utc": "2026-11-05T22:01:58.190157+00:00",
+  "events": [
+    "Managed environment signaled starting, then ready. Files were preserved.",
+    "Root sent both agents status/resume instructions, preserving existing output.",
+    "First generated assets existed before resume; reports must disclose interruption.",
+    "Execution logs begin near Blender launch, not necessarily at model task start. Exact end-to-end time for this case is not available."
+  ]
+}
