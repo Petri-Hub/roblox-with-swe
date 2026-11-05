@@ -1,0 +1,6 @@
+Failed to create secure directory (/home/agent/.config/pulse): Read-only file system
+00:00.364  blend            | Read blend: "/workspace/blender-study/cases/01-arcane-blaster/run-a/asset.blend"
+@@JSON@@{"ok":true,"pass":true,"errors":[],"warnings":["asset lowest point z=-1.02 (not resting on ground plane z=0)"],"ground_z":-1.02,"zfighting":[],"floating":[],"back_to_back":[],"enclosed":[],"objects":{"Studio_Floor":{"verts":4,"faces":1,"tris":2,"ngons":0,"boundary_edges":4,"nonmanifold_edges":0,"wire_edges":0,"loose_verts":0,"degenerate_faces":0,"zero_length_edges":0,"inconsistent_normals_edges":0,"duplicate_verts":0,"islands":1,"inside_out_islands":0,"scale":[1.0,1.0,1.0],"materials":1,"uv_maps":1,"uv_oob_pct":0.0,"uv_zero_area_faces":0,"uv_overlap_pct":0.0,"uv_coverage_pct":100.0}}}
+Blender 5.2.3 LTS (hash e13b728c6880 built 2026-10-22 01:35:05)
+
+Blender quit

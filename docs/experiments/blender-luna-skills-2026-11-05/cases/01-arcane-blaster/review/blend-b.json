@@ -1,0 +1,44 @@
+{
+  "source": "/workspace/roblox-with-swe-report/docs/experiments/blender-luna-skills-2026-11-05/cases/01-arcane-blaster/run-b/asset.blend",
+  "load_ok": true,
+  "blender": "5.2.3 LTS",
+  "mesh_objects": 54,
+  "triangles": 5218,
+  "materials": 7,
+  "bounds": [
+    [
+      -100.0,
+      100.0
+    ],
+    [
+      -100.0,
+      100.0
+    ],
+    [
+      -1.2699999809265137,
+      1.7599999904632568
+    ]
+  ],
+  "dimensions": [
+    200.0,
+    200.0,
+    3.0299999713897705
+  ],
+  "armatures": 0,
+  "bones": 0,
+  "mesh_with_armature_modifier": 0,
+  "actions": 0,
+  "fps": 24,
+  "frame_start": 1,
+  "frame_end": 250,
+  "max_vertex_displacement_from_frame_1": {
+    "1": 0.0,
+    "12": 0.0,
+    "16": 0.0,
+    "24": 0.0,
+    "32": 0.0,
+    "36": 0.0,
+    "48": 0.0
+  },
+  "external_images": []
+}

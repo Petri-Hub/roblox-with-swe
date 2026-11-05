@@ -1,0 +1,14 @@
+Início: 2026-11-05 (UTC; horário será complementado após registro do shell).
+Escopo: execução isolada em run-b.
+Falha inicial (cwd incorreto): 2026-11-05 21:58:14 UTC
+Falha: primeira chamada executou em /workspace e Blender procurou /workspace/generate.py; corrigido usando cwd run-b.
+Código de saída da execução corrigida: 1
+Fim Blender: 2026-11-05 21:58:14 UTC
+Falha de preparação do log: 2026-11-05 21:58:21 UTC
+Falha: diretórios de logs/config/cache foram criados no cwd /workspace por erro de contexto; recriados em run-b.
+Código de saída da execução corrigida: 0
+Fim Blender: 2026-11-05 22:00:18 UTC
+Revisão visual: abri presentation.png, front.png e back.png; silhueta legível, contraste de materiais claro e detalhes visíveis. Notei linha de horizonte do piso nas vistas ortográficas front/back. Não alterei após revisão; renders permanecem adequados para avaliar o asset.
+Validação dimensional: PNGs criados pelo script a 768×768; GLB exportado com use_selection limitado à coleção asset.
+Skills consultadas: nenhuma (ver skills-read.txt).
+Conclusão: 2026-11-05 22:01:57 UTC

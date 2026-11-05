@@ -44,9 +44,9 @@ def table(rows,widths=None):
  t.setStyle(TableStyle([('BACKGROUND',(0,0),(-1,0),colors.HexColor('#e4eef1')),('VALIGN',(0,0),(-1,-1),'TOP'),('LINEBELOW',(0,0),(-1,0),.6,colors.HexColor('#91a6b0')),('BOTTOMPADDING',(0,0),(-1,-1),8),('TOPPADDING',(0,0),(-1,-1),8),('ROWBACKGROUNDS',(0,1),(-1,-1),[colors.white,colors.HexColor('#f4f6f7')])]))
  return t
 
-def charts(folder,m):
+def charts(folder,m,time_label="Tempo decorrido (min)"):
  out=folder/'charts';out.mkdir(exist_ok=True)
- metrics=[('Tempo decorrido (min)',[m[v].get('elapsed_seconds_reported',0)/60 for v in 'ab']),('Triângulos no GLB',[m[v].get('triangles',0) for v in 'ab']),('Tamanho do GLB (KB decimais)',[m[v]['files_bytes'].get('asset.glb',m[v]['files_bytes'].get('tower.glb',0))/1000 for v in 'ab']),('Skills consultadas (registro)',[m[v].get('skills_read_reported',0) for v in 'ab'])]
+ metrics=[(time_label,[m[v].get('elapsed_seconds_reported',0)/60 for v in 'ab']),('Triângulos no GLB',[m[v].get('triangles',0) for v in 'ab']),('Tamanho do GLB (KB decimais)',[m[v]['files_bytes'].get('asset.glb',m[v]['files_bytes'].get('tower.glb',0))/1000 for v in 'ab']),('Skills consultadas (registro)',[m[v].get('skills_read_reported',0) for v in 'ab'])]
  plt.rcParams.update({'font.family':'DejaVu Sans','font.size':10,'axes.spines.top':False,'axes.spines.right':False})
  fig,axs=plt.subplots(2,2,figsize=(10,7.2),layout='constrained')
  for ax,(title,vals) in zip(axs.flat,metrics):
@@ -59,7 +59,7 @@ def charts(folder,m):
  return out/'metrics.png'
 
 def case_report(config):
- folder=ROOT/config['folder'];m=json.loads((folder/'metrics.json').read_text()); chart=charts(folder,m)
+ folder=ROOT/config['folder'];m=json.loads((folder/'metrics.json').read_text()); chart=charts(folder,m,config.get("time_label","Tempo decorrido (min)"))
  title=config['title'];story=[para(title,'Title'),para('Comparação com e sem skills · relatório detalhado','Heading2'),para(config['summary']),Spacer(1,12)]
  # opening images at useful resolution
  hero=[]
@@ -77,7 +77,7 @@ def case_report(config):
  for ext in ['blend','glb']:
   rows.append([f'Arquivo .{ext} (bytes)']+[str(m[v]['files_bytes'].get(f'asset.{ext}',m[v]['files_bytes'].get(f'tower.{ext}',0))) for v in 'ab'])
  rows.append(['Tokens reais','não disponíveis','não disponíveis'])
- story += [table(rows,[220,145,145]),Spacer(1,12),para('Tempo decorrido inclui raciocínio, ferramentas, renderização, revisão e espera em uma máquina compartilhada. Mais tempo não prova maior consumo de tokens. Quantidade de skills lidas também não é medição de tokens. Tamanho de arquivo não mede qualidade, e número de objetos não equivale a draw calls.'),PageBreak()]
+ story += [table(rows,[220,145,145]),Spacer(1,12),para(config.get('timing_note','Tempos conforme registros dos agentes.')),para('Tempo decorrido inclui raciocínio, ferramentas, renderização, revisão e espera em uma máquina compartilhada. Mais tempo não prova maior consumo de tokens. Quantidade de skills lidas também não é medição de tokens. Tamanho de arquivo não mede qualidade, e número de objetos não equivale a draw calls.'),PageBreak()]
  for idx,label in enumerate(['Frente','Trás','Apresentação']):
   story += [para(f'3.{idx+1}. Galeria comparativa — {label}','Heading1')]
   pair=[image(folder/f'run-{v}'/config['images'][v][idx],250,250) for v in 'ab']

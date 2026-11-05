@@ -1,0 +1,9 @@
+2026-11-05T21:58:08Z
+Command: BLENDER_EXE=... blender -b --factory-startup --python-exit-code 1 -P generate.py
+Configuration/cache: XDG_CONFIG_HOME, XDG_CACHE_HOME and BLENDER_USER_CONFIG inside run-a/config
+Exit code: 0
+2026-11-05T21:59:35Z
+2026-11-05T22:02:55Z
+Falha/correção: primeira revisão visual revelou linha de horizonte forte nas vistas front/back; o script passou a ocultar o piso nessas duas vistas e mantê-lo na apresentação.
+QA: blender-asset-qa retornou pass=true; avisou ground_z=-1.02 por incluir STUDIO_FLOOR no conjunto sem seleção. QA executado sem filtro de objetos, por isso mediu o piso e não a coleção do asset. Nenhuma falha de geometria detectada no relatório.
+Revisão visual: front.png, back.png e presentation.png abertas e inspecionadas após correção.

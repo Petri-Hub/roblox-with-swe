@@ -12,8 +12,8 @@ Comparações pareadas com `gpt-6-luna` (medium), com e sem o pacote `EL4CTEO/bl
 
 ## Expansão autorizada em andamento
 
-1. Blaster arcano fictício.
-2. Criatura de terror com rig e idle.
+1. [Blaster arcano fictício — PDF concluído](cases/01-arcane-blaster/report.pdf).
+2. Criatura de terror com rig e idle — em execução.
 3. Pátio de capela abandonada.
 4. Moinho com animação de cenário.
 5. Kit modular para uso posterior no Roblox.
