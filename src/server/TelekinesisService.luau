@@ -393,6 +393,8 @@ local function aim(player: Player, point: any, yaw: any)
 	hold.point = Telekinesis.clampPoint(origin, clamped, Telekinesis.MAX_HOLD_DISTANCE + 6)
 end
 
+local SPLASH_STUN_SECONDS = 0.8
+
 local function damageGhosts(position: Vector3, radius: number, attacker: Player, direct: Model?)
 	local damaged: { [Model]: boolean } = {}
 
@@ -415,7 +417,13 @@ local function damageGhosts(position: Vector3, radius: number, attacker: Player,
 		local ghost = GhostService.resolve(part)
 		if ghost then
 			local origin = if ghost.PrimaryPart then ghost.PrimaryPart.Position else ghost:GetPivot().Position
-			apply(ghost, Telekinesis.splashDamage((origin - position).Magnitude))
+			local amount = Telekinesis.splashDamage((origin - position).Magnitude)
+			apply(ghost, amount)
+			-- The blast of a landing prop dazes too, not only a ghost hurled
+			-- straight into a wall.
+			if amount > 0 then
+				GhostService.stun(ghost, SPLASH_STUN_SECONDS)
+			end
 		end
 	end
 end

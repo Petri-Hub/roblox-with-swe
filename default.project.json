@@ -132,6 +132,15 @@
         "FruitController": {
           "$path": "src/client/FruitController.client.luau"
         },
+        "AbilityController": {
+          "$path": "src/client/AbilityController.client.luau"
+        },
+        "AbilityHud": {
+          "$path": "src/client/AbilityHud.luau"
+        },
+        "AbilityEffects": {
+          "$path": "src/client/AbilityEffects.luau"
+        },
         "FireMagicController": {
           "$path": "src/client/FireMagicController.client.luau"
         },
