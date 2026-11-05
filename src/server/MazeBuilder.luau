@@ -267,7 +267,7 @@ local function buildSafeRoom(parent: Instance)
 
 	-- North wall, split around the stair opening.
 	local northSpan = halfWidth - 4 - THICKNESS
-	local northCenter = 4 + northSpan / 2
+	local northCenter = 4 + northSpan / 2 + THICKNESS / 2
 	dressedWall(parent, Vector3.new(-northCenter, 0, northZ), northSpan, false, 0, ceilingY)
 	dressedWall(parent, Vector3.new(northCenter, 0, northZ), northSpan, false, 0, ceilingY)
 	-- Side and south walls.
