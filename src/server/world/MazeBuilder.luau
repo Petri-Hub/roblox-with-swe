@@ -6,6 +6,7 @@ local ServerStorage = game:GetService("ServerStorage")
 
 local MazeConfig = require(ReplicatedStorage.Shared.domain.MazeConfig)
 local MazePlan = require(ReplicatedStorage.Shared.domain.MazePlan)
+local Moldings = require(script.Parent.Moldings)
 
 local MazeBuilder = {}
 
@@ -98,7 +99,7 @@ local function dressedWall(
 	-- A bead is a half-buried cylinder on each face of the wall. Plain parts have
 	-- no other way to give a molding a curved profile: this project has no
 	-- uploaded meshes for trim, so a cove or a torus has to be turned by hand.
-	local function bead(radius: number, y: number, proud: number, colour: Color3)
+	local function cylinderBead(radius: number, y: number, proud: number, colour: Color3)
 		for _, side in { -1, 1 } do
 			local shift = across / 2 + proud - radius
 			local position = if alongZ
@@ -116,6 +117,32 @@ local function dressedWall(
 			part.CFrame = if alongZ
 				then CFrame.new(position) * CFrame.Angles(0, math.pi / 2, 0)
 				else CFrame.new(position)
+			part.Parent = parent
+		end
+	end
+
+	-- A generated mesh stretched along the run and mirrored onto both faces. The
+	-- profile rises from `y`, and its depth runs out of the wall.
+	local function molding(profile: string, rise: number, depth: number, y: number, colour: Color3)
+		local template = Moldings.get(profile)
+		if not template then
+			cylinderBead(depth / 2, y + rise / 2, depth, colour)
+			return
+		end
+
+		for _, side in { -1, 1 } do
+			local part = template:Clone()
+			part.Color = colour
+			part.Material = Enum.Material.Wood
+			part.Size = Vector3.new(long, rise, depth)
+
+			local origin = if alongZ
+				then Vector3.new(center.X + side * (across / 2 - 0.05), y, center.Z)
+				else Vector3.new(center.X, y, center.Z + side * (across / 2 - 0.05))
+
+			local turn = if alongZ then CFrame.Angles(0, math.pi / 2, 0) else CFrame.identity
+			local flip = if side == 1 then CFrame.identity else CFrame.Angles(0, math.pi, 0)
+			part.CFrame = CFrame.new(origin) * turn * flip
 			part.Parent = parent
 		end
 	end
@@ -221,9 +248,10 @@ local function dressedWall(
 		Enum.Material.Wood,
 		PALETTE.Wood
 	)
-	-- Rounded profile: a bead on the chair rail and a cove under the cornice.
-	bead(0.3, baseY + panelHeight + 0.18, 0.42, PALETTE.WoodTrim)
-	bead(0.38, baseY + wallHeight - 0.62, 0.5, PALETTE.WoodTrim)
+	-- Rounded profile: a real generated mesh where the mesh API works, the
+	-- half-buried cylinder where it does not.
+	molding("bead", 0.5, 0.55, baseY + panelHeight + 0.15, PALETTE.WoodTrim)
+	molding("cove", 0.6, 1.2, baseY + wallHeight - 1.2, PALETTE.WoodTrim)
 end
 
 -- A flat slab built from cell-sized strips, with rectangular holes cut out.
