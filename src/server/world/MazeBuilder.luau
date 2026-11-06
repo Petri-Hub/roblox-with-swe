@@ -439,7 +439,7 @@ local function decalTiles(parent: Instance, x0: number, x1: number, z0: number, 
 					CanTouch = false,
 					Material = Enum.Material.SmoothPlastic,
 					Color = PALETTE.Floor,
-					Size = Vector3.new(tile, 0.1, tile),
+					Size = Vector3.new(tile, 0.04, tile),
 					CFrame = CFrame.new(x + tile / 2, y, z + tile / 2),
 					TopSurface = Enum.SurfaceType.Smooth,
 					BottomSurface = Enum.SurfaceType.Smooth,
@@ -467,7 +467,7 @@ local function buildSafeRoom(parent: Instance)
 	local northZ = 6
 	local halfWidth = width / 2
 
-	slab(parent, -halfWidth, halfWidth, northZ, southZ, 0, Enum.Material.WoodPlanks, PALETTE.Floor, {})
+	slab(parent, -halfWidth, halfWidth, northZ, southZ, 0, Enum.Material.SmoothPlastic, PALETTE.FloorBase, {})
 
 	if not decalTiles(parent, -halfWidth, halfWidth, northZ, southZ, 0.06, nil) then
 		local skin = Textures.plane(width, depth, 8)
@@ -660,7 +660,9 @@ function MazeBuilder.build(random: Random?)
 	local halfW = MazeConfig.GridWidth * CELL / 2
 	local halfD = MazeConfig.GridDepth * CELL / 2
 
-	slab(root, -halfW, halfW, -halfD, halfD, FLOOR_Y, Enum.Material.WoodPlanks, PALETTE.Floor, { well })
+	-- The slab stays almost black: where the decal tiles meet, the gap must read
+	-- as a joint between boards, not as a bright line of plank material.
+	slab(root, -halfW, halfW, -halfD, halfD, FLOOR_Y, Enum.Material.SmoothPlastic, PALETTE.FloorBase, { well })
 
 	-- Floor skin over the slab: the store decal when one is configured, painted
 	-- wood otherwise. The slab keeps the collision; this only changes the look.

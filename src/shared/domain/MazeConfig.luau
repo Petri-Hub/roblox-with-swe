@@ -69,6 +69,7 @@ MazeConfig.Palette = {
 	Wall = Color3.fromRGB(28, 24, 21),
 	Ceiling = Color3.fromRGB(27, 21, 18),
 	Floor = Color3.fromRGB(45, 31, 23),
+	FloorBase = Color3.fromRGB(12, 8, 6),
 	Candle = Color3.fromRGB(148, 132, 112),
 	CandleLight = Color3.fromRGB(255, 198, 152),
 }
