@@ -7,6 +7,7 @@ local ServerStorage = game:GetService("ServerStorage")
 local MazeConfig = require(ReplicatedStorage.Shared.domain.MazeConfig)
 local MazePlan = require(ReplicatedStorage.Shared.domain.MazePlan)
 local Moldings = require(script.Parent.Moldings)
+local Textures = require(script.Parent.Textures)
 
 local MazeBuilder = {}
 
@@ -416,6 +417,12 @@ local function buildSafeRoom(parent: Instance)
 
 	slab(parent, -halfWidth, halfWidth, northZ, southZ, 0, Enum.Material.WoodPlanks, PALETTE.Floor, {})
 
+	local skin = Textures.plane(width, depth, 8)
+	if skin then
+		skin.CFrame = CFrame.new(-halfWidth, 0.05, northZ)
+		skin.Parent = parent
+	end
+
 	-- North wall, split around the stair opening.
 	local northSpan = halfWidth - 4 - THICKNESS
 	local northCenter = 4 + northSpan / 2 + THICKNESS / 2
@@ -600,6 +607,31 @@ function MazeBuilder.build(random: Random?)
 	local halfD = MazeConfig.GridDepth * CELL / 2
 
 	slab(root, -halfW, halfW, -halfD, halfD, FLOOR_Y, Enum.Material.WoodPlanks, PALETTE.Floor, { well })
+
+	-- Painted wood skin over the floor slab, as four quads around the stair hole.
+	-- The slab keeps the collision; this only changes what the eye sees.
+	local skin = Instance.new("Folder")
+	skin.Name = "FloorSkin"
+	skin.Parent = root
+
+	local function floorQuad(x0: number, x1: number, z0: number, z1: number)
+		if x1 - x0 <= 0 or z1 - z0 <= 0 then
+			return
+		end
+
+		local part = Textures.plane(x1 - x0, z1 - z0, 8)
+		if not part then
+			return
+		end
+
+		part.CFrame = CFrame.new(x0, FLOOR_Y + 0.05, z0)
+		part.Parent = skin
+	end
+
+	floorQuad(-halfW, halfW, -halfD, well.z0)
+	floorQuad(-halfW, halfW, well.z1, halfD)
+	floorQuad(-halfW, well.x0, well.z0, well.z1)
+	floorQuad(well.x1, halfW, well.z0, well.z1)
 	slab(root, -halfW, halfW, -halfD, halfD, FLOOR_Y + WALL_HEIGHT, Enum.Material.WoodPlanks, PALETTE.Ceiling, {})
 
 	local lightSpots = buildWalls(root, grid, rng)
