@@ -407,6 +407,58 @@ local function placeLightModel(parent: Instance, name: string, cframe: CFrame, s
 	return model
 end
 
+-- The store wood as a Decal, laid tile by tile. A Decal cannot repeat, so each
+-- tile is its own cell-sized part with one Decal on its top face. Returns false
+-- when no decal is configured, so the caller can fall back to painted wood.
+local function decalTiles(parent: Instance, x0: number, x1: number, z0: number, z1: number, y: number, hole): boolean
+	local texture = MazeConfig.FloorDecal
+	if not texture then
+		return false
+	end
+
+	local tile = MazeConfig.FloorTileSize
+	local folder = Instance.new("Folder")
+	folder.Name = "FloorDecal"
+	folder.Parent = parent
+
+	local placed = 0
+	for x = x0, x1 - tile + 0.01, tile do
+		for z = z0, z1 - tile + 0.01, tile do
+			local insideHole = hole
+				and x >= hole.x0 - 0.01
+				and x + tile <= hole.x1 + 0.01
+				and z >= hole.z0 - 0.01
+				and z + tile <= hole.z1 + 0.01
+
+			if not insideHole then
+				local part = newPart({
+					Name = "FloorTile",
+					Anchored = true,
+					CanCollide = false,
+					CanQuery = false,
+					CanTouch = false,
+					Material = Enum.Material.SmoothPlastic,
+					Color = PALETTE.Floor,
+					Size = Vector3.new(tile, 0.1, tile),
+					CFrame = CFrame.new(x + tile / 2, y, z + tile / 2),
+					TopSurface = Enum.SurfaceType.Smooth,
+					BottomSurface = Enum.SurfaceType.Smooth,
+					Parent = folder,
+				})
+
+				local decal = Instance.new("Decal")
+				decal.Face = Enum.NormalId.Top
+				decal.Texture = texture
+				decal.Parent = part
+				part.Parent = folder
+				placed += 1
+			end
+		end
+	end
+
+	return placed > 0
+end
+
 local function buildSafeRoom(parent: Instance)
 	local width = MazeConfig.SafeRoomWidth
 	local depth = MazeConfig.SafeRoomDepth
@@ -417,10 +469,12 @@ local function buildSafeRoom(parent: Instance)
 
 	slab(parent, -halfWidth, halfWidth, northZ, southZ, 0, Enum.Material.WoodPlanks, PALETTE.Floor, {})
 
-	local skin = Textures.plane(width, depth, 8)
-	if skin then
-		skin.CFrame = CFrame.new(-halfWidth, 0.05, northZ)
-		skin.Parent = parent
+	if not decalTiles(parent, -halfWidth, halfWidth, northZ, southZ, 0.06, nil) then
+		local skin = Textures.plane(width, depth, 8)
+		if skin then
+			skin.CFrame = CFrame.new(-halfWidth, 0.05, northZ)
+			skin.Parent = parent
+		end
 	end
 
 	-- North wall, split around the stair opening.
@@ -608,30 +662,37 @@ function MazeBuilder.build(random: Random?)
 
 	slab(root, -halfW, halfW, -halfD, halfD, FLOOR_Y, Enum.Material.WoodPlanks, PALETTE.Floor, { well })
 
-	-- Painted wood skin over the floor slab, as four quads around the stair hole.
-	-- The slab keeps the collision; this only changes what the eye sees.
-	local skin = Instance.new("Folder")
-	skin.Name = "FloorSkin"
-	skin.Parent = root
+	-- Floor skin over the slab: the store decal when one is configured, painted
+	-- wood otherwise. The slab keeps the collision; this only changes the look.
+	local function paintFloor()
+		local skin = Instance.new("Folder")
+		skin.Name = "FloorSkin"
+		skin.Parent = root
 
-	local function floorQuad(x0: number, x1: number, z0: number, z1: number)
-		if x1 - x0 <= 0 or z1 - z0 <= 0 then
-			return
+		local function floorQuad(x0: number, x1: number, z0: number, z1: number)
+			if x1 - x0 <= 0 or z1 - z0 <= 0 then
+				return
+			end
+
+			local part = Textures.plane(x1 - x0, z1 - z0, 8)
+			if not part then
+				return
+			end
+
+			part.CFrame = CFrame.new(x0, FLOOR_Y + 0.05, z0)
+			part.Parent = skin
 		end
 
-		local part = Textures.plane(x1 - x0, z1 - z0, 8)
-		if not part then
-			return
-		end
-
-		part.CFrame = CFrame.new(x0, FLOOR_Y + 0.05, z0)
-		part.Parent = skin
+		floorQuad(-halfW, halfW, -halfD, well.z0)
+		floorQuad(-halfW, halfW, well.z1, halfD)
+		floorQuad(-halfW, well.x0, well.z0, well.z1)
+		floorQuad(well.x1, halfW, well.z0, well.z1)
 	end
 
-	floorQuad(-halfW, halfW, -halfD, well.z0)
-	floorQuad(-halfW, halfW, well.z1, halfD)
-	floorQuad(-halfW, well.x0, well.z0, well.z1)
-	floorQuad(well.x1, halfW, well.z0, well.z1)
+	if not decalTiles(root, -halfW, halfW, -halfD, halfD, FLOOR_Y + 0.06, well) then
+		paintFloor()
+	end
+
 	slab(root, -halfW, halfW, -halfD, halfD, FLOOR_Y + WALL_HEIGHT, Enum.Material.WoodPlanks, PALETTE.Ceiling, {})
 
 	local lightSpots = buildWalls(root, grid, rng)

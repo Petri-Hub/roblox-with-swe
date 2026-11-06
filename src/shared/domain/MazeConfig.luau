@@ -52,6 +52,13 @@ MazeConfig.Assets = {
 MazeConfig.WoodTexture = nil
 MazeConfig.WoodStudsPerTile = 8
 
+-- A public-domain Creator Store decal DOES work, as a Decal instance: the engine
+-- accepts a decal id there even though it refuses one in a Texture. What it
+-- cannot do is tile, so the floor places one cell-sized part per tile by hand.
+-- 5332619725 is "Dark Wood Texture (Seamless)", the wood picked earlier.
+MazeConfig.FloorDecal = "rbxassetid://5332619725"
+MazeConfig.FloorTileSize = 12
+
 -- Until then the wood is material, colour and geometry.
 -- Brown, not orange. Saturated wood reads as a toy game; real mahogany is a
 -- desaturated dark brown that only picks up warmth where the light hits it.
