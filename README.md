@@ -2,7 +2,7 @@
 
 <br>
 
-<h3 align="center">A Roblox game built like a software project, starting from an empty place.<br>Code, tests, collaboration, and releases—explored on Linux</h3>
+<h3 align="center">A Roblox game built like a software project.<br>Code, tests, collaboration, and releases—explored on Linux</h3>
 
 <p align="center">
   <a href="https://github.com/Petri-Hub/roblox-with-swe/actions/workflows/publish.yml"><img alt="Publish" src="https://github.com/Petri-Hub/roblox-with-swe/actions/workflows/publish.yml/badge.svg?branch=staging" /></a>
@@ -16,19 +16,16 @@
 
 > **TL;DR:** a proof of concept for bringing software engineering to Roblox on Linux: source-controlled places, linting, automated regression tests, Git Flow, playtest previews, and eventually staging and production releases. Friends will build together through branches and reviewed pull requests, using Discord to discuss ideas and ask an agent to help implement them. That agent will be a new Hermes profile in my personal agent pepper, running in my homelab and contributing through the same tests and review process. This game is the first place to try that shared workflow.
 
-## Starting point
+## Play the game
 
-The project was reset to an empty game. It contains a baseplate, a server script, a client script and one shared module (`src/shared/Hello.luau`) with a Jest spec, laid out like a fresh `rojo init` project. Everything else, such as gameplay, maps and tests, is yet to be built.
-
-## Environments
+This AI-assisted horror game is taking shape in a procedurally generated forest. The current build is an early playtest of the map and first-person movement.
 
 - [Staging playtest](https://www.roblox.com/games/112768229129661) receives changes merged into `staging`.
 - [Production game](https://www.roblox.com/games/138015860615681) receives changes merged into `production`.
 
 ## Contents
 
-- [Starting point](#starting-point)
-- [Environments](#environments)
+- [Play the game](#play-the-game)
 - [How it works](#how-it-works)
 - [Software engineering in Roblox](#software-engineering-in-roblox)
 - [Collaboration](#collaboration)
@@ -56,11 +53,12 @@ The GitHub repository holds the Luau and world files. On Linux, a local checkout
 | Dependency management | Wally | `wally.toml` declares packages; `wally.lock` records the resolved versions. Jest Roblox is already installed as a development dependency. |
 | Formatting | StyLua and pre-commit | Luau gets a consistent style before it enters Git. |
 | Static analysis | Selene | Linting catches suspicious Luau code without launching the game. |
-| Regression testing | Jest Roblox and jest-roblox-cli | A separate test place runs the project's tests, locally through Studio on Linux or remotely through Roblox Open Cloud. |
+| Regression testing | Jest Roblox and jest-roblox-cli | A separate test place runs the tree harvesting rules, locally through Studio on Linux or remotely through Roblox Open Cloud. |
 | Continuous integration and delivery | GitHub Actions and Roblox Open Cloud | Pull requests run formatting, linting, builds, and engine tests; merges publish separate staging and production places. |
 
 The tools have different jobs. Rojo moves files into Roblox's DataModel; it does not decide whether the code is correct. Selene checks code without running it; Jest checks behavior by running it. A successful build is therefore only one part of a trustworthy change.
 
+The first feature lets a player harvest the tree in the world. The server checks the player's distance and the tree's regrowth timer, awards one wood, then hides the canopy for eight seconds. A client HUD shows the wood count. The harvest rules live in a shared module so they can be tested without waiting for a real timer.
 
 ## Collaboration
 
@@ -68,9 +66,7 @@ The tools have different jobs. Rojo moves files into Roblox's DataModel; it does
   <img src="assets/collaboration.svg" alt="Proposed four-lane collaboration flow. Friends discuss an idea in Discord; friends or a Hermes agent create a branch and pull request; GitHub Actions checks StyLua, Selene, a Rojo build, and Jest tests; then staging is playtested before a production Roblox release." />
 </p>
 
-Friends start with an idea or bug in Discord. A contributor or Lemon, the Hermes agent in pepper, turns the agreed change into code on a branch and opens a pull request. GitHub Actions checks formatting with StyLua, lint with Selene, build with Rojo, and run Jest tests. Passing changes reach a staging place for playtesting before a production release.
-
-Lemon's development skills live with his profile in [pepper](https://github.com/Petri-Hub/pepper/tree/main/profiles/lemon/skills), covering setup, previews, design, implementation, tests, documentation and delivery.
+Friends start with an idea or bug in Discord. A contributor or the planned Hermes profile in pepper turns the agreed change into code on a branch and opens a pull request. GitHub Actions checks formatting with StyLua, lint with Selene, build with Rojo, and run Jest tests. Passing changes reach a staging place for playtesting before a production release.
 
 ## Technologies
 
@@ -172,17 +168,17 @@ What is working now:
 - ✅ Pin the local toolchain with Rokit.
 - ✅ Build a place from source files and sync it into Studio with Rojo.
 - ✅ Run Roblox Studio through Vinegar on Linux.
+- ✅ Describe a small piece of the world as a Rojo model JSON file.
 - ✅ Format Luau with StyLua and run it from pre-commit.
 - ✅ Lint Luau with Selene.
 - ✅ Add Wally and lock Jest Roblox as a development dependency.
-- ✅ Build a separate Rojo test place with a Jest spec.
+- ✅ Add a small tree harvesting behavior worth testing.
+- ✅ Build a separate Rojo test place with Jest tests for the harvesting rules.
 - ✅ Run Jest from a Linux terminal with jest-roblox-cli and Vinegar.
 - ✅ Run Jest through Open Cloud with a dedicated test place.
 - ✅ Run formatting, linting, builds, and engine tests in GitHub Actions.
 - ✅ Publish separate staging and production places through the Roblox API.
 - ✅ Build roblox-assets-mcp for Creator Store search and download URLs.
-
-Next: decide on the new game and build it.
 
 ## Repository layout
 
@@ -200,11 +196,12 @@ Next: decide on the new game and build it.
 │   └── how-it-works.svg         # workflow diagram shown above
 │
 ├── src/
-│   ├── client/                  # client entry script
-│   ├── server/                  # server entry script
-│   └── shared/                  # shared modules
+│   ├── client/                  # client-side Luau
+│   ├── server/                  # server-side Luau
+│   ├── shared/                  # shared modules
+│   └── world/                   # world objects for Rojo
 │
-├── tests/                       # Jest specs
+├── tests/                       # Jest regression specs
 ├── scripts/                     # Vinegar launch and plugin setup scripts
 │
 ├── default.project.json         # files mapped into the Roblox DataModel
