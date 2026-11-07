@@ -215,7 +215,6 @@ Next: decide on the new game and build it.
 ├── rokit.toml                   # pinned development tools
 ├── wally.toml                   # package declarations
 ├── wally.lock                   # resolved package versions
-├── TODO.md                      # backlog: asset bridge and Lemon workflow
 │
 ├── .stylua.toml                 # formatter configuration
 ├── selene.toml                  # linter configuration
