@@ -3,67 +3,8 @@
   "tree": {
     "$className": "DataModel",
     "ReplicatedStorage": {
-      "WeaponModels": {
-        "$className": "Folder",
-        "AK47": {
-          "$path": "src/assets/weapons/AK47.rbxm"
-        },
-        "M9": {
-          "$path": "src/assets/weapons/M9.rbxm"
-        }
-      },
       "Shared": {
         "$path": "src/shared"
-      }
-    },
-    "ServerStorage": {
-      "ForestAssets": {
-        "$className": "Folder",
-        "BushTall": {
-          "$path": "src/assets/forest/BushTall.rbxm"
-        },
-        "BushRound": {
-          "$path": "src/assets/forest/BushRound.rbxm"
-        },
-        "Fern": {
-          "$path": "src/assets/forest/Fern.rbxm"
-        },
-        "FernSmall": {
-          "$path": "src/assets/forest/FernSmall.rbxm"
-        },
-        "RootStump": {
-          "$path": "src/assets/forest/RootStump.rbxm"
-        },
-        "RelStump": {
-          "$path": "src/assets/forest/RelStump.rbxm"
-        },
-        "FallenLog": {
-          "$path": "src/assets/forest/FallenLog.rbxm"
-        },
-        "HollowLog": {
-          "$path": "src/assets/forest/HollowLog.rbxm"
-        },
-        "AbandonedCabin": {
-          "$path": "src/assets/forest/AbandonedCabin.rbxm"
-        },
-        "CollapsedShed": {
-          "$path": "src/assets/forest/CollapsedShed.rbxm"
-        },
-        "RustedCar": {
-          "$path": "src/assets/forest/RustedCar.rbxm"
-        },
-        "RustyBarrel": {
-          "$path": "src/assets/forest/RustyBarrel.rbxm"
-        },
-        "BrokenCrate": {
-          "$path": "src/assets/forest/BrokenCrate.rbxm"
-        },
-        "SupplyPile": {
-          "$path": "src/assets/forest/SupplyPile.rbxm"
-        },
-        "Crate": {
-          "$path": "src/assets/forest/Crate.rbxmx"
-        }
       }
     },
     "ServerScriptService": {
@@ -74,9 +15,6 @@
         "$className": "Folder",
         "Specs": {
           "$path": "tests/specs"
-        },
-        "ForestGenerator": {
-          "$path": "src/server/ForestGenerator.luau"
         },
         "DevPackages": {
           "$path": "DevPackages"

@@ -2,251 +2,65 @@
   "name": "roblox-with-swe",
   "tree": {
     "$className": "DataModel",
+
     "ReplicatedStorage": {
-      "WeaponModels": {
-        "$className": "Folder",
-        "AK47": {
-          "$path": "src/assets/weapons/AK47.rbxm"
-        },
-        "M9": {
-          "$path": "src/assets/weapons/M9.rbxm"
-        }
-      },
       "Shared": {
         "$path": "src/shared"
-      },
-      "BusHorn": {
-        "$className": "RemoteEvent"
-      },
-      "TransmutationMeshes": {
-        "$className": "Folder",
-        "Spike": {
-          "$path": "src/assets/transmutation/Spike.rbxm"
-        }
       }
     },
-    "ServerStorage": {
-      "BattleBusTemplate": {
-        "$path": "src/assets/BattleBus.rbxm"
-      },
-      "GhostTemplate": {
-        "$path": "src/assets/Ghost.rbxm"
-      },
-      "GhostTemplateAlt2": {
-        "$path": "src/assets/GhostAlt2.rbxm"
-      },
-      "ForestAssets": {
-        "$className": "Folder",
-        "BushTall": {
-          "$path": "src/assets/forest/BushTall.rbxm"
-        },
-        "BushRound": {
-          "$path": "src/assets/forest/BushRound.rbxm"
-        },
-        "Fern": {
-          "$path": "src/assets/forest/Fern.rbxm"
-        },
-        "FernSmall": {
-          "$path": "src/assets/forest/FernSmall.rbxm"
-        },
-        "RootStump": {
-          "$path": "src/assets/forest/RootStump.rbxm"
-        },
-        "RelStump": {
-          "$path": "src/assets/forest/RelStump.rbxm"
-        },
-        "FallenLog": {
-          "$path": "src/assets/forest/FallenLog.rbxm"
-        },
-        "HollowLog": {
-          "$path": "src/assets/forest/HollowLog.rbxm"
-        },
-        "AbandonedCabin": {
-          "$path": "src/assets/forest/AbandonedCabin.rbxm"
-        },
-        "CollapsedShed": {
-          "$path": "src/assets/forest/CollapsedShed.rbxm"
-        },
-        "RustedCar": {
-          "$path": "src/assets/forest/RustedCar.rbxm"
-        },
-        "RustyBarrel": {
-          "$path": "src/assets/forest/RustyBarrel.rbxm"
-        },
-        "BrokenCrate": {
-          "$path": "src/assets/forest/BrokenCrate.rbxm"
-        },
-        "SupplyPile": {
-          "$path": "src/assets/forest/SupplyPile.rbxm"
-        },
-        "Crate": {
-          "$path": "src/assets/forest/Crate.rbxmx"
-        }
-      }
-    },
+
     "ServerScriptService": {
       "Server": {
         "$path": "src/server"
       }
     },
+
     "StarterPlayer": {
-      "$properties": {
-        "CameraMode": "LockFirstPerson",
-        "CharacterJumpHeight": 4.5,
-        "CharacterUseJumpPower": false,
-        "CharacterWalkSpeed": 10,
-        "EnableMouseLockOption": false,
-        "LoadCharacterAppearance": false
-      },
       "StarterPlayerScripts": {
-        "BusHorn": {
-          "$path": "src/client/BusHorn.client.luau"
-        },
-        "FirstPersonMovement": {
-          "$path": "src/client/FirstPersonMovement.client.luau"
-        },
-        "CharacterSounds": {
-          "$path": "src/client/CharacterSounds.client.luau"
-        },
-        "ForestPresentation": {
-          "$path": "src/client/ForestPresentation.client.luau"
-        },
-        "WeaponController": {
-          "$path": "src/client/WeaponController.client.luau"
-        },
-        "FlashlightController": {
-          "$path": "src/client/FlashlightController.client.luau"
-        },
-        "InventoryController": {
-          "$path": "src/client/InventoryController.client.luau"
-        },
-        "DetectorController": {
-          "$path": "src/client/DetectorController.client.luau"
-        },
-        "MusicController": {
-          "$path": "src/client/MusicController.client.luau"
-        },
-        "UVLanternController": {
-          "$path": "src/client/UVLanternController.client.luau"
-        },
-        "FruitController": {
-          "$path": "src/client/FruitController.client.luau"
-        },
-        "AbilityController": {
-          "$path": "src/client/AbilityController.client.luau"
-        },
-        "AbilityHud": {
-          "$path": "src/client/AbilityHud.luau"
-        },
-        "AbilityEffects": {
-          "$path": "src/client/AbilityEffects.luau"
-        },
-        "FireMagicController": {
-          "$path": "src/client/FireMagicController.client.luau"
-        },
-        "FireMagicEffects": {
-          "$path": "src/client/FireMagicEffects.client.luau"
-        },
-        "MagicCircle": {
-          "$path": "src/client/MagicCircle.luau"
-        },
-        "TelekinesisController": {
-          "$path": "src/client/TelekinesisController.client.luau"
-        },
-        "TelekinesisEffects": {
-          "$path": "src/client/TelekinesisEffects.client.luau"
-        },
-        "ShopClient": {
-          "$path": "src/client/ShopClient.client.luau"
-        },
-        "WeaponHud": {
-          "$path": "src/client/WeaponHud.luau"
-        },
-        "SpellBadge": {
-          "$path": "src/client/SpellBadge.luau"
-        },
-        "TransmutationController": {
-          "$path": "src/client/TransmutationController.client.luau"
-        },
-        "TransmutationEffects": {
-          "$path": "src/client/TransmutationEffects.client.luau"
+        "Client": {
+          "$path": "src/client"
         }
       }
     },
+
     "Workspace": {
       "$properties": {
-        "FilteringEnabled": true,
-        "StreamingEnabled": true,
-        "StreamingMinRadius": 96,
-        "StreamingTargetRadius": 512
+        "FilteringEnabled": true
       },
-      "ForestSpawn": {
-        "$className": "SpawnLocation",
+      "Baseplate": {
+        "$className": "Part",
         "$properties": {
           "Anchored": true,
-          "CanCollide": true,
-          "Neutral": true,
+          "Color": [
+            0.38823,
+            0.37254,
+            0.38823
+          ],
+          "Locked": true,
           "Position": [
             0,
-            -0.32,
+            -10,
             0
           ],
           "Size": [
-            10,
-            1,
-            10
-          ],
-          "Transparency": 1
+            512,
+            20,
+            512
+          ]
         }
       }
     },
     "Lighting": {
       "$properties": {
         "Ambient": [
-          0.102,
-          0.102,
-          0.173
+          0,
+          0,
+          0
         ],
-        "Brightness": 1.1,
-        "ClockTime": 0.4,
-        "ExposureCompensation": 0.12,
-        "FogColor": [
-          0.118,
-          0.078,
-          0.204
-        ],
-        "FogStart": 180,
-        "FogEnd": 760,
+        "Brightness": 2,
         "GlobalShadows": true,
-        "OutdoorAmbient": [
-          0.18,
-          0.173,
-          0.29
-        ],
         "Outlines": false,
-        "LightingStyle": "Realistic",
-        "Technology": "ShadowMap"
-      }
-    },
-    "TextChatService": {
-      "TextChatCommands": {
-        "$className": "Folder",
-        "ArenaCommand": {
-          "$className": "TextChatCommand",
-          "$properties": {
-            "AutocompleteVisible": true,
-            "PrimaryAlias": "/arena",
-            "SecondaryAlias": "/coliseu"
-          }
-        },
-        "ForestCommand": {
-          "$className": "TextChatCommand",
-          "$properties": {
-            "AutocompleteVisible": true,
-            "PrimaryAlias": "/floresta",
-            "SecondaryAlias": "/sair"
-          }
-        }
+        "Technology": "Voxel"
       }
     },
     "SoundService": {
